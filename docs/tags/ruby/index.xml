@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ruby on Air on G</title>
+    <link>http://air.googol.im/tags/ruby/index.xml</link>
+    <description>Recent content in Ruby on Air on G</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh_CN</language>
+    <copyright>All rights reserved - 2017</copyright>
+    <atom:link href="http://air.googol.im/tags/ruby/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>迁移到HEXO</title>
+      <link>http://air.googol.im/post/migrate-to-hexo/</link>
+      <pubDate>Wed, 24 Apr 2013 08:34:35 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/migrate-to-hexo/</guid>
+      <description>&lt;p&gt;前几天把这个blog的框架从&lt;a href=&#34;https://github.com/mojombo/jekyll&#34;&gt;jekyll&lt;/a&gt;迁移到了&lt;a href=&#34;http://zespia.tw/hexo/&#34;&gt;HEXO&lt;/a&gt;。因为会重新生成feed，uuid和原来的不一样，所以有刷屏，抱歉。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;总体上，HEXO的完成度要比jekyll高。不过这么比并不公平：对应HEXO的应该是&lt;a href=&#34;http://octopress.org&#34;&gt;Octopress&lt;/a&gt;。不过总体使用感受比jekyll好很多。&lt;/p&gt;
+
+&lt;p&gt;因为HEXO是node.js上模仿Octopress的作品，而Octopress又是基于jekyll的，所以整个迁移过程十分顺畅，而且迁移后所有文章的URL都不会变化，Disque和Google Analytics的数据都不需要更新就可以直接合并过来，很爽。迁移后，RVM终于没有了存在的理由，删之。&lt;/p&gt;
+
+&lt;p&gt;迁移的原因是，因为很久不写blog，也没更新ruby gem，jekyll已经落后主线版本很多。我在用的一个插件，在新版有bug无法正常执行，折腾了很久也没搞定，于是就决定换一个框架.&lt;/p&gt;
+
+&lt;p&gt;本来开始想用Go的一套框架&lt;a href=&#34;http://wendal.net/2013/0111.html&#34;&gt;Gor&lt;/a&gt;，down下来大概跑了一下，因为是编译后的bin，速度相当快。无奈功能还有欠缺，整个迁移目测要改的东西不少，于是放弃了。等养肥了再说。&lt;/p&gt;
+
+&lt;p&gt;后来&lt;a href=&#34;https://twitter.com/ilrcat/status/325092691882954752&#34;&gt;@ilrcat&lt;/a&gt; 推荐用HEXO，正巧这两天也在用node.js弄一些东西，于是就装了一下。速度比基于Ruby的jekyll快不少，虽然感觉还是比Gor慢一些，但是也够用了，而且迁移很快，于是就花了一晚上搞定。&lt;/p&gt;
+
+&lt;p&gt;说到js，这种能执行出 &lt;em&gt;3755933696 | 0xffff != 3755933696&lt;/em&gt; 的语言实在太可怕了！向所有写js的程序员致敬： &lt;em&gt;你们受&lt;/em&gt; 苦了！&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Christian Neukirchen 的 Ruby 编程风格指南</title>
+      <link>http://air.googol.im/post/ruby-style/</link>
+      <pubDate>Sun, 20 Feb 2011 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/ruby-style/</guid>
+      <description>&lt;p&gt;也许你不会同意本文提到的所有规则，但是这些规则确实帮助我产生了高质量的代码，对我来说很有用。任何人都可以随其所想，根据其自己的编码风格去写代码，但是，当你提代码到我的项目里时，请遵守这些规则：&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;译自：&lt;a href=&#34;https://github.com/chneukirchen/styleguide&#34;&gt;https://github.com/chneukirchen/styleguide&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;中文版：&lt;a href=&#34;https://github.com/googollee/styleguide&#34;&gt;https://github.com/googollee/styleguide&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;格式&#34;&gt;格式：&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;使用 ASCII（或者 UTF-8，如果你不得不用的话）。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;使用2个空格做缩进，不要用 tab。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;使用 Unix 风格的换行做行尾。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;在操作符两边，逗号、冒号、分号的后面，{ 的两侧和 } 的前面，加入空格。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;在 (、[ 之后和 ]、) 之前没有空格。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;在声明修饰符前加入两个空格（在 if/unless/while/until/rescue 的后面）&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;按照情形进行缩进，不要过多缩进。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;在方法的 return 语句前留一个空行（除非只有一行），在 def 前后都留一个
+空行。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;使用 RDoc 及其约定来写 API 文档。不要在注释块和 def 间留任何空行。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;使用空行，将一个很长的方法按逻辑分段。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;每行不要超过80个字符。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;杜绝行尾空格。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;语法&#34;&gt;语法：&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;如果有参数时，def 后面要用括号包住参数。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;永远不要用 for，除非你确确实实知道你在做啥。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;永远不要用 then 。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;在条件语句只有一行的情况下，使用 when x; &amp;hellip;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;在布尔表达式里使用 &amp;amp;&amp;amp;/||，在程序流程控制里使用 and/or。（小提示：如果你不得不在最外层加括号，那你就用错操作符了。）&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;杜绝多行使用 ?: ，多行的情况下应该用 if 。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;在调用方法的时候，绝不能使用多余的括号（参数最外面不用括号），但是在调用“函数”时使用括号，比如，当你在一行里需要使用函数的返回值。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;    x = Math.sin(y)
+    array.delete e
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;使用 {&amp;hellip;} 好过 do&amp;hellip;end 。多行情况使用 {&amp;hellip;} 也很好：可以用不同的结束符标识不同的内容（用 } 标识块，而 end 标识 if/while/&amp;hellip; ），这样可以很容易看出到哪里结束。不过在“程序流程控制”和“定义方法”时使用 do&amp;hellip;end（比如，在 Rakefiles 和特定的 DSL 里）。在链式调用时杜绝 do&amp;hellip;end 。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;杜绝无谓的 return。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;杜绝无谓的续行符（\）。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;可以直接使用 = 运算符返回的值：&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;    if v = array.grep(/foo/) ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;请自由使用 ||=。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;使用非 OO 风格的正则表达式（ OO 风格不会让你的代码变得更好）。在需要的时候，自由使用 =~，$0-9，$` 和 $&amp;lsquo;。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;命名&#34;&gt;命名：&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;方法名使用 snake_case 风格。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;类名和模块名使用 CamelCase 风格。（常用首字母缩写保持大写，比如HTTP，RFC，XML）&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;其他常量使用 SCREAMING_SNAKE_CASE 。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;标识符名字的长度决定了其生存周期。在短小的块/方法里，使用单字母变量作为参数，具体名字如下：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;a,b,c：任意对象&lt;/li&gt;
+&lt;li&gt;d：目录名字&lt;/li&gt;
+&lt;li&gt;e：Enumerable的元素&lt;/li&gt;
+&lt;li&gt;ex：截获的异常&lt;/li&gt;
+&lt;li&gt;f：文件对象和文件名&lt;/li&gt;
+&lt;li&gt;i,j：索引&lt;/li&gt;
+&lt;li&gt;k：哈希项的键值部分&lt;/li&gt;
+&lt;li&gt;m：方法&lt;/li&gt;
+&lt;li&gt;o：任意对象&lt;/li&gt;
+&lt;li&gt;r：短函数的返回值&lt;/li&gt;
+&lt;li&gt;s：字符串&lt;/li&gt;
+&lt;li&gt;v：任意值&lt;/li&gt;
+&lt;li&gt;v：哈希项的值部分（和上面一个有毛区别啊！）&lt;/li&gt;
+&lt;li&gt;x,y,z：数字&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;另外，通常来说，如果使用变量时，其值的所有对象都是某个类型，用类名的首字母来表示。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;对用不到的变量，使用 _ 或者用 _ 做前缀的名字。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;当使用带有短块的注入时，对变量命名 |a, e|（方便助记：累加，元素）&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;当定义二值操作符时，将第二个参数命名为“other”。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;优先使用 map 而不是 collect ，优先使用 find 而不是 detect ，优先使用 find_all 而不是 select ，优先使用 size 而不是 length 。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;注释&#34;&gt;注释：&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;比一个单词长的注释，每句话要首字母大写，并且使用标点。每段后用两个空格分隔。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;杜绝在注释里灌水。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;其他&#34;&gt;其他：&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;写对 ruby -w 安全的代码。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;杜绝将哈希表作为可选参数的行为。这个方法是不是干的事情太多了？&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;杜绝过长的方法。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;杜绝太长的参数列表。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;使用 def self.method 这种方式定义单例（singleton）方法。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;将“全局”方法加入到 Kernel （如果你不得不写“全局”方法的话），并将其设为私有的。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;如果 alias_method 可以做，就不要使用 alias 。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;使用 OptionParser 来解析复杂的命令行参数，并用 ruby -s 明确指定命令行参数。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;在1.8下编码，但不要做任何可能导致在1.9下不可用的事情。（那直接用1.9不就行了）&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;杜绝没用的元编程。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;一般&#34;&gt;一般：&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;用函数编程的方式写代码，如果可行的话就杜绝可变量。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;除非函数的意图就是改变参数值，否则不要这么做。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;写库的时候，不要把核心类弄乱。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;不要使用防御式编程。（参见 &lt;a href=&#34;1http://www.erlang.se/doc/programming_rules.shtml#HDR11&#34;&gt;http://www.erlang.se/doc/programming_rules.shtml#HDR1&lt;/a&gt; ）&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;保持代码简单。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;别做过度设计。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;也别不设计。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;杜绝 bugs。（别逗了！）&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;阅读其他的风格指导，并且接受与本指导不冲突的部分。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;保持前后一致。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;使用常识。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

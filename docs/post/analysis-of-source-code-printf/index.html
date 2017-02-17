@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="theme-color" content="#263238">
+
+<meta name="generator" content="Hugo 0.18.1" />
+
+<link rel="apple-touch-icon" href="http://air.googol.im/images/logo.png">
+
+
+<link rel="canonical" href="http://air.googol.im/post/analysis-of-source-code-printf/">
+
+
+    
+    <link href="//fonts.googleapis.com/css?family=Noto+Sans:400,700|Montserrat" rel="stylesheet">
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>内核printf源代码分析 - Air on G</title>
+    
+<meta name="description" content="&lt;p&gt;对VC里printf的实现的分析。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;">
+
+<meta property="og:title" content="内核printf源代码分析 - Air on G">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://air.googol.im/post/analysis-of-source-code-printf/">
+<meta property="og:image" content="http://air.googol.im/images/default.png">
+<meta property="og:site_name" content="Air on G">
+<meta property="og:description" content="&lt;p&gt;对VC里printf的实现的分析。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="Air on G">
+<meta name="twitter:url" content="http://air.googol.im/post/analysis-of-source-code-printf/">
+<meta name="twitter:title" content="内核printf源代码分析 - Air on G">
+<meta name="twitter:description" content="&lt;p&gt;对VC里printf的实现的分析。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;">
+<meta name="twitter:image" content="http://air.googol.im/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http:\/\/air.googol.im\/"
+    },
+    "headline": "内核printf源代码分析 - Air on G",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http:\/\/air.googol.im\/images\/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2004-10-18T20:00:00JST",
+    "dateModified": "2004-10-18T20:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "Air on G"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Air on G",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http:\/\/air.googol.im\/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "\x3cp\x3e对VC里printf的实现的分析。\x3c\/p\x3e\n\n\x3cp\x3e\x3c\/p\x3e"
+  }
+</script>
+
+
+    <style>
+      html { font-size: 18px;}@media (max-width: 768px) { html { font-size: 15px; }}body { font-family: 'Noto Sans','Hiragino Kaku Gothic Pro',メイリオ,Meiryo,sans-serif; font-size: inherit; font-weight: 300; line-height: 1rem; background-color: #eceff1;}p { margin: 0;}a { color: #4caf50;}a:hover { text-decoration: none; color: #388e3c;}ul,ol { margin: 0; padding: 0;}h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 700;}h1 { font-size: 1.8rem; line-height: 2rem; margin: 1.5rem 0; }h2 { font-size: 1.4rem; line-height: 2rem; margin: 1.5rem 0; }h3 { font-size: 1.2rem; line-height: 1.5rem; margin: 1.5rem 0; }h4, h5, h6 { font-size: 1rem; line-height: 1.5rem; margin: 1.5rem 0; }main { display: block;}.content-inner { padding: 1rem 2rem;}.content-inner.thin { padding: .5rem 1rem;}@media (max-width: 768px) { .content-inner { padding: 1rem; }}/* Override */.container { position: relative;}/* Parts:layouts */.l-header { background-color: #fff; margin-bottom: 1rem; padding: 1rem 0; text-align: center;}.l-footer { font-size: .8rem; padding: 1.5rem 0;}/* Parts:menu */.p-menu { position: absolute; right: 15px; top: 0;}/* Parts:terms */.p-terms { list-style: none;}.p-terms .terms-title { margin: 0;}.p-terms a { display: inline-block; padding: .25rem 0;}.p-terms.inline li { display: inline-block; font-size: .8rem;}.p-terms.inline li::after { content: ',';}.p-terms.inline li:last-child::after { content: '';}/* Parts:paging */.p-paging { margin-bottom: 1.5rem; text-align: center;}.p-paging a { display: inline-block; padding: 1rem 1.5rem; margin: 0 .5rem; background-color: #cfd8dc; color: #263238;}/* Parts:section */section { margin-bottom: 1.5rem;}section>header { font-size: .8rem; font-weight: 700; margin-bottom: .5rem; text-transform: uppercase;}section>header a { color: #333; text-decoration: underline;}section.article-footer { margin-bottom: 1rem;}section.article-footer>header { margin-bottom: 0;}/* Parts:share */.p-share { min-width: 100%; margin-bottom: 1.5rem;}.p-share .share-inner { display: table; table-layout: fixed; width: 100%; border-spacing: .25rem;}.p-share a { display: table-cell; text-align: center; font-weight: 700; font-size: .7rem; padding: .5rem 0; color: #fff; border-radius: 5px;}.p-share a.ht { background-color: #00a4de; border-bottom: 2px solid #0083b1; }.p-share a.fb { background-color: #3b5998; border-bottom: 2px solid #2f4779; }.p-share a.tw { background-color: #1da1f2; border-bottom: 2px solid #1780c1; }.p-share a.gp { background-color: #dd4b39; border-bottom: 2px solid #b03c2d; }.p-share a.ln { background-color: #00c300; border-bottom: 2px solid #009c00; }.p-share a.ht::before { content: 'Hatena'; }.p-share a.fb::before { content: 'Facebook'; }.p-share a.tw::before { content: 'Twitter'; }.p-share a.gp::before { content: 'Google+'; }.p-share a.ln::before { content: 'LINE'; }/* Parts:logo */.h-logo { font-family: 'Montserrat', sans-serif;}.p-logo { display: inline-block; text-transform: uppercase;}.p-logo a { display: inline-block; font-size: 1.4rem; line-height: 2rem; color: #000;}/* Parts:crumb */.p-crumb ol { list-style: none; margin-bottom: 1rem;}.p-crumb li { display: inline; margin-right: .25rem; font-size: .8rem; color: #607d8b;}.p-crumb li::after { content: '/'; margin-left: .25rem;}.p-crumb li:last-child::after { content: '';}/* Parts:facts */.p-facts { list-style: none; font-size: .8rem; margin-bottom: 1rem;}.p-facts li { display: inline-block; margin-right: .5rem; color: #90a4ae;}.p-facts li i { margin-right: .5rem; color: #cfd8dc;}/* Parts:article */article { background-color: #fff;}article .title { margin: 0; margin-bottom: .5rem; font-weight: 700;}article .title a { color: #000;}article .thumb { display: block; background-image: url(http://air.googol.im/images/default.jpg); background-position: center; background-size: cover;}article .summary { margin-bottom: .5rem; max-height: 5rem; overflow: hidden;}article.single .thumb { height: 18rem; margin-bottom: 1rem;}@media (max-width: 768px) { article.single .thumb { height: 12rem; }}article.li { margin-bottom: 1rem;}article.li .thumb { height: 7.5rem; margin-bottom: .5rem;}article.li.sm { background-color: transparent; margin-bottom: .5rem;}article.li.sm>header { padding: .5rem 0;}article.li.sm .title { font-size: .8rem; line-height: 1rem; margin-bottom: .25rem;}article.li.sm .p-facts { font-size: .6rem; margin-bottom: 0;}article.li.sm .thumb { float: left; margin-right: .5rem; height: 3rem; width: 3rem;}.article-body h2 { padding: 1rem 0; border-bottom: 2px solid #eceff1;}.article-body h2:first-child { margin-top: 0; }.article-body h3 { color: #428bca;}.article-body h4 { border-left: solid .25rem #428bca; padding: 0 .5rem;}.article-body p { margin: 1.5rem 0; line-height: 1.5rem;}.article-body a { text-decoration: underline;}.article-body ul,.article-body ol { padding-left: 1.5rem;}.article-body code { display: inline-block; font-family: Menlo, consolas, monospace; font-size: .8rem; padding: 0 .5rem; line-height: 1.5rem;}.article-body pre { margin: 1.5rem 0; padding: 0; font-size: .8rem; border: none; border-radius: 0;}.article-body pre code { display: block; line-height: 1rem; padding: 1rem;}.article-body blockquote { margin: 1.5rem 0; padding: .5rem 0; font-size: .8rem; border-top: 1px solid #eceff1; border-bottom: 1px solid #eceff1; color: #607d8b;}.article-body blockquote p { margin: .5rem 0; line-height: 1rem;}.article-body strong { box-shadow: 0 -.5rem 0 0 #90caf9 inset;}.article-body em { font-style: normal; font-weight: 700; color: #03a9f4;}.article-body figure { margin: 1.5rem 0; }.article-body figure img { max-width: 100%; }.article-body figure.left,.article-body figure.right { width: 15rem; height: 12rem; margin-top: 0;}.article-body figure.left { float: left; margin-right: 1rem; }.article-body figure.right { float: right; margin-left: 1rem; }@media (max-width: 768px) { .article-body figure.left, .article-body figure.right { float: none; margin: 0; width: auto; height: auto; }}.article-body figcaption { padding: .5rem 0; font-size: .8rem; text-align: center;}.article-body figcaption a { color: #263238;}
+      
+      
+    </style>
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <div class="container">
+        <div class="p-logo">
+          <a href="http://air.googol.im/" class="h-logo">Air on G</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol>
+        <li><a href="http://air.googol.im/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://air.googol.im/post/" itemprop="url"><span itemprop="title">post</span></a></li>
+        
+        <li class="active">内核printf源代码分析</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+
+  <a href="http://air.googol.im/post/analysis-of-source-code-printf/" class="thumb"></a>
+  <div class="content-inner">
+    <h1 class="title">内核printf源代码分析</h1>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2004-10-18T20:00:00JST">Oct 18, 2004</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+      
+    </ul>
+
+    <div class="article-body"><p>对VC里printf的实现的分析。</p>
+
+<p></p>
+
+<p>在stdio.c里找到了printf的实现代码.首先看看对printf的定义:</p>
+
+<pre><code class="language-c">int printf (const char *cntrl_string, ...)
+</code></pre>
+
+<p>第一个参数cntrl_string是控制字符串,也就是平常我们写入%d,%f的地方.紧接着后面是一个变长参数.</p>
+
+<p>看看函数头部的定义:</p>
+
+<pre><code class="language-c">  int pos = 0, cnt_printed_chars = 0, i;
+  unsigned char* chptr;
+  va_list ap;
+</code></pre>
+
+<p>马上晕!除了ap我们可以马上判断出来是用来读取变长参数的,i用于循环变量.其他变量都不知道是怎么回事.不要着急,我们边看代码边分析.代码的第一行必然是</p>
+
+<pre><code class="language-c">va_start (ap, cntrl_string);
+</code></pre>
+
+<p>用来初始化变长参数.</p>
+
+<p>接下来是一个while循环</p>
+
+<pre><code class="language-c">while (cntrl_string[pos]) {
+...
+}
+</code></pre>
+
+<p>结束条件是cntrl_string[pos]为NULL,显然这个循环是用来遍历整个控制字符串的.自然pos就是当前遍历到的位置了.进入循环首先闯入视线的是</p>
+
+<pre><code class="language-c">if (cntrl_string[pos] == '%') {
+     pos++;
+     ...
+}
+</code></pre>
+
+<p>开门见山,上来就当前字符是否办断是否%.一猜就知道如果成立pos++马上取出下一个字符在d,f,l等等之间进行判断.往下一看,果真不出所料:</p>
+
+<pre><code class="language-c">switch (cntrl_string[pos]) {
+    case 'c':
+...
+    case 's':
+...
+    case 'i':
+...
+    case 'd':
+...
+    case 'u':
+...
+</code></pre>
+
+<p>用上switch-case了. 快速浏览一下下面的代码.</p>
+
+<p>首先看看case &lsquo;c&rsquo;的部分</p>
+
+<pre><code class="language-c">case 'c':
+ putchar (va_arg (ap, unsigned char));
+ cnt_printed_chars++;
+ break;
+</code></pre>
+
+<p>%c表示仅仅输出一个字符.因此先通过va_arg进行参数的类型转换,之后用putchar[1]输出到屏幕上去.之后是cnt_printed_chars++,通过这句我们就可以判断出cnt_printed_chars使用来表示,已经被printf输出的字符个数的.</p>
+
+<p>再来看看 case &rsquo;s&rsquo;:</p>
+
+<pre><code class="language-c">case 's':
+ chptr = va_arg (ap, unsigned char*);
+ i = 0;
+ while (chptr [i]) {
+   cnt_printed_chars++;
+   putchar (chptr [i++]);
+ }
+ break;
+</code></pre>
+
+<p>和case &lsquo;c&rsquo;,同出一辙.cnt_printed_chars++放在了循环内,也证明了刚才提到的他的作用.另外我们也看到了cnptr是用来在处理字符串时的位置指针.到此为止,我们清楚的所有变量的用途,前途变得更加光明了.</p>
+
+<p>接下来:</p>
+
+<pre><code class="language-c">// PartI
+      case 'i':
+      case 'd':
+ cnt_printed_chars += printInt (va_arg (ap, int));
+ break;
+      case 'u':
+ cnt_printed_chars += printUnsignedInt (va_arg (ap, unsigned int));
+ break;
+      case 'x':
+ cnt_printed_chars += printHexa (va_arg (ap, unsigned int), 'x');
+ break;
+      case 'X':
+ cnt_printed_chars += printHexa (va_arg (ap, unsigned int), 'X');
+ break;
+      case 'o':
+ cnt_printed_chars += printOctal (va_arg (ap, unsigned int));
+ break;
+// Part II
+ case 'p':
+ putchar ('0');
+ putchar ('x');
+ cnt_printed_chars += 2; /* of '0x' */
+ cnt_printed_chars += printHexa (va_arg (ap, unsigned int), 'x');
+ break;
+      case '#':
+ pos++;
+ switch (cntrl_string[pos]) {
+ case 'x':
+   putchar ('0');
+   putchar ('x');
+   cnt_printed_chars += 2; /* of '0x' */
+   cnt_printed_chars += printHexa (va_arg (ap, unsigned int), 'x');
+   break;
+ case 'X':
+   putchar ('0');
+   putchar ('X');
+   cnt_printed_chars += 2; /* of '0X' */
+   cnt_printed_chars += printHexa (va_arg (ap, unsigned int), 'X');
+   break;
+ case 'o':
+   putchar ('0');
+   cnt_printed_chars++;
+   cnt_printed_chars += printOctal (va_arg (ap, unsigned int));
+   break;
+</code></pre>
+
+<p>注意观察一下,PartII的代码其实就是比PartI的代码多一个样式.在16进制数或八进制前加入0x或是o,等等.因此这里就只分析一下PartI咯.</p>
+
+<p>其实仔细看看PartI的个条case,也就是把参数分发到了更具体的函数用于显示,然后以返回值的形式返回输出个数.对于这些函数就不具体分析了.我们先来看看一些善后处理:</p>
+
+<p>先看case的default处理.</p>
+
+<pre><code class="language-c">default:
+ putchar ((unsigned char) cntrl_string[pos]);
+ cnt_printed_chars++;
+</code></pre>
+
+<p>就是直接输出cntrl_string里%号后面的未知字符.应该是一种容错设计处理.</p>
+
+<p>再看看if (cntrl_string[pos] == &lsquo;%&rsquo;)的else部分</p>
+
+<pre><code class="language-c">else {
+      putchar ((unsigned char) cntrl_string[pos]);
+      cnt_printed_chars++;
+      pos++;
+ }
+</code></pre>
+
+<p>如果不是%开头的,那么直接输出这个字符.</p>
+
+<p>最后函数返回前</p>
+
+<pre><code class="language-c">  va_end (ap);
+  return cnt_printed_chars;
+</code></pre>
+
+<p>va_end处理变长参数的善后工作.并返回输出的字符个数.</p>
+
+<p>在最后我们有必要谈谈putChar函数以及基本输出的基础函数printChar,先来看看putChar</p>
+
+<pre><code class="language-c">int putchar (int c) {
+  switch ((unsigned char) c) {
+  case '\n' :
+    newLine ();
+    break;
+  case '\r' :
+    carriageReturn ();
+    break;
+  case '\f' :
+    clearScreen ();
+    break;
+  case '\t' :
+    printChar (32); printChar (32); /* 32 = space */
+    printChar (32); printChar (32);
+    printChar (32); printChar (32);
+    printChar (32); printChar (32);
+    break;
+  case '\b':
+    backspace ();
+    break;
+  case '\a':
+    beep ();
+    break;
+  default :
+    printChar ((unsigned char) c);
+  }
+  return c;
+}
+</code></pre>
+
+<p>通览一下,也是switch-case为主体的.主要是用来应对一些特殊字符,如\n,\r,&hellip;.这里需要提一下,关于\t的理解.有些人认为\t就是8个space,有些人则认为,屏幕分为10大列(每个大列8个小列总共80列).一个\t就跳到下一个大列输出.也就是说不管你现在实在屏幕的第1,2,3,4,5,6,7位置输出字符,只要一个\t都在第8个位置开始输出. VS.NET中就是用的这种理解.因此如果按照这个理解的话,\t的实现可以这样</p>
+
+<pre><code class="language-c">int currentX = ((currentX % 10) + 1) * 8;
+</code></pre>
+
+<p>然后在currentX位置输出.</p>
+
+<p>接下来看printChar也就是输出部分最低层的操作咯</p>
+
+<pre><code class="language-c">void printChar (const byte ch) {
+  *(word *)(VIDEO + y * 160 + x * 2) = ch | (fill_color &lt;&lt; 8);
+  x++;
+  if (x &gt;= WIDTH)
+    newLine ();
+  setVideoCursor (y, x);
+}
+</code></pre>
+
+<p>这里VIDEO表示显存地址也就是0xB8000.通过<code>y * 160 + x</code>屏幕<code>(x,y)</code>坐标在显存中的位置.这里需要知道,一个字符显示需要两个字节,一个是ASCII码,第二个是字符属性代码也就是颜色代码.因此才必须<code>y * 80 * 2 + x = y * 160 + x</code>.那么<code>ch | (fill_color &lt;&lt; 8)</code>也自然就是写入字符及属性代码用的了.每写一个字符光标位置加1,如果大于屏幕宽度WIDTH就换行.最后通过setVideoCursor设置新的光标位置.完成了整个printChar过程.</p>
+
+<p>到此,把printf从上到下说了一遍.不知道各位大家感觉如何,如果说得不清楚还大家多提意见.有说得不对的地方请大家多多指教.</p></div>
+  </div>
+
+  <footer class="article-footer">
+    <div class="content-inner">
+
+      <aside class="p-share">
+  <div class="share-inner">
+    <a href="http://b.hatena.ne.jp/add?mode=confirm&url=http%3a%2f%2fair.googol.im%2fpost%2fanalysis-of-source-code-printf%2f&title=%e5%86%85%e6%a0%b8printf%e6%ba%90%e4%bb%a3%e7%a0%81%e5%88%86%e6%9e%90" title="はてなブックマーク" class="ht" target="_blank" rel="nofollow"></a>
+    <a href="http://www.facebook.com/sharer.php?u=http%3a%2f%2fair.googol.im%2fpost%2fanalysis-of-source-code-printf%2f&t=%e5%86%85%e6%a0%b8printf%e6%ba%90%e4%bb%a3%e7%a0%81%e5%88%86%e6%9e%90" title="Facebookでシェア" class="fb" target="_blank" rel="nofollow"></a>
+    <a href="http://twitter.com/intent/tweet?url=http%3a%2f%2fair.googol.im%2fpost%2fanalysis-of-source-code-printf%2f&text=%e5%86%85%e6%a0%b8printf%e6%ba%90%e4%bb%a3%e7%a0%81%e5%88%86%e6%9e%90&tw_p=tweetbutton" title="Twitterでシェア" class="tw" target="_blank" rel="nofollow"></a>
+    <a href="https://plus.google.com/share?url=http%3a%2f%2fair.googol.im%2fpost%2fanalysis-of-source-code-printf%2f" title="Google Plusでシェア" class="gp" target="_blank" rel="nofollow"></a>
+    <a href="http://line.me/R/msg/text/?%e5%86%85%e6%a0%b8printf%e6%ba%90%e4%bb%a3%e7%a0%81%e5%88%86%e6%9e%90 http%3a%2f%2fair.googol.im%2fpost%2fanalysis-of-source-code-printf%2f" title="LINEでシェア" class="ln" target="_blank" rel="nofollow"></a>
+  </div>
+</aside>
+
+
+      <nav class="p-crumb">
+        <ol>
+          <li><a href="http://air.googol.im/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+          
+          <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://air.googol.im/post/" itemprop="url"><span itemprop="title">post</span></a></li>
+          
+          <li class="active">内核printf源代码分析</li>
+        </ol>
+      </nav>
+
+      
+      
+      
+      
+      
+      <section class="article-footer">
+        <header>
+          <a href="http://air.googol.im/tags/">TAGS</a>
+        </header>
+        <div>
+          <ul class="p-terms inline">
+            
+            <li><a href="http://air.googol.im/tags/c/">c</a></li>
+            
+            <li><a href="http://air.googol.im/tags/printf/">printf</a></li>
+            
+          </ul>
+        </div>
+      </section>
+      
+      
+    </div>
+  </footer>
+
+</article>
+
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'air-g';
+    var disqus_identifier = 'http:\/\/air.googol.im\/post\/analysis-of-source-code-printf\/';
+    var disqus_title = '内核printf源代码分析';
+    var disqus_url = 'http:\/\/air.googol.im\/post\/analysis-of-source-code-printf\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+
+  <div class="col-md-4">
+    <aside class="site">
+
+  <section>
+    <header>latests</header>
+    <div>
+      <div class="row">
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/contiguous-stacks-in-go/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/contiguous-stacks-in-go/">Go中的连续栈</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-28T21:21:24JST">Mar 28, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/supervisor-with-docker-to-manage-processes/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/supervisor-with-docker-to-manage-processes/">在Docker里使用（支持镜像继承的）supervisor管理进程</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-28T19:46:44JST">Mar 28, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/go-concurrency-patterns-pipelines-and-cancellation/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/go-concurrency-patterns-pipelines-and-cancellation/">Go并发模式：管道和取消</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-15T10:52:46JST">Mar 15, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/explain-big-data/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/explain-big-data/">试着解释大数据</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-11T21:01:03JST">Mar 11, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/first-glance-at-atom/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/first-glance-at-atom/">Atom初探</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-07T01:20:00JST">Mar 7, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/whats-happening-in-go-tip-2014-01-10/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/whats-happening-in-go-tip-2014-01-10/">Go tip在做什么 2014-01-10</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-01-12T10:13:39JST">Jan 12, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/go-rest-revolution/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/go-rest-revolution/">go-rest演化</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-12-31T10:48:24JST">Dec 31, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/shy-note-project-management/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/shy-note-project-management/">S会议开发手札：项目管理</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-09-25T22:48:15JST">Sep 25, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/shy-note-over-design/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/shy-note-over-design/">S会议开发手札：过渡设计</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-09-17T22:51:28JST">Sep 17, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/shy-notes/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/shy-notes/">S会议开发手札</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-09-16T23:14:56JST">Sep 16, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+      </div>
+    </div>
+  </section>
+
+  
+  <section>
+    <header>category</header>
+    <div>
+      <ul class="p-terms">
+        
+      </ul>
+    </div>
+  </section>
+  
+  <section>
+    <header>tag</header>
+    <div>
+      <ul class="p-terms">
+        <li><a href="http://air.googol.im/tags/golang">golang</a></li><li><a href="http://air.googol.im/tags/cpp">cpp</a></li><li><a href="http://air.googol.im/tags/c">c</a></li><li><a href="http://air.googol.im/tags/python">python</a></li><li><a href="http://air.googol.im/tags/y-combinator">y-combinator</a></li><li><a href="http://air.googol.im/tags/startup">startup</a></li><li><a href="http://air.googol.im/tags/interview">interview</a></li><li><a href="http://air.googol.im/tags/occ">occ</a></li><li><a href="http://air.googol.im/tags/project">project</a></li><li><a href="http://air.googol.im/tags/ruby">ruby</a></li>
+      </ul>
+    </div>
+  </section>
+  
+
+</aside>
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p>All rights reserved - 2017</p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_robust">Robust</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

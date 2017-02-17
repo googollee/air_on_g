@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="theme-color" content="#263238">
+
+<meta name="generator" content="Hugo 0.18.1" />
+
+<link rel="apple-touch-icon" href="http://air.googol.im/images/logo.png">
+
+
+<link rel="canonical" href="http://air.googol.im/post/go-rest-revolution/">
+
+
+    
+    <link href="//fonts.googleapis.com/css?family=Noto+Sans:400,700|Montserrat" rel="stylesheet">
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>go-rest演化 - Air on G</title>
+    
+<meta name="description" content="&lt;p&gt;在EXFE创业的两年，虽然项目最终失败了（很可惜），不过自己从头开始写了一个简化RESTful Service实现的Framework——&lt;a href=&#34;https://github.com/googollee/go-rest&#34;&gt;go-rest&lt;/a&gt;，还算有不少收获。这里记录一下go-rest实现过程中一些重要的演变，以及这些演变背后的原因。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;">
+
+<meta property="og:title" content="go-rest演化 - Air on G">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://air.googol.im/post/go-rest-revolution/">
+<meta property="og:image" content="http://air.googol.im/images/default.png">
+<meta property="og:site_name" content="Air on G">
+<meta property="og:description" content="&lt;p&gt;在EXFE创业的两年，虽然项目最终失败了（很可惜），不过自己从头开始写了一个简化RESTful Service实现的Framework——&lt;a href=&#34;https://github.com/googollee/go-rest&#34;&gt;go-rest&lt;/a&gt;，还算有不少收获。这里记录一下go-rest实现过程中一些重要的演变，以及这些演变背后的原因。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="Air on G">
+<meta name="twitter:url" content="http://air.googol.im/post/go-rest-revolution/">
+<meta name="twitter:title" content="go-rest演化 - Air on G">
+<meta name="twitter:description" content="&lt;p&gt;在EXFE创业的两年，虽然项目最终失败了（很可惜），不过自己从头开始写了一个简化RESTful Service实现的Framework——&lt;a href=&#34;https://github.com/googollee/go-rest&#34;&gt;go-rest&lt;/a&gt;，还算有不少收获。这里记录一下go-rest实现过程中一些重要的演变，以及这些演变背后的原因。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;">
+<meta name="twitter:image" content="http://air.googol.im/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http:\/\/air.googol.im\/"
+    },
+    "headline": "go-rest演化 - Air on G",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http:\/\/air.googol.im\/images\/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2013-12-31T10:48:24JST",
+    "dateModified": "2013-12-31T10:48:24JST",
+    "author": {
+      "@type": "Person",
+      "name": "Air on G"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Air on G",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http:\/\/air.googol.im\/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "\x3cp\x3e在EXFE创业的两年，虽然项目最终失败了（很可惜），不过自己从头开始写了一个简化RESTful Service实现的Framework——\x3ca href=\x22https:\/\/github.com\/googollee\/go-rest\x22\x3ego-rest\x3c\/a\x3e，还算有不少收获。这里记录一下go-rest实现过程中一些重要的演变，以及这些演变背后的原因。\x3c\/p\x3e\n\n\x3cp\x3e\x3c\/p\x3e"
+  }
+</script>
+
+
+    <style>
+      html { font-size: 18px;}@media (max-width: 768px) { html { font-size: 15px; }}body { font-family: 'Noto Sans','Hiragino Kaku Gothic Pro',メイリオ,Meiryo,sans-serif; font-size: inherit; font-weight: 300; line-height: 1rem; background-color: #eceff1;}p { margin: 0;}a { color: #4caf50;}a:hover { text-decoration: none; color: #388e3c;}ul,ol { margin: 0; padding: 0;}h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 700;}h1 { font-size: 1.8rem; line-height: 2rem; margin: 1.5rem 0; }h2 { font-size: 1.4rem; line-height: 2rem; margin: 1.5rem 0; }h3 { font-size: 1.2rem; line-height: 1.5rem; margin: 1.5rem 0; }h4, h5, h6 { font-size: 1rem; line-height: 1.5rem; margin: 1.5rem 0; }main { display: block;}.content-inner { padding: 1rem 2rem;}.content-inner.thin { padding: .5rem 1rem;}@media (max-width: 768px) { .content-inner { padding: 1rem; }}/* Override */.container { position: relative;}/* Parts:layouts */.l-header { background-color: #fff; margin-bottom: 1rem; padding: 1rem 0; text-align: center;}.l-footer { font-size: .8rem; padding: 1.5rem 0;}/* Parts:menu */.p-menu { position: absolute; right: 15px; top: 0;}/* Parts:terms */.p-terms { list-style: none;}.p-terms .terms-title { margin: 0;}.p-terms a { display: inline-block; padding: .25rem 0;}.p-terms.inline li { display: inline-block; font-size: .8rem;}.p-terms.inline li::after { content: ',';}.p-terms.inline li:last-child::after { content: '';}/* Parts:paging */.p-paging { margin-bottom: 1.5rem; text-align: center;}.p-paging a { display: inline-block; padding: 1rem 1.5rem; margin: 0 .5rem; background-color: #cfd8dc; color: #263238;}/* Parts:section */section { margin-bottom: 1.5rem;}section>header { font-size: .8rem; font-weight: 700; margin-bottom: .5rem; text-transform: uppercase;}section>header a { color: #333; text-decoration: underline;}section.article-footer { margin-bottom: 1rem;}section.article-footer>header { margin-bottom: 0;}/* Parts:share */.p-share { min-width: 100%; margin-bottom: 1.5rem;}.p-share .share-inner { display: table; table-layout: fixed; width: 100%; border-spacing: .25rem;}.p-share a { display: table-cell; text-align: center; font-weight: 700; font-size: .7rem; padding: .5rem 0; color: #fff; border-radius: 5px;}.p-share a.ht { background-color: #00a4de; border-bottom: 2px solid #0083b1; }.p-share a.fb { background-color: #3b5998; border-bottom: 2px solid #2f4779; }.p-share a.tw { background-color: #1da1f2; border-bottom: 2px solid #1780c1; }.p-share a.gp { background-color: #dd4b39; border-bottom: 2px solid #b03c2d; }.p-share a.ln { background-color: #00c300; border-bottom: 2px solid #009c00; }.p-share a.ht::before { content: 'Hatena'; }.p-share a.fb::before { content: 'Facebook'; }.p-share a.tw::before { content: 'Twitter'; }.p-share a.gp::before { content: 'Google+'; }.p-share a.ln::before { content: 'LINE'; }/* Parts:logo */.h-logo { font-family: 'Montserrat', sans-serif;}.p-logo { display: inline-block; text-transform: uppercase;}.p-logo a { display: inline-block; font-size: 1.4rem; line-height: 2rem; color: #000;}/* Parts:crumb */.p-crumb ol { list-style: none; margin-bottom: 1rem;}.p-crumb li { display: inline; margin-right: .25rem; font-size: .8rem; color: #607d8b;}.p-crumb li::after { content: '/'; margin-left: .25rem;}.p-crumb li:last-child::after { content: '';}/* Parts:facts */.p-facts { list-style: none; font-size: .8rem; margin-bottom: 1rem;}.p-facts li { display: inline-block; margin-right: .5rem; color: #90a4ae;}.p-facts li i { margin-right: .5rem; color: #cfd8dc;}/* Parts:article */article { background-color: #fff;}article .title { margin: 0; margin-bottom: .5rem; font-weight: 700;}article .title a { color: #000;}article .thumb { display: block; background-image: url(http://air.googol.im/images/default.jpg); background-position: center; background-size: cover;}article .summary { margin-bottom: .5rem; max-height: 5rem; overflow: hidden;}article.single .thumb { height: 18rem; margin-bottom: 1rem;}@media (max-width: 768px) { article.single .thumb { height: 12rem; }}article.li { margin-bottom: 1rem;}article.li .thumb { height: 7.5rem; margin-bottom: .5rem;}article.li.sm { background-color: transparent; margin-bottom: .5rem;}article.li.sm>header { padding: .5rem 0;}article.li.sm .title { font-size: .8rem; line-height: 1rem; margin-bottom: .25rem;}article.li.sm .p-facts { font-size: .6rem; margin-bottom: 0;}article.li.sm .thumb { float: left; margin-right: .5rem; height: 3rem; width: 3rem;}.article-body h2 { padding: 1rem 0; border-bottom: 2px solid #eceff1;}.article-body h2:first-child { margin-top: 0; }.article-body h3 { color: #428bca;}.article-body h4 { border-left: solid .25rem #428bca; padding: 0 .5rem;}.article-body p { margin: 1.5rem 0; line-height: 1.5rem;}.article-body a { text-decoration: underline;}.article-body ul,.article-body ol { padding-left: 1.5rem;}.article-body code { display: inline-block; font-family: Menlo, consolas, monospace; font-size: .8rem; padding: 0 .5rem; line-height: 1.5rem;}.article-body pre { margin: 1.5rem 0; padding: 0; font-size: .8rem; border: none; border-radius: 0;}.article-body pre code { display: block; line-height: 1rem; padding: 1rem;}.article-body blockquote { margin: 1.5rem 0; padding: .5rem 0; font-size: .8rem; border-top: 1px solid #eceff1; border-bottom: 1px solid #eceff1; color: #607d8b;}.article-body blockquote p { margin: .5rem 0; line-height: 1rem;}.article-body strong { box-shadow: 0 -.5rem 0 0 #90caf9 inset;}.article-body em { font-style: normal; font-weight: 700; color: #03a9f4;}.article-body figure { margin: 1.5rem 0; }.article-body figure img { max-width: 100%; }.article-body figure.left,.article-body figure.right { width: 15rem; height: 12rem; margin-top: 0;}.article-body figure.left { float: left; margin-right: 1rem; }.article-body figure.right { float: right; margin-left: 1rem; }@media (max-width: 768px) { .article-body figure.left, .article-body figure.right { float: none; margin: 0; width: auto; height: auto; }}.article-body figcaption { padding: .5rem 0; font-size: .8rem; text-align: center;}.article-body figcaption a { color: #263238;}
+      
+      
+    </style>
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <div class="container">
+        <div class="p-logo">
+          <a href="http://air.googol.im/" class="h-logo">Air on G</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol>
+        <li><a href="http://air.googol.im/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://air.googol.im/post/" itemprop="url"><span itemprop="title">post</span></a></li>
+        
+        <li class="active">go-rest演化</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+
+  <a href="http://air.googol.im/post/go-rest-revolution/" class="thumb"></a>
+  <div class="content-inner">
+    <h1 class="title">go-rest演化</h1>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-12-31T10:48:24JST">Dec 31, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+      
+    </ul>
+
+    <div class="article-body"><p>在EXFE创业的两年，虽然项目最终失败了（很可惜），不过自己从头开始写了一个简化RESTful Service实现的Framework——<a href="https://github.com/googollee/go-rest">go-rest</a>，还算有不少收获。这里记录一下go-rest实现过程中一些重要的演变，以及这些演变背后的原因。</p>
+
+<p></p>
+
+<p>最开始，我把Service定义为RPC remote式的调用方法。处理逻辑的函数，基本上是这样：</p>
+
+<pre><code class="language-go">func Handler(input InputType) OutputType { ... }
+</code></pre>
+
+<p>框架主要是解决HTTP协议的处理，以及将Request Post的body部分反序列化为InputType的实例，根据url调用相应的函数，并序列化函数的输出结果。</p>
+
+<p>因此，当时的框架使用起来类似下面的样子（因为最老的一版代码找不到了，这个是凭印象写的）：</p>
+
+<pre><code class="language-go">
+func Handler1(input InputType) OutputType { ... }
+func Handler2(input InputType) (OutputType, error) { ... }
+
+func main() {
+	r := rest.New()
+	r.Add(&quot;/handler1&quot;, Handler1)
+	r.Add(&quot;/handler2&quot;, Handler2)
+
+	http.ListenAndServe(&quot;:8000&quot;, r)
+}
+</code></pre>
+
+<p>优点：</p>
+
+<ul>
+<li>自动处理HTTP协议，根据mime选择合适的序列化方法；</li>
+<li>自动将Request Body和Response Body序列化/反序列化为对应的参数结构，处理函数内不需要考虑序列化问题；</li>
+<li>逻辑函数易于测试。</li>
+</ul>
+
+<p>缺点：</p>
+
+<ul>
+<li>无法自定义任何HTTP协议的处理过程，无法做url参数化或者对url的参数做处理，无法使用HTTP Header信息；</li>
+<li>只能固定使用POST方法做请求；</li>
+<li>返回值格式固定，如果出错（处理函数的error返回不为nil），只能使用500一种返回码，调用者无法知道错误细节；</li>
+</ul>
+
+<p>为了解决缺点，最开始使用gorilla/mux库做路由，解决了不能自定义HTTP method的问题。之后为了利用起HTTP协议本身的各种参数化和配置方法，达到更加RESTful的状态，go-rest第二版引入了Context的概念。在注册处理函数时，参考<a href="https://code.google.com/p/gorest/">gorest</a>也引入了使用将struct做配置的方法。</p>
+
+<p>第二版里定义一个用于处理逻辑的struct如下所示：</p>
+
+<pre><code class="language-go">type RestExample struct {
+    rest.Service `prefix:&quot;/prefix&quot; mime:&quot;application/json&quot;`
+
+    postSample rest.SimpleNode `method:&quot;POST&quot; route:&quot;/post&quot;`
+    getSample  rest.SimpleNode `method:&quot;GET&quot; route:&quot;/get/:id&quot;`
+}
+
+func (r *RestExample) PostSample(ctx rest.Context, arg InputType) {
+    ...
+}
+
+func (r *RestExample) GetSample(ctx rest.Context) {
+    var id int
+    ctx.Bind(&quot;id&quot;, &amp;id)
+    if err := ctx.Error(); err != nil {
+        ctx.Return(http.StatusBadRequest, err.Error())
+        return
+    }
+    ...
+}
+</code></pre>
+
+<p>优点：</p>
+
+<ul>
+<li>url配置更加灵活，可以为每个Service分别添加前缀；</li>
+<li>参数化url，可以写表达性更强的url，而且可以保证处理函数不需要牵涉到HTTP协议的细节；</li>
+<li>可以使用Context来访问HTTP报文相关内容，比如拿到Request Header，或者改变HTTP Response Code（见GetSample）；</li>
+<li>使用Context.Bind来处理url参数解析，声明式比过程式更易懂；</li>
+<li>配置统一定义在RestExample里。</li>
+</ul>
+
+<p>缺点：</p>
+
+<ul>
+<li>使用Context处理HTTP相关信息的时候引入了HTTP协议细节，不易测试；</li>
+<li>函数名和配置变量对应依靠首字母大小写来对应，过于隐晦；</li>
+<li>没有中间层，对于一些通用处理显得繁琐，比如log，auth等。</li>
+</ul>
+
+<p>因为要对HTTP的细节作处理（Header，url参数化等等），而引入的Context，最终却变成了逻辑函数里额外的部分，导致测试时需要花费很大精力准备一个合法的Context，是这次变动中最失败的部分。但是由于更加符合业务要求，实现出来的接口更容易理解且符合RSETful的要求，这个实现大概维持了1年左右没有变化。</p>
+
+<p>后来团队解散后空余时间比较多，也因为Node.js很火爆，就跑去看了看Node.js上最流行的框架Express.js。Express.js使用的Connect库做到的中间件很有意思。借鉴Connect的中间件思想，就有了go-rest最新的一次改版。这次改版的主要思路在于，使用中间件来处理与HTTP协议相关的逻辑，保持最终的业务逻辑是一个独立的函数，不引入任何与框架相关的约束和假设。改版后的框架使用起来像下面这个样子：</p>
+
+<pre><code class="language-go">
+r := rest.New()
+
+// add log midware
+r.Use(rest.NewLog(nil))
+
+// add router. router must before mime parser because parser need handler's parameter inserted by router.
+r.Use(rest.NewRouter())
+
+// parse json
+r.Use(rest.NewJSON()))
+
+// get sample
+r.Get(&quot;/get/:id&quot;, func(params rest.Params) error {
+    var id int
+    params.Bind(&quot;id&quot;, &amp;id)
+    if err := params.Error(); err != nil {
+        return resp.Error(http.StatusBadRequest, err.Error())
+    }
+    ...
+})
+
+// post sample
+r.Post(&quot;/post&quot;, func(arg InputType) {
+	...
+})
+
+// custom midware
+func prefix(prefix string) http.HandlerFunc {
+    return func(w http.ResponseWriter, r *http.Request) {
+        if !strings.HasPrefix(r.URL.Path, prefix) {
+            http.NotFound(w, r)
+            return
+        }
+    }
+}
+
+// a handler with special midware
+r.NotFound(prefix(&quot;/static/&quot;), http.FileServer(http.Dir(&quot;.&quot;)))
+</code></pre>
+
+<p>由于有了灵活的中间件机制（通过Use引入），可以将所有和HTTP解析相关的代码改写为中间件并复用。同时，可以给每个处理函数单独配置自己的中间件，这样不同处理函数也可以复用一些相似的逻辑。需要从HTTP内解析出的变量，通过rest.Params传入处理函数。而rest.Params只是map[string]interface{}的简单封装，测试时很容易构造其中的内容。Params.Bind的部分目前还没有实现，其实这部分可以通过中间件完成的，写在这里是为了展示效果。如果error返回的不是一个rest.Response或者rest.Error，HTTP就会以StatusServerInternalError作为Response Code。</p>
+
+<p>这个框架本身还可以支持多参数的处理函数，不过要自己写相应的中间件对参数顺序做布局。由于通用性不高，我就没有实现相关的内容。</p>
+
+<p>这个框架的优点：</p>
+
+<ul>
+<li>中间件机制灵活，可以对某个处理分支加入单独的中间件；</li>
+<li>处理函数与HTTP协议无关，方便测试和重构；</li>
+<li>中间件可以改变处理函数需要的参数和返回值的类型，支持类似wrapper的特性而不需要改动业务处理函数。</li>
+</ul>
+
+<p>缺点：</p>
+
+<ul>
+<li>实现有一些精巧的不易理解的部分，使用时容易造成困惑；</li>
+<li>看上去接口并不清晰。</li>
+</ul></div>
+  </div>
+
+  <footer class="article-footer">
+    <div class="content-inner">
+
+      <aside class="p-share">
+  <div class="share-inner">
+    <a href="http://b.hatena.ne.jp/add?mode=confirm&url=http%3a%2f%2fair.googol.im%2fpost%2fgo-rest-revolution%2f&title=go-rest%e6%bc%94%e5%8c%96" title="はてなブックマーク" class="ht" target="_blank" rel="nofollow"></a>
+    <a href="http://www.facebook.com/sharer.php?u=http%3a%2f%2fair.googol.im%2fpost%2fgo-rest-revolution%2f&t=go-rest%e6%bc%94%e5%8c%96" title="Facebookでシェア" class="fb" target="_blank" rel="nofollow"></a>
+    <a href="http://twitter.com/intent/tweet?url=http%3a%2f%2fair.googol.im%2fpost%2fgo-rest-revolution%2f&text=go-rest%e6%bc%94%e5%8c%96&tw_p=tweetbutton" title="Twitterでシェア" class="tw" target="_blank" rel="nofollow"></a>
+    <a href="https://plus.google.com/share?url=http%3a%2f%2fair.googol.im%2fpost%2fgo-rest-revolution%2f" title="Google Plusでシェア" class="gp" target="_blank" rel="nofollow"></a>
+    <a href="http://line.me/R/msg/text/?go-rest%e6%bc%94%e5%8c%96 http%3a%2f%2fair.googol.im%2fpost%2fgo-rest-revolution%2f" title="LINEでシェア" class="ln" target="_blank" rel="nofollow"></a>
+  </div>
+</aside>
+
+
+      <nav class="p-crumb">
+        <ol>
+          <li><a href="http://air.googol.im/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+          
+          <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://air.googol.im/post/" itemprop="url"><span itemprop="title">post</span></a></li>
+          
+          <li class="active">go-rest演化</li>
+        </ol>
+      </nav>
+
+      
+      
+      
+      
+      
+      <section class="article-footer">
+        <header>
+          <a href="http://air.googol.im/tags/">TAGS</a>
+        </header>
+        <div>
+          <ul class="p-terms inline">
+            
+            <li><a href="http://air.googol.im/tags/golang/">golang</a></li>
+            
+            <li><a href="http://air.googol.im/tags/restful/">restful</a></li>
+            
+          </ul>
+        </div>
+      </section>
+      
+      
+    </div>
+  </footer>
+
+</article>
+
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'air-g';
+    var disqus_identifier = 'http:\/\/air.googol.im\/post\/go-rest-revolution\/';
+    var disqus_title = 'go-rest演化';
+    var disqus_url = 'http:\/\/air.googol.im\/post\/go-rest-revolution\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+
+  <div class="col-md-4">
+    <aside class="site">
+
+  <section>
+    <header>latests</header>
+    <div>
+      <div class="row">
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/contiguous-stacks-in-go/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/contiguous-stacks-in-go/">Go中的连续栈</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-28T21:21:24JST">Mar 28, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/supervisor-with-docker-to-manage-processes/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/supervisor-with-docker-to-manage-processes/">在Docker里使用（支持镜像继承的）supervisor管理进程</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-28T19:46:44JST">Mar 28, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/go-concurrency-patterns-pipelines-and-cancellation/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/go-concurrency-patterns-pipelines-and-cancellation/">Go并发模式：管道和取消</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-15T10:52:46JST">Mar 15, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/explain-big-data/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/explain-big-data/">试着解释大数据</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-11T21:01:03JST">Mar 11, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/first-glance-at-atom/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/first-glance-at-atom/">Atom初探</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-07T01:20:00JST">Mar 7, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/whats-happening-in-go-tip-2014-01-10/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/whats-happening-in-go-tip-2014-01-10/">Go tip在做什么 2014-01-10</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-01-12T10:13:39JST">Jan 12, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/go-rest-revolution/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/go-rest-revolution/">go-rest演化</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-12-31T10:48:24JST">Dec 31, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/shy-note-project-management/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/shy-note-project-management/">S会议开发手札：项目管理</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-09-25T22:48:15JST">Sep 25, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/shy-note-over-design/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/shy-note-over-design/">S会议开发手札：过渡设计</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-09-17T22:51:28JST">Sep 17, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/shy-notes/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/shy-notes/">S会议开发手札</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-09-16T23:14:56JST">Sep 16, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+      </div>
+    </div>
+  </section>
+
+  
+  <section>
+    <header>category</header>
+    <div>
+      <ul class="p-terms">
+        
+      </ul>
+    </div>
+  </section>
+  
+  <section>
+    <header>tag</header>
+    <div>
+      <ul class="p-terms">
+        <li><a href="http://air.googol.im/tags/golang">golang</a></li><li><a href="http://air.googol.im/tags/cpp">cpp</a></li><li><a href="http://air.googol.im/tags/c">c</a></li><li><a href="http://air.googol.im/tags/python">python</a></li><li><a href="http://air.googol.im/tags/y-combinator">y-combinator</a></li><li><a href="http://air.googol.im/tags/startup">startup</a></li><li><a href="http://air.googol.im/tags/interview">interview</a></li><li><a href="http://air.googol.im/tags/occ">occ</a></li><li><a href="http://air.googol.im/tags/project">project</a></li><li><a href="http://air.googol.im/tags/ruby">ruby</a></li>
+      </ul>
+    </div>
+  </section>
+  
+
+</aside>
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p>All rights reserved - 2017</p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_robust">Robust</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

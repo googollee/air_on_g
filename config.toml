@@ -3,6 +3,7 @@ title = "Air on G"
 baseurl = "http://air.googol.im/"
 Copyright = "All rights reserved - 2017"
 caononifyurls = true
+publishDir = "docs"
 
 [params]
   disqusShortname = "air-g"

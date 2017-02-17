@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="theme-color" content="#263238">
+
+<meta name="generator" content="Hugo 0.18.1" />
+
+<link rel="apple-touch-icon" href="http://air.googol.im/images/logo.png">
+
+
+<link rel="canonical" href="http://air.googol.im/post/why-i-like-go/">
+
+
+    
+    <link href="//fonts.googleapis.com/css?family=Noto+Sans:400,700|Montserrat" rel="stylesheet">
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>我为什么喜欢Go - Air on G</title>
+    
+<meta name="description" content="&lt;p&gt;这半年来工作上一直在用Go，总共统计下来也写了1w多行代码，算上删删改改的，大概能有1w5吧。而且还写了不少go的库，比如android push库&lt;a href=&#34;https://github.com/googollee/go_c2dm&#34;&gt;go_c2dm&lt;/a&gt;，一个简单的IMAP客户端&lt;a href=&#34;https://github.com/googollee/goimap&#34;&gt;goimap&lt;/a&gt;，想继续完善的编码库&lt;a href=&#34;https://github.com/googollee/go-encoding-ex&#34;&gt;go-encoding-ex&lt;/a&gt;。似乎赶着最近Google IO，国外很时兴写对Go的总结，于是我也赶热闹写一篇blog。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;">
+
+<meta property="og:title" content="我为什么喜欢Go - Air on G">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://air.googol.im/post/why-i-like-go/">
+<meta property="og:image" content="http://air.googol.im/images/default.png">
+<meta property="og:site_name" content="Air on G">
+<meta property="og:description" content="&lt;p&gt;这半年来工作上一直在用Go，总共统计下来也写了1w多行代码，算上删删改改的，大概能有1w5吧。而且还写了不少go的库，比如android push库&lt;a href=&#34;https://github.com/googollee/go_c2dm&#34;&gt;go_c2dm&lt;/a&gt;，一个简单的IMAP客户端&lt;a href=&#34;https://github.com/googollee/goimap&#34;&gt;goimap&lt;/a&gt;，想继续完善的编码库&lt;a href=&#34;https://github.com/googollee/go-encoding-ex&#34;&gt;go-encoding-ex&lt;/a&gt;。似乎赶着最近Google IO，国外很时兴写对Go的总结，于是我也赶热闹写一篇blog。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="Air on G">
+<meta name="twitter:url" content="http://air.googol.im/post/why-i-like-go/">
+<meta name="twitter:title" content="我为什么喜欢Go - Air on G">
+<meta name="twitter:description" content="&lt;p&gt;这半年来工作上一直在用Go，总共统计下来也写了1w多行代码，算上删删改改的，大概能有1w5吧。而且还写了不少go的库，比如android push库&lt;a href=&#34;https://github.com/googollee/go_c2dm&#34;&gt;go_c2dm&lt;/a&gt;，一个简单的IMAP客户端&lt;a href=&#34;https://github.com/googollee/goimap&#34;&gt;goimap&lt;/a&gt;，想继续完善的编码库&lt;a href=&#34;https://github.com/googollee/go-encoding-ex&#34;&gt;go-encoding-ex&lt;/a&gt;。似乎赶着最近Google IO，国外很时兴写对Go的总结，于是我也赶热闹写一篇blog。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;">
+<meta name="twitter:image" content="http://air.googol.im/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http:\/\/air.googol.im\/"
+    },
+    "headline": "我为什么喜欢Go - Air on G",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http:\/\/air.googol.im\/images\/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2012-07-09T20:00:00JST",
+    "dateModified": "2012-07-09T20:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "Air on G"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Air on G",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http:\/\/air.googol.im\/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "\x3cp\x3e这半年来工作上一直在用Go，总共统计下来也写了1w多行代码，算上删删改改的，大概能有1w5吧。而且还写了不少go的库，比如android push库\x3ca href=\x22https:\/\/github.com\/googollee\/go_c2dm\x22\x3ego_c2dm\x3c\/a\x3e，一个简单的IMAP客户端\x3ca href=\x22https:\/\/github.com\/googollee\/goimap\x22\x3egoimap\x3c\/a\x3e，想继续完善的编码库\x3ca href=\x22https:\/\/github.com\/googollee\/go-encoding-ex\x22\x3ego-encoding-ex\x3c\/a\x3e。似乎赶着最近Google IO，国外很时兴写对Go的总结，于是我也赶热闹写一篇blog。\x3c\/p\x3e\n\n\x3cp\x3e\x3c\/p\x3e"
+  }
+</script>
+
+
+    <style>
+      html { font-size: 18px;}@media (max-width: 768px) { html { font-size: 15px; }}body { font-family: 'Noto Sans','Hiragino Kaku Gothic Pro',メイリオ,Meiryo,sans-serif; font-size: inherit; font-weight: 300; line-height: 1rem; background-color: #eceff1;}p { margin: 0;}a { color: #4caf50;}a:hover { text-decoration: none; color: #388e3c;}ul,ol { margin: 0; padding: 0;}h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 700;}h1 { font-size: 1.8rem; line-height: 2rem; margin: 1.5rem 0; }h2 { font-size: 1.4rem; line-height: 2rem; margin: 1.5rem 0; }h3 { font-size: 1.2rem; line-height: 1.5rem; margin: 1.5rem 0; }h4, h5, h6 { font-size: 1rem; line-height: 1.5rem; margin: 1.5rem 0; }main { display: block;}.content-inner { padding: 1rem 2rem;}.content-inner.thin { padding: .5rem 1rem;}@media (max-width: 768px) { .content-inner { padding: 1rem; }}/* Override */.container { position: relative;}/* Parts:layouts */.l-header { background-color: #fff; margin-bottom: 1rem; padding: 1rem 0; text-align: center;}.l-footer { font-size: .8rem; padding: 1.5rem 0;}/* Parts:menu */.p-menu { position: absolute; right: 15px; top: 0;}/* Parts:terms */.p-terms { list-style: none;}.p-terms .terms-title { margin: 0;}.p-terms a { display: inline-block; padding: .25rem 0;}.p-terms.inline li { display: inline-block; font-size: .8rem;}.p-terms.inline li::after { content: ',';}.p-terms.inline li:last-child::after { content: '';}/* Parts:paging */.p-paging { margin-bottom: 1.5rem; text-align: center;}.p-paging a { display: inline-block; padding: 1rem 1.5rem; margin: 0 .5rem; background-color: #cfd8dc; color: #263238;}/* Parts:section */section { margin-bottom: 1.5rem;}section>header { font-size: .8rem; font-weight: 700; margin-bottom: .5rem; text-transform: uppercase;}section>header a { color: #333; text-decoration: underline;}section.article-footer { margin-bottom: 1rem;}section.article-footer>header { margin-bottom: 0;}/* Parts:share */.p-share { min-width: 100%; margin-bottom: 1.5rem;}.p-share .share-inner { display: table; table-layout: fixed; width: 100%; border-spacing: .25rem;}.p-share a { display: table-cell; text-align: center; font-weight: 700; font-size: .7rem; padding: .5rem 0; color: #fff; border-radius: 5px;}.p-share a.ht { background-color: #00a4de; border-bottom: 2px solid #0083b1; }.p-share a.fb { background-color: #3b5998; border-bottom: 2px solid #2f4779; }.p-share a.tw { background-color: #1da1f2; border-bottom: 2px solid #1780c1; }.p-share a.gp { background-color: #dd4b39; border-bottom: 2px solid #b03c2d; }.p-share a.ln { background-color: #00c300; border-bottom: 2px solid #009c00; }.p-share a.ht::before { content: 'Hatena'; }.p-share a.fb::before { content: 'Facebook'; }.p-share a.tw::before { content: 'Twitter'; }.p-share a.gp::before { content: 'Google+'; }.p-share a.ln::before { content: 'LINE'; }/* Parts:logo */.h-logo { font-family: 'Montserrat', sans-serif;}.p-logo { display: inline-block; text-transform: uppercase;}.p-logo a { display: inline-block; font-size: 1.4rem; line-height: 2rem; color: #000;}/* Parts:crumb */.p-crumb ol { list-style: none; margin-bottom: 1rem;}.p-crumb li { display: inline; margin-right: .25rem; font-size: .8rem; color: #607d8b;}.p-crumb li::after { content: '/'; margin-left: .25rem;}.p-crumb li:last-child::after { content: '';}/* Parts:facts */.p-facts { list-style: none; font-size: .8rem; margin-bottom: 1rem;}.p-facts li { display: inline-block; margin-right: .5rem; color: #90a4ae;}.p-facts li i { margin-right: .5rem; color: #cfd8dc;}/* Parts:article */article { background-color: #fff;}article .title { margin: 0; margin-bottom: .5rem; font-weight: 700;}article .title a { color: #000;}article .thumb { display: block; background-image: url(http://air.googol.im/images/default.jpg); background-position: center; background-size: cover;}article .summary { margin-bottom: .5rem; max-height: 5rem; overflow: hidden;}article.single .thumb { height: 18rem; margin-bottom: 1rem;}@media (max-width: 768px) { article.single .thumb { height: 12rem; }}article.li { margin-bottom: 1rem;}article.li .thumb { height: 7.5rem; margin-bottom: .5rem;}article.li.sm { background-color: transparent; margin-bottom: .5rem;}article.li.sm>header { padding: .5rem 0;}article.li.sm .title { font-size: .8rem; line-height: 1rem; margin-bottom: .25rem;}article.li.sm .p-facts { font-size: .6rem; margin-bottom: 0;}article.li.sm .thumb { float: left; margin-right: .5rem; height: 3rem; width: 3rem;}.article-body h2 { padding: 1rem 0; border-bottom: 2px solid #eceff1;}.article-body h2:first-child { margin-top: 0; }.article-body h3 { color: #428bca;}.article-body h4 { border-left: solid .25rem #428bca; padding: 0 .5rem;}.article-body p { margin: 1.5rem 0; line-height: 1.5rem;}.article-body a { text-decoration: underline;}.article-body ul,.article-body ol { padding-left: 1.5rem;}.article-body code { display: inline-block; font-family: Menlo, consolas, monospace; font-size: .8rem; padding: 0 .5rem; line-height: 1.5rem;}.article-body pre { margin: 1.5rem 0; padding: 0; font-size: .8rem; border: none; border-radius: 0;}.article-body pre code { display: block; line-height: 1rem; padding: 1rem;}.article-body blockquote { margin: 1.5rem 0; padding: .5rem 0; font-size: .8rem; border-top: 1px solid #eceff1; border-bottom: 1px solid #eceff1; color: #607d8b;}.article-body blockquote p { margin: .5rem 0; line-height: 1rem;}.article-body strong { box-shadow: 0 -.5rem 0 0 #90caf9 inset;}.article-body em { font-style: normal; font-weight: 700; color: #03a9f4;}.article-body figure { margin: 1.5rem 0; }.article-body figure img { max-width: 100%; }.article-body figure.left,.article-body figure.right { width: 15rem; height: 12rem; margin-top: 0;}.article-body figure.left { float: left; margin-right: 1rem; }.article-body figure.right { float: right; margin-left: 1rem; }@media (max-width: 768px) { .article-body figure.left, .article-body figure.right { float: none; margin: 0; width: auto; height: auto; }}.article-body figcaption { padding: .5rem 0; font-size: .8rem; text-align: center;}.article-body figcaption a { color: #263238;}
+      
+      
+    </style>
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <div class="container">
+        <div class="p-logo">
+          <a href="http://air.googol.im/" class="h-logo">Air on G</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol>
+        <li><a href="http://air.googol.im/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://air.googol.im/post/" itemprop="url"><span itemprop="title">post</span></a></li>
+        
+        <li class="active">我为什么喜欢Go</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+
+  <a href="http://air.googol.im/post/why-i-like-go/" class="thumb"></a>
+  <div class="content-inner">
+    <h1 class="title">我为什么喜欢Go</h1>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2012-07-09T20:00:00JST">Jul 9, 2012</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+      
+    </ul>
+
+    <div class="article-body"><p>这半年来工作上一直在用Go，总共统计下来也写了1w多行代码，算上删删改改的，大概能有1w5吧。而且还写了不少go的库，比如android push库<a href="https://github.com/googollee/go_c2dm">go_c2dm</a>，一个简单的IMAP客户端<a href="https://github.com/googollee/goimap">goimap</a>，想继续完善的编码库<a href="https://github.com/googollee/go-encoding-ex">go-encoding-ex</a>。似乎赶着最近Google IO，国外很时兴写对Go的总结，于是我也赶热闹写一篇blog。</p>
+
+<p></p>
+
+<h2 id="我喜欢的go特性">我喜欢的Go特性</h2>
+
+<h3 id="interface">interface</h3>
+
+<p>Go的interface实在是让人眼前一亮的特性，在静态编译语言里引入了动态语言常用的duck type特性，而且还没有任何运行时负担。举个栗子，如果我想给一个struct A实现io.Reader接口，在定义struct A的时，不需要和io.Reader扯上任何关系（不需要继承，不需要包含，什么都不需要），只要对struct A定义Read([]byte) (int, error)这个函数（与对象方法类似）就可以。至于如何把struct A的实例捏成一个io.Reader，全是Go编译器在背后的工作。我斗胆猜一下Go在使用io.Reader这个interface的时候，使用了类似下面的结构：</p>
+
+<pre><code class="language-go">type InterfaceReader struct {
+	instancePtr pointer_to_original_instance
+	readFunc pointer_to_read_function
+}
+</code></pre>
+
+<p>而将一个实现了Read成员函数的实例变成io.Reader的时候，执行了类似下面的代码：</p>
+
+<pre><code class="language-go">// Pseudo code for:
+//   var i io.Reader
+//   i = New(A)
+i = New(InterfaceReader)
+i.instancePtr = New(A)
+i.readFunc = i.instancePtr.Read
+</code></pre>
+
+<p>这个伪代码的操作，在编译期就可以完成，不需要在运行时依旧保留很多类型的相关信息。</p>
+
+<h3 id="reflect">reflect</h3>
+
+<p>不过Go依旧在运行时保留了不少的类型信息，用来完成反射。不过Go的反射与Java和其他动态语言比起来，还是有限制：所有的反射操作都必须通过一个实例完成，而不能直接操作类型。比如，可以根据一个实例拿到一个类型并生成这个类型对应的新实例：</p>
+
+<pre><code class="language-go">t := reflect.TypeOf(a)
+v := reflect.New(t.Elem())
+newA = v.Interface().(*A)
+</code></pre>
+
+<p>但是没法直接根据类型的名字拿到类型并生成实例，考虑到这门语言设计目的是效率优先的静态编译语言，这也似乎不是太大的问题，而且可以通过别的方法实现。</p>
+
+<p>不过，目前Go的reflect库不能通过reflect.Type来创建一个Array或者Slice，似乎是个挺杯具且无解的事情，限制很大。</p>
+
+<p>值得一体的是，Go的struct的成员可以定义Tag这种描述信息，程序里没有直接的作用，但可以通过reflect访问到：</p>
+
+<pre><code class="language-go">type A struct {
+	i int `tag:&quot;abc&quot;`
+}
+
+v := reflect.TypeOf(new(A))
+f, _ := v.FieldByName(&quot;i&quot;)
+f.Tag.Get(&quot;tag&quot;) == &quot;abc&quot;
+</code></pre>
+
+<p>虽然目前Go的标准库里只用Tag来做json编码/解码时对应域的名字，不过似乎可以有更有趣的用法。</p>
+
+<h3 id="channel">channel</h3>
+
+<p>在Go之前，就有不少语言以支持轻量进程的并发为特点，比如广为人知的Erlang（其语法的诡异导致没有大规模流行）。不过Go比Erlang更多了一种叫做channel的类型，用于在进程间传递消息。Erlang里，如果要和一个进程通信，只能给这个进程的pid发消息，消息里带有一个标号。这个进程收到消息后，根据标号再做不同的处理。这种做法使得Erlang里大量出现通信时根据标号做模式匹配的语句，可以类比C的大块大块switch/case，配合Erlang的另一大特点“代码热更新”，经常会写出十分难读的代码。另一方面由于pid要先创建进程后才能拿到，如果想让两个进程互相通信，就必须先创建进程A拿到pid_a，再创建进程B，把pid_a传给进程B，再把进程B的pid_b传给进程A，A拿到pid_b后会对自己的执行体做更新，去实现真正的功能。这个说起来似乎简单，真写一写的话实在头疼。</p>
+
+<p>Go在Erlang的基础上进一步抽象出了channel，使得进程间通信变的更加清晰。一个goroutine可以持有一个或者多个channel。可以先创建channel，把创建好的channel传给若干个需要互相通信的goroutine。这样就完美的解决了Erlang里遇到的两个很拧巴的问题。</p>
+
+<h3 id="goroutine">goroutine</h3>
+
+<p>一句话：并发变得如此简单。</p>
+
+<h3 id="one-executable-binary">one executable binary</h3>
+
+<p>目前Go在编译好后只会有一个bin文件，而且不使用cgo引用c库的话，也不会依赖特殊的库。在生产环境部署Go真是痛快无比，再也不用想是不是要升级这个gem，是不是要下那个egg，是不是这个版本滞后了，是不是那个api不兼容……</p>
+
+<h3 id="go-fmt">go fmt</h3>
+
+<p>配合<a href="http://www.sublimetext.com/2">Sublime2</a> + <a href="https://github.com/DisposaBoy/GoSublime">GoSublime</a>，再也不用费心代码格式的问题了。</p>
+
+<h2 id="使用中遇到的问题">使用中遇到的问题</h2>
+
+<h3 id="用成员首字母的大小写来控制可见性">用成员首字母的大小写来控制可见性</h3>
+
+<p><del>这真是很诡异的特性：</del>所有名字首字母大写的成员，是对包外可见的；所有名字首字母小写的成员，都是包外不可见的。</p>
+
+<p><del>这一条就使得Go命名与下划线分割的命名方式绝缘，只能选用驼峰命名法。因为PublicName和privateName看上去还算协调，如果出现Public_name，就怎么看怎么诡异了。或许以后可以用驼峰作为公开命名PublicName，而用下划线作为私有命名private_name。</del></p>
+
+<p>更新：经过一段时间的使用，Go选择这种命名方式真是太好了。在看一段代码时，只要看到首字母大写的，就能知道这个变量/函数是公开的，不能轻易修改；而对于小写的变量/函数修改就像对自由很多。维护的时候再也不用去来回翻阅声明，检查一个变量/函数是不是可以变了！</p>
+
+<p>不过Go官方推荐都用驼峰命名。</p>
+
+<p>多说一句，在做json解码时，如果对应的struct没有特殊声明，会把json的域写入对应名字首字母大写的struct的成员里。而json编码时默认会以struct域的名字作为json域名，如果要对应到小写，需要声明相关域的Tag：</p>
+
+<pre><code class="language-go">type A struct {
+	I int `json:&quot;i&quot;`
+}
+</code></pre>
+
+<h3 id="reflect还有问题">reflect还有问题</h3>
+
+<p>前面也提过，不能根据reflect.Type直接生成对应的Slice或者Array或者Map实在太讨厌了！</p>
+
+<h2 id="期望">期望</h2>
+
+<p>Go还是一门很年轻的语言，如果要对其提出展望的话，我期望以下特性：</p>
+
+<h3 id="reflect支持创建对应type的slice和array">reflect支持创建对应Type的Slice和Array</h3>
+
+<p>前面多次提到了。</p>
+
+<h3 id="struct的成员函数也能支持tag">struct的成员函数也能支持tag</h3>
+
+<p>目前tag只能支持成员变量，如果也能给成员函数写tag就太cool了：</p>
+
+<pre><code class="language-go">type A struct {}
+
+func (a *A) `tag:&quot;id&quot;` SomeFunc() {}
+</code></pre>
+
+<h3 id="完善库">完善库</h3>
+
+<p>没有IMAP好痛苦！自己实现IMAP好蛋疼！ <em>(:з」∠)</em></p>
+
+<p>目前我可能比较急需的库：多语言本地化（大概把ICU直接port过来），更多的编解码，能换个更好用的text模版库么（模版里写个range都没法判断是不是到了最后一个元素，想用模版输出“a, b, c and d.”简直要死人啊）。</p>
+
+<h3 id="heroku">heroku</h3>
+
+<p>严格来说这个不是对Go语言的期望。现在GAE已经支持Go了，但是因为GAE的api太特殊，为GAE写的程序只能跑在GAE，不能自己部署，所以稍微有点不爽。如果heroku可以支持Go的话，就可以做到本地云间一个样了。可惜看上去heroku目前并<a href="https://twitter.com/heroku/status/221990016329596928">没有支持Go的打算</a>。</p>
+
+<p>（不过heroku内部已经把一部分ruby模块切换到Go了，或许可以期待一下？）</p>
+
+<h2 id="后记">后记</h2>
+
+<p>Go的前途是光明的！道路是曲折的！以后我也会在blog里多分享一些自己使用Go遇到的问题和惯用法。</p></div>
+  </div>
+
+  <footer class="article-footer">
+    <div class="content-inner">
+
+      <aside class="p-share">
+  <div class="share-inner">
+    <a href="http://b.hatena.ne.jp/add?mode=confirm&url=http%3a%2f%2fair.googol.im%2fpost%2fwhy-i-like-go%2f&title=%e6%88%91%e4%b8%ba%e4%bb%80%e4%b9%88%e5%96%9c%e6%ac%a2Go" title="はてなブックマーク" class="ht" target="_blank" rel="nofollow"></a>
+    <a href="http://www.facebook.com/sharer.php?u=http%3a%2f%2fair.googol.im%2fpost%2fwhy-i-like-go%2f&t=%e6%88%91%e4%b8%ba%e4%bb%80%e4%b9%88%e5%96%9c%e6%ac%a2Go" title="Facebookでシェア" class="fb" target="_blank" rel="nofollow"></a>
+    <a href="http://twitter.com/intent/tweet?url=http%3a%2f%2fair.googol.im%2fpost%2fwhy-i-like-go%2f&text=%e6%88%91%e4%b8%ba%e4%bb%80%e4%b9%88%e5%96%9c%e6%ac%a2Go&tw_p=tweetbutton" title="Twitterでシェア" class="tw" target="_blank" rel="nofollow"></a>
+    <a href="https://plus.google.com/share?url=http%3a%2f%2fair.googol.im%2fpost%2fwhy-i-like-go%2f" title="Google Plusでシェア" class="gp" target="_blank" rel="nofollow"></a>
+    <a href="http://line.me/R/msg/text/?%e6%88%91%e4%b8%ba%e4%bb%80%e4%b9%88%e5%96%9c%e6%ac%a2Go http%3a%2f%2fair.googol.im%2fpost%2fwhy-i-like-go%2f" title="LINEでシェア" class="ln" target="_blank" rel="nofollow"></a>
+  </div>
+</aside>
+
+
+      <nav class="p-crumb">
+        <ol>
+          <li><a href="http://air.googol.im/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+          
+          <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://air.googol.im/post/" itemprop="url"><span itemprop="title">post</span></a></li>
+          
+          <li class="active">我为什么喜欢Go</li>
+        </ol>
+      </nav>
+
+      
+      
+      
+      
+      
+      <section class="article-footer">
+        <header>
+          <a href="http://air.googol.im/tags/">TAGS</a>
+        </header>
+        <div>
+          <ul class="p-terms inline">
+            
+            <li><a href="http://air.googol.im/tags/golang/">golang</a></li>
+            
+          </ul>
+        </div>
+      </section>
+      
+      
+    </div>
+  </footer>
+
+</article>
+
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'air-g';
+    var disqus_identifier = 'http:\/\/air.googol.im\/post\/why-i-like-go\/';
+    var disqus_title = '我为什么喜欢Go';
+    var disqus_url = 'http:\/\/air.googol.im\/post\/why-i-like-go\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+
+  <div class="col-md-4">
+    <aside class="site">
+
+  <section>
+    <header>latests</header>
+    <div>
+      <div class="row">
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/contiguous-stacks-in-go/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/contiguous-stacks-in-go/">Go中的连续栈</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-28T21:21:24JST">Mar 28, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/supervisor-with-docker-to-manage-processes/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/supervisor-with-docker-to-manage-processes/">在Docker里使用（支持镜像继承的）supervisor管理进程</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-28T19:46:44JST">Mar 28, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/go-concurrency-patterns-pipelines-and-cancellation/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/go-concurrency-patterns-pipelines-and-cancellation/">Go并发模式：管道和取消</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-15T10:52:46JST">Mar 15, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/explain-big-data/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/explain-big-data/">试着解释大数据</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-11T21:01:03JST">Mar 11, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/first-glance-at-atom/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/first-glance-at-atom/">Atom初探</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-07T01:20:00JST">Mar 7, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/whats-happening-in-go-tip-2014-01-10/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/whats-happening-in-go-tip-2014-01-10/">Go tip在做什么 2014-01-10</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-01-12T10:13:39JST">Jan 12, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/go-rest-revolution/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/go-rest-revolution/">go-rest演化</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-12-31T10:48:24JST">Dec 31, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/shy-note-project-management/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/shy-note-project-management/">S会议开发手札：项目管理</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-09-25T22:48:15JST">Sep 25, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/shy-note-over-design/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/shy-note-over-design/">S会议开发手札：过渡设计</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-09-17T22:51:28JST">Sep 17, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/shy-notes/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/shy-notes/">S会议开发手札</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-09-16T23:14:56JST">Sep 16, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+      </div>
+    </div>
+  </section>
+
+  
+  <section>
+    <header>category</header>
+    <div>
+      <ul class="p-terms">
+        
+      </ul>
+    </div>
+  </section>
+  
+  <section>
+    <header>tag</header>
+    <div>
+      <ul class="p-terms">
+        <li><a href="http://air.googol.im/tags/golang">golang</a></li><li><a href="http://air.googol.im/tags/cpp">cpp</a></li><li><a href="http://air.googol.im/tags/c">c</a></li><li><a href="http://air.googol.im/tags/python">python</a></li><li><a href="http://air.googol.im/tags/y-combinator">y-combinator</a></li><li><a href="http://air.googol.im/tags/startup">startup</a></li><li><a href="http://air.googol.im/tags/interview">interview</a></li><li><a href="http://air.googol.im/tags/occ">occ</a></li><li><a href="http://air.googol.im/tags/project">project</a></li><li><a href="http://air.googol.im/tags/ruby">ruby</a></li>
+      </ul>
+    </div>
+  </section>
+  
+
+</aside>
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p>All rights reserved - 2017</p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_robust">Robust</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

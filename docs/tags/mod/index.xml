@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mod on Air on G</title>
+    <link>http://air.googol.im/tags/mod/index.xml</link>
+    <description>Recent content in Mod on Air on G</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh_CN</language>
+    <copyright>All rights reserved - 2017</copyright>
+    <atom:link href="http://air.googol.im/tags/mod/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>求3的余数</title>
+      <link>http://air.googol.im/post/mod-3/</link>
+      <pubDate>Fri, 04 Feb 2005 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/mod-3/</guid>
+      <description>&lt;p&gt;北京华为的一道面试题。要求是只使用+-*和移位运算，且不能递减3求得余数。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;先在csdn上求，求得以下算法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;int i, m, n, p, q;
+int yushu[]={1, 2};
+m = n;
+while(m&amp;gt;3)
+{
+ i=0;  q=0;
+ while(m)
+ {
+  i&amp;amp;=0x1;
+  q+=(m&amp;amp;0x1)*yushu[i++];
+  m&amp;gt;&amp;gt;=1;
+ }
+ m=q;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;没看懂，倒是提示我可以用查表的方法，变成求4的余数。自己探求程序如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;int mo[]={0,1,2,0};
+int i, m;
+m = n;
+i = 4;
+while (i&amp;gt;3)
+{
+ i = 0;
+ while(m&amp;gt;0)
+ {
+  i += m &amp;amp; 3;
+  m &amp;gt;&amp;gt;= 2;
+ }
+ m = i;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;貌似比网上高人给的算法效率更高，可惜没去证实。&lt;/p&gt;
+
+&lt;p&gt;晚上又想到更高效的算法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;int mo[]={0,1,2,0};
+int m;
+while(m&amp;gt;3)
+{
+ m = (m&amp;gt;&amp;gt;2) + (m&amp;amp;3);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;想来不会有更高效的做法了，于是开始这种算法的数学证明，如下：&lt;/p&gt;
+
+&lt;p&gt;因为&lt;code&gt;4 mod 3=1&lt;/code&gt;，所以&lt;code&gt;4^k mod 3 = 1^k mod 3&lt;/code&gt;（此原理来源于小学数学奥校五年级分册= =|||），所以对任意数n，转化成4进制数后每位为n1 n2 n3 n4&amp;hellip;nm，有&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(n1*4^(m-1)+n2*4^(m-2)+n3*4^(m-3)+n4*4^(m-4)+...+nm-1*4^1+nm*4^0) mod 3
+=n1*4^(m-1) mod 3+n2*4^(m-2) mod 3+n3*4^(m-3) mod 3+n4*4^(m-4) mod 3+...+nm-1*4^1 mod 3+nm*4^0 mod 3
+=n1*1^(m-1) mod 3+n2*1^(m-2) mod 3+n3*1^(m-3) mod 3+n4*1^(m-4) mod 3+...+nm-1*1^1 mod 3+nm*1^0 mod 3
+=(n1+n2+n3+n4+...+nm-1+nm) mod 3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;因此对数n每次取二进制最后两位（四进制的最后一位），并加入除去二进制最后两位的余数（相当于右移2位），如此反复，直到只剩最后两位，此两位二进制数与原数n同余于3。&lt;/p&gt;
+
+&lt;p&gt;现在研究的是，求任意数的余数的高效算法是什么呢？&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

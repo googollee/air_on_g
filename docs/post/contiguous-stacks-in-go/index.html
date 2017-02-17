@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="theme-color" content="#263238">
+
+<meta name="generator" content="Hugo 0.18.1" />
+
+<link rel="apple-touch-icon" href="http://air.googol.im/images/logo.png">
+
+
+<link rel="canonical" href="http://air.googol.im/post/contiguous-stacks-in-go/">
+
+
+    
+    <link href="//fonts.googleapis.com/css?family=Noto+Sans:400,700|Montserrat" rel="stylesheet">
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>Go中的连续栈 - Air on G</title>
+    
+<meta name="description" content="&lt;p&gt;本文译自&lt;a href=&#34;http://agis.io/2014/03/25/contiguous-stacks-in-go.html&#34;&gt;Contiguous stacks in Go&lt;/a&gt;。介绍了Go 1.3版本在栈管理上的变化，以及由此带来的性能改进。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;">
+
+<meta property="og:title" content="Go中的连续栈 - Air on G">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://air.googol.im/post/contiguous-stacks-in-go/">
+<meta property="og:image" content="http://air.googol.im/images/default.png">
+<meta property="og:site_name" content="Air on G">
+<meta property="og:description" content="&lt;p&gt;本文译自&lt;a href=&#34;http://agis.io/2014/03/25/contiguous-stacks-in-go.html&#34;&gt;Contiguous stacks in Go&lt;/a&gt;。介绍了Go 1.3版本在栈管理上的变化，以及由此带来的性能改进。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="Air on G">
+<meta name="twitter:url" content="http://air.googol.im/post/contiguous-stacks-in-go/">
+<meta name="twitter:title" content="Go中的连续栈 - Air on G">
+<meta name="twitter:description" content="&lt;p&gt;本文译自&lt;a href=&#34;http://agis.io/2014/03/25/contiguous-stacks-in-go.html&#34;&gt;Contiguous stacks in Go&lt;/a&gt;。介绍了Go 1.3版本在栈管理上的变化，以及由此带来的性能改进。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;">
+<meta name="twitter:image" content="http://air.googol.im/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http:\/\/air.googol.im\/"
+    },
+    "headline": "Go中的连续栈 - Air on G",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http:\/\/air.googol.im\/images\/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2014-03-28T21:21:24JST",
+    "dateModified": "2014-03-28T21:21:24JST",
+    "author": {
+      "@type": "Person",
+      "name": "Air on G"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Air on G",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http:\/\/air.googol.im\/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "\x3cp\x3e本文译自\x3ca href=\x22http:\/\/agis.io\/2014\/03\/25\/contiguous-stacks-in-go.html\x22\x3eContiguous stacks in Go\x3c\/a\x3e。介绍了Go 1.3版本在栈管理上的变化，以及由此带来的性能改进。\x3c\/p\x3e\n\n\x3cp\x3e\x3c\/p\x3e"
+  }
+</script>
+
+
+    <style>
+      html { font-size: 18px;}@media (max-width: 768px) { html { font-size: 15px; }}body { font-family: 'Noto Sans','Hiragino Kaku Gothic Pro',メイリオ,Meiryo,sans-serif; font-size: inherit; font-weight: 300; line-height: 1rem; background-color: #eceff1;}p { margin: 0;}a { color: #4caf50;}a:hover { text-decoration: none; color: #388e3c;}ul,ol { margin: 0; padding: 0;}h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 700;}h1 { font-size: 1.8rem; line-height: 2rem; margin: 1.5rem 0; }h2 { font-size: 1.4rem; line-height: 2rem; margin: 1.5rem 0; }h3 { font-size: 1.2rem; line-height: 1.5rem; margin: 1.5rem 0; }h4, h5, h6 { font-size: 1rem; line-height: 1.5rem; margin: 1.5rem 0; }main { display: block;}.content-inner { padding: 1rem 2rem;}.content-inner.thin { padding: .5rem 1rem;}@media (max-width: 768px) { .content-inner { padding: 1rem; }}/* Override */.container { position: relative;}/* Parts:layouts */.l-header { background-color: #fff; margin-bottom: 1rem; padding: 1rem 0; text-align: center;}.l-footer { font-size: .8rem; padding: 1.5rem 0;}/* Parts:menu */.p-menu { position: absolute; right: 15px; top: 0;}/* Parts:terms */.p-terms { list-style: none;}.p-terms .terms-title { margin: 0;}.p-terms a { display: inline-block; padding: .25rem 0;}.p-terms.inline li { display: inline-block; font-size: .8rem;}.p-terms.inline li::after { content: ',';}.p-terms.inline li:last-child::after { content: '';}/* Parts:paging */.p-paging { margin-bottom: 1.5rem; text-align: center;}.p-paging a { display: inline-block; padding: 1rem 1.5rem; margin: 0 .5rem; background-color: #cfd8dc; color: #263238;}/* Parts:section */section { margin-bottom: 1.5rem;}section>header { font-size: .8rem; font-weight: 700; margin-bottom: .5rem; text-transform: uppercase;}section>header a { color: #333; text-decoration: underline;}section.article-footer { margin-bottom: 1rem;}section.article-footer>header { margin-bottom: 0;}/* Parts:share */.p-share { min-width: 100%; margin-bottom: 1.5rem;}.p-share .share-inner { display: table; table-layout: fixed; width: 100%; border-spacing: .25rem;}.p-share a { display: table-cell; text-align: center; font-weight: 700; font-size: .7rem; padding: .5rem 0; color: #fff; border-radius: 5px;}.p-share a.ht { background-color: #00a4de; border-bottom: 2px solid #0083b1; }.p-share a.fb { background-color: #3b5998; border-bottom: 2px solid #2f4779; }.p-share a.tw { background-color: #1da1f2; border-bottom: 2px solid #1780c1; }.p-share a.gp { background-color: #dd4b39; border-bottom: 2px solid #b03c2d; }.p-share a.ln { background-color: #00c300; border-bottom: 2px solid #009c00; }.p-share a.ht::before { content: 'Hatena'; }.p-share a.fb::before { content: 'Facebook'; }.p-share a.tw::before { content: 'Twitter'; }.p-share a.gp::before { content: 'Google+'; }.p-share a.ln::before { content: 'LINE'; }/* Parts:logo */.h-logo { font-family: 'Montserrat', sans-serif;}.p-logo { display: inline-block; text-transform: uppercase;}.p-logo a { display: inline-block; font-size: 1.4rem; line-height: 2rem; color: #000;}/* Parts:crumb */.p-crumb ol { list-style: none; margin-bottom: 1rem;}.p-crumb li { display: inline; margin-right: .25rem; font-size: .8rem; color: #607d8b;}.p-crumb li::after { content: '/'; margin-left: .25rem;}.p-crumb li:last-child::after { content: '';}/* Parts:facts */.p-facts { list-style: none; font-size: .8rem; margin-bottom: 1rem;}.p-facts li { display: inline-block; margin-right: .5rem; color: #90a4ae;}.p-facts li i { margin-right: .5rem; color: #cfd8dc;}/* Parts:article */article { background-color: #fff;}article .title { margin: 0; margin-bottom: .5rem; font-weight: 700;}article .title a { color: #000;}article .thumb { display: block; background-image: url(http://air.googol.im/images/default.jpg); background-position: center; background-size: cover;}article .summary { margin-bottom: .5rem; max-height: 5rem; overflow: hidden;}article.single .thumb { height: 18rem; margin-bottom: 1rem;}@media (max-width: 768px) { article.single .thumb { height: 12rem; }}article.li { margin-bottom: 1rem;}article.li .thumb { height: 7.5rem; margin-bottom: .5rem;}article.li.sm { background-color: transparent; margin-bottom: .5rem;}article.li.sm>header { padding: .5rem 0;}article.li.sm .title { font-size: .8rem; line-height: 1rem; margin-bottom: .25rem;}article.li.sm .p-facts { font-size: .6rem; margin-bottom: 0;}article.li.sm .thumb { float: left; margin-right: .5rem; height: 3rem; width: 3rem;}.article-body h2 { padding: 1rem 0; border-bottom: 2px solid #eceff1;}.article-body h2:first-child { margin-top: 0; }.article-body h3 { color: #428bca;}.article-body h4 { border-left: solid .25rem #428bca; padding: 0 .5rem;}.article-body p { margin: 1.5rem 0; line-height: 1.5rem;}.article-body a { text-decoration: underline;}.article-body ul,.article-body ol { padding-left: 1.5rem;}.article-body code { display: inline-block; font-family: Menlo, consolas, monospace; font-size: .8rem; padding: 0 .5rem; line-height: 1.5rem;}.article-body pre { margin: 1.5rem 0; padding: 0; font-size: .8rem; border: none; border-radius: 0;}.article-body pre code { display: block; line-height: 1rem; padding: 1rem;}.article-body blockquote { margin: 1.5rem 0; padding: .5rem 0; font-size: .8rem; border-top: 1px solid #eceff1; border-bottom: 1px solid #eceff1; color: #607d8b;}.article-body blockquote p { margin: .5rem 0; line-height: 1rem;}.article-body strong { box-shadow: 0 -.5rem 0 0 #90caf9 inset;}.article-body em { font-style: normal; font-weight: 700; color: #03a9f4;}.article-body figure { margin: 1.5rem 0; }.article-body figure img { max-width: 100%; }.article-body figure.left,.article-body figure.right { width: 15rem; height: 12rem; margin-top: 0;}.article-body figure.left { float: left; margin-right: 1rem; }.article-body figure.right { float: right; margin-left: 1rem; }@media (max-width: 768px) { .article-body figure.left, .article-body figure.right { float: none; margin: 0; width: auto; height: auto; }}.article-body figcaption { padding: .5rem 0; font-size: .8rem; text-align: center;}.article-body figcaption a { color: #263238;}
+      
+      
+    </style>
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <div class="container">
+        <div class="p-logo">
+          <a href="http://air.googol.im/" class="h-logo">Air on G</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol>
+        <li><a href="http://air.googol.im/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://air.googol.im/post/" itemprop="url"><span itemprop="title">post</span></a></li>
+        
+        <li class="active">Go中的连续栈</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+
+  <a href="http://air.googol.im/post/contiguous-stacks-in-go/" class="thumb"></a>
+  <div class="content-inner">
+    <h1 class="title">Go中的连续栈</h1>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-28T21:21:24JST">Mar 28, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+      
+    </ul>
+
+    <div class="article-body"><p>本文译自<a href="http://agis.io/2014/03/25/contiguous-stacks-in-go.html">Contiguous stacks in Go</a>。介绍了Go 1.3版本在栈管理上的变化，以及由此带来的性能改进。</p>
+
+<p></p>
+
+<p>Go里的连续栈</p>
+
+<p>我用了一段时间Go，非常喜欢这种语言。1.3版本计划在2014年六月释出，这个版本会有不少关于性能的改进，其中一项性能改进是连续栈技术。让我们来看看连续栈到底是什么。</p>
+
+<p>分段栈（segmented stacks）</p>
+
+<p>The 1.2 runtime uses segmented stacks, also known as split stacks.
+Go 1.2版本运行时使用分段栈，也被叫做切分栈（split stacks）。</p>
+
+<p>分段栈是一种用来实现不连续且会连续增长的栈的方法。</p>
+
+<p>Each stack starts with a single segment. When the stack needs to grow another segment is allocated and linked to the previous one, and so forth. Each stack is effectively a doubly linked list of one or more segments.
+每个栈开始时只有一个单独的段。随着栈增长，就会分配新的段，并与上一个段相连，如此保证栈可以不断增长。每个栈都是一个或多个靠高效的双向互链的段组成的。</p>
+
+<p><img src="http://air.googol.im/images/segmented-stacks.png" alt="分段栈" /></p>
+
+<p>这种方法的优点是，栈可以一开始时很小，根据需要增长或者收缩。比如说，1.1版本的栈一开始是4kb，1.2版本的栈一开始是8kb。</p>
+
+<p>当然，这种方法也会有问题。</p>
+
+<p>考虑在栈接近满的时候，发生了一个函数调用。调用会强迫栈赠长，导致需要分配新的段。当这个函数返回时，这个新分配的段会被释放，栈也会再次收缩。</p>
+
+<p>现在，假设这个调用发生的非常频繁。比如：</p>
+
+<pre><code>func main() {
+    for {
+        big()
+    }
+}
+
+func big() {
+    var x [8180]byte
+    // 对x做些事情
+
+    return
+}
+</code></pre>
+
+<p>对<code>big()</code>的调用会申请新的段，这个新的段会在函数返回时释放。在循环里，这个申请释放的过程会反复发生。</p>
+
+<p>这类情况里，恰巧在循环里遇到了栈的容量触及边界的情况，反复创建和销毁段时的开销会非常明显。在Go社区内部，这种情况被称作“切分热点”。Rust社区面对同样的问题，只不过将其称作“锻打栈”。</p>
+
+<p>连续栈</p>
+
+<p>在Go 1.3里会因为使用了连续栈实现而不再有“切分热点”问题。</p>
+
+<p>现在，如果栈需要增长，不再申请新的段，而是按如下方式操作：</p>
+
+<ul>
+<li>创建一个新的，更大的栈</li>
+<li>将老栈的内容复制到新栈</li>
+<li>调整所有被复制的指针到新的地址</li>
+<li>销毁老栈</li>
+</ul>
+
+<p>调整指针的操作会受到编译器的逃逸分析算法影响。这个算法保证只有指向栈上数据的指针会存储在同一个栈上（当然，也有一些例外）。如果某个指针有逃逸（比如，指针要返回给调用者，或者写入了一个全局变量），就意味着分配的数据需要保存在堆上。</p>
+
+<p>这种方法当然也有一些挑战。1.2版本在运行时并不知道栈上一个指针大小的字，真的是个指针，还是别的同样大小的数据。也许是浮点数或者是更不常见的将一个整形数当作指针，真的指向某个数据。</p>
+
+<p>由于缺少关于数据的理解，垃圾收集器只能保守考虑，将所有位于栈帧上的地址当作根。结果就导致了内存泄露的可能，尤其是在内存池更小的32位架构上。</p>
+
+<p>如果是复制整个栈，就能避免这种问题，在调整指针时只考虑真正的指针。</p>
+
+<p>工作就这么做完了，栈上活指针的信息现在嵌入了二进制程序里，并可以在运行时使用这些信息。这意味着1.3版本的垃圾收集器不仅可以精确收集栈数据，还可以调整栈上的指针。</p>
+
+<p>1.3版本的初始栈大小很保守，设置为4kb，在1.4版本里可能会进一步缩小。对于收缩机制，在垃圾收集器执行时，栈使用了少于1/4的总空间时，会缩减一半的大小。</p>
+
+<p>虽然连续栈会造成一些内存碎片的问题，但是使用json和html/template做性能测试的结果显示，连续栈的性能有很大改善。</p>
+
+<p><img src="http://air.googol.im/images/json-benchmark.png" alt="json benchmark" /></p>
+
+<p><img src="http://air.googol.im/images/html-benchmark.png" alt="html benchmark" /></p>
+
+<p>来源：<a href="https://docs.google.com/document/d/1wAaf1rYoM4S4gtnPh0zOlGzWtrZFQ5suE8qr2sD8uWQ/pub">contiguous stacks design document</a></p>
+
+<p>结论</p>
+
+<p>Go 1.3将会是一个有重多性能改善和其他重要更新的大版本。我很期待。</p></div>
+  </div>
+
+  <footer class="article-footer">
+    <div class="content-inner">
+
+      <aside class="p-share">
+  <div class="share-inner">
+    <a href="http://b.hatena.ne.jp/add?mode=confirm&url=http%3a%2f%2fair.googol.im%2fpost%2fcontiguous-stacks-in-go%2f&title=Go%e4%b8%ad%e7%9a%84%e8%bf%9e%e7%bb%ad%e6%a0%88" title="はてなブックマーク" class="ht" target="_blank" rel="nofollow"></a>
+    <a href="http://www.facebook.com/sharer.php?u=http%3a%2f%2fair.googol.im%2fpost%2fcontiguous-stacks-in-go%2f&t=Go%e4%b8%ad%e7%9a%84%e8%bf%9e%e7%bb%ad%e6%a0%88" title="Facebookでシェア" class="fb" target="_blank" rel="nofollow"></a>
+    <a href="http://twitter.com/intent/tweet?url=http%3a%2f%2fair.googol.im%2fpost%2fcontiguous-stacks-in-go%2f&text=Go%e4%b8%ad%e7%9a%84%e8%bf%9e%e7%bb%ad%e6%a0%88&tw_p=tweetbutton" title="Twitterでシェア" class="tw" target="_blank" rel="nofollow"></a>
+    <a href="https://plus.google.com/share?url=http%3a%2f%2fair.googol.im%2fpost%2fcontiguous-stacks-in-go%2f" title="Google Plusでシェア" class="gp" target="_blank" rel="nofollow"></a>
+    <a href="http://line.me/R/msg/text/?Go%e4%b8%ad%e7%9a%84%e8%bf%9e%e7%bb%ad%e6%a0%88 http%3a%2f%2fair.googol.im%2fpost%2fcontiguous-stacks-in-go%2f" title="LINEでシェア" class="ln" target="_blank" rel="nofollow"></a>
+  </div>
+</aside>
+
+
+      <nav class="p-crumb">
+        <ol>
+          <li><a href="http://air.googol.im/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+          
+          <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://air.googol.im/post/" itemprop="url"><span itemprop="title">post</span></a></li>
+          
+          <li class="active">Go中的连续栈</li>
+        </ol>
+      </nav>
+
+      
+      
+      
+      
+      
+      <section class="article-footer">
+        <header>
+          <a href="http://air.googol.im/tags/">TAGS</a>
+        </header>
+        <div>
+          <ul class="p-terms inline">
+            
+            <li><a href="http://air.googol.im/tags/golang/">golang</a></li>
+            
+            <li><a href="http://air.googol.im/tags/performance/">performance</a></li>
+            
+          </ul>
+        </div>
+      </section>
+      
+      
+    </div>
+  </footer>
+
+</article>
+
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'air-g';
+    var disqus_identifier = 'http:\/\/air.googol.im\/post\/contiguous-stacks-in-go\/';
+    var disqus_title = 'Go中的连续栈';
+    var disqus_url = 'http:\/\/air.googol.im\/post\/contiguous-stacks-in-go\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+
+  <div class="col-md-4">
+    <aside class="site">
+
+  <section>
+    <header>latests</header>
+    <div>
+      <div class="row">
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/contiguous-stacks-in-go/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/contiguous-stacks-in-go/">Go中的连续栈</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-28T21:21:24JST">Mar 28, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/supervisor-with-docker-to-manage-processes/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/supervisor-with-docker-to-manage-processes/">在Docker里使用（支持镜像继承的）supervisor管理进程</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-28T19:46:44JST">Mar 28, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/go-concurrency-patterns-pipelines-and-cancellation/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/go-concurrency-patterns-pipelines-and-cancellation/">Go并发模式：管道和取消</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-15T10:52:46JST">Mar 15, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/explain-big-data/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/explain-big-data/">试着解释大数据</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-11T21:01:03JST">Mar 11, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/first-glance-at-atom/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/first-glance-at-atom/">Atom初探</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-07T01:20:00JST">Mar 7, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/whats-happening-in-go-tip-2014-01-10/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/whats-happening-in-go-tip-2014-01-10/">Go tip在做什么 2014-01-10</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-01-12T10:13:39JST">Jan 12, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/go-rest-revolution/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/go-rest-revolution/">go-rest演化</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-12-31T10:48:24JST">Dec 31, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/shy-note-project-management/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/shy-note-project-management/">S会议开发手札：项目管理</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-09-25T22:48:15JST">Sep 25, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/shy-note-over-design/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/shy-note-over-design/">S会议开发手札：过渡设计</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-09-17T22:51:28JST">Sep 17, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/shy-notes/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/shy-notes/">S会议开发手札</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-09-16T23:14:56JST">Sep 16, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+      </div>
+    </div>
+  </section>
+
+  
+  <section>
+    <header>category</header>
+    <div>
+      <ul class="p-terms">
+        
+      </ul>
+    </div>
+  </section>
+  
+  <section>
+    <header>tag</header>
+    <div>
+      <ul class="p-terms">
+        <li><a href="http://air.googol.im/tags/golang">golang</a></li><li><a href="http://air.googol.im/tags/cpp">cpp</a></li><li><a href="http://air.googol.im/tags/c">c</a></li><li><a href="http://air.googol.im/tags/python">python</a></li><li><a href="http://air.googol.im/tags/y-combinator">y-combinator</a></li><li><a href="http://air.googol.im/tags/startup">startup</a></li><li><a href="http://air.googol.im/tags/interview">interview</a></li><li><a href="http://air.googol.im/tags/occ">occ</a></li><li><a href="http://air.googol.im/tags/project">project</a></li><li><a href="http://air.googol.im/tags/ruby">ruby</a></li>
+      </ul>
+    </div>
+  </section>
+  
+
+</aside>
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p>All rights reserved - 2017</p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_robust">Robust</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

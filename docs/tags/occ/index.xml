@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Occ on Air on G</title>
+    <link>http://air.googol.im/tags/occ/index.xml</link>
+    <description>Recent content in Occ on Air on G</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh_CN</language>
+    <copyright>All rights reserved - 2017</copyright>
+    <atom:link href="http://air.googol.im/tags/occ/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>一段有趣的C程序（续）</title>
+      <link>http://air.googol.im/post/analysis-of-occ-circle/</link>
+      <pubDate>Thu, 23 Sep 2004 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/analysis-of-occ-circle/</guid>
+      <description>&lt;p&gt;同学看完我的一段有趣的程序后，给了我一段bt的程序：&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#define _ -F&amp;lt;00||--F-OO--;
+int F=00,OO=00;main(){F_OO();printf(&amp;quot;%1.3f\n&amp;quot;,4.*-F/OO/OO);}F_OO()
+{
+            _-_-_-_
+       _-_-_-_-_-_-_-_-_
+    _-_-_-_-_-_-_-_-_-_-_-_
+  _-_-_-_-_-_-_-_-_-_-_-_-_-_
+ _-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+ _-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+ _-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+ _-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+  _-_-_-_-_-_-_-_-_-_-_-_-_-_
+    _-_-_-_-_-_-_-_-_-_-_-_
+        _-_-_-_-_-_-_-_
+            _-_-_-_
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+&lt;p&gt;俺就又本着人不bt枉少年的精神，又bt的研究了一下。程序贴到vc里，编译出现三个错误，一个是printf未定义，一个是F_00未定义。改动后如下，同时将程序结构改的可读性更强：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include&amp;lt;stdio.h&amp;gt;
+#define _ -F&amp;lt;00||--F-OO--;
+F_OO();
+
+int F=00,OO=00;
+
+main(){
+    F_OO();
+    printf(&amp;quot;%1.3f\n&amp;quot;,4.*-F/OO/OO);
+}
+
+F_OO()
+{
+            _-_-_-_
+       _-_-_-_-_-_-_-_-_
+    _-_-_-_-_-_-_-_-_-_-_-_
+  _-_-_-_-_-_-_-_-_-_-_-_-_-_
+ _-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+ _-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+ _-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+ _-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+  _-_-_-_-_-_-_-_-_-_-_-_-_-_
+    _-_-_-_-_-_-_-_-_-_-_-_
+        _-_-_-_-_-_-_-_
+            _-_-_-_
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;首先，这个程序bt到用00和OO近似来混淆视听！OO是两个大写字母o，可以作为变量名，而00单独写只是数字0，不能作为变量名。&lt;/p&gt;
+
+&lt;p&gt;程序首先定义了一段宏&lt;code&gt;_&lt;/code&gt;（md，又是这个下划线），之后定义了两个变量F和OO，并赋予初值0。这里要注意，宏里使用到的就是这两个变量。&lt;/p&gt;
+
+&lt;p&gt;之后定义了一个函数F_00()，大量调用了这个宏，来改变变量F和OO的值。虽然程序看起来bt，但实际上归结起来只有两种语句“&lt;code&gt;_&lt;/code&gt;”和“&lt;code&gt;-_&lt;/code&gt;”两种。这两语句在进行宏替换后分别为“&lt;code&gt;-F&amp;lt;00||--F-OO--;&lt;/code&gt;”和“&lt;code&gt;--F&amp;lt;00||--F-OO--;&lt;/code&gt;”&lt;/p&gt;
+
+&lt;p&gt;语句“&lt;code&gt;-F&amp;lt;00||--F-OO--;&lt;/code&gt;”根据优先级判断，先执行&lt;code&gt;||&lt;/code&gt;左边的部分，由于F=0，所以左部分为假（0&amp;lt;0为假），在执行右半部分，先对F自减1，执行&lt;code&gt;F-OO&lt;/code&gt;，再对OO自减1。最后的结果为-1，再进行&lt;code&gt;||&lt;/code&gt;，舍弃最后结果。折腾半天，只有对F和OO的自减使变量发生了变化，最终的运算结果并不care。&lt;/p&gt;
+
+&lt;p&gt;语句“&lt;code&gt;--F&amp;lt;00||--F-OO--;&lt;/code&gt;”根据优先级判断，先执行&lt;code&gt;||&lt;/code&gt;左边部分，对F自减1后判断是否F&amp;lt;0。经过上个语句后，F值为-1，因此F&amp;lt;0为真，不再执行右半部分。&lt;/p&gt;
+
+&lt;p&gt;但是注意！*在单步跟踪“&lt;code&gt;-_&lt;/code&gt;”语句时，变量的值没有发生任何变化！*也就是说刚才的分析并不是实际情况。由于变量值没有任何改变，可以肯定&lt;code&gt;||&lt;/code&gt;右边的部分根本没有被运行，也就是说&lt;code&gt;||&lt;/code&gt;左边的部分结果为真。如果左边的语句解释为“&lt;code&gt;- -F&amp;lt;00&lt;/code&gt;”（注意两个减号中间的空格），则F的值没有被改变，且其值为真。因此，这里的“&lt;code&gt;-_&lt;/code&gt;”语句实际是被解释成“&lt;code&gt;- -F&amp;lt;00||--F-OO--;&lt;/code&gt;”，也就是“&lt;code&gt;(-(-F))&amp;lt;00||--F-OO--;&lt;/code&gt;”。&lt;/p&gt;
+
+&lt;p&gt;由于“&lt;code&gt;-_&lt;/code&gt;”没有对变量的值进行任何操作，因此函数&lt;code&gt;F_00()&lt;/code&gt;里看似唬人的大球，实际每行只有行首的“&lt;code&gt;_&lt;/code&gt;”语句起作用，是对两个变量的值自减1。因此，整个高度为16的球，实际对两个变量进行16次自减1。真是无聊！！！！！&lt;/p&gt;
+
+&lt;p&gt;主程序就简单多了。首先运行&lt;code&gt;F_00()&lt;/code&gt;改变两个变量的值，最后运行&lt;code&gt;printf(&amp;quot;%1.3f\n&amp;quot;,4.*-F/OO/OO)&lt;/code&gt;语句输出。这个printf语句就简单了，输出一个长度为1，3位小数宽度的浮点数并换行。因为浮点的总长度肯定大于1，所以相当于输出一个3位小数宽的浮点并换行。输出的浮点内容为“&lt;code&gt;4.*-F/OO/OO&lt;/code&gt;”，也就是“&lt;code&gt;(4.)*(-F)/OO/OO&lt;/code&gt;”，此时F和OO的值都是“-16”，结果很显然，没啥大意思了。&lt;/p&gt;
+
+&lt;p&gt;前面所讲到的问题，应该涉及到c语言编译器实现的细节问题。c语言编译器指对宏进行简单替换，而不进行任何语法判断，因此可以肯定，对宏的替换工作是先于语法判断和编译过程的。c编译器在进行语法判断时，使用的是大嘴原则，也就是尽可能将更多的字符解释为运算符等关键字，而实际中并没有将“&lt;code&gt;-_&lt;/code&gt;”解释为“&lt;code&gt;--F&amp;lt;00||--F-OO--;&lt;/code&gt;”，可以认为，编译器在替换前，会对宏的前后进行标识，将宏本身与前后的语句分开，这样，宏本身的运算符就不会与程序前后的运算符关联在一起，改变宏语句本身的运算符的意义。因此，这个程序中的宏最终解释为“&lt;code&gt;- -F&amp;lt;00||--F-OO--;&lt;/code&gt;”。&lt;/p&gt;
+
+&lt;p&gt;另一个值得注意的问题是，“&lt;code&gt;-_&lt;/code&gt;”在解释为“&lt;code&gt;- -F&amp;lt;00||--F-OO--;&lt;/code&gt;”之后，实际宏本身的运算顺序已经改变。这里也是为什么在《c陷阱与缺陷》里，作者特别提到，宏的定义应该加括号，格式为“#define NN (&amp;hellip;)”，以免程序中出现很隐蔽的，改变宏本身运算顺序的逻辑错误。&lt;/p&gt;
+
+&lt;p&gt;为了验证编译器对宏的替换过程，编写了下面的程序：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#define A ++a
+void main(void){
+ int a=0;
+ a=a+++A;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;实际程序运行通过，证明“&lt;code&gt;a=a+++A&lt;/code&gt;”被解释为“&lt;code&gt;a=a+++ ++a&lt;/code&gt;”即“&lt;code&gt;a=(a++)+(++a)&lt;/code&gt;”，而不是“&lt;code&gt;a=a+++++a&lt;/code&gt;”。其中后一种译法会因为大嘴原则译为“&lt;code&gt;a=((a++) ++)+a&lt;/code&gt;”第二层的“&lt;code&gt;++&lt;/code&gt;”会因为左边不是一个有效变量，而引起编译错误：&lt;code&gt;error C2105: &#39;++&#39; needs l-value&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>一段有趣的C程序</title>
+      <link>http://air.googol.im/post/analysis-of-occ-knocker/</link>
+      <pubDate>Wed, 22 Sep 2004 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/analysis-of-occ-knocker/</guid>
+      <description>&lt;p&gt;最近在一个论坛发现了一段简单的C程序很有意思，其中蕴含着不少技巧，在此与大家分享一下。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;原程序如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include &amp;lt;stdio.h&amp;gt;
+main(_){char*x=&amp;quot;*b#**000**I#*******2*0***#-.****5.*-#-.****54.#*******2**6#****00**0.#&amp;quot;;while(_=*x/4)_-=8,printf(&amp;quot;\n%*s&amp;quot;+!!_,_+_,&amp;quot;_/_/_/&amp;quot;+*x++%4*2);}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+&lt;p&gt;表面看起来很奇怪的代码，我把它放到VC++6下面编译，发现不能通过，提示“_”未声明，对以上代码稍加修改，如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include &amp;lt;stdio.h&amp;gt;
+
+main(int _){char*x=&amp;quot;*b#**000**I#*******2*0***#-.****5.*-#-.****54.#*******2**6#****00**0.#&amp;quot;;while(_=*x/4)_-=8,printf(&amp;quot;\n%*s&amp;quot;+!!_,_+_,&amp;quot;_/_/_/&amp;quot;+*x++%4*2);}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;细心的人已经看出来了，就是在main函数的参数“&lt;code&gt;_&lt;/code&gt;”前面加上了变量的类型：&lt;code&gt;int&lt;/code&gt;。此时，以上代码在VC6中就能够正常的编译和连接了。运行的结果如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;  _/                              _/
+  _/  _/  _/_/_/  _/_/_/  _/_/_/  _/  _/                _/_/
+  _/  _/  _/  _/  _/  _/  _/      _/  _/  _/_/_/  _/  _/  _/
+  _/_/    _/  _/  _/  _/  _/      _/_/    _/  _/  _/_/
+  _/_/    _/  _/  _/  _/  _/      _/_/    _/_/_/    _/
+  _/  _/  _/  _/  _/  _/  _/      _/  _/  _/        _/
+  _/  _/  _/  _/  _/_/_/  _/_/_/  _/  _/  _/_/_/    _/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;是用“&lt;code&gt;_/&lt;/code&gt;”组成的单词“knocker”。&lt;/p&gt;
+
+&lt;p&gt;下面我们来分析这个小小的程序，不过为了看起来直观，我把这个程序稍加改动：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include &amp;lt;stdio.h&amp;gt;
+
+main(int _) {
+  char*x=&amp;quot;*b#**000**I#*******2*0***#-.****5.*-#-.****54.#*******2**6#****00**0.#&amp;quot;;
+  while(_=*x/4) {
+    _-=8;
+    printf(&amp;quot;\n%*s&amp;quot;+!!_,_+_,&amp;quot;_/_/_/&amp;quot;+*x++%4*2);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;首先来看看&lt;code&gt;main&lt;/code&gt;函数参数，这个参数的名称比较奇怪“&lt;code&gt;_&lt;/code&gt;”，我们看着有些不习惯，但它确实是合法的变量名称。另外，本来我们常见的&lt;code&gt;main&lt;/code&gt;函数一般都不带参数，如果有参数是因为程序希望处理命令行格式下运行这个程序所需要的参数，一般是这样的：&lt;code&gt;main(int argc, char **argv)&lt;/code&gt;，第一个参数argc表示参数表中参数的个数，argc是一个char型二维数组，保存着参数字符串。&lt;/p&gt;
+
+&lt;p&gt;举个例子，如果我们在命令行下输入命令：&lt;code&gt;dir –s c:\&lt;/code&gt;。此时，argc的值为3（包括命令本身），argv[0]指向字符串：dir，arg[1] 指向字符串：-s，arg[2]指向字符串“&lt;code&gt;c:\&lt;/code&gt;”。那么既然main函数的参数通常要不没有，要不就是两个，而这个程序只有一个，这样做是否合法呢？答案是肯定的！我在《关于C语言中的变量》中提到过，函数中的参数是保存在堆栈中的，所以这就涉及到一个谁来平衡堆栈的问题，是调用者还是被调用者。在使用VC6编译器的时候，如果函数没有特别的声明，默认是调用者清理堆栈。换句话说，运行时库(runtime)调用main函数的时候，只传递一个参数给main函数，这一点它自己是知道的，当main函数调用结束以后，它在平衡堆栈的时候，只清除掉一个函数，因此不会出现任何问题。&lt;/p&gt;
+
+&lt;p&gt;我们接着往下看，下面定义了一个char型指针变量x，指向一个字符串。接下来是while语句，&lt;code&gt;while(_=(*x)/4)&lt;/code&gt;，当表达式&lt;code&gt;_=(*x)/4&lt;/code&gt;的值不为0的时候就执行while的循环体，然而表达式&lt;code&gt;_=(*x)/4&lt;/code&gt;是一个赋值语句，它的值又是多少呢？在这种情况下，通常赋值号右面的表达式的值就是整个表达式的值。第一次执行这个语句的时候，x指向字符‘*’，对应的值为42，以此类推，当&lt;code&gt;x=0&lt;/code&gt;时，也就是字符串结束的时候，循环结束。&lt;/p&gt;
+
+&lt;p&gt;接下来在原来的程序中是：&lt;code&gt;_-=8,printf(&amp;quot;\n%*s&amp;quot;+!!_,_+_,&amp;quot;_/_/_/&amp;quot;+*x++%4*2);&lt;/code&gt;这里的逗号作用有些类似分号，但是逗号两侧组成的是一条语句，而分号则是两条语句。&lt;/p&gt;
+
+&lt;p&gt;我们仔细看printf这条语句，它的格式字符串为：“&lt;code&gt;\n%*s&lt;/code&gt;”，其中&lt;code&gt;%*s&lt;/code&gt;很少见，很多人不知道这是什么格式，不过我们可以在MSDN中找到这样的描述：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;If the width specification is an asterisk (*), an int argument from the argument list supplies the value. The width argument must precede the value being formatted in the argument list.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;意思是说如果宽度用星号(*)来指定，则应该在参数列表中提供一个int型参数作为宽度的值。这样就清楚了，原来这个printf语句是用表达式_+_来控制字符串”%*s”的宽度，也就是替换其中的（*）。&lt;/p&gt;
+
+&lt;p&gt;在仔细一看，原来格式字符串还没有完！完整的应该是：&lt;code&gt;&amp;quot;\n%*s&amp;quot;+!!_&lt;/code&gt;。这就奇怪了，字符串怎么和&lt;code&gt;!!_&lt;/code&gt;相加呢？其实也不奇怪，在这里&lt;code&gt;!!_&lt;/code&gt;是对变量_作了两次“非”的操作，结果应该是0或1。要明确的是，字符串作为参数传递给函数的时候，只是把字符串的首地址传递给了函数，所以字符串&lt;code&gt;&amp;quot;\n%*s&amp;quot;&lt;/code&gt;的首地址就是字符‘&lt;code&gt;\n&lt;/code&gt;’的地址，当这个地址加1的时候，传递给printf函数的格式字符串就变成了&lt;code&gt;&amp;quot;%*s&amp;quot;&lt;/code&gt;，所以这个&lt;code&gt;+!!_&lt;/code&gt;的奥妙就在于控制换行！是不是很有创意？&lt;/p&gt;
+
+&lt;p&gt;当然了，下面的代码同样有创意，就是printf语句要打印的字符串参数：&lt;code&gt;&amp;quot;_/_/_/&amp;quot;+*x++%4*2&lt;/code&gt;。经过刚才的分析，我们不难理解&lt;code&gt;&amp;quot;_/_/_/&amp;quot;&lt;/code&gt;加上后面的表达式的用意了，同样是控制输出字符的个数，是一个“&lt;code&gt;_/&lt;/code&gt;”，两个，还是三个。那么关键就是后面这个表达式了：&lt;code&gt;*x++%4*2&lt;/code&gt;。其实慢慢的分析也不困难，先执行&lt;code&gt;*x%4*2&lt;/code&gt;，然后执行&lt;code&gt;x++&lt;/code&gt;。所以，当在执行while语句的时候，x会指向下一个字符！&lt;/p&gt;
+
+&lt;p&gt;综上所述，这个小程序就是利用一个字符串来控制输出的例子，里面运用了很多技巧，对于初学者需要很好的理解，对今后的编程是很有帮助的！&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

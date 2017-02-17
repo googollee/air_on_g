@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="theme-color" content="#263238">
+
+<meta name="generator" content="Hugo 0.18.1" />
+
+<link rel="apple-touch-icon" href="http://air.googol.im/images/logo.png">
+
+
+<link rel="canonical" href="http://air.googol.im/post/supervisor-with-docker-to-manage-processes/">
+
+
+    
+    <link href="//fonts.googleapis.com/css?family=Noto+Sans:400,700|Montserrat" rel="stylesheet">
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>在Docker里使用（支持镜像继承的）supervisor管理进程 - Air on G</title>
+    
+<meta name="description" content="&lt;p&gt;这篇文章是受&lt;a href=&#34;http://dockboard.org&#34;&gt;Dockboard&lt;/a&gt;之托帮忙翻译的与docker有关的技术文章。&lt;a href=&#34;http://dockboard.org&#34;&gt;Dockboard&lt;/a&gt;致力于在中国建立一个Docker技术的开放社区。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;">
+
+<meta property="og:title" content="在Docker里使用（支持镜像继承的）supervisor管理进程 - Air on G">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://air.googol.im/post/supervisor-with-docker-to-manage-processes/">
+<meta property="og:image" content="http://air.googol.im/images/default.png">
+<meta property="og:site_name" content="Air on G">
+<meta property="og:description" content="&lt;p&gt;这篇文章是受&lt;a href=&#34;http://dockboard.org&#34;&gt;Dockboard&lt;/a&gt;之托帮忙翻译的与docker有关的技术文章。&lt;a href=&#34;http://dockboard.org&#34;&gt;Dockboard&lt;/a&gt;致力于在中国建立一个Docker技术的开放社区。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="Air on G">
+<meta name="twitter:url" content="http://air.googol.im/post/supervisor-with-docker-to-manage-processes/">
+<meta name="twitter:title" content="在Docker里使用（支持镜像继承的）supervisor管理进程 - Air on G">
+<meta name="twitter:description" content="&lt;p&gt;这篇文章是受&lt;a href=&#34;http://dockboard.org&#34;&gt;Dockboard&lt;/a&gt;之托帮忙翻译的与docker有关的技术文章。&lt;a href=&#34;http://dockboard.org&#34;&gt;Dockboard&lt;/a&gt;致力于在中国建立一个Docker技术的开放社区。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;">
+<meta name="twitter:image" content="http://air.googol.im/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http:\/\/air.googol.im\/"
+    },
+    "headline": "在Docker里使用（支持镜像继承的）supervisor管理进程 - Air on G",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http:\/\/air.googol.im\/images\/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2014-03-28T19:46:44JST",
+    "dateModified": "2014-03-28T19:46:44JST",
+    "author": {
+      "@type": "Person",
+      "name": "Air on G"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Air on G",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http:\/\/air.googol.im\/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "\x3cp\x3e这篇文章是受\x3ca href=\x22http:\/\/dockboard.org\x22\x3eDockboard\x3c\/a\x3e之托帮忙翻译的与docker有关的技术文章。\x3ca href=\x22http:\/\/dockboard.org\x22\x3eDockboard\x3c\/a\x3e致力于在中国建立一个Docker技术的开放社区。\x3c\/p\x3e\n\n\x3cp\x3e\x3c\/p\x3e"
+  }
+</script>
+
+
+    <style>
+      html { font-size: 18px;}@media (max-width: 768px) { html { font-size: 15px; }}body { font-family: 'Noto Sans','Hiragino Kaku Gothic Pro',メイリオ,Meiryo,sans-serif; font-size: inherit; font-weight: 300; line-height: 1rem; background-color: #eceff1;}p { margin: 0;}a { color: #4caf50;}a:hover { text-decoration: none; color: #388e3c;}ul,ol { margin: 0; padding: 0;}h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 700;}h1 { font-size: 1.8rem; line-height: 2rem; margin: 1.5rem 0; }h2 { font-size: 1.4rem; line-height: 2rem; margin: 1.5rem 0; }h3 { font-size: 1.2rem; line-height: 1.5rem; margin: 1.5rem 0; }h4, h5, h6 { font-size: 1rem; line-height: 1.5rem; margin: 1.5rem 0; }main { display: block;}.content-inner { padding: 1rem 2rem;}.content-inner.thin { padding: .5rem 1rem;}@media (max-width: 768px) { .content-inner { padding: 1rem; }}/* Override */.container { position: relative;}/* Parts:layouts */.l-header { background-color: #fff; margin-bottom: 1rem; padding: 1rem 0; text-align: center;}.l-footer { font-size: .8rem; padding: 1.5rem 0;}/* Parts:menu */.p-menu { position: absolute; right: 15px; top: 0;}/* Parts:terms */.p-terms { list-style: none;}.p-terms .terms-title { margin: 0;}.p-terms a { display: inline-block; padding: .25rem 0;}.p-terms.inline li { display: inline-block; font-size: .8rem;}.p-terms.inline li::after { content: ',';}.p-terms.inline li:last-child::after { content: '';}/* Parts:paging */.p-paging { margin-bottom: 1.5rem; text-align: center;}.p-paging a { display: inline-block; padding: 1rem 1.5rem; margin: 0 .5rem; background-color: #cfd8dc; color: #263238;}/* Parts:section */section { margin-bottom: 1.5rem;}section>header { font-size: .8rem; font-weight: 700; margin-bottom: .5rem; text-transform: uppercase;}section>header a { color: #333; text-decoration: underline;}section.article-footer { margin-bottom: 1rem;}section.article-footer>header { margin-bottom: 0;}/* Parts:share */.p-share { min-width: 100%; margin-bottom: 1.5rem;}.p-share .share-inner { display: table; table-layout: fixed; width: 100%; border-spacing: .25rem;}.p-share a { display: table-cell; text-align: center; font-weight: 700; font-size: .7rem; padding: .5rem 0; color: #fff; border-radius: 5px;}.p-share a.ht { background-color: #00a4de; border-bottom: 2px solid #0083b1; }.p-share a.fb { background-color: #3b5998; border-bottom: 2px solid #2f4779; }.p-share a.tw { background-color: #1da1f2; border-bottom: 2px solid #1780c1; }.p-share a.gp { background-color: #dd4b39; border-bottom: 2px solid #b03c2d; }.p-share a.ln { background-color: #00c300; border-bottom: 2px solid #009c00; }.p-share a.ht::before { content: 'Hatena'; }.p-share a.fb::before { content: 'Facebook'; }.p-share a.tw::before { content: 'Twitter'; }.p-share a.gp::before { content: 'Google+'; }.p-share a.ln::before { content: 'LINE'; }/* Parts:logo */.h-logo { font-family: 'Montserrat', sans-serif;}.p-logo { display: inline-block; text-transform: uppercase;}.p-logo a { display: inline-block; font-size: 1.4rem; line-height: 2rem; color: #000;}/* Parts:crumb */.p-crumb ol { list-style: none; margin-bottom: 1rem;}.p-crumb li { display: inline; margin-right: .25rem; font-size: .8rem; color: #607d8b;}.p-crumb li::after { content: '/'; margin-left: .25rem;}.p-crumb li:last-child::after { content: '';}/* Parts:facts */.p-facts { list-style: none; font-size: .8rem; margin-bottom: 1rem;}.p-facts li { display: inline-block; margin-right: .5rem; color: #90a4ae;}.p-facts li i { margin-right: .5rem; color: #cfd8dc;}/* Parts:article */article { background-color: #fff;}article .title { margin: 0; margin-bottom: .5rem; font-weight: 700;}article .title a { color: #000;}article .thumb { display: block; background-image: url(http://air.googol.im/images/default.jpg); background-position: center; background-size: cover;}article .summary { margin-bottom: .5rem; max-height: 5rem; overflow: hidden;}article.single .thumb { height: 18rem; margin-bottom: 1rem;}@media (max-width: 768px) { article.single .thumb { height: 12rem; }}article.li { margin-bottom: 1rem;}article.li .thumb { height: 7.5rem; margin-bottom: .5rem;}article.li.sm { background-color: transparent; margin-bottom: .5rem;}article.li.sm>header { padding: .5rem 0;}article.li.sm .title { font-size: .8rem; line-height: 1rem; margin-bottom: .25rem;}article.li.sm .p-facts { font-size: .6rem; margin-bottom: 0;}article.li.sm .thumb { float: left; margin-right: .5rem; height: 3rem; width: 3rem;}.article-body h2 { padding: 1rem 0; border-bottom: 2px solid #eceff1;}.article-body h2:first-child { margin-top: 0; }.article-body h3 { color: #428bca;}.article-body h4 { border-left: solid .25rem #428bca; padding: 0 .5rem;}.article-body p { margin: 1.5rem 0; line-height: 1.5rem;}.article-body a { text-decoration: underline;}.article-body ul,.article-body ol { padding-left: 1.5rem;}.article-body code { display: inline-block; font-family: Menlo, consolas, monospace; font-size: .8rem; padding: 0 .5rem; line-height: 1.5rem;}.article-body pre { margin: 1.5rem 0; padding: 0; font-size: .8rem; border: none; border-radius: 0;}.article-body pre code { display: block; line-height: 1rem; padding: 1rem;}.article-body blockquote { margin: 1.5rem 0; padding: .5rem 0; font-size: .8rem; border-top: 1px solid #eceff1; border-bottom: 1px solid #eceff1; color: #607d8b;}.article-body blockquote p { margin: .5rem 0; line-height: 1rem;}.article-body strong { box-shadow: 0 -.5rem 0 0 #90caf9 inset;}.article-body em { font-style: normal; font-weight: 700; color: #03a9f4;}.article-body figure { margin: 1.5rem 0; }.article-body figure img { max-width: 100%; }.article-body figure.left,.article-body figure.right { width: 15rem; height: 12rem; margin-top: 0;}.article-body figure.left { float: left; margin-right: 1rem; }.article-body figure.right { float: right; margin-left: 1rem; }@media (max-width: 768px) { .article-body figure.left, .article-body figure.right { float: none; margin: 0; width: auto; height: auto; }}.article-body figcaption { padding: .5rem 0; font-size: .8rem; text-align: center;}.article-body figcaption a { color: #263238;}
+      
+      
+    </style>
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <div class="container">
+        <div class="p-logo">
+          <a href="http://air.googol.im/" class="h-logo">Air on G</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol>
+        <li><a href="http://air.googol.im/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://air.googol.im/post/" itemprop="url"><span itemprop="title">post</span></a></li>
+        
+        <li class="active">在Docker里使用（支持镜像继承的）supervisor管理进程</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+
+  <a href="http://air.googol.im/post/supervisor-with-docker-to-manage-processes/" class="thumb"></a>
+  <div class="content-inner">
+    <h1 class="title">在Docker里使用（支持镜像继承的）supervisor管理进程</h1>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-28T19:46:44JST">Mar 28, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+      
+    </ul>
+
+    <div class="article-body"><p>这篇文章是受<a href="http://dockboard.org">Dockboard</a>之托帮忙翻译的与docker有关的技术文章。<a href="http://dockboard.org">Dockboard</a>致力于在中国建立一个Docker技术的开放社区。</p>
+
+<p></p>
+
+<p>本文译自<a href="http://blog.trifork.com/2014/03/11/using-supervisor-with-docker-to-manage-processes-supporting-image-inheritance">Using Supervisor with Docker to manage processes (supporting image inheritance)</a>，作者Quinten Krijger。</p>
+
+<p><img src="http://blog.trifork.com/wp-content/uploads/2013/08/Docker-logo.png" alt="Docker-logo" /></p>
+
+<p>在八月份，我写了一篇关于如何创建tomcat镜像的<a href="http://blog.trifork.com/2013/08/15/using-docker-to-efficiently-create-multiple-tomcat-instances/">blog</a>。从那以后，docker又改进了很多，我对docker的了解也增加了很多。我很高兴和你分们享我找到的关于管理container进程的好办法。在读完这篇文章后，我希望你能善加利用我<a href="https://github.com/Krijger/docker-cookbooks">github仓库</a>里的supervisor镜像。</p>
+
+<h2 id="docker命令">Docker命令</h2>
+
+<p>在之前的文章里，我提到Docker（只能）支持运行一个前台进程。我们通常习惯使用类似upstart这种管理服务来初始化启动流程，但是Docker默认没有这些服务的支持。刚开始使用Docker时会很不习惯，你必须指定你想要运行的进程。这种行为和虚拟机相比有个优点，会尽可能的保持轻量的container。你可以通过run命令最后的参数，在启动container时指定进程命令，比如：</p>
+
+<pre><code>docker run ubuntu echo &quot;hello world&quot;
+</code></pre>
+
+<p>另外一种方法，你可以利用<a href="http://docs.docker.io/en/latest/reference/builder/#cmd">CMD</a>指令，在Dockerfile里指定docker run命令的默认参数。比如，如果你目录下的Dockerfile包含以下内容：</p>
+
+<pre><code>FROM ubuntu
+CMD echo &quot;hello world&quot;
+</code></pre>
+
+<p>再使用下面的指令构造<code>hello_world_printer</code>镜像：</p>
+
+<pre><code>docker build -t &quot;hello_world_printer&quot; .
+</code></pre>
+
+<p>使用下面的命令，你可以得到和之前run命令相同的执行结果。</p>
+
+<pre><code>docker run hello_world_printer
+</code></pre>
+
+<p>要注意，因为你可以覆盖掉CMD指定的命令行参数，这个只是个运行时的指令。有趣的事情是，在Linux container里，你可以只调用upstart命令然后得到和普通虚拟机大致相同的行为。</p>
+
+<h2 id="运行多个命令">运行多个命令</h2>
+
+<p>运行多个进程是个很正常的想法。比如，一个ssh服务（这样就能登录到正在运行的container）和实际的应用。你可以用下面的方法运行container：</p>
+
+<pre><code>docker run ... /usr/sbin/sshd &amp;&amp; run_your_app_in_foreground
+</code></pre>
+
+<p>这在开发时很方便。这样，当应用进程退出后，因为唯一的前台程序退出了，container会自动关闭。当然你可以使用<code>using /usr/bin/sshd -D</code>保证container不会退出，但是这里真正的问题是，这种使用run命令设置初始程序的方式不够简洁。而且，随着你的container变复杂，run命令会越来越长。</p>
+
+<p>所以，在运行更复杂的container的时候，很多人使用复杂的bash脚本。典型的bash脚本会执行一个前台进程，并开启一个或者多个（renegade）守护进程。与只是用Docker命令行的方式相比，这种方法最重要的改进在于，bash脚本是可以做版本控制的：启动脚本在你的Docker镜像里，新的改动可以和软件项目一起分发。不过，使用bash脚本管理进程依旧简陋枯燥，而且容易出错。</p>
+
+<h2 id="使用supervisor">……使用supervisor</h2>
+
+<p>更好的方法是使用<a href="http://supervisord.org/">supervisor</a>。supervisor可以更好的管理进程：使用更加简洁的代码管理进程；在崩溃时可以重启进程；允许重启一组进程并且有命令行工具和网页界面来管理进程。当然，越大的能力要求越大的责任：大量使用supervisor特性的代码，预示着你应该将整个服务更好的拆分成多个小的supervisor来管理。</p>
+
+<p>个人来讲，我喜欢supervisor让我用更清晰的代码管理启动的进程。我见过最简洁的使用例子，是子镜像扩展出一个进程组。比如，如果你经常使用SSH，使用一个SSH镜像作为基础镜像就是很合理的。这种情况，在所有基于这个镜像的扩展镜像上实现启动SSH进程的代码，形式少就是一种重复代码。我来给你们展示下我找到的解决这个问题的好办法。</p>
+
+<h2 id="supervisor基础镜像">supervisor基础镜像</h2>
+
+<p>首先，因为我默认使用supervisor，所以我所有的镜像都扩展自一个只包含supervisor和最新版本ubuntu的基础镜像。你可以在<a href="https://github.com/Krijger/docker-cookbooks/blob/master/supervisor/Dockerfile">这里</a>找到这个Dockerfile。这个基础镜像包括一个配置文件<code>/etc/supervisor.conf</code>：</p>
+
+<pre><code>[supervisord]
+nodaemon=true
+
+[include]
+files = /etc/supervisor/conf.d/*.conf
+</code></pre>
+
+<p>这个配置让supervisor本身以前台进程运行，这样可以让我们的container启动后持续运行。第二，这个配置将包含所有在<code>/etc/supervisor/conf.d/</code>目录下的配置文件，启动任何在这里定义的程序。</p>
+
+<h2 id="扩展基础镜像">扩展基础镜像</h2>
+
+<p><img src="http://blog.trifork.com/wp-content/uploads/2014/02/tomcat-stack-164x300.png" alt="tomcat-stack" /></p>
+
+<p>是的，想法很简单。所有的子container通过将特定的service.sv.conf放到特定的目录的方式，将其自己的服务加入到supervisor的管理里。之后，使用如下命令启动container：</p>
+
+<pre><code>docker run child_image_name &quot;supervisor -c /etc/supervisor.conf&quot;
+</code></pre>
+
+<p>会自动启动所有指定的进程。你可以对镜像做多层扩展，每层扩展加入一个或者多个服务到配置目录。在Docker里使用supervisor启动命令代替upstart也更有效和有范。</p>
+
+<p>作为例子，让我们看看之前blog提到的Tomcat工作栈，是如何使用这种改进后的方法的。</p>
+
+<ul>
+<li><p>首先，和之前讨论的一样，我们使用从ubuntu扩展而来的supervisor基础镜像</p></li>
+
+<li><p>之后，我们使用在supervisor上安装了Java的<a href="https://github.com/Krijger/docker-cookbooks/tree/master/jdk7-oracle">JDK镜像</a>。Java只是其他服务使用的库，所以我们在这层不指定任何启动服务。这层要做一些类似设置JAVA_HOME环境变量的通常任务</p></li>
+
+<li><p>Tomcat镜像在工作栈上安装Tomcat并暴露8080端口。这层包括一个名字是Tomcat的服务，定义在<a href="https://github.com/Krijger/docker-cookbooks/blob/master/tomcat7/tomcat.sv.conf">tomcat.sv.conf</a>：</p>
+
+<pre><code>[program:webapp]
+command=/bin/bash -c &quot;env &gt; /tmp/tomcat.env &amp;&amp; cat /etc/default/tomcat7 &gt;&gt; /tmp/tomcat.env &amp;&amp; mv /tmp/tomcat.env /etc/default/tomcat7 &amp;&amp; service tomcat7 start&quot;
+redirect_stderr=true
+</code></pre>
+
+<p>执行Tomcat服务的命令并不像我喜欢的那样简洁，将其放到一个专门的脚本里会更好。命令先添加了一些环境变量，比如<a href="http://docs.docker.io/en/latest/use/working_with_links_names/">container的关联参数</a>，到<code>/etc/default/tomcat7</code>，这样我们可以在之后的配置中使用这些参数，后面的例子会展示这种用法。也许使用类似etcd的键值存储会更好，不过这超出了本文的范畴。</p>
+
+<p>当然，我们这里只安装了默认的文件，没有真正的网络应用程序。</p></li>
+
+<li><p>你的网络应用程序应当扩展自Tomcat镜像，并安装入真正的应用程序。当启动supervisor的时候，会自动启动Tomcat。</p></li>
+</ul>
+
+<h2 id="一个tomcat网络程序的dockerfile例子">一个Tomcat网络程序的Dockerfile例子</h2>
+
+<p>如何安装实际的网络应用超出了本文的范畴，不过，作为结束，我给出了个Dockerfile例子，演示如何使用这个工作栈。这个例子完全基于Java Tomcat，所以如果你对这个不感兴趣，别读了，玩别的去吧:)</p>
+
+<p>假设，我们有一个使用Elasticsearch的网络应用：</p>
+
+<pre><code>FROM quintenk/tomcat:7
+
+# 安装一些项目的依赖，这些依赖在每次更新时不会改变
+# RUN apt-get -y install ...
+
+RUN rm -rf /var/lib/tomcat7/webapps/*
+
+# 将配置加入/etc/default/tomcat7，比如：
+...
+RUN echo 'DOCKER_OPTS=&quot;-DELASTICSEARCH_SERVER_URL=${ELASTICSEARCH_PORT_9200_TCP_ADDR}&quot;' &gt;&gt; /etc/default/tomcat7
+RUN echo 'CATALINA_OPTS=&quot;... ${DOCKER_OPTS}&quot;' &gt;&gt; /etc/default/tomcat7
+
+# 加入类似log4j.properties的配置文件，并将其chown root:tomcat7
+
+# 假设项目已经构建好了，而且ROOT.war在你构建Docker的目录（包含Dockerfile的目录）。基于缓存的考虑，这个作为最后的步骤
+ADD ROOT.war /var/lib/tomcat7/webapps/
+RUN chown root:tomcat7 /var/lib/tomcat7/webapps/ROOT.war
+
+CMD supervisord -c /etc/supervisor.conf
+</code></pre>
+
+<p>这段代码里，elasticsearch的相关环境变量（搜索索引）已经被设置了，因为supervisor关于Tomcat的配置，会在启动时将所有环境变量添加到/etc/default/tomcat7。当然，我们在启动网络应用镜像时需要关联到elasticsearch containter，比如：</p>
+
+<pre><code>docker run -link name_of_elasticsearch_instance:elasticsearch -d name_of_webapp_image &quot;supervisor -c /etc/supervisor.conf&quot;
+</code></pre>
+
+<p>你现在的网络应用可以去访问<code>ELASTICSEARCH_SERVER_URL</code>路径了。你可以在配置文件里使用这个变量，像这样：</p>
+
+<pre><code>elastic.unicast.hosts=${ELASTICSEARCH_SERVER_URL}
+</code></pre>
+
+<p>这样就可以将配置暴露给你的应用程序。如果你是个Java开发者，并且也阅读了前一篇文章，希望这让你能开始一段愉快的代码之旅。</p></div>
+  </div>
+
+  <footer class="article-footer">
+    <div class="content-inner">
+
+      <aside class="p-share">
+  <div class="share-inner">
+    <a href="http://b.hatena.ne.jp/add?mode=confirm&url=http%3a%2f%2fair.googol.im%2fpost%2fsupervisor-with-docker-to-manage-processes%2f&title=%e5%9c%a8Docker%e9%87%8c%e4%bd%bf%e7%94%a8%ef%bc%88%e6%94%af%e6%8c%81%e9%95%9c%e5%83%8f%e7%bb%a7%e6%89%bf%e7%9a%84%ef%bc%89supervisor%e7%ae%a1%e7%90%86%e8%bf%9b%e7%a8%8b" title="はてなブックマーク" class="ht" target="_blank" rel="nofollow"></a>
+    <a href="http://www.facebook.com/sharer.php?u=http%3a%2f%2fair.googol.im%2fpost%2fsupervisor-with-docker-to-manage-processes%2f&t=%e5%9c%a8Docker%e9%87%8c%e4%bd%bf%e7%94%a8%ef%bc%88%e6%94%af%e6%8c%81%e9%95%9c%e5%83%8f%e7%bb%a7%e6%89%bf%e7%9a%84%ef%bc%89supervisor%e7%ae%a1%e7%90%86%e8%bf%9b%e7%a8%8b" title="Facebookでシェア" class="fb" target="_blank" rel="nofollow"></a>
+    <a href="http://twitter.com/intent/tweet?url=http%3a%2f%2fair.googol.im%2fpost%2fsupervisor-with-docker-to-manage-processes%2f&text=%e5%9c%a8Docker%e9%87%8c%e4%bd%bf%e7%94%a8%ef%bc%88%e6%94%af%e6%8c%81%e9%95%9c%e5%83%8f%e7%bb%a7%e6%89%bf%e7%9a%84%ef%bc%89supervisor%e7%ae%a1%e7%90%86%e8%bf%9b%e7%a8%8b&tw_p=tweetbutton" title="Twitterでシェア" class="tw" target="_blank" rel="nofollow"></a>
+    <a href="https://plus.google.com/share?url=http%3a%2f%2fair.googol.im%2fpost%2fsupervisor-with-docker-to-manage-processes%2f" title="Google Plusでシェア" class="gp" target="_blank" rel="nofollow"></a>
+    <a href="http://line.me/R/msg/text/?%e5%9c%a8Docker%e9%87%8c%e4%bd%bf%e7%94%a8%ef%bc%88%e6%94%af%e6%8c%81%e9%95%9c%e5%83%8f%e7%bb%a7%e6%89%bf%e7%9a%84%ef%bc%89supervisor%e7%ae%a1%e7%90%86%e8%bf%9b%e7%a8%8b http%3a%2f%2fair.googol.im%2fpost%2fsupervisor-with-docker-to-manage-processes%2f" title="LINEでシェア" class="ln" target="_blank" rel="nofollow"></a>
+  </div>
+</aside>
+
+
+      <nav class="p-crumb">
+        <ol>
+          <li><a href="http://air.googol.im/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+          
+          <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://air.googol.im/post/" itemprop="url"><span itemprop="title">post</span></a></li>
+          
+          <li class="active">在Docker里使用（支持镜像继承的）supervisor管理进程</li>
+        </ol>
+      </nav>
+
+      
+      
+      
+      
+      
+      <section class="article-footer">
+        <header>
+          <a href="http://air.googol.im/tags/">TAGS</a>
+        </header>
+        <div>
+          <ul class="p-terms inline">
+            
+            <li><a href="http://air.googol.im/tags/docker/">docker</a></li>
+            
+            <li><a href="http://air.googol.im/tags/operation/">operation</a></li>
+            
+          </ul>
+        </div>
+      </section>
+      
+      
+    </div>
+  </footer>
+
+</article>
+
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'air-g';
+    var disqus_identifier = 'http:\/\/air.googol.im\/post\/supervisor-with-docker-to-manage-processes\/';
+    var disqus_title = '在Docker里使用（支持镜像继承的）supervisor管理进程';
+    var disqus_url = 'http:\/\/air.googol.im\/post\/supervisor-with-docker-to-manage-processes\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+
+  <div class="col-md-4">
+    <aside class="site">
+
+  <section>
+    <header>latests</header>
+    <div>
+      <div class="row">
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/contiguous-stacks-in-go/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/contiguous-stacks-in-go/">Go中的连续栈</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-28T21:21:24JST">Mar 28, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/supervisor-with-docker-to-manage-processes/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/supervisor-with-docker-to-manage-processes/">在Docker里使用（支持镜像继承的）supervisor管理进程</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-28T19:46:44JST">Mar 28, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/go-concurrency-patterns-pipelines-and-cancellation/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/go-concurrency-patterns-pipelines-and-cancellation/">Go并发模式：管道和取消</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-15T10:52:46JST">Mar 15, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/explain-big-data/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/explain-big-data/">试着解释大数据</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-11T21:01:03JST">Mar 11, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/first-glance-at-atom/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/first-glance-at-atom/">Atom初探</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-07T01:20:00JST">Mar 7, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/whats-happening-in-go-tip-2014-01-10/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/whats-happening-in-go-tip-2014-01-10/">Go tip在做什么 2014-01-10</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-01-12T10:13:39JST">Jan 12, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/go-rest-revolution/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/go-rest-revolution/">go-rest演化</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-12-31T10:48:24JST">Dec 31, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/shy-note-project-management/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/shy-note-project-management/">S会议开发手札：项目管理</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-09-25T22:48:15JST">Sep 25, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/shy-note-over-design/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/shy-note-over-design/">S会议开发手札：过渡设计</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-09-17T22:51:28JST">Sep 17, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/shy-notes/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/shy-notes/">S会议开发手札</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-09-16T23:14:56JST">Sep 16, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+      </div>
+    </div>
+  </section>
+
+  
+  <section>
+    <header>category</header>
+    <div>
+      <ul class="p-terms">
+        
+      </ul>
+    </div>
+  </section>
+  
+  <section>
+    <header>tag</header>
+    <div>
+      <ul class="p-terms">
+        <li><a href="http://air.googol.im/tags/golang">golang</a></li><li><a href="http://air.googol.im/tags/cpp">cpp</a></li><li><a href="http://air.googol.im/tags/c">c</a></li><li><a href="http://air.googol.im/tags/python">python</a></li><li><a href="http://air.googol.im/tags/y-combinator">y-combinator</a></li><li><a href="http://air.googol.im/tags/startup">startup</a></li><li><a href="http://air.googol.im/tags/interview">interview</a></li><li><a href="http://air.googol.im/tags/occ">occ</a></li><li><a href="http://air.googol.im/tags/project">project</a></li><li><a href="http://air.googol.im/tags/ruby">ruby</a></li>
+      </ul>
+    </div>
+  </section>
+  
+
+</aside>
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p>All rights reserved - 2017</p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_robust">Robust</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

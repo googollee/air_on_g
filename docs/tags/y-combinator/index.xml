@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Y Combinator on Air on G</title>
+    <link>http://air.googol.im/tags/y-combinator/index.xml</link>
+    <description>Recent content in Y Combinator on Air on G</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh_CN</language>
+    <copyright>All rights reserved - 2017</copyright>
+    <atom:link href="http://air.googol.im/tags/y-combinator/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>尝试用C&#43;&#43;实现Y Combinator（之三）</title>
+      <link>http://air.googol.im/post/implement-y-combinator-in-cpp-3/</link>
+      <pubDate>Sat, 22 Sep 2007 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/implement-y-combinator-in-cpp-3/</guid>
+      <description>&lt;p&gt;基本上，又进行了几次失败的尝试，具体过程不写了，反正写了也没人看。（其实是我没有存……）&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;难点在于C++的类型是在编译时确定的，也就是说，所有函数的返回类型和参数类型必须在编译前确定。但是，重新考察python的实现：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def Y(le):
+  def _anon(cc):
+    return le(lambda x: cc(cc)(x))
+  return _anon(_anon)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你能说清楚那个cc的准确类型么？是，cc返回一个int(int)的函数（是真的函数，不是函数指针！），但是参数类型呢？还是cc，而这个cc的类型还是cc……&lt;/p&gt;
+
+&lt;p&gt;难怪说动态语言能实现无穷，实际是这里的类型是无穷递归的……&lt;/p&gt;
+
+&lt;p&gt;但是python这里为啥就没有问题呢？原因是python的类型并不是在编译时确定，而是在运行时，也就是说，当执行到cc(cc)时，才确认cc是一个函数，以及这个函数的返回值和参数。你问为啥cc会是个函数？使用者（也就是调用_anon的地方）决定的呗，调用的时候就传入的是个函数。你还问要不是函数咋办？不是函数……抛异常崩溃呗，蓝屏的，见过吧？（还是微软六厂的呢！）&lt;/p&gt;
+
+&lt;p&gt;所以说，想靠C++的正常手段实现Y Combinator是没有希望了。C++在编译时可写不出无穷递归的参数类型。不过，我们有void*。（这方面讲，C#和Java的反射也能达到运行时确定参数类型的目的，就是麻烦点。但C#的delegate估计就没戏了。）&lt;/p&gt;
+
+&lt;p&gt;不过，由于boost::function的一些在我看来很奇怪的限制，导致我可能要真的重新实现一个function的东西了。比如下面这段居然就编译不过去：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;typedef boost::function&amp;lt;int(int)&amp;gt; ftype;
+typedef boost::function&amp;lt;ftypye(ftype)&amp;gt; letype;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;而int(int)()(int(int))（天，我竟然能写出这么bt的类型签名，《C专家编程》没白读……）类型正是Y的参数le的类型，也是_1的返回类型。如此重要的类型居然没法用function定义出来……&lt;/p&gt;
+
+&lt;p&gt;啊？你说为啥非要用function？这个_1的返回值_fn可是有enclosure在里面的，没有个functor怎么实现？既然有了functor，那普通的函数指针肯定没戏，只能找个类似function的东西。&lt;/p&gt;
+
+&lt;p&gt;最终，还是逃不掉再造轮子的宿命。&lt;/p&gt;
+
+&lt;p&gt;我命由我不由天口牙~~~~~~~（天渐渐凉了，大家记得多穿衣服，小心寒到……）&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>尝试用C&#43;&#43;实现Y Combinator（之二）</title>
+      <link>http://air.googol.im/post/implement-y-combinator-in-cpp-2/</link>
+      <pubDate>Thu, 06 Sep 2007 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/implement-y-combinator-in-cpp-2/</guid>
+      <description>&lt;p&gt;恩……上篇没写完……&lt;/p&gt;
+
+&lt;p&gt;其实，上篇还写错了……&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;那个combinator::operator()的返回值是int，但是，看那个Python实现：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt; def _1(factorial):
+     def _fn(n):
+         if n == 0: return 1
+         else:
+             return n*factorial(n-1)
+     return _fn
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;很明显，这个返回值是一个函数……&lt;/p&gt;
+
+&lt;p&gt;那么，现在是到了仔细想想_1返回值类型的时候了。简单来说，返回的是个函数，这个函数以一个int为参数，返回一个int值。也就是_1的返回值是int (*)(int)类型。&lt;/p&gt;
+
+&lt;p&gt;很明显， _1的返回值和combinator::operator()的返回值不一致。&lt;/p&gt;
+
+&lt;p&gt;问题是，怎么才能把他们写的一致呢？由于_fn函数保存了_1传入的参数factorial，所以_fn一定不是一个传统意义上的C++函数，而应该是个仿函数。由于_fn是个仿函数，那就必然有类的实例的生命周期的问题存在，一个不考虑释放内存的_fn应该是这样：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;class _fn
+{
+public:
+    typedef int(*func_type)(int);
+
+    _fn(func_type factorial) : func_(factorial), type_(FUNCTION), functor_(0)
+    {}
+
+    _fn(_fn *factorial) : type_(FUNCTOR), func_(0), functor_(factorial)
+    {}
+
+    int operator()(int n)
+    {
+        if (n == 0)
+            return 1;
+        else
+        {
+            switch (type_)
+            {
+            case FUNCTION:
+                return n * func_(n - 1);
+                break;
+            case FUNCTOR:
+                return n * (*functor_)(n - 1);
+                break;
+            }
+        }
+        throw;
+    }
+
+private:
+    enum
+    {
+        FUNCTION,
+        FUNCTOR,
+    } type_;
+    func_type func_;
+    _fn *functor_;
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对应的_1有两个，分别对应传入参数为函数和仿函数的情况：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;_fn* _1(_fn::func_type factorial)
+{
+    return new _fn(factorial);
+}
+
+_fn* _1(_fn *factorial)
+{
+    return new _fn(factorial);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;实验一下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;int error(int n)
+{
+    throw;
+}
+
+int main(int argc, char* argv[])
+{
+    _fn* f1 = _1(error);
+
+    cout &amp;lt;&amp;lt; (*f1)(0) &amp;lt;&amp;lt; endl; // print 1
+    //cout &amp;lt;&amp;lt; (*f1)(1) &amp;lt;&amp;lt; endl; // throw
+
+    _fn* f2 = _1(_1(error));
+    cout &amp;lt;&amp;lt; (*f2)(0) &amp;lt;&amp;lt; endl; // print 1
+    cout &amp;lt;&amp;lt; (*f2)(1) &amp;lt;&amp;lt; endl; // print 1
+    //cout &amp;lt;&amp;lt; (*f2)(2) &amp;lt;&amp;lt; endl; // throw
+
+    _fn* f3 = _1(_1(_1(_1(error))));
+    cout &amp;lt;&amp;lt; (*f3)(0) &amp;lt;&amp;lt; endl; // print 1
+    cout &amp;lt;&amp;lt; (*f3)(1) &amp;lt;&amp;lt; endl; // print 1
+    cout &amp;lt;&amp;lt; (*f3)(2) &amp;lt;&amp;lt; endl; // print 2
+    cout &amp;lt;&amp;lt; (*f3)(3) &amp;lt;&amp;lt; endl; // print 6
+    //cout &amp;lt;&amp;lt; (*f3)(4) &amp;lt;&amp;lt; endl; // throw
+
+    return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;看上去成功了耶~~~~~&lt;/p&gt;
+
+&lt;p&gt;当然，我也考虑过不使用指针，而是使用实例，也就是_fn的构造类似：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;_fn(_fn &amp;amp;factorial) : type_(FUNCTOR), func_(0), functor_(factorial) // need copy ctor here
+{}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但这是对应functor_(factorial)，就需要一个类_fn的拷贝构造函数，又由于_fn(_fn &amp;amp;factorial)实际就是_fn的拷贝构造函数，也就是说这里递归了……（x，又是递归！）由于Y Combinator的本意就是不用递归而写出递归，所以这里我就不考虑这种情况了。&lt;/p&gt;
+
+&lt;p&gt;另一个不考虑的，就是每个_1都会在堆上建一个_fn的实例，这个实例何时销毁？当然是在最后一个_fn销毁的时候销毁。但是……谁有保证不会有人写出&amp;rdquo;&lt;code&gt;_fn *f4 = _1(f3)&lt;/code&gt;&amp;ldquo;呢？f4销毁的时候，可能有别的地方还在用f3……所以说，gc啊gc，开门吧~~~~~~（就是说，期待C++ 0x的gc吧）&lt;/p&gt;
+
+&lt;p&gt;再有，就是诡异的语法了。&lt;code&gt;(*f1)()&lt;/code&gt;之类的东西实在看的别扭。或者也可以写&amp;rdquo;&lt;code&gt;_fn &amp;amp;f1 = *_1(_1(...))&lt;/code&gt;&amp;ldquo;……总之，甘蔗不能两头甜，大床不能两头睡，凑合吧……&lt;/p&gt;
+
+&lt;p&gt;不管怎么说，总算实现了看上去像Y Combinator的东西，下次总该能真正实现个浪费内存诡异语法的Y Combinator了吧？&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>尝试用C&#43;&#43;实现Y Combinator（之一）</title>
+      <link>http://air.googol.im/post/implement-y-combinator-in-cpp-1/</link>
+      <pubDate>Sat, 01 Sep 2007 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/implement-y-combinator-in-cpp-1/</guid>
+      <description>&lt;p&gt;恩……程序员的一大特点：看到别人有个轮子，就想自己动手造个出来……（这样不好，不好……）&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;上篇文章翻译了用Python实现Y Combinator。托作者之福，写的清晰易懂，算是让我大概理解了Y Combinator是个什么东西。其实就是把单递归抽象出来嘛，把递归的概念和递归体分离开，这个Y Combinator就是实现了递归概念的函数而已。（真是站着说话不腰疼啊……）&lt;/p&gt;
+
+&lt;p&gt;然后，想试试用C++能不能实现这个玩意儿。&lt;/p&gt;
+
+&lt;p&gt;基本上，这真是个让我吐血的想法……&lt;/p&gt;
+
+&lt;p&gt;最早想一步实现Y Combinator。琢磨着怎么有模板有运算符重载有类的C++，还模拟不出来个函数编程么？结果……唉，具体实现先不提。后来尝试按照文章里讲解Y Combinator的过程，实现某个非递归版本的函，比如那个阶乘：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;class combinator
+{
+public:
+    typedef int (*func_type)(int);
+
+    combinator(func_type arg) : factorial_(arg)
+    {}
+
+    int _fn(int n)
+    {
+        if (n == 0)
+            return 1;
+        else
+            return n * factorial_(n-1);
+    }
+
+    int operator()(int arg)
+    {
+        return _fn(arg);
+    }
+private:
+    func_type factorial_;
+};
+
+int error(int n)
+{
+    throw;
+}
+
+int main(int argc, char** argv)
+{
+    combinator _1(error);
+
+    cout &amp;lt;&amp;lt; _1(0) &amp;lt;&amp;lt; endl; // print 1
+    //cout &amp;lt;&amp;lt; _1(1) &amp;lt;&amp;lt; endl; // throw exception
+    return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;看吧，看吧，果然实现了！&lt;/p&gt;
+
+&lt;p&gt;但是，当我想进一步递归的时候，问题出现了……因为对combinator的调用，是通过仿函数实现的，这个没法再次用函数的形式，去构造另一个combinator实例，比如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;combinator _2(_1); // 这个不会通过编译的……
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;真是死人。没关系，我们有重载……这样：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;class combinator
+{
+public:
+    typedef int (*func_type)(int);
+
+    combinator(func_type arg) : factorial_(arg), type_(Function)
+    {}
+
+    combinator(combinator *instance/* really want to use ref here, but that can&#39;t differ from copy ctor */) : combinator_(instance), type_(Functor)
+    {}
+
+    int _fn(int n)
+    {
+        if (n == 0)
+            return 1;
+        else
+        {
+            switch (type_)
+            {
+            case Function:
+                return n * factorial_(n-1);
+            case Functor:
+                return n * (*combinator_)(n-1);
+            }
+            throw;
+        }
+    }
+
+    int operator()(int arg)
+    {
+        return _fn(arg);
+    }
+
+protected:
+    combinator(const combinator&amp;amp; arg) // copy ctor be protected can avoid miss usage.
+    {}
+
+private:
+    enum
+    {
+        Function,
+        Functor,
+    } type_;
+    func_type factorial_;
+    combinator *combinator_; // instance is better than pointer here, for pointer may be deleted. But, how...
+};
+
+int error(int n)
+{
+    throw;
+}
+
+int main(int argc, char* argv[])
+{
+    combinator _1(error); // can be writen like _1(&amp;amp;error) :)
+
+    cout &amp;lt;&amp;lt; _1(0) &amp;lt;&amp;lt; endl; // print 1
+    //cout &amp;lt;&amp;lt; _1(1) &amp;lt;&amp;lt; endl; // throw exception
+
+    combinator _2(&amp;amp;_1); // well, a little different with python
+
+    cout &amp;lt;&amp;lt; _2(0) &amp;lt;&amp;lt; endl; // print 1
+    cout &amp;lt;&amp;lt; _2(1) &amp;lt;&amp;lt; endl; // print 1
+    //cout &amp;lt;&amp;lt; _2(2) &amp;lt;&amp;lt; endl; // throw exception
+
+    combinator _3(&amp;amp;_2);
+
+    cout &amp;lt;&amp;lt; _3(0) &amp;lt;&amp;lt; endl; // print 1
+    cout &amp;lt;&amp;lt; _3(1) &amp;lt;&amp;lt; endl; // print 1
+    cout &amp;lt;&amp;lt; _3(2) &amp;lt;&amp;lt; endl; // print 2
+    //cout &amp;lt;&amp;lt; _3(3) &amp;lt;&amp;lt; endl; // throw exception
+
+    return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;怎么样？很厉害吧？不过，本来在Python里挺短的程序，居然写了这么长，真是Orz！另外，类不能重载么？在类里面存在个type_来判断到底存的是函数还是仿函数，真是不优雅。不过，莫非要我再用类继承来消掉这个type_？那就不仅仅是这么长的代码了！算了，有兴趣追求优雅的，自己去写吧，我忍了……&lt;/p&gt;
+
+&lt;p&gt;居然写这个东西要写这么半天，郁闷！而且貌似再往后也不是那么好写的。最终的Y Combinator实现，留到下次吧……&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Y Combinator in Python</title>
+      <link>http://air.googol.im/post/y-combinator-in-python/</link>
+      <pubDate>Fri, 31 Aug 2007 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/y-combinator-in-python/</guid>
+      <description>&lt;p&gt;译自（由于某种原因，请用代理访问）：&lt;a href=&#34;http://siddhi.blogspot.com/2007/08/y-combinator-in-python.html&#34;&gt;Y Combinator in Python&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;我刚刚读完《The Little Schemer》一书。真是本好书啊！我喜欢书里那种Q&amp;amp;A的风格，而且更加期待这系列的第二本书，《The Seasoned Schemer》。（g9老大好像在某篇blog里提到过这两本书。）&lt;/p&gt;
+
+&lt;p&gt;第九章和第十章（最后两章）真是太好了。第十章是关于如何写一个小型的Schemer解释器的（怎么国外的语言牛书都爱自己写解释器……）。但是在这篇 blog里，我想谈谈第九章，因为这章介绍了Y Combinator（记得刘老大把这个翻译为Y算子还是啥的，突然找不到那篇blog了，干脆不翻）。&lt;/p&gt;
+
+&lt;p&gt;我过去曾试图理解这个概念，但是失败了（wikipedia page的解释真是莫名其妙），但是这本书却给出了一个华丽丽的解释。实际上，书里从Y Combinator的源头开始解释，并且每一步清晰易懂。&lt;/p&gt;
+
+&lt;p&gt;作为练习，我试着在Python里实现这个概念。最终结果是这样的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def Y(le):
+  def _anon(cc):
+    return le(lambda x: cc(cc)(x))
+  return _anon(_anon)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你并不知道Y Combinator的含义，那这段程序看上去实在诡异。&lt;/p&gt;
+
+&lt;p&gt;一个简单的解释是，Y Combinator是一个函数，这个函数以一个函数为输入，以这个函数的递归版本做输出。可能一个例子能够更好的说明这点：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def _1(factorial):
+  def _fn(n):
+    if n == 0:
+      return 1
+    else:
+      return n*factorial(n-1)
+  return _fn
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;看这个函数。函数名字是&lt;code&gt;_1&lt;/code&gt;。函数体含有看上去像是递归求阶乘的实现，只是这个递归从没有调用函数自身（记住，函数名字是&lt;code&gt;_1&lt;/code&gt;），而是调用的函数参数&lt;code&gt;factorial&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;factorial参数本身是个函数，所以&lt;code&gt;_1&lt;/code&gt;的意思是：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;如果n为0，返回1&lt;/li&gt;
+&lt;li&gt;否则，利用从factorial传入的函数，以n-1为参数调用这个函数，并且将其返回值乘以n，返回最终的结果&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;再进一步：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def error(n): raise Exception
+
+f = _1(error) # passing function &amp;quot;error&amp;quot; as the parameter
+f(0)   # prints 1
+f(1)   # Exception F (1) # Exception
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的函数f传入error函数做参数。所以如果n为0，返回1。其它情况，程序走到else的分支，调用我们作为参数传入的那个函数，在这里是指error，最终抛出了个异常。&lt;/p&gt;
+
+&lt;p&gt;按照递归的规则，我们不想调用error，而是想再次调用某个相同的函数。如果我们传入一个相同的函数呢？（意指给&lt;code&gt;_1&lt;/code&gt;传入&lt;code&gt;_1&lt;/code&gt;）这样在else的部分，就不会调用error，而是调用函数自己了。就像这样：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;f = _1(_1(error))
+f(0)   # prints 1
+f(1)   # prints 1
+f(2)   # Exception
+
+f = _1(_1(_1(_1(error))))
+f(0)   # prints 1
+f(1)   # prints 1
+f(2)   # prints 2
+f(3)   # prints 6
+f(4)   # Exception
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;恩……在每个例子里，递归在遇到error函数时终止。一个真正的递归版本应该像这样：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;f = _1(_1(_1(_1(_1......
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;恩……基本上来说，这就是Y Combinator所做的。用一些神奇的函数传递，就使&lt;code&gt;_1&lt;/code&gt;变成了一个递归函数。怎么样？很神奇吧！这里解释起来有点复杂。去找那本书的第九章看看吧。但是它确实按我的意思工作了！看看这个：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;f = Y(_1)
+f(0)   # prints 1
+f(1)   # prints 1
+f(5)   # prints 120
+f(10)   # prints 3628800
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;有意思吧？更有意思的是，这并不仅仅限于阶乘。看这个：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def _2(length):
+  def _fn(alist):
+    if not alist: return 0
+  else:
+    return 1 + length(alist[1:])
+  return _fn
+
+f = Y(_2) # calculate length of a list
+f([])   # prints 0
+f([1,2,3,4,5])   # prints 5
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Woohoo！还可以更进一步：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def _3(reverse):
+  def _fn(alist):
+    if not alist: return []
+  else:
+    return reverse(alist[1:]) + [alist[0]]
+  return _fn
+
+f = Y(_3) # reverse a list
+f([])   # prints []
+f([1,2,3])   # prints [3,2,1]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你可以随便找个递归函数，用上面的形式重写，然后使用Y Combinator来完成最终的递归版本。这很酷吧？&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

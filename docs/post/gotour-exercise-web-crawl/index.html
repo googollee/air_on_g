@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="theme-color" content="#263238">
+
+<meta name="generator" content="Hugo 0.18.1" />
+
+<link rel="apple-touch-icon" href="http://air.googol.im/images/logo.png">
+
+
+<link rel="canonical" href="http://air.googol.im/post/gotour-exercise-web-crawl/">
+
+
+    
+    <link href="//fonts.googleapis.com/css?family=Noto+Sans:400,700|Montserrat" rel="stylesheet">
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>关于gotour最后一题的一些想法 - Air on G</title>
+    
+<meta name="description" content="&lt;p&gt;过年几天，把&lt;a href=&#34;http://tour.golang.org/&#34;&gt;A Tour of Go&lt;/a&gt;看了一遍，算是复习了一遍go语言。其中最后一题&lt;a href=&#34;http://tour.golang.org/#70&#34;&gt;Exercise: Web Crawler&lt;/a&gt;有些复杂，是串行程序转换到并行时常见的问题。这里记录一些当时思考的结果。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;">
+
+<meta property="og:title" content="关于gotour最后一题的一些想法 - Air on G">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://air.googol.im/post/gotour-exercise-web-crawl/">
+<meta property="og:image" content="http://air.googol.im/images/default.png">
+<meta property="og:site_name" content="Air on G">
+<meta property="og:description" content="&lt;p&gt;过年几天，把&lt;a href=&#34;http://tour.golang.org/&#34;&gt;A Tour of Go&lt;/a&gt;看了一遍，算是复习了一遍go语言。其中最后一题&lt;a href=&#34;http://tour.golang.org/#70&#34;&gt;Exercise: Web Crawler&lt;/a&gt;有些复杂，是串行程序转换到并行时常见的问题。这里记录一些当时思考的结果。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="Air on G">
+<meta name="twitter:url" content="http://air.googol.im/post/gotour-exercise-web-crawl/">
+<meta name="twitter:title" content="关于gotour最后一题的一些想法 - Air on G">
+<meta name="twitter:description" content="&lt;p&gt;过年几天，把&lt;a href=&#34;http://tour.golang.org/&#34;&gt;A Tour of Go&lt;/a&gt;看了一遍，算是复习了一遍go语言。其中最后一题&lt;a href=&#34;http://tour.golang.org/#70&#34;&gt;Exercise: Web Crawler&lt;/a&gt;有些复杂，是串行程序转换到并行时常见的问题。这里记录一些当时思考的结果。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;">
+<meta name="twitter:image" content="http://air.googol.im/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http:\/\/air.googol.im\/"
+    },
+    "headline": "关于gotour最后一题的一些想法 - Air on G",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http:\/\/air.googol.im\/images\/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2012-02-04T20:00:00JST",
+    "dateModified": "2012-02-04T20:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "Air on G"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Air on G",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http:\/\/air.googol.im\/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "\x3cp\x3e过年几天，把\x3ca href=\x22http:\/\/tour.golang.org\/\x22\x3eA Tour of Go\x3c\/a\x3e看了一遍，算是复习了一遍go语言。其中最后一题\x3ca href=\x22http:\/\/tour.golang.org\/#70\x22\x3eExercise: Web Crawler\x3c\/a\x3e有些复杂，是串行程序转换到并行时常见的问题。这里记录一些当时思考的结果。\x3c\/p\x3e\n\n\x3cp\x3e\x3c\/p\x3e"
+  }
+</script>
+
+
+    <style>
+      html { font-size: 18px;}@media (max-width: 768px) { html { font-size: 15px; }}body { font-family: 'Noto Sans','Hiragino Kaku Gothic Pro',メイリオ,Meiryo,sans-serif; font-size: inherit; font-weight: 300; line-height: 1rem; background-color: #eceff1;}p { margin: 0;}a { color: #4caf50;}a:hover { text-decoration: none; color: #388e3c;}ul,ol { margin: 0; padding: 0;}h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 700;}h1 { font-size: 1.8rem; line-height: 2rem; margin: 1.5rem 0; }h2 { font-size: 1.4rem; line-height: 2rem; margin: 1.5rem 0; }h3 { font-size: 1.2rem; line-height: 1.5rem; margin: 1.5rem 0; }h4, h5, h6 { font-size: 1rem; line-height: 1.5rem; margin: 1.5rem 0; }main { display: block;}.content-inner { padding: 1rem 2rem;}.content-inner.thin { padding: .5rem 1rem;}@media (max-width: 768px) { .content-inner { padding: 1rem; }}/* Override */.container { position: relative;}/* Parts:layouts */.l-header { background-color: #fff; margin-bottom: 1rem; padding: 1rem 0; text-align: center;}.l-footer { font-size: .8rem; padding: 1.5rem 0;}/* Parts:menu */.p-menu { position: absolute; right: 15px; top: 0;}/* Parts:terms */.p-terms { list-style: none;}.p-terms .terms-title { margin: 0;}.p-terms a { display: inline-block; padding: .25rem 0;}.p-terms.inline li { display: inline-block; font-size: .8rem;}.p-terms.inline li::after { content: ',';}.p-terms.inline li:last-child::after { content: '';}/* Parts:paging */.p-paging { margin-bottom: 1.5rem; text-align: center;}.p-paging a { display: inline-block; padding: 1rem 1.5rem; margin: 0 .5rem; background-color: #cfd8dc; color: #263238;}/* Parts:section */section { margin-bottom: 1.5rem;}section>header { font-size: .8rem; font-weight: 700; margin-bottom: .5rem; text-transform: uppercase;}section>header a { color: #333; text-decoration: underline;}section.article-footer { margin-bottom: 1rem;}section.article-footer>header { margin-bottom: 0;}/* Parts:share */.p-share { min-width: 100%; margin-bottom: 1.5rem;}.p-share .share-inner { display: table; table-layout: fixed; width: 100%; border-spacing: .25rem;}.p-share a { display: table-cell; text-align: center; font-weight: 700; font-size: .7rem; padding: .5rem 0; color: #fff; border-radius: 5px;}.p-share a.ht { background-color: #00a4de; border-bottom: 2px solid #0083b1; }.p-share a.fb { background-color: #3b5998; border-bottom: 2px solid #2f4779; }.p-share a.tw { background-color: #1da1f2; border-bottom: 2px solid #1780c1; }.p-share a.gp { background-color: #dd4b39; border-bottom: 2px solid #b03c2d; }.p-share a.ln { background-color: #00c300; border-bottom: 2px solid #009c00; }.p-share a.ht::before { content: 'Hatena'; }.p-share a.fb::before { content: 'Facebook'; }.p-share a.tw::before { content: 'Twitter'; }.p-share a.gp::before { content: 'Google+'; }.p-share a.ln::before { content: 'LINE'; }/* Parts:logo */.h-logo { font-family: 'Montserrat', sans-serif;}.p-logo { display: inline-block; text-transform: uppercase;}.p-logo a { display: inline-block; font-size: 1.4rem; line-height: 2rem; color: #000;}/* Parts:crumb */.p-crumb ol { list-style: none; margin-bottom: 1rem;}.p-crumb li { display: inline; margin-right: .25rem; font-size: .8rem; color: #607d8b;}.p-crumb li::after { content: '/'; margin-left: .25rem;}.p-crumb li:last-child::after { content: '';}/* Parts:facts */.p-facts { list-style: none; font-size: .8rem; margin-bottom: 1rem;}.p-facts li { display: inline-block; margin-right: .5rem; color: #90a4ae;}.p-facts li i { margin-right: .5rem; color: #cfd8dc;}/* Parts:article */article { background-color: #fff;}article .title { margin: 0; margin-bottom: .5rem; font-weight: 700;}article .title a { color: #000;}article .thumb { display: block; background-image: url(http://air.googol.im/images/default.jpg); background-position: center; background-size: cover;}article .summary { margin-bottom: .5rem; max-height: 5rem; overflow: hidden;}article.single .thumb { height: 18rem; margin-bottom: 1rem;}@media (max-width: 768px) { article.single .thumb { height: 12rem; }}article.li { margin-bottom: 1rem;}article.li .thumb { height: 7.5rem; margin-bottom: .5rem;}article.li.sm { background-color: transparent; margin-bottom: .5rem;}article.li.sm>header { padding: .5rem 0;}article.li.sm .title { font-size: .8rem; line-height: 1rem; margin-bottom: .25rem;}article.li.sm .p-facts { font-size: .6rem; margin-bottom: 0;}article.li.sm .thumb { float: left; margin-right: .5rem; height: 3rem; width: 3rem;}.article-body h2 { padding: 1rem 0; border-bottom: 2px solid #eceff1;}.article-body h2:first-child { margin-top: 0; }.article-body h3 { color: #428bca;}.article-body h4 { border-left: solid .25rem #428bca; padding: 0 .5rem;}.article-body p { margin: 1.5rem 0; line-height: 1.5rem;}.article-body a { text-decoration: underline;}.article-body ul,.article-body ol { padding-left: 1.5rem;}.article-body code { display: inline-block; font-family: Menlo, consolas, monospace; font-size: .8rem; padding: 0 .5rem; line-height: 1.5rem;}.article-body pre { margin: 1.5rem 0; padding: 0; font-size: .8rem; border: none; border-radius: 0;}.article-body pre code { display: block; line-height: 1rem; padding: 1rem;}.article-body blockquote { margin: 1.5rem 0; padding: .5rem 0; font-size: .8rem; border-top: 1px solid #eceff1; border-bottom: 1px solid #eceff1; color: #607d8b;}.article-body blockquote p { margin: .5rem 0; line-height: 1rem;}.article-body strong { box-shadow: 0 -.5rem 0 0 #90caf9 inset;}.article-body em { font-style: normal; font-weight: 700; color: #03a9f4;}.article-body figure { margin: 1.5rem 0; }.article-body figure img { max-width: 100%; }.article-body figure.left,.article-body figure.right { width: 15rem; height: 12rem; margin-top: 0;}.article-body figure.left { float: left; margin-right: 1rem; }.article-body figure.right { float: right; margin-left: 1rem; }@media (max-width: 768px) { .article-body figure.left, .article-body figure.right { float: none; margin: 0; width: auto; height: auto; }}.article-body figcaption { padding: .5rem 0; font-size: .8rem; text-align: center;}.article-body figcaption a { color: #263238;}
+      
+      
+    </style>
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <div class="container">
+        <div class="p-logo">
+          <a href="http://air.googol.im/" class="h-logo">Air on G</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol>
+        <li><a href="http://air.googol.im/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://air.googol.im/post/" itemprop="url"><span itemprop="title">post</span></a></li>
+        
+        <li class="active">关于gotour最后一题的一些想法</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+
+  <a href="http://air.googol.im/post/gotour-exercise-web-crawl/" class="thumb"></a>
+  <div class="content-inner">
+    <h1 class="title">关于gotour最后一题的一些想法</h1>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2012-02-04T20:00:00JST">Feb 4, 2012</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+      
+    </ul>
+
+    <div class="article-body"><p>过年几天，把<a href="http://tour.golang.org/">A Tour of Go</a>看了一遍，算是复习了一遍go语言。其中最后一题<a href="http://tour.golang.org/#70">Exercise: Web Crawler</a>有些复杂，是串行程序转换到并行时常见的问题。这里记录一些当时思考的结果。</p>
+
+<p></p>
+
+<h2 id="原题">原题</h2>
+
+<p>将下面的网页抓取程序，由串行改为并行。修改Crawl函数，并发抓取url指向的页面，并且保证对同一页面只做一次抓去。</p>
+
+<pre><code class="language-go">package main
+
+import (
+	&quot;os&quot;
+	&quot;fmt&quot;
+)
+
+type Fetcher interface {
+	// Fetch returns the body of URL and
+	// a slice of URLs found on that page.
+	Fetch(url string) (body string, urls []string, err os.Error)
+}
+
+// Crawl uses fetcher to recursively crawl
+// pages starting with url, to a maximum of depth.
+func Crawl(url string, depth int, fetcher Fetcher) {
+	// TODO: Fetch URLs in parallel.
+	// TODO: Don't fetch the same URL twice.
+	// This implementation doesn't do either:
+	if depth &lt;= 0 {
+		return
+	}
+	body, urls, err := fetcher.Fetch(url)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf(&quot;found: %s %q\n&quot;, url, body)
+	for _, u := range urls {
+		Crawl(u, depth-1, fetcher)
+	}
+	return
+}
+
+func main() {
+	Crawl(&quot;http://golang.org/&quot;, 4, fetcher)
+}
+
+
+// fakeFetcher is Fetcher that returns canned results.
+type fakeFetcher map[string]*fakeResult
+
+type fakeResult struct {
+	body string
+	urls     []string
+}
+
+func (f *fakeFetcher) Fetch(url string) (string, []string, os.Error) {
+	if res, ok := (*f)[url]; ok {
+		return res.body, res.urls, nil
+	}
+	return &quot;&quot;, nil, fmt.Errorf(&quot;not found: %s&quot;, url)
+}
+
+// fetcher is a populated fakeFetcher.
+var fetcher = &amp;fakeFetcher{
+	&quot;http://golang.org/&quot;: &amp;fakeResult{
+		&quot;The Go Programming Language&quot;,
+		[]string{
+			&quot;http://golang.org/pkg/&quot;,
+			&quot;http://golang.org/cmd/&quot;,
+		},
+	},
+	&quot;http://golang.org/pkg/&quot;: &amp;fakeResult{
+		&quot;Packages&quot;,
+		[]string{
+			&quot;http://golang.org/&quot;,
+			&quot;http://golang.org/cmd/&quot;,
+			&quot;http://golang.org/pkg/fmt/&quot;,
+			&quot;http://golang.org/pkg/os/&quot;,
+		},
+	},
+	&quot;http://golang.org/pkg/fmt/&quot;: &amp;fakeResult{
+		&quot;Package fmt&quot;,
+		[]string{
+			&quot;http://golang.org/&quot;,
+			&quot;http://golang.org/pkg/&quot;,
+		},
+	},
+	&quot;http://golang.org/pkg/os/&quot;: &amp;fakeResult{
+		&quot;Package os&quot;,
+		[]string{
+			&quot;http://golang.org/&quot;,
+			&quot;http://golang.org/pkg/&quot;,
+		},
+	},
+}
+</code></pre>
+
+<p>程序有些长有些长，因为还包括一部分假数据。程序入口在<code>func main</code>里，提供<code>&quot;http://golang.org/&quot;</code>作为起始页面，抓取深度是4，使用fetcher作为抓取算法。</p>
+
+<h2 id="第一次并行化">第一次并行化</h2>
+
+<p>最初的想法是让每个Crawl单独跑一个goroutine，当Crawl里抓到新的url时，就启动一个新的goroutine。这个改动很简单，只需要修改Crawl函数就行：</p>
+
+<pre><code class="language-go">func Crawl(url string, depth int, fetcher Fetcher) {
+	if depth &lt;= 0 {
+		return
+	}
+	body, urls, err := fetcher.Fetch(url)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf(&quot;found: %s %q\n&quot;, url, body)
+	for _, u := range urls {
+		go Crawl(u, depth-1, fetcher)
+	}
+	return
+}
+</code></pre>
+
+<p>但实际结果却是只打印最初的一条“<a href="http://golang.org/”就结束了。因为go的程序在终止时，并不等待其余goroutine的结束，Crawl内用`go">http://golang.org/”就结束了。因为go的程序在终止时，并不等待其余goroutine的结束，Crawl内用`go</a> Crawl(&hellip;)`的方式递归调用后，main并不等待新建的goroutine的结束，就结束了整个程序，因此其余的url还没有抓取，就结束了。</p>
+
+<h2 id="监视goroutine的启动和退出">监视goroutine的启动和退出</h2>
+
+<p>因此，程序需要有办法监控总共启动了多少个goroutine，而且还要能知道，是否所有goroutine都已经运行完毕退出了。传统的并发程序，是通过thread id或者thread handler，配合类似join的api来完成的。但是go没有任何对goroutine的控制方法，要想知道goroutine的状态，只能在其内部，通过chan将状态发送给接收者。同时，为了方便对goroutine进行计数，最好将所有goroutine的启动放在一个函数内，这就需要Crawl将新抓到的url发到一个特殊的控制函数，这个控制函数在接收到新的url后，启动新的Crawl进行抓取。程序修改如下：</p>
+
+<p>新建一个UrlData结构，用来传递新抓到的url，以及这个url对应的抓取深度depth：</p>
+
+<pre><code class="language-go">type UrlData struct {
+	url   string
+	depth int
+}
+</code></pre>
+
+<p>修改Crawl函数，加入两个chan，quit对应函数退出的信号，urldata对应抓取到新的url时的新数据传输通道。注意defer是如何间接明了的完成发送quit信号的功能的（对比C++的析构函数概念，defer要清晰明快的多，而且有closure的加持，能做的事情也比析构多）：</p>
+
+<pre><code class="language-go">func Crawl(url string, depth int, fetcher Fetcher, urldata chan&lt;- *UrlData, quit chan&lt;- int) {
+	defer func() { quit &lt;- 1 }()
+
+	if depth &lt;= 0 {
+		return
+	}
+	body, urls, err := fetcher.Fetch(url)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf(&quot;found: %s %q\n&quot;, url, body)
+	for _, u := range urls {
+		urldata &lt;- &amp;UrlData{u, depth-1}
+	}
+	return
+}
+</code></pre>
+
+<p>修改main函数，加入对goroutine的控制：</p>
+
+<pre><code class="language-go">func main() {
+	urldata := make(chan *UrlData)
+	quit := make(chan int)
+
+	go Crawl(&quot;http://golang.org/&quot;, 4, fetcher, urldata, quit)
+
+	for i:=1; i&gt;0; {
+		select {
+		case &lt;-quit:
+			i--
+		case url := &lt;-urldata:
+			go Crawl(url.url, url.depth, fetcher, urldata, quit)
+			i++
+		}
+	}
+}
+</code></pre>
+
+<p>这样，整个程序在流程上就没有问题了。</p>
+
+<h2 id="加入cache-对同一网址只crawl一遍">加入cache，对同一网址只Crawl一遍</h2>
+
+<p>因为所有Crawl都是由main函数控制的，因此这个改动只在main里修改即可：</p>
+
+<pre><code class="language-go">func main() {
+	urldata := make(chan *UrlData)
+	quit := make(chan int)
+	url_cache := make(map[string]bool)
+
+	url_cache[&quot;http://golang.org/&quot;] = true
+	go Crawl(&quot;http://golang.org/&quot;, 4, fetcher, urldata, quit)
+
+	for i:=1; i&gt;0; {
+		select {
+		case &lt;-quit:
+			i--
+		case url := &lt;-urldata:
+			if url_cache[url.url] {
+				break
+			}
+			url_cache[url.url] = true
+			go Crawl(url.url, url.depth, fetcher, urldata, quit)
+			i++
+		}
+	}
+}
+</code></pre>
+
+<p>url_cache是一个key为string，value为bool的map，在有新的url传入时，先以url为key，检查其value是否为true。如果为true说明已经Crawl过，不再处理，如果为false，先将value设置为true，然后启动Crawl对这个url进行抓取。</p>
+
+<h2 id="重构-dry">重构，DRY</h2>
+
+<p>你注意到了么？main函数里有两个地方对url_cache进行操作并启动Crawl。一个是在for循环外面，设置启动url，另一个是在for循环里面，处理新的url。这两个地方所做的事情，本质上都是对一个新url的处理，但为什么要写两遍呢？现在就来试试能不能将其合并：</p>
+
+<pre><code class="language-go">func main() {
+	urldata := make(chan *UrlData)
+	quit := make(chan int)
+	url_cache := make(map[string]bool)
+
+	go func() { urldata &lt;- &amp;UrlData{&quot;http://golang.org/&quot;, 4} }()
+
+Loop:
+	for i := 0; ; {
+		select {
+		case &lt;-quit:
+			i--
+			if i == 0 {
+				break Loop
+			}
+		case url := &lt;-urldata:
+			if url_cache[url.url] {
+				break
+			}
+			url_cache[url.url] = true
+			go Crawl(url.url, url.depth, fetcher, urldata, quit)
+			i++
+		}
+	}
+}
+</code></pre>
+
+<p>利用已有的urldata chan，将初始url和depth作为参数传入，就可以去掉for外面的Crawl启动代码。不过，由于for的条件判断是前置判断，而go不支持do&hellip;while式的后置判断循环，所以for的终止条件只能移入for的内部，否则<code>for i:=0; i&lt;0;</code>将不会进入循环。</p>
+
+<h2 id="抽象接口">抽象接口</h2>
+
+<p>对这道题来说，做完上面的部分，就已经完成了所有任务。不过从设计的角度，这个程序的输入和输出都混在一起（不会有真的只是打印就完事的抓取程序吧？）。能不能实现一个更好的接口呢？</p>
+
+<p>先来设想一下使用的情况。一个简洁好用的接口应该是什么样子的呢？下面的样子是不是足够简洁呢？</p>
+
+<pre><code class="language-go">func main() {
+	for data := range CrawlWeb(&quot;http://golang.org/&quot;, fetcher) {
+		if data.err == nil {
+			fmt.Println(&quot;found:&quot;, data.url, data.body)
+		} else {
+			fmt.Println(&quot;not found:&quot;, data.url)
+		}
+	}
+}
+</code></pre>
+
+<p>显然，为了实现并行，CrawlWeb应该返回一个chan，这个chan包含了抓取的相关信息：</p>
+
+<pre><code class="language-go">type FetchData struct {
+	err os.Error
+	url string
+	body string
+}
+</code></pre>
+
+<p>对应修改Crawl的输出方式，使其不再直接Println结果，而是将结果打包，传入data chan作为输出：</p>
+
+<pre><code class="language-go">func Crawl(url string, depth int, fetcher Fetcher, data chan&lt;- *FetchData, new_url chan&lt;- *UrlData, quit chan&lt;- int) {
+	defer func() { quit &lt;- 1 }()
+
+	if depth &lt;= 0 {
+		return
+	}
+	body, urls, err := fetcher.Fetch(url)
+	data &lt;- &amp;FetchData{err, url, body}
+
+	for _, u := range urls {
+		new_url &lt;- &amp;UrlData{u, depth - 1}
+	}
+	return
+}
+</code></pre>
+
+<p>由于在现在的main里，调用CrawlWeb后函数需要立刻返回，因此原先的for循环需要跑在一个单独的goroutine里，不能阻塞CrawlWeb的调用。为了清晰，将循环部分单独写成一个函数：</p>
+
+<pre><code class="language-go">func CrawlLoop(url chan *UrlData, output chan&lt;- *FetchData, fetcher Fetcher) {
+	defer func() { close(output) }()
+
+	url_cache := make(map[string]bool)
+	quit := make(chan int)
+
+	for i := 0; ; {
+		select {
+		case &lt;-quit:
+			i--
+			if i == 0 {
+				return
+			}
+		case data := &lt;-url:
+			if url_cache[data.url] {
+				break
+			}
+			url_cache[data.url] = true
+			go Crawl(data.url, data.depth, fetcher, output, url, quit)
+			i++
+		}
+	}
+}
+</code></pre>
+
+<p>CrawLoop在退出时会close(output)，来结束main里的range循环。</p>
+
+<p>剩下的，就是如何用CrawlWeb来启动CrawlLoop，并将output chan作为返回值，返回给外面的range了：</p>
+
+<pre><code class="language-go">func CrawlWeb(start_url string, depth int, fetcher Fetcher) &lt;-chan *FetchData {
+	output := make(chan *FetchData)
+	url := make(chan *UrlData)
+
+	go CrawlLoop(url, output, fetcher)
+
+	url &lt;- &amp;UrlData{start_url, depth}
+
+	return output
+}
+</code></pre>
+
+<p>对于CrawlLoop这个函数，作为goroutine启动后，可以将url chan视为输入，output chan视为输出，当给url chan传入数据时，启动CrawlLoop的真正执行，结果会在执行过程中从output中逐项输出。由于并发的因素，和传统函数调用不同，输出不是等待函数结束后一次性输出，而是在函数的执行过程中，output随时会输出结果，当函数执行完毕后关闭output。</p>
+
+<h2 id="收工">收工</h2>
+
+<p>最后，贴上修改后的所有代码。为了测试是否真正实现并行，我加入了一部分假数据。那么，如何测试是否真的实现了并发呢？有兴趣的可以自己动手实验一下。</p>
+
+<pre><code class="language-go">package main
+
+import (
+	&quot;os&quot;
+	&quot;fmt&quot;
+)
+
+type Fetcher interface {
+	// Fetch returns the body of URL and
+	// a slice of URLs found on that page.
+	Fetch(url string) (body string, urls []string, err os.Error)
+}
+
+type UrlData struct {
+	url   string
+	depth int
+}
+
+type FetchData struct {
+	err os.Error
+	url string
+	body string
+}
+
+// Crawl uses fetcher to recursively crawl
+// pages starting with url, to a maximum of depth.
+func Crawl(url string, depth int, fetcher Fetcher, data chan&lt;- *FetchData, new_url chan&lt;- *UrlData, quit chan&lt;- int) {
+	// TODO: Fetch URLs in parallel.
+	// TODO: Don't fetch the same URL twice.
+	// This implementation doesn't do either:
+	defer func() { quit &lt;- 1 }()
+
+	if depth &lt;= 0 {
+		return
+	}
+	body, urls, err := fetcher.Fetch(url)
+	data &lt;- &amp;FetchData{err, url, body}
+
+	for _, u := range urls {
+		new_url &lt;- &amp;UrlData{u, depth - 1}
+	}
+	return
+}
+
+func CrawlLoop(url chan *UrlData, output chan&lt;- *FetchData, fetcher Fetcher) {
+	defer func() { close(output) }()
+
+	url_cache := make(map[string]bool)
+	quit := make(chan int)
+
+	for i := 0; ; {
+		select {
+		case &lt;-quit:
+			i--
+			if i == 0 {
+				return
+			}
+		case data := &lt;-url:
+			if url_cache[data.url] {
+				break
+			}
+			url_cache[data.url] = true
+			go Crawl(data.url, data.depth, fetcher, output, url, quit)
+			i++
+		}
+	}
+}
+
+func CrawlWeb(start_url string, depth int, fetcher Fetcher) &lt;-chan *FetchData {
+	output := make(chan *FetchData)
+	url := make(chan *UrlData)
+
+	go CrawlLoop(url, output, fetcher)
+
+	url &lt;- &amp;UrlData{start_url, depth}
+
+	return output
+}
+
+func main() {
+	for data := range CrawlWeb(&quot;http://golang.org/&quot;, 4, fetcher) {
+		if data.err == nil {
+			fmt.Println(&quot;found:&quot;, data.url, data.body)
+		} else {
+			fmt.Println(&quot;not found:&quot;, data.url)
+		}
+	}
+}
+
+// fakeFetcher is Fetcher that returns canned results.
+type fakeFetcher map[string]*fakeResult
+
+type fakeResult struct {
+	body string
+	urls []string
+}
+
+func (f *fakeFetcher) Fetch(url string) (string, []string, os.Error) {
+	if res, ok := (*f)[url]; ok {
+		return res.body, res.urls, nil
+	}
+	return &quot;&quot;, nil, fmt.Errorf(&quot;not found: %s&quot;, url)
+}
+
+// fetcher is a populated fakeFetcher.
+var fetcher = &amp;fakeFetcher{
+	&quot;http://golang.org/&quot;: &amp;fakeResult{
+		&quot;The Go Programming Language&quot;,
+		[]string{
+			&quot;http://golang.org/pkg/&quot;,
+			&quot;http://golang.org/cmd/&quot;,
+		},
+	},
+	&quot;http://golang.org/pkg/&quot;: &amp;fakeResult{
+		&quot;Packages&quot;,
+		[]string{
+			&quot;http://golang.org/&quot;,
+			&quot;http://golang.org/cmd/&quot;,
+			&quot;http://golang.org/pkg/fmt/&quot;,
+			&quot;http://golang.org/pkg/os/&quot;,
+		},
+	},
+	&quot;http://golang.org/pkg/fmt/&quot;: &amp;fakeResult{
+		&quot;Package fmt&quot;,
+		[]string{
+			&quot;http://golang.org/&quot;,
+			&quot;http://golang.org/pkg/&quot;,
+		},
+	},
+	&quot;http://golang.org/pkg/os/&quot;: &amp;fakeResult{
+		&quot;Package os&quot;,
+		[]string{
+			&quot;http://golang.org/&quot;,
+			&quot;http://golang.org/pkg/&quot;,
+		},
+	},
+	&quot;http://golang.org/cmd/&quot;: &amp;fakeResult{
+		&quot;Commands&quot;,
+		[]string{
+			&quot;http://golang.org/cmd/6g&quot;,
+			&quot;http://golang.org/cmd/8g&quot;,
+			&quot;http://golang.org/cmd/&quot;,
+			&quot;http://golang.org/&quot;,
+		},
+	},
+	&quot;http://golang.org/cmd/6g&quot;: &amp;fakeResult{
+		&quot;Command 6g&quot;,
+		[]string{
+			&quot;http://golang.org/cmd/&quot;,
+			&quot;http://golang.org/&quot;,
+		},
+	},
+}
+</code></pre></div>
+  </div>
+
+  <footer class="article-footer">
+    <div class="content-inner">
+
+      <aside class="p-share">
+  <div class="share-inner">
+    <a href="http://b.hatena.ne.jp/add?mode=confirm&url=http%3a%2f%2fair.googol.im%2fpost%2fgotour-exercise-web-crawl%2f&title=%e5%85%b3%e4%ba%8egotour%e6%9c%80%e5%90%8e%e4%b8%80%e9%a2%98%e7%9a%84%e4%b8%80%e4%ba%9b%e6%83%b3%e6%b3%95" title="はてなブックマーク" class="ht" target="_blank" rel="nofollow"></a>
+    <a href="http://www.facebook.com/sharer.php?u=http%3a%2f%2fair.googol.im%2fpost%2fgotour-exercise-web-crawl%2f&t=%e5%85%b3%e4%ba%8egotour%e6%9c%80%e5%90%8e%e4%b8%80%e9%a2%98%e7%9a%84%e4%b8%80%e4%ba%9b%e6%83%b3%e6%b3%95" title="Facebookでシェア" class="fb" target="_blank" rel="nofollow"></a>
+    <a href="http://twitter.com/intent/tweet?url=http%3a%2f%2fair.googol.im%2fpost%2fgotour-exercise-web-crawl%2f&text=%e5%85%b3%e4%ba%8egotour%e6%9c%80%e5%90%8e%e4%b8%80%e9%a2%98%e7%9a%84%e4%b8%80%e4%ba%9b%e6%83%b3%e6%b3%95&tw_p=tweetbutton" title="Twitterでシェア" class="tw" target="_blank" rel="nofollow"></a>
+    <a href="https://plus.google.com/share?url=http%3a%2f%2fair.googol.im%2fpost%2fgotour-exercise-web-crawl%2f" title="Google Plusでシェア" class="gp" target="_blank" rel="nofollow"></a>
+    <a href="http://line.me/R/msg/text/?%e5%85%b3%e4%ba%8egotour%e6%9c%80%e5%90%8e%e4%b8%80%e9%a2%98%e7%9a%84%e4%b8%80%e4%ba%9b%e6%83%b3%e6%b3%95 http%3a%2f%2fair.googol.im%2fpost%2fgotour-exercise-web-crawl%2f" title="LINEでシェア" class="ln" target="_blank" rel="nofollow"></a>
+  </div>
+</aside>
+
+
+      <nav class="p-crumb">
+        <ol>
+          <li><a href="http://air.googol.im/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+          
+          <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://air.googol.im/post/" itemprop="url"><span itemprop="title">post</span></a></li>
+          
+          <li class="active">关于gotour最后一题的一些想法</li>
+        </ol>
+      </nav>
+
+      
+      
+      
+      
+      
+      <section class="article-footer">
+        <header>
+          <a href="http://air.googol.im/tags/">TAGS</a>
+        </header>
+        <div>
+          <ul class="p-terms inline">
+            
+            <li><a href="http://air.googol.im/tags/golang/">golang</a></li>
+            
+          </ul>
+        </div>
+      </section>
+      
+      
+    </div>
+  </footer>
+
+</article>
+
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'air-g';
+    var disqus_identifier = 'http:\/\/air.googol.im\/post\/gotour-exercise-web-crawl\/';
+    var disqus_title = '关于gotour最后一题的一些想法';
+    var disqus_url = 'http:\/\/air.googol.im\/post\/gotour-exercise-web-crawl\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+
+  <div class="col-md-4">
+    <aside class="site">
+
+  <section>
+    <header>latests</header>
+    <div>
+      <div class="row">
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/contiguous-stacks-in-go/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/contiguous-stacks-in-go/">Go中的连续栈</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-28T21:21:24JST">Mar 28, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/supervisor-with-docker-to-manage-processes/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/supervisor-with-docker-to-manage-processes/">在Docker里使用（支持镜像继承的）supervisor管理进程</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-28T19:46:44JST">Mar 28, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/go-concurrency-patterns-pipelines-and-cancellation/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/go-concurrency-patterns-pipelines-and-cancellation/">Go并发模式：管道和取消</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-15T10:52:46JST">Mar 15, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/explain-big-data/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/explain-big-data/">试着解释大数据</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-11T21:01:03JST">Mar 11, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/first-glance-at-atom/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/first-glance-at-atom/">Atom初探</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-07T01:20:00JST">Mar 7, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/whats-happening-in-go-tip-2014-01-10/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/whats-happening-in-go-tip-2014-01-10/">Go tip在做什么 2014-01-10</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-01-12T10:13:39JST">Jan 12, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/go-rest-revolution/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/go-rest-revolution/">go-rest演化</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-12-31T10:48:24JST">Dec 31, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/shy-note-project-management/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/shy-note-project-management/">S会议开发手札：项目管理</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-09-25T22:48:15JST">Sep 25, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/shy-note-over-design/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/shy-note-over-design/">S会议开发手札：过渡设计</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-09-17T22:51:28JST">Sep 17, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        
+        
+        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
+  <a href="http://air.googol.im/post/shy-notes/" class="thumb"></a>
+  <header>
+    <div class="title"><a href="http://air.googol.im/post/shy-notes/">S会议开发手札</a></div>
+
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-09-16T23:14:56JST">Sep 16, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
+    </ul>
+  </header>
+</article>
+</div>
+        <div class="col-sm-12"></div>
+        
+      </div>
+    </div>
+  </section>
+
+  
+  <section>
+    <header>category</header>
+    <div>
+      <ul class="p-terms">
+        
+      </ul>
+    </div>
+  </section>
+  
+  <section>
+    <header>tag</header>
+    <div>
+      <ul class="p-terms">
+        <li><a href="http://air.googol.im/tags/golang">golang</a></li><li><a href="http://air.googol.im/tags/cpp">cpp</a></li><li><a href="http://air.googol.im/tags/c">c</a></li><li><a href="http://air.googol.im/tags/python">python</a></li><li><a href="http://air.googol.im/tags/y-combinator">y-combinator</a></li><li><a href="http://air.googol.im/tags/startup">startup</a></li><li><a href="http://air.googol.im/tags/interview">interview</a></li><li><a href="http://air.googol.im/tags/occ">occ</a></li><li><a href="http://air.googol.im/tags/project">project</a></li><li><a href="http://air.googol.im/tags/ruby">ruby</a></li>
+      </ul>
+    </div>
+  </section>
+  
+
+</aside>
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p>All rights reserved - 2017</p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_robust">Robust</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+
