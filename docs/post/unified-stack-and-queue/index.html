@@ -1,130 +1,212 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-<meta name="pinterest" content="nopin">
-<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
-<meta name="theme-color" content="#263238">
+<html lang="zh-CN">
+<head>
 
-<meta name="generator" content="Hugo 0.18.1" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-<link rel="apple-touch-icon" href="http://air.googol.im/images/logo.png">
-
-
-<link rel="canonical" href="http://air.googol.im/post/unified-stack-and-queue/">
+    
 
 
     
-    <link href="//fonts.googleapis.com/css?family=Noto+Sans:400,700|Montserrat" rel="stylesheet">
+        <meta name="twitter:card" content="summary"/>
     
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
-    <title>栈和队的统一 - Air on G</title>
+
+
+
+<meta name="twitter:title" content="栈和队的统一"/>
+<meta name="twitter:description" content=""/>
+<meta name="twitter:site" content="@googollee"/>
+
+
+
+  	<meta property="og:title" content="栈和队的统一 &middot; Air on G" />
+  	<meta property="og:site_name" content="Air on G" />
+  	<meta property="og:url" content="http://air.googol.im/post/unified-stack-and-queue/" />
     
-<meta name="description" content="&lt;p&gt;这是上周软设考试时遇到的一道题，判断对错：可以用两个栈模拟一个队列，也可以用一个队列模拟两个栈。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;">
+    
+        
+    
 
-<meta property="og:title" content="栈和队的统一 - Air on G">
-<meta property="og:type" content="article">
-<meta property="og:url" content="http://air.googol.im/post/unified-stack-and-queue/">
-<meta property="og:image" content="http://air.googol.im/images/default.png">
-<meta property="og:site_name" content="Air on G">
-<meta property="og:description" content="&lt;p&gt;这是上周软设考试时遇到的一道题，判断对错：可以用两个栈模拟一个队列，也可以用一个队列模拟两个栈。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;">
-<meta property="og:locale" content="ja_JP">
+    
+    <meta property="og:description" content="" />
+  	<meta property="og:type" content="article" />
+    <meta property="og:image" content="http://air.googol.im/" />
+    <meta property="article:published_time" content="2009-05-28T20:00:00&#43;08:00" />
 
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:site" content="Air on G">
-<meta name="twitter:url" content="http://air.googol.im/post/unified-stack-and-queue/">
-<meta name="twitter:title" content="栈和队的统一 - Air on G">
-<meta name="twitter:description" content="&lt;p&gt;这是上周软设考试时遇到的一道题，判断对错：可以用两个栈模拟一个队列，也可以用一个队列模拟两个栈。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;">
-<meta name="twitter:image" content="http://air.googol.im/images/default.png">
+    
+    <meta property="article:tag" content="stack" />
+    
+    <meta property="article:tag" content="queue" />
+    
+    
 
+    <title>栈和队的统一 &middot; Air on G</title>
 
-<script type="application/ld+json">
-  {
-    "@context": "http://schema.org",
-    "@type": "NewsArticle",
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id":"http:\/\/air.googol.im\/"
-    },
-    "headline": "栈和队的统一 - Air on G",
-    "image": {
-      "@type": "ImageObject",
-      "url": "http:\/\/air.googol.im\/images\/default.png",
-      "height": 800,
-      "width": 800
-    },
-    "datePublished": "2009-05-28T20:00:00JST",
-    "dateModified": "2009-05-28T20:00:00JST",
-    "author": {
-      "@type": "Person",
-      "name": "Air on G"
-    },
+    
+    <meta name="description" content="" />
+    
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="http://air.googol.im/images/favicon.ico">
+	  <link rel="apple-touch-icon" href="http://air.googol.im/images/apple-touch-icon.png" />
+
+    <link rel="stylesheet" type="text/css" href="http://air.googol.im/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="http://air.googol.im/css/nav.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Inconsolata" />
+
+    
+
+    
+      
+          <link href="http://air.googol.im/index.xml" rel="alternate" type="application/rss+xml" title="Air on G" />
+      
+      
+    
+    <meta name="generator" content="Hugo 0.18.1" />
+
+    <link rel="canonical" href="http://air.googol.im/post/unified-stack-and-queue/" />
+
+    
+      
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
     "publisher": {
-      "@type": "Organization",
-      "name": "Air on G",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "http:\/\/air.googol.im\/images/logo.png",
-        "width": 600,
-        "height": 60
-      }
+        "@type": "Organization",
+        "name": ""
     },
-    "description": "\x3cp\x3e这是上周软设考试时遇到的一道题，判断对错：可以用两个栈模拟一个队列，也可以用一个队列模拟两个栈。\x3c\/p\x3e\n\n\x3cp\x3e\x3c\/p\x3e"
-  }
-</script>
+    "author": {
+        "@type": "Person",
+        "name": "",
+        
+        "url": "http://air.googol.im",
+        "sameAs": [
+            
+            
+             
+             
+             
+             
+             
+            
+        ],
+        "description": "my bio"
+        
+    },
+    "headline": "栈和队的统一",
+    "name": "栈和队的统一",
+    "wordCount":  7 ,
+    "timeRequired": "PT1M",
+    "inLanguage": {
+      "@type": "Language",
+      "alternateName": "en"
+    },
+    "url": "http://air.googol.im/post/unified-stack-and-queue/",
+    "datePublished": "2009-05-28T20:00Z",
+    "dateModified": "2009-05-28T20:00Z",
+    
+    "keywords": "stack, queue",
+    "description": "",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "http://air.googol.im/post/unified-stack-and-queue/"
+    }
+}
+    </script>
+    
 
 
-    <style>
-      html { font-size: 18px;}@media (max-width: 768px) { html { font-size: 15px; }}body { font-family: 'Noto Sans','Hiragino Kaku Gothic Pro',メイリオ,Meiryo,sans-serif; font-size: inherit; font-weight: 300; line-height: 1rem; background-color: #eceff1;}p { margin: 0;}a { color: #4caf50;}a:hover { text-decoration: none; color: #388e3c;}ul,ol { margin: 0; padding: 0;}h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 700;}h1 { font-size: 1.8rem; line-height: 2rem; margin: 1.5rem 0; }h2 { font-size: 1.4rem; line-height: 2rem; margin: 1.5rem 0; }h3 { font-size: 1.2rem; line-height: 1.5rem; margin: 1.5rem 0; }h4, h5, h6 { font-size: 1rem; line-height: 1.5rem; margin: 1.5rem 0; }main { display: block;}.content-inner { padding: 1rem 2rem;}.content-inner.thin { padding: .5rem 1rem;}@media (max-width: 768px) { .content-inner { padding: 1rem; }}/* Override */.container { position: relative;}/* Parts:layouts */.l-header { background-color: #fff; margin-bottom: 1rem; padding: 1rem 0; text-align: center;}.l-footer { font-size: .8rem; padding: 1.5rem 0;}/* Parts:menu */.p-menu { position: absolute; right: 15px; top: 0;}/* Parts:terms */.p-terms { list-style: none;}.p-terms .terms-title { margin: 0;}.p-terms a { display: inline-block; padding: .25rem 0;}.p-terms.inline li { display: inline-block; font-size: .8rem;}.p-terms.inline li::after { content: ',';}.p-terms.inline li:last-child::after { content: '';}/* Parts:paging */.p-paging { margin-bottom: 1.5rem; text-align: center;}.p-paging a { display: inline-block; padding: 1rem 1.5rem; margin: 0 .5rem; background-color: #cfd8dc; color: #263238;}/* Parts:section */section { margin-bottom: 1.5rem;}section>header { font-size: .8rem; font-weight: 700; margin-bottom: .5rem; text-transform: uppercase;}section>header a { color: #333; text-decoration: underline;}section.article-footer { margin-bottom: 1rem;}section.article-footer>header { margin-bottom: 0;}/* Parts:share */.p-share { min-width: 100%; margin-bottom: 1.5rem;}.p-share .share-inner { display: table; table-layout: fixed; width: 100%; border-spacing: .25rem;}.p-share a { display: table-cell; text-align: center; font-weight: 700; font-size: .7rem; padding: .5rem 0; color: #fff; border-radius: 5px;}.p-share a.ht { background-color: #00a4de; border-bottom: 2px solid #0083b1; }.p-share a.fb { background-color: #3b5998; border-bottom: 2px solid #2f4779; }.p-share a.tw { background-color: #1da1f2; border-bottom: 2px solid #1780c1; }.p-share a.gp { background-color: #dd4b39; border-bottom: 2px solid #b03c2d; }.p-share a.ln { background-color: #00c300; border-bottom: 2px solid #009c00; }.p-share a.ht::before { content: 'Hatena'; }.p-share a.fb::before { content: 'Facebook'; }.p-share a.tw::before { content: 'Twitter'; }.p-share a.gp::before { content: 'Google+'; }.p-share a.ln::before { content: 'LINE'; }/* Parts:logo */.h-logo { font-family: 'Montserrat', sans-serif;}.p-logo { display: inline-block; text-transform: uppercase;}.p-logo a { display: inline-block; font-size: 1.4rem; line-height: 2rem; color: #000;}/* Parts:crumb */.p-crumb ol { list-style: none; margin-bottom: 1rem;}.p-crumb li { display: inline; margin-right: .25rem; font-size: .8rem; color: #607d8b;}.p-crumb li::after { content: '/'; margin-left: .25rem;}.p-crumb li:last-child::after { content: '';}/* Parts:facts */.p-facts { list-style: none; font-size: .8rem; margin-bottom: 1rem;}.p-facts li { display: inline-block; margin-right: .5rem; color: #90a4ae;}.p-facts li i { margin-right: .5rem; color: #cfd8dc;}/* Parts:article */article { background-color: #fff;}article .title { margin: 0; margin-bottom: .5rem; font-weight: 700;}article .title a { color: #000;}article .thumb { display: block; background-image: url(http://air.googol.im/images/default.jpg); background-position: center; background-size: cover;}article .summary { margin-bottom: .5rem; max-height: 5rem; overflow: hidden;}article.single .thumb { height: 18rem; margin-bottom: 1rem;}@media (max-width: 768px) { article.single .thumb { height: 12rem; }}article.li { margin-bottom: 1rem;}article.li .thumb { height: 7.5rem; margin-bottom: .5rem;}article.li.sm { background-color: transparent; margin-bottom: .5rem;}article.li.sm>header { padding: .5rem 0;}article.li.sm .title { font-size: .8rem; line-height: 1rem; margin-bottom: .25rem;}article.li.sm .p-facts { font-size: .6rem; margin-bottom: 0;}article.li.sm .thumb { float: left; margin-right: .5rem; height: 3rem; width: 3rem;}.article-body h2 { padding: 1rem 0; border-bottom: 2px solid #eceff1;}.article-body h2:first-child { margin-top: 0; }.article-body h3 { color: #428bca;}.article-body h4 { border-left: solid .25rem #428bca; padding: 0 .5rem;}.article-body p { margin: 1.5rem 0; line-height: 1.5rem;}.article-body a { text-decoration: underline;}.article-body ul,.article-body ol { padding-left: 1.5rem;}.article-body code { display: inline-block; font-family: Menlo, consolas, monospace; font-size: .8rem; padding: 0 .5rem; line-height: 1.5rem;}.article-body pre { margin: 1.5rem 0; padding: 0; font-size: .8rem; border: none; border-radius: 0;}.article-body pre code { display: block; line-height: 1rem; padding: 1rem;}.article-body blockquote { margin: 1.5rem 0; padding: .5rem 0; font-size: .8rem; border-top: 1px solid #eceff1; border-bottom: 1px solid #eceff1; color: #607d8b;}.article-body blockquote p { margin: .5rem 0; line-height: 1rem;}.article-body strong { box-shadow: 0 -.5rem 0 0 #90caf9 inset;}.article-body em { font-style: normal; font-weight: 700; color: #03a9f4;}.article-body figure { margin: 1.5rem 0; }.article-body figure img { max-width: 100%; }.article-body figure.left,.article-body figure.right { width: 15rem; height: 12rem; margin-top: 0;}.article-body figure.left { float: left; margin-right: 1rem; }.article-body figure.right { float: right; margin-left: 1rem; }@media (max-width: 768px) { .article-body figure.left, .article-body figure.right { float: none; margin: 0; width: auto; height: auto; }}.article-body figcaption { padding: .5rem 0; font-size: .8rem; text-align: center;}.article-body figcaption a { color: #263238;}
-      
-      
-    </style>
-  </head>
+    
 
-  <body>
+    
+
+    
+</head>
+<body class="nav-closed">
+
+  <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        
+        
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
+            </li>
+        
+            <h3>Follow me</h3>
+            <li class="nav-opened" role="presentation">
+            	<a href="https://github.com/googollee">Github repos</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="https://twitter.com/googollee">Twitter timeline</a>
+            </li>
+        
+    </ul>
     
     
+    <a class="subscribe-button icon-feed" href="http://air.googol.im/index.xml">Subscribe</a>
     
+</div>
+<span class="nav-cover"></span>
 
-    <header class="l-header">
-      <div class="container">
-        <div class="p-logo">
-          <a href="http://air.googol.im/" class="h-logo">Air on G</a>
-        </div>
-      </div>
+
+ <div class="site-wrapper">
+
+
+
+
+<header class="main-header post-head no-cover">
+  <nav class="main-nav clearfix">
+
+
+  
+  
+      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
+  
+  </nav>
+</header>
+
+
+
+<main class="content" role="main">
+
+
+
+
+  <article class="post post">
+
+    <header class="post-header">
+        <h1 class="post-title">栈和队的统一</h1>
+        <small></small>
+
+        <section class="post-meta">
+        
+          <time class="post-date" datetime="2009-05-28T20:00:00&#43;08:00">
+            May 28, 2009
+          </time>
+        
+         
+          <span class="post-tag small"><a href="http://air.googol.im/tags/stack/">#stack</a></span>
+         
+          <span class="post-tag small"><a href="http://air.googol.im/tags/queue/">#queue</a></span>
+         
+        </section>
     </header>
 
-    <main>
-      <div class="container">
-        
-<div class="row">
-  <div class="col-md-8">
-
-    <nav class="p-crumb">
-      <ol>
-        <li><a href="http://air.googol.im/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
-        
-        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://air.googol.im/post/" itemprop="url"><span itemprop="title">post</span></a></li>
-        
-        <li class="active">栈和队的统一</li>
-      </ol>
-    </nav>
-
-    <article class="single">
-
-  <a href="http://air.googol.im/post/unified-stack-and-queue/" class="thumb"></a>
-  <div class="content-inner">
-    <h1 class="title">栈和队的统一</h1>
-
-    <ul class="p-facts">
-      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-05-28T20:00:00JST">May 28, 2009</time></li>
-      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
-      
-    </ul>
-
-    <div class="article-body"><p>这是上周软设考试时遇到的一道题，判断对错：可以用两个栈模拟一个队列，也可以用一个队列模拟两个栈。</p>
+    <section class="post-content">
+      <p>这是上周软设考试时遇到的一道题，判断对错：可以用两个栈模拟一个队列，也可以用一个队列模拟两个栈。</p>
 
 <p></p>
 
@@ -138,271 +220,89 @@
 
 <p>后来很长一段时间没有想法怎么模拟两个栈，直到突然想到既然这个栈是在出队时增加了一个循环移位整个队列的操作，如果把这个操作换到入队时呢？于是想了一下，果然可以再模拟一个栈。（具体过程就不写了）这时相当于两个栈的栈底是连在一起，两个栈分别向两端增长。</p>
 
-<p>这种模拟使一个栈的出栈的操作是O(m+n)，另一个的入栈操作是O(m+n)，都增大了不少。而且考虑到队列的内存分配问题，似乎没有什么优点。如果是同时使用两个栈，似乎还是栈底分离，相向增长的方式比较好。</p></div>
+<p>这种模拟使一个栈的出栈的操作是O(m+n)，另一个的入栈操作是O(m+n)，都增大了不少。而且考虑到队列的内存分配问题，似乎没有什么优点。如果是同时使用两个栈，似乎还是栈底分离，相向增长的方式比较好。</p>
+    </section>
+
+
+  <footer class="post-footer">
+
+
+    
+
+    
+
+
+
+
+
+<section class="author">
+  <h4><a href="http://air.googol.im/">Googol Lee</a></h4>
+  
+  <p>my bio</p>
+  
+  <div class="author-meta">
+    <span class="author-location icon-location">Munich, Germany</span>
+    <span class="author-link icon-link"><a href="http://air.googol.im">http://air.googol.im</a></span>
   </div>
-
-  <footer class="article-footer">
-    <div class="content-inner">
-
-      <aside class="p-share">
-  <div class="share-inner">
-    <a href="http://b.hatena.ne.jp/add?mode=confirm&url=http%3a%2f%2fair.googol.im%2fpost%2funified-stack-and-queue%2f&title=%e6%a0%88%e5%92%8c%e9%98%9f%e7%9a%84%e7%bb%9f%e4%b8%80" title="はてなブックマーク" class="ht" target="_blank" rel="nofollow"></a>
-    <a href="http://www.facebook.com/sharer.php?u=http%3a%2f%2fair.googol.im%2fpost%2funified-stack-and-queue%2f&t=%e6%a0%88%e5%92%8c%e9%98%9f%e7%9a%84%e7%bb%9f%e4%b8%80" title="Facebookでシェア" class="fb" target="_blank" rel="nofollow"></a>
-    <a href="http://twitter.com/intent/tweet?url=http%3a%2f%2fair.googol.im%2fpost%2funified-stack-and-queue%2f&text=%e6%a0%88%e5%92%8c%e9%98%9f%e7%9a%84%e7%bb%9f%e4%b8%80&tw_p=tweetbutton" title="Twitterでシェア" class="tw" target="_blank" rel="nofollow"></a>
-    <a href="https://plus.google.com/share?url=http%3a%2f%2fair.googol.im%2fpost%2funified-stack-and-queue%2f" title="Google Plusでシェア" class="gp" target="_blank" rel="nofollow"></a>
-    <a href="http://line.me/R/msg/text/?%e6%a0%88%e5%92%8c%e9%98%9f%e7%9a%84%e7%bb%9f%e4%b8%80 http%3a%2f%2fair.googol.im%2fpost%2funified-stack-and-queue%2f" title="LINEでシェア" class="ln" target="_blank" rel="nofollow"></a>
-  </div>
-</aside>
+</section>
 
 
-      <nav class="p-crumb">
-        <ol>
-          <li><a href="http://air.googol.im/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
-          
-          <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://air.googol.im/post/" itemprop="url"><span itemprop="title">post</span></a></li>
-          
-          <li class="active">栈和队的统一</li>
-        </ol>
-      </nav>
 
-      
-      
-      
-      
-      
-      <section class="article-footer">
-        <header>
-          <a href="http://air.googol.im/tags/">TAGS</a>
-        </header>
-        <div>
-          <ul class="p-terms inline">
-            
-            <li><a href="http://air.googol.im/tags/stack/">stack</a></li>
-            
-            <li><a href="http://air.googol.im/tags/queue/">queue</a></li>
-            
-          </ul>
-        </div>
-      </section>
-      
-      
-    </div>
-  </footer>
-
-</article>
+    
+<section class="share">
+  <h4>Share this post</h4>
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=%e6%a0%88%e5%92%8c%e9%98%9f%e7%9a%84%e7%bb%9f%e4%b8%80&nbsp;-&nbsp;Air%20on%20G&amp;url=http%3a%2f%2fair.googol.im%2fpost%2funified-stack-and-queue%2f"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="hidden">Twitter</span>
+  </a>
+  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fair.googol.im%2fpost%2funified-stack-and-queue%2f"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="hidden">Facebook</span>
+  </a>
+  <a class="icon-pinterest" style="font-size: 1.4em" href="http://pinterest.com/pin/create/button/?url=http%3a%2f%2fair.googol.im%2fpost%2funified-stack-and-queue%2f&amp;description=%e6%a0%88%e5%92%8c%e9%98%9f%e7%9a%84%e7%bb%9f%e4%b8%80"
+      onclick="window.open(this.href, 'pinterest-share','width=580,height=296');return false;">
+      <span class="hidden">Pinterest</span>
+  </a>
+  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=http%3a%2f%2fair.googol.im%2fpost%2funified-stack-and-queue%2f"
+     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+      <span class="hidden">Google+</span>
+  </a>
+</section>
 
 
-    <div id="disqus_thread"></div>
+
+    
+
+<div id="disqus_thread"></div>
 <script type="text/javascript">
-    var disqus_shortname = 'air-g';
-    var disqus_identifier = 'http:\/\/air.googol.im\/post\/unified-stack-and-queue\/';
-    var disqus_title = '栈和队的统一';
-    var disqus_url = 'http:\/\/air.googol.im\/post\/unified-stack-and-queue\/';
-
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
+  var disqus_shortname = 'air-g';
+  var disqus_url = 'http:\/\/air.googol.im\/post\/unified-stack-and-queue\/';
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-  </div>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
-  <div class="col-md-4">
-    <aside class="site">
 
-  <section>
-    <header>latests</header>
-    <div>
-      <div class="row">
-        
-        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
-  <a href="http://air.googol.im/post/contiguous-stacks-in-go/" class="thumb"></a>
-  <header>
-    <div class="title"><a href="http://air.googol.im/post/contiguous-stacks-in-go/">Go中的连续栈</a></div>
 
-    <ul class="p-facts">
-      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-28T21:21:24JST">Mar 28, 2014</time></li>
-      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
-    </ul>
-  </header>
+
+  </footer>
 </article>
-</div>
-        
-        
-        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
-  <a href="http://air.googol.im/post/supervisor-with-docker-to-manage-processes/" class="thumb"></a>
-  <header>
-    <div class="title"><a href="http://air.googol.im/post/supervisor-with-docker-to-manage-processes/">在Docker里使用（支持镜像继承的）supervisor管理进程</a></div>
 
-    <ul class="p-facts">
-      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-28T19:46:44JST">Mar 28, 2014</time></li>
-      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
-    </ul>
-  </header>
-</article>
-</div>
-        <div class="col-sm-12"></div>
+</main>
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="">Air on G</a> All rights reserved - 2017</section>
         
-        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
-  <a href="http://air.googol.im/post/go-concurrency-patterns-pipelines-and-cancellation/" class="thumb"></a>
-  <header>
-    <div class="title"><a href="http://air.googol.im/post/go-concurrency-patterns-pipelines-and-cancellation/">Go并发模式：管道和取消</a></div>
-
-    <ul class="p-facts">
-      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-15T10:52:46JST">Mar 15, 2014</time></li>
-      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
-    </ul>
-  </header>
-</article>
-</div>
+        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
         
-        
-        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
-  <a href="http://air.googol.im/post/explain-big-data/" class="thumb"></a>
-  <header>
-    <div class="title"><a href="http://air.googol.im/post/explain-big-data/">试着解释大数据</a></div>
-
-    <ul class="p-facts">
-      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-11T21:01:03JST">Mar 11, 2014</time></li>
-      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
-    </ul>
-  </header>
-</article>
-</div>
-        <div class="col-sm-12"></div>
-        
-        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
-  <a href="http://air.googol.im/post/first-glance-at-atom/" class="thumb"></a>
-  <header>
-    <div class="title"><a href="http://air.googol.im/post/first-glance-at-atom/">Atom初探</a></div>
-
-    <ul class="p-facts">
-      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-03-07T01:20:00JST">Mar 7, 2014</time></li>
-      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
-    </ul>
-  </header>
-</article>
-</div>
-        
-        
-        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
-  <a href="http://air.googol.im/post/whats-happening-in-go-tip-2014-01-10/" class="thumb"></a>
-  <header>
-    <div class="title"><a href="http://air.googol.im/post/whats-happening-in-go-tip-2014-01-10/">Go tip在做什么 2014-01-10</a></div>
-
-    <ul class="p-facts">
-      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-01-12T10:13:39JST">Jan 12, 2014</time></li>
-      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
-    </ul>
-  </header>
-</article>
-</div>
-        <div class="col-sm-12"></div>
-        
-        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
-  <a href="http://air.googol.im/post/go-rest-revolution/" class="thumb"></a>
-  <header>
-    <div class="title"><a href="http://air.googol.im/post/go-rest-revolution/">go-rest演化</a></div>
-
-    <ul class="p-facts">
-      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-12-31T10:48:24JST">Dec 31, 2013</time></li>
-      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
-    </ul>
-  </header>
-</article>
-</div>
-        
-        
-        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
-  <a href="http://air.googol.im/post/shy-note-project-management/" class="thumb"></a>
-  <header>
-    <div class="title"><a href="http://air.googol.im/post/shy-note-project-management/">S会议开发手札：项目管理</a></div>
-
-    <ul class="p-facts">
-      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-09-25T22:48:15JST">Sep 25, 2013</time></li>
-      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
-    </ul>
-  </header>
-</article>
-</div>
-        <div class="col-sm-12"></div>
-        
-        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
-  <a href="http://air.googol.im/post/shy-note-over-design/" class="thumb"></a>
-  <header>
-    <div class="title"><a href="http://air.googol.im/post/shy-note-over-design/">S会议开发手札：过渡设计</a></div>
-
-    <ul class="p-facts">
-      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-09-17T22:51:28JST">Sep 17, 2013</time></li>
-      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
-    </ul>
-  </header>
-</article>
-</div>
-        
-        
-        <div class="col-md-12 col-sm-6 col-xs-12"><article class="li sm">
-  <a href="http://air.googol.im/post/shy-notes/" class="thumb"></a>
-  <header>
-    <div class="title"><a href="http://air.googol.im/post/shy-notes/">S会议开发手札</a></div>
-
-    <ul class="p-facts">
-      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-09-16T23:14:56JST">Sep 16, 2013</time></li>
-      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://air.googol.im/post/">post</a></li>
-    </ul>
-  </header>
-</article>
-</div>
-        <div class="col-sm-12"></div>
-        
-      </div>
-    </div>
-  </section>
-
-  
-  <section>
-    <header>category</header>
-    <div>
-      <ul class="p-terms">
-        
-      </ul>
-    </div>
-  </section>
-  
-  <section>
-    <header>tag</header>
-    <div>
-      <ul class="p-terms">
-        <li><a href="http://air.googol.im/tags/golang">golang</a></li><li><a href="http://air.googol.im/tags/cpp">cpp</a></li><li><a href="http://air.googol.im/tags/c">c</a></li><li><a href="http://air.googol.im/tags/python">python</a></li><li><a href="http://air.googol.im/tags/y-combinator">y-combinator</a></li><li><a href="http://air.googol.im/tags/startup">startup</a></li><li><a href="http://air.googol.im/tags/interview">interview</a></li><li><a href="http://air.googol.im/tags/occ">occ</a></li><li><a href="http://air.googol.im/tags/project">project</a></li><li><a href="http://air.googol.im/tags/ruby">ruby</a></li>
-      </ul>
-    </div>
-  </section>
-  
-
-</aside>
-
-  </div>
-</div>
-
-      </div>
-    </main>
-
-    <footer class="l-footer">
-      <div class="container">
-        <p>All rights reserved - 2017</p>
-        <aside>
-          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
-          <p><a href="https://github.com/dim0627/hugo_theme_robust">Robust</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
-        </aside>
-      </div>
     </footer>
-
-    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-  </body>
+    </div>
+    <script type="text/javascript" src="http://air.googol.im/js/jquery.js"></script>
+    <script type="text/javascript" src="http://air.googol.im/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="http://air.googol.im/js/index.js"></script>
+    
+</body>
 </html>
 

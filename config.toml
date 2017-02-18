@@ -1,27 +1,50 @@
-languageCode = "zh_CN"
+languageCode = "zh-CN"
 title = "Air on G"
 baseurl = "http://air.googol.im/"
-Copyright = "All rights reserved - 2017"
+copyright = "All rights reserved - 2017"
 caononifyurls = true
 publishDir = "docs"
+disqusShortname = "air-g"
+theme = "casper"
+
+[[menu.main]]
+identifier = "blog"
+name = "Blog"
+url = "/"
+
+[[menu.main]]
+name = "Github repos"
+pre = "<h3>Follow me</h3>"
+url = "https://github.com/googollee"
+weight = 100
+
+[[menu.main]]
+name = "Twitter timeline"
+url = "https://twitter.com/googollee"
+weight = 101
 
 [params]
-  disqusShortname = "air-g"
-  description = "The Blog of Googol Lee"
-  #cover = "images/cover.jpg"
-  author = "Googol Lee"
-  authorlocation = "Munich, Germany"
-  authorwebsite = "http://air.googol.im"
-  bio= "my bio"
-  #logo = "images/logo.png"
-  googleAnalyticsUserID = ""
-  # Optional RSS-Link, if not provided it defaults to the standard index.xml
-  # RSSLink = "http://feeds.feedburner.com/..."
-  githubName = "googollee"
-  twitterName = "googollee"
-  # facebookName = ""
-  # linkedinName = ""
-  # set true if you are not proud of using Hugo (true will hide the footer note "Proudly published with HUGO.....")
-  hideHUGOSupport = false
-  [params.social]
-    twitter = "googollee"
+description = "The Blog of Googol Lee"
+#cover = "images/cover.jpg"
+author = "Googol Lee"
+authorlocation = "Munich, Germany"
+authorwebsite = "http://air.googol.im"
+bio= "my bio"
+#logo = "images/logo.png"
+googleAnalyticsUserID = ""
+# Optional RSS-Link, if not provided it defaults to the standard index.xml
+# RSSLink = "http://feeds.feedburner.com/..."
+githubName = "googollee"
+twitterName = "googollee"
+# facebookName = ""
+# linkedinName = ""
+# set true if you are not proud of using Hugo (true will hide the footer note "Proudly published with HUGO.....")
+hideHUGOSupport = false
+
+[params.social]
+twitter = "googollee"
+
+[sitemap]
+ChangeFreq = ""
+Filename = "sitemap.xml"
+Priority = "-1"
