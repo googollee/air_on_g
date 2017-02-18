@@ -1,7 +1,7 @@
 languageCode = "zh-CN"
 title = "Air on G"
 baseurl = "http://air.googol.im/"
-copyright = "All rights reserved - 2017"
+copyright = "除非另有声明，本网站采用<a href='https://creativecommons.org/licenses/by-nd/3.0/cn/'>知识共享“署名-禁止演绎 3.0 中国大陆”许可协议</a>授权。"
 caononifyurls = true
 publishDir = "docs"
 disqusShortname = "air-g"
@@ -25,11 +25,11 @@ weight = 101
 
 [params]
 description = "The Blog of Googol Lee"
-#cover = "images/cover.jpg"
+cover = "images/cover.jpg"
 author = "Googol Lee"
 authorlocation = "Munich, Germany"
 authorwebsite = "http://air.googol.im"
-bio= "my bio"
+bio= "多年生软件工程师，信仰开源"
 #logo = "images/logo.png"
 googleAnalyticsUserID = ""
 # Optional RSS-Link, if not provided it defaults to the standard index.xml
