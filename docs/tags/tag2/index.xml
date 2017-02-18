@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tag2 on Air on G</title>
+    <link>http://air.googol.im/tags/tag2/index.xml</link>
+    <description>Recent content in Tag2 on Air on G</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>除非另有声明，本网站采用&lt;a href=&#39;https://creativecommons.org/licenses/by-nd/3.0/cn/&#39;&gt;知识共享“署名-禁止演绎 3.0 中国大陆”许可协议&lt;/a&gt;授权。</copyright>
+    <atom:link href="http://air.googol.im/tags/tag2/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Post title</title>
+      <link>http://air.googol.im/post/post-title/</link>
+      <pubDate>Fri, 11 Jul 2014 10:54:24 +0200</pubDate>
+      
+      <guid>http://air.googol.im/post/post-title/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
