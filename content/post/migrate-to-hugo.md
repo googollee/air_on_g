@@ -1,7 +1,7 @@
 +++
 comments = true
 tags = ["hugo","blog"]
-date = "2014-07-11T10:54:24+02:00"
+date = "2017-02-19T10:54:24+01:00"
 share = true
 title = "这个Blog又复活了"
 +++
