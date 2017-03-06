@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://air.googol.im/post/go-in-action/</loc>
+    <lastmod>2017-03-05T21:06:19-08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://air.googol.im/post/migrate-to-hugo/</loc>
     <lastmod>2017-02-19T10:54:24+01:00</lastmod>
   </url>
@@ -188,7 +193,7 @@
   
   <url>
     <loc>http://air.googol.im/</loc>
-    <lastmod>2017-02-19T10:54:24+01:00</lastmod>
+    <lastmod>2017-03-05T21:06:19-08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -213,6 +218,12 @@
   <url>
     <loc>http://air.googol.im/tags/blog/</loc>
     <lastmod>2017-02-19T10:54:24+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://air.googol.im/tags/book/</loc>
+    <lastmod>2017-03-05T21:06:19-08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -290,7 +301,7 @@
   
   <url>
     <loc>http://air.googol.im/tags/golang/</loc>
-    <lastmod>2014-03-28T21:21:24+08:00</lastmod>
+    <lastmod>2017-03-05T21:06:19-08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -380,7 +391,7 @@
   
   <url>
     <loc>http://air.googol.im/post/</loc>
-    <lastmod>2017-02-19T10:54:24+01:00</lastmod>
+    <lastmod>2017-03-05T21:06:19-08:00</lastmod>
     <priority>0</priority>
   </url>
   
