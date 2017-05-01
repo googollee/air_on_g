@@ -1,4 +1,4 @@
-update:
+update: docs/CNAME
 	hugo
 	git add .
 	git commit
@@ -6,3 +6,6 @@ update:
 
 server:
 	hugo server
+
+docs/CNAME:
+	echo air.googol.im > docs/CNAME
