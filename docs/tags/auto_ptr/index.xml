@@ -2,12 +2,15 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Auto_ptr on Air on G</title>
-    <link>http://air.googol.im/tags/auto_ptr/index.xml</link>
+    <link>http://air.googol.im/tags/auto_ptr/</link>
     <description>Recent content in Auto_ptr on Air on G</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>除非另有声明，本网站采用&lt;a href=&#39;https://creativecommons.org/licenses/by-nd/3.0/cn/&#39;&gt;知识共享“署名-禁止演绎 3.0 中国大陆”许可协议&lt;/a&gt;授权。</copyright>
-    <atom:link href="http://air.googol.im/tags/auto_ptr/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 07 Nov 2009 20:00:00 +0800</lastBuildDate>
+    
+	<atom:link href="http://air.googol.im/tags/auto_ptr/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>关于C&#43;&#43;智能指针的思考</title>
@@ -17,55 +20,7 @@
       <guid>http://air.googol.im/post/thinking-of-cpp-ptr/</guid>
       <description>&lt;p&gt;最近在公司的项目里开始实践用C++的析构来自动释放已申请的指针，同时保证程序的效率不变。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;p&gt;由于要使用C库，因此自己写了三个类：local_ptr，local_ptr_f，auto_ptr_f。其中第一个类是类似std::autor_ptr，只是没有拷贝构造函数和赋值构造函数，只能本地使用。两个带_f后缀的，在构造时分别多了一个用于释放内存的函数做参数，目的是可以自动管理C的内存分配。&lt;/p&gt;
-
-&lt;p&gt;为什么不直接用boost::share_ptr？首先，我觉得引用计数这东西在大部分场合用不到。用到的时候，也应该作为确认实例生命周期的工具而存在（比如类似COM的应用），而不是成为指针的一部分；另一方面，虽然引用计数引入的操作不多，但是蚂蚁啃大象，直接使用share_ptr会在不知不觉中引入很多没必要的计数操作，降低效率（记得许老大的blog上有提到过这种情况）。尤其是将share_ptr直接扔到container里的行为，在我看来，这简直就是对C/C++追求效率的宗旨的肆意践踏！先不说多出来的内存占用量，由于container自身一些调整行为导致的引用计数操作，简直就是不可预测的！&lt;/p&gt;
-
-&lt;p&gt;由于没有了share_ptr，weak_ptr自然也就没有存在的必要了。对于不释放的内存引用，直接用原生指针就行。对于不需要在函数间传递的内存引用，使用local_ptr/local_ptr_f，例如：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;{
-  local_ptr&amp;lt;SomeClass&amp;gt; p = new SomeClass;
-  // blablabla
-}
-
-{
-  local_ptr_f&amp;lt;FILE&amp;gt; f(fopen(...), fclose);
-  // blablabla
-}
-
-{
-  local_ptr_f&amp;lt;char&amp;gt; str(strdup(...), free);
-  // blablabla
-}
-
-{
-  local_ptr_f&amp;lt;GFileEnumerator&amp;gt; enum(g_file_enumerate_children(...), g_object_unref);
-  GFileInfo* info = NULL;
-  while ( (info = g_file_enumerator_next_file(enum.get(), ...)) != NULL )
-  {
-    local_ptr_f&amp;lt;GFileInfo&amp;gt; p(info, g_object_unref);
-    // blablabla
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;对于需要传递实例所有权的情况，使用auto_ptr/auto_ptr_f。这个各类C++书籍都有介绍，我就不展示代码了。&lt;/p&gt;
-
-&lt;p&gt;使用这些函数，依旧要求程序员像C一样明确一个实例的生存周期，而且还要分辨这个周期中的持有者（对持有者使用local_ptr/local_ptr_f），传递者（对传递者使用auto_ptr/auto_ptr_f）和引用者（对引用者使用原生指针）。优点是：利用C++析构函数自动调用的优点，不需要手动为每一个内存释放点写释放代码；对C风格来说，申请内存的函数和释放内存的函数靠的很近，可以避免误配对；保证对一种内存实例使用同一个内存释放函数。&lt;/p&gt;
-
-&lt;p&gt;也有一个缺点：从阅读角度，创建内存实例的时候，赋值操作看着不明显了。比较：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;char* str = strdup(...);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;和&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;local_ptr_f&amp;lt;char&amp;gt; str(strdup(...), free);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;就我自己的感觉，在一堆堆的代码里，前者因为有“=”的存在，能更轻易的被发现，而且现代编辑器可能还会用特殊的颜色标识出来。而后者会和函数调用等语句混在一起，不利于阅读。目前没有想到解决办法。另一个不好的地方是，会把变量初始化的语句写的很长。这个可以通过适当的折行来缩短，不算什么太大的问题。&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>
