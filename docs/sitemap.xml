@@ -148,11 +148,6 @@
   </url>
   
   <url>
-    <loc>http://air.googol.im/post/introduce-monad/</loc>
-    <lastmod>2007-12-31T16:11:00+08:00</lastmod>
-  </url>
-  
-  <url>
     <loc>http://air.googol.im/post/implement-y-combinator-in-cpp-3/</loc>
     <lastmod>2007-09-22T20:00:00+08:00</lastmod>
   </url>

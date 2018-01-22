@@ -140,7 +140,7 @@
 	
 	    <a class="newer-posts" href="/post/page/2/">&larr; Newer Posts</a>
 	
-	<span class="page-number">Page 3 of 5</span>
+	<span class="page-number">Page 3 of 4</span>
 	
 	    <a class="older-posts" href="/post/page/4/">Older Posts &rarr;</a>
 	
@@ -418,38 +418,6 @@
 	   
 <article class="post post">
     <header class="post-header">
-        <h2 class="post-title"><a href="/post/introduce-monad/">通过context/defer/promise介绍monad</a></h2>
-    </header>
-    <section class="post-excerpt">
-        
-            <p>func DeferUsage() { from, _ := os.Open('/proc/stat') defer from.Close() to, _ := ioutil.TempFile(&quot;&quot;, &quot;defer&quot;) defer to.Close() } func DeferUsage() { deferMonad := defer.Background() from, _ := os.Open('/proc/stat') deferMonad = defer(deferMonad, from.Close) to, _ := ioutil.TempFile(&quot;&quot;, &quot;defer&quot;) deferMonad = defer(deferMonad, to.Close) } func DeferUsage() { defer.Background().Call(func() { from, _ := os.Open('/proc/stat') return from.Close }).Call(func() { to, _ := ioutil.TempFile(&quot;&quot;, &quot;defer&quot;) return to.Close }).Do() } func ContextHandler() { timeout := 10*time.Second ctx := context.Background() ctx = context.WithValue(ctx, &quot;user&quot;, &quot;id-123&quot;) ctx1, cancel1 := context.WithTimeout(ctx, timeout) done := make(chan bool) go func() { fork1(ctx1) close(done) }() select { case &lt;-done: // succeed case &lt;-time.After(timeout): // timeout } cancel1() } func ContextHandler() { timeout := 10*time.Second ctx := context.Background() ctx = context.WithValue(ctx, &quot;user&quot;, &quot;id-123&quot;) ctx1, cancel1 := context.WithTimeout(ctx, timeout) // ... <a class="read-more" href="/post/introduce-monad/">&raquo;</a></p>
-        
-    </section>
-    <footer class="post-meta">
-        
-        
-
-        
-        
-            Googol Lee
-        
-        on
-            
-                <a href="http://air.googol.im/tags/monad/">#monad</a>,
-            
-                <a href="http://air.googol.im/tags/type_system/">#type_system</a>,
-            
-        
-        <time class="post-date" datetime="2007-12-31T16:11:00&#43;08:00">
-            31 Dec 2007
-        </time>
-    </footer>
-</article>
-
-	
-	   
-<article class="post post">
-    <header class="post-header">
         <h2 class="post-title"><a href="/post/implement-y-combinator-in-cpp-3/">尝试用C&#43;&#43;实现Y Combinator（之三）</a></h2>
     </header>
     <section class="post-excerpt">
@@ -482,12 +450,49 @@
 </article>
 
 	
+	   
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/post/implement-y-combinator-in-cpp-2/">尝试用C&#43;&#43;实现Y Combinator（之二）</a></h2>
+    </header>
+    <section class="post-excerpt">
+        
+            <p><p>恩……上篇没写完……</p>
+
+<p>其实，上篇还写错了……</p>
+ <a class="read-more" href="/post/implement-y-combinator-in-cpp-2/">&raquo;</a></p>
+        
+    </section>
+    <footer class="post-meta">
+        
+        
+
+        
+        
+            Googol Lee
+        
+        on
+            
+                <a href="http://air.googol.im/tags/cpp/">#cpp</a>,
+            
+                <a href="http://air.googol.im/tags/python/">#python</a>,
+            
+                <a href="http://air.googol.im/tags/y-combinator/">#y combinator</a>,
+            
+        
+        <time class="post-date" datetime="2007-09-06T20:00:00&#43;08:00">
+            6 Sep 2007
+        </time>
+    </footer>
+</article>
+
+	
 
 	<nav class="pagination" role="navigation">
 	
 	    <a class="newer-posts" href="/post/page/2/">&larr; Newer Posts</a>
 	
-	<span class="page-number">Page 3 of 5</span>
+	<span class="page-number">Page 3 of 4</span>
 	
 	    <a class="older-posts" href="/post/page/4/">Older Posts &rarr;</a>
 	
