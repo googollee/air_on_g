@@ -8,9 +8,7 @@
     <language>zh-CN</language>
     <copyright>除非另有声明，本网站采用&lt;a href=&#39;https://creativecommons.org/licenses/by-nd/3.0/cn/&#39;&gt;知识共享“署名-禁止演绎 3.0 中国大陆”许可协议&lt;/a&gt;授权。</copyright>
     <lastBuildDate>Wed, 25 Sep 2013 22:48:15 +0800</lastBuildDate>
-    
-	<atom:link href="http://air.googol.im/tags/project-management/index.xml" rel="self" type="application/rss+xml" />
-    
+    <atom:link href="http://air.googol.im/tags/project-management/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>S会议开发手札：项目管理</title>
@@ -20,7 +18,28 @@
       <guid>http://air.googol.im/post/shy-note-project-management/</guid>
       <description>&lt;p&gt;这周进行了一周的Scrum演练，谈谈感受。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;其实并不是完全意义的Scrum，只是引入了迭代的概念、迭代开始的项目会议和进度管理，等这次周期结束还打算进行回顾展示会议。&lt;/p&gt;
+
+&lt;p&gt;要说这次引入开始的项目会议，还是有很大作用的。会议本身是个让开发者明确产品需求的时机，两个前端能在会议上明确讨论需求的大致实现方法，同时所有人能对别人做的事情有更好的了解。&lt;/p&gt;
+
+&lt;p&gt;一些经验：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;在会议开始前，要做好backlog的准备工作。这个是Scrum master要和产品在会前得出结论的，包括足够的需求和需求的重要度。我在这次实践还让产品经理去估计项目的时间（按照人天，最短0.5人天为单位），目的是让产品能感受到他自己的时间估计和实际时间的偏差。不过后起来看这个可能会效果不大。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;为这个会议留足讨论的时间。如果输入的需求足够细致，自然时间就不会很长。但是一旦需求不够明确，没有足够的时间就会导致讨论不够细致，为之后的开发带来隐患。不过会议中间应该注意休息，大概一小时休息一次的节奏会比较合适。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;会上要让全体一起估计每个需求的时间，哪怕这个需求最后只归结到某个人去做，也要让大家一起参与。一方面当大家偏差较大时，说明大家对需求的理解不一致，需要继续讨论，另一方面也是尽量阻止有人思想溜号，只关心自己的部分。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;会议上要合理将需求分解为可控的任务，如果是新功能，分解的任务需要包含测试和返工的时间。对于很纠结的产品经理，一定要把任务拆的尽量细，然后争取在每个任务完成后进行反馈，这样能尽早展现做完的形象。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Scrum Master可以记录每个需求的讨论时间，用来衡量需求本身质量的高低。如果一个需求的质量还没有达到可以开发的地步，就会有大量的时间花费在这个需求，确认各种细节和实现，导致这个需求的讨论时间非常长。这次有两个需求的讨论时间超出了30分钟，最后的实现阶段这两个需求都出现了延期。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在一开始，可能还不会有很好的方式做scrum log，我现在都是自己用number来追踪项目的完成度和时间。不过另一方面的经验，scrum log的维护可能还是要有一个专人来完成，不然慢慢就没人做了。&lt;/p&gt;
+
+&lt;p&gt;不过现在trello的用法很奇怪。居然要求第一阶段的request尽量空，而第二阶段的plan却堆满了东西。从trello里完全看不出一个迭代内应该做的事情。反正事情我劝了，不接受我也没办法。如果以后做Scrum，需要在各种视图上都明确出迭代的阶段，一方面让产品了解什么时候该准备需求，什么时候该讨论需求，另一方面让团队有节奏感，知道什么时候应该突击功能，什么时候应该重构代码。老大现在一直不愿意让团队有喘息的机会，生怕闲下来出现偷懒摸鱼的人，唉……&lt;/p&gt;
+</description>
     </item>
     
   </channel>

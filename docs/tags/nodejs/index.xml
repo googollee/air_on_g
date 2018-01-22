@@ -8,9 +8,7 @@
     <language>zh-CN</language>
     <copyright>除非另有声明，本网站采用&lt;a href=&#39;https://creativecommons.org/licenses/by-nd/3.0/cn/&#39;&gt;知识共享“署名-禁止演绎 3.0 中国大陆”许可协议&lt;/a&gt;授权。</copyright>
     <lastBuildDate>Wed, 24 Apr 2013 08:34:35 +0800</lastBuildDate>
-    
-	<atom:link href="http://air.googol.im/tags/nodejs/index.xml" rel="self" type="application/rss+xml" />
-    
+    <atom:link href="http://air.googol.im/tags/nodejs/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>迁移到HEXO</title>
@@ -20,7 +18,18 @@
       <guid>http://air.googol.im/post/migrate-to-hexo/</guid>
       <description>&lt;p&gt;前几天把这个blog的框架从&lt;a href=&#34;https://github.com/mojombo/jekyll&#34;&gt;jekyll&lt;/a&gt;迁移到了&lt;a href=&#34;http://zespia.tw/hexo/&#34;&gt;HEXO&lt;/a&gt;。因为会重新生成feed，uuid和原来的不一样，所以有刷屏，抱歉。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;总体上，HEXO的完成度要比jekyll高。不过这么比并不公平：对应HEXO的应该是&lt;a href=&#34;http://octopress.org&#34;&gt;Octopress&lt;/a&gt;。不过总体使用感受比jekyll好很多。&lt;/p&gt;
+
+&lt;p&gt;因为HEXO是node.js上模仿Octopress的作品，而Octopress又是基于jekyll的，所以整个迁移过程十分顺畅，而且迁移后所有文章的URL都不会变化，Disque和Google Analytics的数据都不需要更新就可以直接合并过来，很爽。迁移后，RVM终于没有了存在的理由，删之。&lt;/p&gt;
+
+&lt;p&gt;迁移的原因是，因为很久不写blog，也没更新ruby gem，jekyll已经落后主线版本很多。我在用的一个插件，在新版有bug无法正常执行，折腾了很久也没搞定，于是就决定换一个框架.&lt;/p&gt;
+
+&lt;p&gt;本来开始想用Go的一套框架&lt;a href=&#34;http://wendal.net/2013/0111.html&#34;&gt;Gor&lt;/a&gt;，down下来大概跑了一下，因为是编译后的bin，速度相当快。无奈功能还有欠缺，整个迁移目测要改的东西不少，于是放弃了。等养肥了再说。&lt;/p&gt;
+
+&lt;p&gt;后来&lt;a href=&#34;https://twitter.com/ilrcat/status/325092691882954752&#34;&gt;@ilrcat&lt;/a&gt; 推荐用HEXO，正巧这两天也在用node.js弄一些东西，于是就装了一下。速度比基于Ruby的jekyll快不少，虽然感觉还是比Gor慢一些，但是也够用了，而且迁移很快，于是就花了一晚上搞定。&lt;/p&gt;
+
+&lt;p&gt;说到js，这种能执行出 &lt;em&gt;3755933696 | 0xffff != 3755933696&lt;/em&gt; 的语言实在太可怕了！向所有写js的程序员致敬： &lt;em&gt;你们受&lt;/em&gt; 苦了！&lt;/p&gt;
+</description>
     </item>
     
   </channel>

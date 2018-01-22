@@ -67,62 +67,12 @@
       
       
     
-    <meta name="generator" content="Hugo 0.21-DEV" />
+    <meta name="generator" content="Hugo 0.16-DEV" />
 
     <link rel="canonical" href="http://air.googol.im/post/whats-happening-in-go-tip-2014-01-10/" />
 
     
       
-    
-    <script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "publisher": {
-        "@type": "Organization",
-        "name": 
-    },
-    "author": {
-        "@type": "Person",
-        "name": ,
-        
-        "url": http://air.googol.im,
-        "sameAs": [
-            
-            
-             
-             
-             
-             
-             
-            
-        ],
-        "description": 多年生软件工程师，信仰开源
-        
-    },
-    "headline": Go tip在做什么 2014-01-10,
-    "name": Go tip在做什么 2014-01-10,
-    "wordCount": 74,
-    "timeRequired": "PT1M",
-    "inLanguage": {
-      "@type": "Language",
-      "alternateName": en
-    },
-    "url": http://air.googol.im/post/whats-happening-in-go-tip-2014-01-10/,
-    "datePublished": 2014-01-12T10:13Z,
-    "dateModified": 2014-01-12T10:13Z,
-    
-    "keywords": golang, go tip,
-    "description": ,
-    "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": http://air.googol.im/post/whats-happening-in-go-tip-2014-01-10/
-    }
-}
-    </script>
-    
-
-
     
 
     
@@ -140,6 +90,11 @@
         
         
         
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
+            </li>
+        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -148,11 +103,6 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -208,9 +158,9 @@
     </header>
 
     <section class="post-content">
-      <p>Go tip是Go语言的实验分支，包含了很多尚在讨论，但很有可能会加入stable分支的特性。“Go tip在做什么”（原文地址：<a href="http://dominik.honnef.co/go-tip/">What&rsquo;s happening in Go tip</a>）分析总结了Go语言尚在开发中的一些重要特性。</p>
+      
 
-<p></p>
+<p>Go tip是Go语言的实验分支，包含了很多尚在讨论，但很有可能会加入stable分支的特性。“Go tip在做什么”（原文地址：<a href="http://dominik.honnef.co/go-tip/">What&rsquo;s happening in Go tip</a>）分析总结了Go语言尚在开发中的一些重要特性。</p>
 
 <p>本文译自：<a href="http://dominik.honnef.co/go-tip/2014-01-10/">What&rsquo;s happening in Go tip (2014-01-10)</a></p>
 
@@ -222,14 +172,14 @@
 
 <p>这篇文章我们将会关注类型<code>sync.Pool</code>。这个类型是Go 1.3标准库新添加的第一个重要功能。</p>
 
-<h1 id="做了什么">做了什么</h1>
+<h1 id="做了什么:4c41eef00e9c11f0c0667009de71ae39">做了什么</h1>
 
 <ul>
 <li>添加了<code>sync.Pool</code>类型</li>
 <li>开发流程的小改变</li>
 </ul>
 
-<h2 id="添加了-sync-pool-类型">添加了<code>sync.Pool</code>类型</h2>
+<h2 id="添加了-sync-pool-类型:4c41eef00e9c11f0c0667009de71ae39">添加了<code>sync.Pool</code>类型</h2>
 
 <p>相关CL：<a href="http://codereview.appspot.com/41860043">CL 41860043</a>, <a href="http://codereview.appspot.com/43990043">CL 43990043</a>, <a href="http://codereview.appspot.com/37720047">CL 37720047</a>, <a href="http://codereview.appspot.com/44080043">CL 44080043</a>, <a href="http://codereview.appspot.com/44150043">CL 44150043</a>, <a href="http://codereview.appspot.com/44060044">CL 44060044</a>, <a href="http://codereview.appspot.com/44050044">CL 44050044</a>, <a href="http://codereview.appspot.com/44680043">CL 44680043</a>, <a href="http://codereview.appspot.com/46010043">CL 46010043</a></p>
 
@@ -257,13 +207,14 @@
 
 <p>虽然本文对<code>sync.Pool</code>的探索结束了，但是关于池的讨论还没有结束。还有<a href="http://codereview.appspot.com/46010043">CL 46010043</a>，为了更适合并发时使用，改进了非常简单的初始化实现。但这个CL在目前还没有通过审核。</p>
 
-<h2 id="开发流程的小改变">开发流程的小改变</h2>
+<h2 id="开发流程的小改变:4c41eef00e9c11f0c0667009de71ae39">开发流程的小改变</h2>
 
 <p>从Go 1.3的周期开始，开发的流程有一些小的变化。这些变化只会影响到直接参与开发流程的人，以及像我一样，紧跟最新变动的人。</p>
 
 <p>启用了一个新的邮件列表，<a href="https://groups.google.com/forum/#!forum/golang-codereviews">golang-coderreviews</a>，并作为新CL的默认抄送对象，替代了原有的<a href="https://groups.google.com/forum/#!forum/golang-dev">golang-dev</a>。这个想法是为了降低golang-dev里的噪音，以便让其关注真正的讨论。</p>
 
 <p>同时也启用了一个新的信息板，允许提交者更容易的跟踪还在开放的Issue和CL。任何对Go团队的工作方式感兴趣的人，都可以在这个新的信息板上找到有用的说明。</p>
+
     </section>
 
 

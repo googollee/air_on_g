@@ -65,62 +65,12 @@
       
       
     
-    <meta name="generator" content="Hugo 0.21-DEV" />
+    <meta name="generator" content="Hugo 0.16-DEV" />
 
     <link rel="canonical" href="http://air.googol.im/post/why-i-like-go/" />
 
     
       
-    
-    <script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "publisher": {
-        "@type": "Organization",
-        "name": 
-    },
-    "author": {
-        "@type": "Person",
-        "name": ,
-        
-        "url": http://air.googol.im,
-        "sameAs": [
-            
-            
-             
-             
-             
-             
-             
-            
-        ],
-        "description": 多年生软件工程师，信仰开源
-        
-    },
-    "headline": 我为什么喜欢Go,
-    "name": 我为什么喜欢Go,
-    "wordCount": 138,
-    "timeRequired": "PT1M",
-    "inLanguage": {
-      "@type": "Language",
-      "alternateName": en
-    },
-    "url": http://air.googol.im/post/why-i-like-go/,
-    "datePublished": 2012-07-09T20:00Z,
-    "dateModified": 2012-07-09T20:00Z,
-    
-    "keywords": golang,
-    "description": ,
-    "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": http://air.googol.im/post/why-i-like-go/
-    }
-}
-    </script>
-    
-
-
     
 
     
@@ -138,6 +88,11 @@
         
         
         
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
+            </li>
+        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -146,11 +101,6 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -204,13 +154,13 @@
     </header>
 
     <section class="post-content">
-      <p>这半年来工作上一直在用Go，总共统计下来也写了1w多行代码，算上删删改改的，大概能有1w5吧。而且还写了不少go的库，比如android push库<a href="https://github.com/googollee/go_c2dm">go_c2dm</a>，一个简单的IMAP客户端<a href="https://github.com/googollee/goimap">goimap</a>，想继续完善的编码库<a href="https://github.com/googollee/go-encoding-ex">go-encoding-ex</a>。似乎赶着最近Google IO，国外很时兴写对Go的总结，于是我也赶热闹写一篇blog。</p>
+      
 
-<p></p>
+<p>这半年来工作上一直在用Go，总共统计下来也写了1w多行代码，算上删删改改的，大概能有1w5吧。而且还写了不少go的库，比如android push库<a href="https://github.com/googollee/go_c2dm">go_c2dm</a>，一个简单的IMAP客户端<a href="https://github.com/googollee/goimap">goimap</a>，想继续完善的编码库<a href="https://github.com/googollee/go-encoding-ex">go-encoding-ex</a>。似乎赶着最近Google IO，国外很时兴写对Go的总结，于是我也赶热闹写一篇blog。</p>
 
-<h2 id="我喜欢的go特性">我喜欢的Go特性</h2>
+<h2 id="我喜欢的go特性:d3e72fc70f376b9e5f01146f9b1d4da5">我喜欢的Go特性</h2>
 
-<h3 id="interface">interface</h3>
+<h3 id="interface:d3e72fc70f376b9e5f01146f9b1d4da5">interface</h3>
 
 <p>Go的interface实在是让人眼前一亮的特性，在静态编译语言里引入了动态语言常用的duck type特性，而且还没有任何运行时负担。举个栗子，如果我想给一个struct A实现io.Reader接口，在定义struct A的时，不需要和io.Reader扯上任何关系（不需要继承，不需要包含，什么都不需要），只要对struct A定义Read([]byte) (int, error)这个函数（与对象方法类似）就可以。至于如何把struct A的实例捏成一个io.Reader，全是Go编译器在背后的工作。我斗胆猜一下Go在使用io.Reader这个interface的时候，使用了类似下面的结构：</p>
 
@@ -232,7 +182,7 @@ i.readFunc = i.instancePtr.Read
 
 <p>这个伪代码的操作，在编译期就可以完成，不需要在运行时依旧保留很多类型的相关信息。</p>
 
-<h3 id="reflect">reflect</h3>
+<h3 id="reflect:d3e72fc70f376b9e5f01146f9b1d4da5">reflect</h3>
 
 <p>不过Go依旧在运行时保留了不少的类型信息，用来完成反射。不过Go的反射与Java和其他动态语言比起来，还是有限制：所有的反射操作都必须通过一个实例完成，而不能直接操作类型。比如，可以根据一个实例拿到一个类型并生成这个类型对应的新实例：</p>
 
@@ -258,27 +208,27 @@ f.Tag.Get(&quot;tag&quot;) == &quot;abc&quot;
 
 <p>虽然目前Go的标准库里只用Tag来做json编码/解码时对应域的名字，不过似乎可以有更有趣的用法。</p>
 
-<h3 id="channel">channel</h3>
+<h3 id="channel:d3e72fc70f376b9e5f01146f9b1d4da5">channel</h3>
 
 <p>在Go之前，就有不少语言以支持轻量进程的并发为特点，比如广为人知的Erlang（其语法的诡异导致没有大规模流行）。不过Go比Erlang更多了一种叫做channel的类型，用于在进程间传递消息。Erlang里，如果要和一个进程通信，只能给这个进程的pid发消息，消息里带有一个标号。这个进程收到消息后，根据标号再做不同的处理。这种做法使得Erlang里大量出现通信时根据标号做模式匹配的语句，可以类比C的大块大块switch/case，配合Erlang的另一大特点“代码热更新”，经常会写出十分难读的代码。另一方面由于pid要先创建进程后才能拿到，如果想让两个进程互相通信，就必须先创建进程A拿到pid_a，再创建进程B，把pid_a传给进程B，再把进程B的pid_b传给进程A，A拿到pid_b后会对自己的执行体做更新，去实现真正的功能。这个说起来似乎简单，真写一写的话实在头疼。</p>
 
 <p>Go在Erlang的基础上进一步抽象出了channel，使得进程间通信变的更加清晰。一个goroutine可以持有一个或者多个channel。可以先创建channel，把创建好的channel传给若干个需要互相通信的goroutine。这样就完美的解决了Erlang里遇到的两个很拧巴的问题。</p>
 
-<h3 id="goroutine">goroutine</h3>
+<h3 id="goroutine:d3e72fc70f376b9e5f01146f9b1d4da5">goroutine</h3>
 
 <p>一句话：并发变得如此简单。</p>
 
-<h3 id="one-executable-binary">one executable binary</h3>
+<h3 id="one-executable-binary:d3e72fc70f376b9e5f01146f9b1d4da5">one executable binary</h3>
 
 <p>目前Go在编译好后只会有一个bin文件，而且不使用cgo引用c库的话，也不会依赖特殊的库。在生产环境部署Go真是痛快无比，再也不用想是不是要升级这个gem，是不是要下那个egg，是不是这个版本滞后了，是不是那个api不兼容……</p>
 
-<h3 id="go-fmt">go fmt</h3>
+<h3 id="go-fmt:d3e72fc70f376b9e5f01146f9b1d4da5">go fmt</h3>
 
 <p>配合<a href="http://www.sublimetext.com/2">Sublime2</a> + <a href="https://github.com/DisposaBoy/GoSublime">GoSublime</a>，再也不用费心代码格式的问题了。</p>
 
-<h2 id="使用中遇到的问题">使用中遇到的问题</h2>
+<h2 id="使用中遇到的问题:d3e72fc70f376b9e5f01146f9b1d4da5">使用中遇到的问题</h2>
 
-<h3 id="用成员首字母的大小写来控制可见性">用成员首字母的大小写来控制可见性</h3>
+<h3 id="用成员首字母的大小写来控制可见性:d3e72fc70f376b9e5f01146f9b1d4da5">用成员首字母的大小写来控制可见性</h3>
 
 <p><del>这真是很诡异的特性：</del>所有名字首字母大写的成员，是对包外可见的；所有名字首字母小写的成员，都是包外不可见的。</p>
 
@@ -295,19 +245,19 @@ f.Tag.Get(&quot;tag&quot;) == &quot;abc&quot;
 }
 </code></pre>
 
-<h3 id="reflect还有问题">reflect还有问题</h3>
+<h3 id="reflect还有问题:d3e72fc70f376b9e5f01146f9b1d4da5">reflect还有问题</h3>
 
 <p>前面也提过，不能根据reflect.Type直接生成对应的Slice或者Array或者Map实在太讨厌了！</p>
 
-<h2 id="期望">期望</h2>
+<h2 id="期望:d3e72fc70f376b9e5f01146f9b1d4da5">期望</h2>
 
 <p>Go还是一门很年轻的语言，如果要对其提出展望的话，我期望以下特性：</p>
 
-<h3 id="reflect支持创建对应type的slice和array">reflect支持创建对应Type的Slice和Array</h3>
+<h3 id="reflect支持创建对应type的slice和array:d3e72fc70f376b9e5f01146f9b1d4da5">reflect支持创建对应Type的Slice和Array</h3>
 
 <p>前面多次提到了。</p>
 
-<h3 id="struct的成员函数也能支持tag">struct的成员函数也能支持tag</h3>
+<h3 id="struct的成员函数也能支持tag:d3e72fc70f376b9e5f01146f9b1d4da5">struct的成员函数也能支持tag</h3>
 
 <p>目前tag只能支持成员变量，如果也能给成员函数写tag就太cool了：</p>
 
@@ -316,21 +266,22 @@ f.Tag.Get(&quot;tag&quot;) == &quot;abc&quot;
 func (a *A) `tag:&quot;id&quot;` SomeFunc() {}
 </code></pre>
 
-<h3 id="完善库">完善库</h3>
+<h3 id="完善库:d3e72fc70f376b9e5f01146f9b1d4da5">完善库</h3>
 
 <p>没有IMAP好痛苦！自己实现IMAP好蛋疼！ <em>(:з」∠)</em></p>
 
 <p>目前我可能比较急需的库：多语言本地化（大概把ICU直接port过来），更多的编解码，能换个更好用的text模版库么（模版里写个range都没法判断是不是到了最后一个元素，想用模版输出“a, b, c and d.”简直要死人啊）。</p>
 
-<h3 id="heroku">heroku</h3>
+<h3 id="heroku:d3e72fc70f376b9e5f01146f9b1d4da5">heroku</h3>
 
 <p>严格来说这个不是对Go语言的期望。现在GAE已经支持Go了，但是因为GAE的api太特殊，为GAE写的程序只能跑在GAE，不能自己部署，所以稍微有点不爽。如果heroku可以支持Go的话，就可以做到本地云间一个样了。可惜看上去heroku目前并<a href="https://twitter.com/heroku/status/221990016329596928">没有支持Go的打算</a>。</p>
 
 <p>（不过heroku内部已经把一部分ruby模块切换到Go了，或许可以期待一下？）</p>
 
-<h2 id="后记">后记</h2>
+<h2 id="后记:d3e72fc70f376b9e5f01146f9b1d4da5">后记</h2>
 
 <p>Go的前途是光明的！道路是曲折的！以后我也会在blog里多分享一些自己使用Go遇到的问题和惯用法。</p>
+
     </section>
 
 

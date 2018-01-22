@@ -69,62 +69,12 @@
       
       
     
-    <meta name="generator" content="Hugo 0.21-DEV" />
+    <meta name="generator" content="Hugo 0.16-DEV" />
 
     <link rel="canonical" href="http://air.googol.im/post/vim-config/" />
 
     
       
-    
-    <script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "publisher": {
-        "@type": "Organization",
-        "name": 
-    },
-    "author": {
-        "@type": "Person",
-        "name": ,
-        
-        "url": http://air.googol.im,
-        "sameAs": [
-            
-            
-             
-             
-             
-             
-             
-            
-        ],
-        "description": 多年生软件工程师，信仰开源
-        
-    },
-    "headline": 在WSL上配置VIM,
-    "name": 在WSL上配置VIM,
-    "wordCount": 131,
-    "timeRequired": "PT1M",
-    "inLanguage": {
-      "@type": "Language",
-      "alternateName": en
-    },
-    "url": http://air.googol.im/post/vim-config/,
-    "datePublished": 2017-05-01T08:38Z,
-    "dateModified": 2017-05-01T08:38Z,
-    
-    "keywords": programming, vim, wsl,
-    "description": ,
-    "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": http://air.googol.im/post/vim-config/
-    }
-}
-    </script>
-    
-
-
     
 
     
@@ -142,6 +92,11 @@
         
         
         
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
+            </li>
+        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -150,11 +105,6 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -213,8 +163,6 @@
 
     <section class="post-content">
       <p>最近在Windows 10上折腾Windows Subsystem for Linux。为了减少折腾的复杂性和不一致性，决定在这个环境里用VIM。这里记录了这次配置VIM的经历。</p>
-
-<p></p>
 
 <p>Linux Subsystem on Windows是Windows 10上的一个Linux模拟层，类似Wine。这个模拟层在底层模拟了Linux的系统调用，最早目的是在Windows RT上执行Android程序。后来随着Windows Mobile的衰落，这个项目就没用了。不过近几年微软实在好心，最终还是把这个项目废物利用，变成了Windows下兼容Linux的一套运行层环境。最早在Windows 10里叫Bash on Ubuntu on Windows，是和Ubuntu合作的一个项目。微软负责模拟层，Ubuntu负责基于模拟层搭建Ubuntu 14.04环境。在最新的Windows 10 Updates里，微软把这个模拟层改名叫Windows Subsystem for Linux，除了名字太长，至少没有前一个那么多的槽点了（其实还不如改名叫Line，和Wine凑一对）。自带的Ubuntu也升级到了16.04（都2017年了，不过至少是个LTS）。</p>
 
@@ -279,6 +227,7 @@ $ python ./install.py --clang-completer --gocode-completer --tern-completer
 <p>再次进入VIM，就可以正常使用了。</p>
 
 <p>如果要更新插件，可以进入VIM执行<code>:PluginInstall</code>。</p>
+
     </section>
 
 

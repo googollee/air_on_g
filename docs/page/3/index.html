@@ -58,46 +58,12 @@
         <link href="http://air.googol.im/index.xml" rel="alternate" type="application/rss+xml" title="Air on G" />
       
     
-    <meta name="generator" content="Hugo 0.21-DEV" />
+    <meta name="generator" content="Hugo 0.16-DEV" />
 
     <link rel="canonical" href="http://air.googol.im/" />
 
     
       
-    
-    <script type="application/ld+json">
-    {
-    "@context": "https://schema.org",
-    "@type": "Website",
-    "publisher": {
-        "@type": "Person",
-        "name": ,
-        
-        "url": http://air.googol.im,
-        "sameAs": [
-            
-            
-             
-             
-             
-             
-             
-            
-        ],
-        "description": 多年生软件工程师，信仰开源
-        
-    },
-    "url": http://air.googol.im/,
-    "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": http://air.googol.im/
-    },
-    "description": The Blog of Googol Lee
-}
-  </script>
-    
-
-
     
 
     
@@ -115,6 +81,11 @@
         
         
         
+            
+            <li class="nav-opened nav-current" role="presentation">
+            	<a href="/">Blog</a>
+            </li>
+        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -123,11 +94,6 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
-            </li>
-        
-            
-            <li class="nav-opened nav-current" role="presentation">
-            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -265,7 +231,15 @@
     
         
     
+        
+    
+        
+    
 
+    
+        
+            
+        
     
 
     
@@ -277,7 +251,7 @@
 	
 	    <a class="newer-posts" href="/page/2/">&larr; Newer Posts</a>
 	
-	<span class="page-number">Page 3 of 4</span>
+	<span class="page-number">Page 3 of 5</span>
 	
 	    <a class="older-posts" href="/page/4/">Older Posts &rarr;</a>
 	
@@ -289,13 +263,45 @@
         
 <article class="post post">
     <header class="post-header">
+        <h2 class="post-title"><a href="/post/ruby-style/">Christian Neukirchen 的 Ruby 编程风格指南</a></h2>
+    </header>
+    <section class="post-excerpt">
+        
+            <p><p>也许你不会同意本文提到的所有规则，但是这些规则确实帮助我产生了高质量的代码，对我来说很有用。任何人都可以随其所想，根据其自己的编码风格去写代码，但是，当你提代码到我的项目里时，请遵守这些规则：</p>
+ <a class="read-more" href="/post/ruby-style/">&raquo;</a></p>
+        
+    </section>
+    <footer class="post-meta">
+        
+        
+
+        
+        
+            Googol Lee
+        
+        on
+            
+                <a href="http://air.googol.im/tags/ruby/">#ruby</a>,
+            
+                <a href="http://air.googol.im/tags/code-style/">#code style</a>,
+            
+        
+        <time class="post-date" datetime="2011-02-20T20:00:00&#43;08:00">
+            20 Feb 2011
+        </time>
+    </footer>
+</article>
+
+    
+        
+<article class="post post">
+    <header class="post-header">
         <h2 class="post-title"><a href="/post/call-c-in-golang/">Golang里调用C</a></h2>
     </header>
     <section class="post-excerpt">
         
             <p><p>Golang调用C分两个步骤：1 写一个C的wrapper，这个很简单；2 对wrapper做编译，这个步骤有点复杂，而且涉及众多中间文件。应该是有办法用自动化的工具简化这个过程的。</p>
-
-<p></p> <a class="read-more" href="/post/call-c-in-golang/">&raquo;</a></p>
+ <a class="read-more" href="/post/call-c-in-golang/">&raquo;</a></p>
         
     </section>
     <footer class="post-meta">
@@ -328,8 +334,7 @@
     <section class="post-excerpt">
         
             <p><p>这两天帮同事看一个sshd退出时报错的问题。</p>
-
-<p></p> <a class="read-more" href="/post/ssh-quit-with-epipe/">&raquo;</a></p>
+ <a class="read-more" href="/post/ssh-quit-with-epipe/">&raquo;</a></p>
         
     </section>
     <footer class="post-meta">
@@ -364,8 +369,7 @@
     <section class="post-excerpt">
         
             <p><p>Go语言是Google于2009年11月公布的一个新语言项目，其目标是创造一门既简单又有效率的开源编程语言。由于有C语言创始人Ken Thompson的参与，Go一面世，就被看成是C语言的继任者，受到很大关注。Go一方面吸收了C简单清晰、执行效率高的优点，另一方面融合了动态语言的闭包、动态绑定等特性，更加适应目前多核与多机高并发的开发环境和快速敏捷的开发效率。此外，Go并没有跟随主流的以“类和继承”为基础的面向对象实现方式，而是以接口和动态绑定的方式，将封装的粒度做得更细、更灵活，实现了另一种面向对象的代码组织形式。</p>
-
-<p></p> <a class="read-more" href="/post/guide-to-golang/">&raquo;</a></p>
+ <a class="read-more" href="/post/guide-to-golang/">&raquo;</a></p>
         
     </section>
     <footer class="post-meta">
@@ -396,8 +400,7 @@
     <section class="post-excerpt">
         
             <p><p>这几天试了下TDD，需要一个UnitTest框架。以前用过Google Test和JUnit，不过想了一下，印象里Google Test经过几次升级后，似乎只能单独编译，而JUnit只能用在Java里，都不适合嵌入式运行的场合。所以花了半天左右自己写了个框架。</p>
-
-<p></p> <a class="read-more" href="/post/simple-unittest-framework/">&raquo;</a></p>
+ <a class="read-more" href="/post/simple-unittest-framework/">&raquo;</a></p>
         
     </section>
     <footer class="post-meta">
@@ -432,8 +435,7 @@
     <section class="post-excerpt">
         
             <p><p>最近在公司的项目里开始实践用C++的析构来自动释放已申请的指针，同时保证程序的效率不变。</p>
-
-<p></p> <a class="read-more" href="/post/thinking-of-cpp-ptr/">&raquo;</a></p>
+ <a class="read-more" href="/post/thinking-of-cpp-ptr/">&raquo;</a></p>
         
     </section>
     <footer class="post-meta">
@@ -466,8 +468,7 @@
     <section class="post-excerpt">
         
             <p><p>事情的起因是boss要把对samba的支持从kernel转移到user模式的gio。这个迁移到还不是很复杂，改一些接口就可以。迁移过来后发现通过samba播放视频的性能下降的很厉害，在arm平台上，以前能流畅播放的视频现在完全不可看。</p>
-
-<p></p> <a class="read-more" href="/post/optimize-for-continous-reading/">&raquo;</a></p>
+ <a class="read-more" href="/post/optimize-for-continous-reading/">&raquo;</a></p>
         
     </section>
     <footer class="post-meta">
@@ -500,8 +501,7 @@
     <section class="post-excerpt">
         
             <p><p>这是上周软设考试时遇到的一道题，判断对错：可以用两个栈模拟一个队列，也可以用一个队列模拟两个栈。</p>
-
-<p></p> <a class="read-more" href="/post/unified-stack-and-queue/">&raquo;</a></p>
+ <a class="read-more" href="/post/unified-stack-and-queue/">&raquo;</a></p>
         
     </section>
     <footer class="post-meta">
@@ -529,13 +529,44 @@
         
 <article class="post post">
     <header class="post-header">
+        <h2 class="post-title"><a href="/post/introduce-monad/">通过context/defer/promise介绍monad</a></h2>
+    </header>
+    <section class="post-excerpt">
+        
+            <p>func DeferUsage() { from, _ := os.Open('/proc/stat') defer from.Close() to, _ := ioutil.TempFile(&quot;&quot;, &quot;defer&quot;) defer to.Close() } func DeferUsage() { deferMonad := defer.Background() from, _ := os.Open('/proc/stat') deferMonad = defer(deferMonad, from.Close) to, _ := ioutil.TempFile(&quot;&quot;, &quot;defer&quot;) deferMonad = defer(deferMonad, to.Close) } func DeferUsage() { defer.Background().Call(func() { from, _ := os.Open('/proc/stat') return from.Close }).Call(func() { to, _ := ioutil.TempFile(&quot;&quot;, &quot;defer&quot;) return to.Close }).Do() } func ContextHandler() { timeout := 10*time.Second ctx := context.Background() ctx = context.WithValue(ctx, &quot;user&quot;, &quot;id-123&quot;) ctx1, cancel1 := context.WithTimeout(ctx, timeout) done := make(chan bool) go func() { fork1(ctx1) close(done) }() select { case &lt;-done: // succeed case &lt;-time.After(timeout): // timeout } cancel1() } func ContextHandler() { timeout := 10*time.Second ctx := context.Background() ctx = context.WithValue(ctx, &quot;user&quot;, &quot;id-123&quot;) ctx1, cancel1 := context.WithTimeout(ctx, timeout) // ... <a class="read-more" href="/post/introduce-monad/">&raquo;</a></p>
+        
+    </section>
+    <footer class="post-meta">
+        
+        
+
+        
+        
+            Googol Lee
+        
+        on
+            
+                <a href="http://air.googol.im/tags/monad/">#monad</a>,
+            
+                <a href="http://air.googol.im/tags/type_system/">#type_system</a>,
+            
+        
+        <time class="post-date" datetime="2007-12-31T16:11:00&#43;08:00">
+            31 Dec 2007
+        </time>
+    </footer>
+</article>
+
+    
+        
+<article class="post post">
+    <header class="post-header">
         <h2 class="post-title"><a href="/post/implement-y-combinator-in-cpp-3/">尝试用C&#43;&#43;实现Y Combinator（之三）</a></h2>
     </header>
     <section class="post-excerpt">
         
             <p><p>基本上，又进行了几次失败的尝试，具体过程不写了，反正写了也没人看。（其实是我没有存……）</p>
-
-<p></p> <a class="read-more" href="/post/implement-y-combinator-in-cpp-3/">&raquo;</a></p>
+ <a class="read-more" href="/post/implement-y-combinator-in-cpp-3/">&raquo;</a></p>
         
     </section>
     <footer class="post-meta">
@@ -562,86 +593,12 @@
 </article>
 
     
-        
-<article class="post post">
-    <header class="post-header">
-        <h2 class="post-title"><a href="/post/implement-y-combinator-in-cpp-2/">尝试用C&#43;&#43;实现Y Combinator（之二）</a></h2>
-    </header>
-    <section class="post-excerpt">
-        
-            <p><p>恩……上篇没写完……</p>
-
-<p>其实，上篇还写错了……</p>
-
-<p></p> <a class="read-more" href="/post/implement-y-combinator-in-cpp-2/">&raquo;</a></p>
-        
-    </section>
-    <footer class="post-meta">
-        
-        
-
-        
-        
-            Googol Lee
-        
-        on
-            
-                <a href="http://air.googol.im/tags/cpp/">#cpp</a>,
-            
-                <a href="http://air.googol.im/tags/python/">#python</a>,
-            
-                <a href="http://air.googol.im/tags/y-combinator/">#y combinator</a>,
-            
-        
-        <time class="post-date" datetime="2007-09-06T20:00:00&#43;08:00">
-            6 Sep 2007
-        </time>
-    </footer>
-</article>
-
-    
-        
-<article class="post post">
-    <header class="post-header">
-        <h2 class="post-title"><a href="/post/implement-y-combinator-in-cpp-1/">尝试用C&#43;&#43;实现Y Combinator（之一）</a></h2>
-    </header>
-    <section class="post-excerpt">
-        
-            <p><p>恩……程序员的一大特点：看到别人有个轮子，就想自己动手造个出来……（这样不好，不好……）</p>
-
-<p></p> <a class="read-more" href="/post/implement-y-combinator-in-cpp-1/">&raquo;</a></p>
-        
-    </section>
-    <footer class="post-meta">
-        
-        
-
-        
-        
-            Googol Lee
-        
-        on
-            
-                <a href="http://air.googol.im/tags/cpp/">#cpp</a>,
-            
-                <a href="http://air.googol.im/tags/y-combinator/">#y combinator</a>,
-            
-                <a href="http://air.googol.im/tags/python/">#python</a>,
-            
-        
-        <time class="post-date" datetime="2007-09-01T20:00:00&#43;08:00">
-            1 Sep 2007
-        </time>
-    </footer>
-</article>
-
-    
 
     <nav class="pagination" role="navigation">
 	
 	    <a class="newer-posts" href="/page/2/">&larr; Newer Posts</a>
 	
-	<span class="page-number">Page 3 of 4</span>
+	<span class="page-number">Page 3 of 5</span>
 	
 	    <a class="older-posts" href="/page/4/">Older Posts &rarr;</a>
 	

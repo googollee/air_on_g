@@ -67,62 +67,12 @@
       
       
     
-    <meta name="generator" content="Hugo 0.21-DEV" />
+    <meta name="generator" content="Hugo 0.16-DEV" />
 
     <link rel="canonical" href="http://air.googol.im/post/first-glance-at-atom/" />
 
     
       
-    
-    <script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "publisher": {
-        "@type": "Organization",
-        "name": 
-    },
-    "author": {
-        "@type": "Person",
-        "name": ,
-        
-        "url": http://air.googol.im,
-        "sameAs": [
-            
-            
-             
-             
-             
-             
-             
-            
-        ],
-        "description": 多年生软件工程师，信仰开源
-        
-    },
-    "headline": Atom初探,
-    "name": Atom初探,
-    "wordCount": 57,
-    "timeRequired": "PT1M",
-    "inLanguage": {
-      "@type": "Language",
-      "alternateName": en
-    },
-    "url": http://air.googol.im/post/first-glance-at-atom/,
-    "datePublished": 2014-03-07T01:20Z,
-    "dateModified": 2014-03-07T01:20Z,
-    
-    "keywords": atom, editor,
-    "description": ,
-    "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": http://air.googol.im/post/first-glance-at-atom/
-    }
-}
-    </script>
-    
-
-
     
 
     
@@ -140,6 +90,11 @@
         
         
         
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
+            </li>
+        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -148,11 +103,6 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -208,7 +158,9 @@
     </header>
 
     <section class="post-content">
-      <p>传说上古之时，上帝为了防止人们齐心协力制造能够通向天堂的通天塔，给了不同人群不同的编辑器，其中最大的两群人分别拿到了叫做VI和Emacs的编辑器，其余的nano，ed，UltraEdit之类不一一详叙。自此以后，人类为了使用什么编辑器来编写通天塔的文档吵个不停，再也没有心思去修通天塔了……</p>
+      
+
+<p>传说上古之时，上帝为了防止人们齐心协力制造能够通向天堂的通天塔，给了不同人群不同的编辑器，其中最大的两群人分别拿到了叫做VI和Emacs的编辑器，其余的nano，ed，UltraEdit之类不一一详叙。自此以后，人类为了使用什么编辑器来编写通天塔的文档吵个不停，再也没有心思去修通天塔了……</p>
 
 <p>后来，有不同的英雄察觉了上帝的企图，决定以个人之力重新统一人们的编辑器，并赋予其更强大的弑神之力。这些英雄的名字不仅仅限于Text Mate，Sublime……</p>
 
@@ -216,13 +168,11 @@
 
 <p><em>本文使用Atom编写</em></p>
 
-<p></p>
-
 <p>决定还是好好说话。Atom是github最近的一个桌面编辑器项目。刚一发布，立刻引起了众人围观，不仅仅在hack news上有着诸多报道，其github repo也被迅速关注，而为其编写的package更是一夜之间遍布各个领域。</p>
 
 <p>为什么Atom能如此受到关注？除了github本身的光环，以及开箱即用的功能，对其目标人群——程序员——来说，基于web技术理念设计的桌面软件，大概是最吸引人的特点。</p>
 
-<h2 id="什么是web技术理念的桌面软件">什么是web技术理念的桌面软件？</h2>
+<h2 id="什么是web技术理念的桌面软件:aeed4bc0d231faf74894f342139f0801">什么是web技术理念的桌面软件？</h2>
 
 <p>简单来讲，Atom其实是一个跑在本地的网页。Atom编辑器本身是个Chromium项目，运行时会在NaCl（Native Client）环境里启动一个node.js的进程处理编辑器的核心功能，在界面上利用Chromium显示由node.js支持的网页，并在页面上为使用者提供功能。目前在Atom的界面上，还可以随时用Chromium的快捷键cmd+alt+i来打开控制台，查看整个Atom程序的页面布局：</p>
 
@@ -232,7 +182,7 @@
 
 <p>以css和javascript作为基础，大大简化了为Atom开发的门槛，只要有web的编程基础，再加上好的创意，就能为Atom编写插件。这也能解释从Atom发布到现在不长的时间里，Atom的package数量就快速增长，覆盖了各个领域（参见<a href="https://atom.io/packages/list">package页面</a>）。</p>
 
-<h2 id="实际使用">实际使用</h2>
+<h2 id="实际使用:aeed4bc0d231faf74894f342139f0801">实际使用</h2>
 
 <p>由于Atom还在邀请使用的阶段，如果还没有的同学，请发挥自己的人脉，或者善用Google，找到安装包。目前的安装包似乎只有Mac上的版本……</p>
 
@@ -262,7 +212,7 @@
 
 <p>Atom的配置文件倒是很有特色的选择了cson，而不是更通用的json。当然，cson完全兼容json，把所有的配置当作json来写没有任何问题，甚至还不用拿着放大镜找哪个数组的末尾多写了逗号这种恼人的情况。不过，总有人会讨厌这种混合着yaml和json的格式的。</p>
 
-<h2 id="感受">感受</h2>
+<h2 id="感受:aeed4bc0d231faf74894f342139f0801">感受</h2>
 
 <p>我多想最后就写一句话：Atom就是好啊就是好！就是好啊就是好！就是好！</p>
 
@@ -273,6 +223,7 @@
 <p>相比Text Mate的沉沦和Sublime的拖沓，还是相信github会对Atom非常上心，会尽可能解决目前存在的问题。Atom社区也会非常活跃的产出各种package，解决不同使用场景下缺失的功能，扩展Atom的能力。</p>
 
 <p>如果你是程序员，或者是喜欢折腾的Geek，试试Atom吧。不管最终是不是使用Atom，你都会发现其独特的一面。</p>
+
     </section>
 
 

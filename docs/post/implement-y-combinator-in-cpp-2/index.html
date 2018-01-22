@@ -69,62 +69,12 @@
       
       
     
-    <meta name="generator" content="Hugo 0.21-DEV" />
+    <meta name="generator" content="Hugo 0.16-DEV" />
 
     <link rel="canonical" href="http://air.googol.im/post/implement-y-combinator-in-cpp-2/" />
 
     
       
-    
-    <script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "publisher": {
-        "@type": "Organization",
-        "name": 
-    },
-    "author": {
-        "@type": "Person",
-        "name": ,
-        
-        "url": http://air.googol.im,
-        "sameAs": [
-            
-            
-             
-             
-             
-             
-             
-            
-        ],
-        "description": 多年生软件工程师，信仰开源
-        
-    },
-    "headline": 尝试用C&#43;&#43;实现Y Combinator（之二）,
-    "name": 尝试用C&#43;&#43;实现Y Combinator（之二）,
-    "wordCount": 244,
-    "timeRequired": "PT2M",
-    "inLanguage": {
-      "@type": "Language",
-      "alternateName": en
-    },
-    "url": http://air.googol.im/post/implement-y-combinator-in-cpp-2/,
-    "datePublished": 2007-09-06T20:00Z,
-    "dateModified": 2007-09-06T20:00Z,
-    
-    "keywords": cpp, python, y combinator,
-    "description": ,
-    "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": http://air.googol.im/post/implement-y-combinator-in-cpp-2/
-    }
-}
-    </script>
-    
-
-
     
 
     
@@ -142,6 +92,11 @@
         
         
         
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
+            </li>
+        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -150,11 +105,6 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -215,8 +165,6 @@
       <p>恩……上篇没写完……</p>
 
 <p>其实，上篇还写错了……</p>
-
-<p></p>
 
 <p>那个combinator::operator()的返回值是int，但是，看那个Python实现：</p>
 
@@ -335,6 +283,7 @@ int main(int argc, char* argv[])
 <p>再有，就是诡异的语法了。<code>(*f1)()</code>之类的东西实在看的别扭。或者也可以写&rdquo;<code>_fn &amp;f1 = *_1(_1(...))</code>&ldquo;……总之，甘蔗不能两头甜，大床不能两头睡，凑合吧……</p>
 
 <p>不管怎么说，总算实现了看上去像Y Combinator的东西，下次总该能真正实现个浪费内存诡异语法的Y Combinator了吧？</p>
+
     </section>
 
 

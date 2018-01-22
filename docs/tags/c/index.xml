@@ -8,9 +8,7 @@
     <language>zh-CN</language>
     <copyright>除非另有声明，本网站采用&lt;a href=&#39;https://creativecommons.org/licenses/by-nd/3.0/cn/&#39;&gt;知识共享“署名-禁止演绎 3.0 中国大陆”许可协议&lt;/a&gt;授权。</copyright>
     <lastBuildDate>Sun, 18 Apr 2010 20:00:00 +0800</lastBuildDate>
-    
-	<atom:link href="http://air.googol.im/tags/c/index.xml" rel="self" type="application/rss+xml" />
-    
+    <atom:link href="http://air.googol.im/tags/c/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Golang里调用C</title>
@@ -20,7 +18,113 @@
       <guid>http://air.googol.im/post/call-c-in-golang/</guid>
       <description>&lt;p&gt;Golang调用C分两个步骤：1 写一个C的wrapper，这个很简单；2 对wrapper做编译，这个步骤有点复杂，而且涉及众多中间文件。应该是有办法用自动化的工具简化这个过程的。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;先来展示一下C程序。为了将描述集中在如何调用上，C的程序很简单：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;# file: prints.h
+#ifndef PRINTS_HEAD
+void prints(char* str);
+#endif
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;# file: prints.c
+#include &amp;quot;prints.h&amp;quot;
+#include &amp;lt;stdio.h&amp;gt;
+
+void prints(char* str)
+{
+  printf(&amp;quot;%s\n&amp;quot;, str);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;之后是Golang对C的一个wrapper：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// file: prints.go
+package prints
+
+// NOTICE BELOW
+
+//#include &amp;quot;prints.h&amp;quot;
+// // some comment
+import &amp;quot;C&amp;quot;
+
+func Prints(s string) {
+  p := C.CString(s);
+  C.prints(p);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;需要注意的是import &amp;ldquo;C&amp;rdquo;及其上面的几行注释。在编译过程中，go会根据import &amp;ldquo;C&amp;rdquo;之前的几行注释生成一个c程序，并将这个c程序里的符号导入到模块C里，最后由import &amp;ldquo;C&amp;rdquo;再导入到go程序里。如果需要在其他go程序里调用api，需要参照prints.go里的Prints函数（要导出的go模块需要首字母大写）写一个wrapper func。其中对c程序里符号的引用都需要通过C来引用，包括一些c的类型定义，比如传给c api的int需要通过C.int来定义，而字符串则是C.CString。&lt;/p&gt;
+
+&lt;p&gt;有了这几个文件，就可以编译一个可以在go里加载的库了。以下都是在x86 linux下操作过程，如果是其他环境，请替换相应的编译命令。&lt;/p&gt;
+
+&lt;p&gt;编译wrapper：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cgo prints.go
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;生成文件：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;_cgo_defun.c：根据prints.go里标红的注释，生成用于在go里调用的c符号和函数&lt;/li&gt;
+&lt;li&gt;_cgo_gotypes.go：_cgo_defun.c里的符号在go里对应的定义&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;cgo&lt;/em&gt;.o&lt;/li&gt;
+&lt;li&gt;prints.cgo1.go：根据prints.go生成的go wrapper func&lt;/li&gt;
+&lt;li&gt;prints.cgo2.c：根据prints.go生成的c wrapper func&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;编译go wrapper相关的文件，生成&lt;em&gt;go&lt;/em&gt;.8&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;8g -o _go_.8 prints.cgo1.go _cgo_gotypes.go
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;编译c wrapper的通用部分，生成_cgo_defun.8&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;8c -FVw -I&amp;quot;/home/lizh/go/src/pkg/runtime/&amp;quot; _cgo_defun.c
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对上面两个编译好的wrapper打包，生成prints.a&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;gopack grc prints.a _go_.8 _cgo_defun.8
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;将生成的prints.a放到go的包目录下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cp prints.a $GOROOT/pkg/linux_386/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;之后是对c部分的编译：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;gcc -m32 -fPIC -O2 -o prints.cgo2.o -c prints.cgo2.c
+gcc -m32 -fPIC -O2 -o prints.o -c prints.c
+gcc -m32 -o prints.so prints.o prints.cgo2.o -shared
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;根据prints.c和prints.cgo2.c生成prints.so，是一个可供go程序引入的动态库。通过objdump查看prints.so的符号，可以发现：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;prints：需要引入的c api符号&lt;/li&gt;
+&lt;li&gt;_cgo_prints：由go生成的对c api的wrapper，具体可以查看prints.cgo2.c&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;将编译好的动态库放入go的包目录下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cp prints.so /home/lizh/go/pkg/linux_386/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;之后就可以在go里调用prints这个c函数了：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import &amp;quot;prints&amp;quot;
+
+func main() {
+  s := &amp;quot;Hello world!&amp;quot;;
+  prints.Prints(s);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;查看生成的调用程序，可以看到对$GOROOT/pkg/linux_386/libcgo.so和$GOROOT/pkg/linux_386/prints.so两个动态库的引用。发布时需要将这两个库放到发布环境里。&lt;/p&gt;
+</description>
     </item>
     
     <item>
@@ -31,7 +135,68 @@
       <guid>http://air.googol.im/post/mod-3/</guid>
       <description>&lt;p&gt;北京华为的一道面试题。要求是只使用+-*和移位运算，且不能递减3求得余数。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;先在csdn上求，求得以下算法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;int i, m, n, p, q;
+int yushu[]={1, 2};
+m = n;
+while(m&amp;gt;3)
+{
+ i=0;  q=0;
+ while(m)
+ {
+  i&amp;amp;=0x1;
+  q+=(m&amp;amp;0x1)*yushu[i++];
+  m&amp;gt;&amp;gt;=1;
+ }
+ m=q;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;没看懂，倒是提示我可以用查表的方法，变成求4的余数。自己探求程序如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;int mo[]={0,1,2,0};
+int i, m;
+m = n;
+i = 4;
+while (i&amp;gt;3)
+{
+ i = 0;
+ while(m&amp;gt;0)
+ {
+  i += m &amp;amp; 3;
+  m &amp;gt;&amp;gt;= 2;
+ }
+ m = i;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;貌似比网上高人给的算法效率更高，可惜没去证实。&lt;/p&gt;
+
+&lt;p&gt;晚上又想到更高效的算法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;int mo[]={0,1,2,0};
+int m;
+while(m&amp;gt;3)
+{
+ m = (m&amp;gt;&amp;gt;2) + (m&amp;amp;3);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;想来不会有更高效的做法了，于是开始这种算法的数学证明，如下：&lt;/p&gt;
+
+&lt;p&gt;因为&lt;code&gt;4 mod 3=1&lt;/code&gt;，所以&lt;code&gt;4^k mod 3 = 1^k mod 3&lt;/code&gt;（此原理来源于小学数学奥校五年级分册= =|||），所以对任意数n，转化成4进制数后每位为n1 n2 n3 n4&amp;hellip;nm，有&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(n1*4^(m-1)+n2*4^(m-2)+n3*4^(m-3)+n4*4^(m-4)+...+nm-1*4^1+nm*4^0) mod 3
+=n1*4^(m-1) mod 3+n2*4^(m-2) mod 3+n3*4^(m-3) mod 3+n4*4^(m-4) mod 3+...+nm-1*4^1 mod 3+nm*4^0 mod 3
+=n1*1^(m-1) mod 3+n2*1^(m-2) mod 3+n3*1^(m-3) mod 3+n4*1^(m-4) mod 3+...+nm-1*1^1 mod 3+nm*1^0 mod 3
+=(n1+n2+n3+n4+...+nm-1+nm) mod 3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;因此对数n每次取二进制最后两位（四进制的最后一位），并加入除去二进制最后两位的余数（相当于右移2位），如此反复，直到只剩最后两位，此两位二进制数与原数n同余于3。&lt;/p&gt;
+
+&lt;p&gt;现在研究的是，求任意数的余数的高效算法是什么呢？&lt;/p&gt;
+</description>
     </item>
     
     <item>
@@ -42,7 +207,217 @@
       <guid>http://air.googol.im/post/analysis-of-source-code-printf/</guid>
       <description>&lt;p&gt;对VC里printf的实现的分析。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;在stdio.c里找到了printf的实现代码.首先看看对printf的定义:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;int printf (const char *cntrl_string, ...)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;第一个参数cntrl_string是控制字符串,也就是平常我们写入%d,%f的地方.紧接着后面是一个变长参数.&lt;/p&gt;
+
+&lt;p&gt;看看函数头部的定义:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;  int pos = 0, cnt_printed_chars = 0, i;
+  unsigned char* chptr;
+  va_list ap;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;马上晕!除了ap我们可以马上判断出来是用来读取变长参数的,i用于循环变量.其他变量都不知道是怎么回事.不要着急,我们边看代码边分析.代码的第一行必然是&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;va_start (ap, cntrl_string);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;用来初始化变长参数.&lt;/p&gt;
+
+&lt;p&gt;接下来是一个while循环&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;while (cntrl_string[pos]) {
+...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;结束条件是cntrl_string[pos]为NULL,显然这个循环是用来遍历整个控制字符串的.自然pos就是当前遍历到的位置了.进入循环首先闯入视线的是&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;if (cntrl_string[pos] == &#39;%&#39;) {
+     pos++;
+     ...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;开门见山,上来就当前字符是否办断是否%.一猜就知道如果成立pos++马上取出下一个字符在d,f,l等等之间进行判断.往下一看,果真不出所料:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;switch (cntrl_string[pos]) {
+    case &#39;c&#39;:
+...
+    case &#39;s&#39;:
+...
+    case &#39;i&#39;:
+...
+    case &#39;d&#39;:
+...
+    case &#39;u&#39;:
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;用上switch-case了. 快速浏览一下下面的代码.&lt;/p&gt;
+
+&lt;p&gt;首先看看case &amp;lsquo;c&amp;rsquo;的部分&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;case &#39;c&#39;:
+ putchar (va_arg (ap, unsigned char));
+ cnt_printed_chars++;
+ break;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;%c表示仅仅输出一个字符.因此先通过va_arg进行参数的类型转换,之后用putchar[1]输出到屏幕上去.之后是cnt_printed_chars++,通过这句我们就可以判断出cnt_printed_chars使用来表示,已经被printf输出的字符个数的.&lt;/p&gt;
+
+&lt;p&gt;再来看看 case &amp;rsquo;s&amp;rsquo;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;case &#39;s&#39;:
+ chptr = va_arg (ap, unsigned char*);
+ i = 0;
+ while (chptr [i]) {
+   cnt_printed_chars++;
+   putchar (chptr [i++]);
+ }
+ break;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;和case &amp;lsquo;c&amp;rsquo;,同出一辙.cnt_printed_chars++放在了循环内,也证明了刚才提到的他的作用.另外我们也看到了cnptr是用来在处理字符串时的位置指针.到此为止,我们清楚的所有变量的用途,前途变得更加光明了.&lt;/p&gt;
+
+&lt;p&gt;接下来:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;// PartI
+      case &#39;i&#39;:
+      case &#39;d&#39;:
+ cnt_printed_chars += printInt (va_arg (ap, int));
+ break;
+      case &#39;u&#39;:
+ cnt_printed_chars += printUnsignedInt (va_arg (ap, unsigned int));
+ break;
+      case &#39;x&#39;:
+ cnt_printed_chars += printHexa (va_arg (ap, unsigned int), &#39;x&#39;);
+ break;
+      case &#39;X&#39;:
+ cnt_printed_chars += printHexa (va_arg (ap, unsigned int), &#39;X&#39;);
+ break;
+      case &#39;o&#39;:
+ cnt_printed_chars += printOctal (va_arg (ap, unsigned int));
+ break;
+// Part II
+ case &#39;p&#39;:
+ putchar (&#39;0&#39;);
+ putchar (&#39;x&#39;);
+ cnt_printed_chars += 2; /* of &#39;0x&#39; */
+ cnt_printed_chars += printHexa (va_arg (ap, unsigned int), &#39;x&#39;);
+ break;
+      case &#39;#&#39;:
+ pos++;
+ switch (cntrl_string[pos]) {
+ case &#39;x&#39;:
+   putchar (&#39;0&#39;);
+   putchar (&#39;x&#39;);
+   cnt_printed_chars += 2; /* of &#39;0x&#39; */
+   cnt_printed_chars += printHexa (va_arg (ap, unsigned int), &#39;x&#39;);
+   break;
+ case &#39;X&#39;:
+   putchar (&#39;0&#39;);
+   putchar (&#39;X&#39;);
+   cnt_printed_chars += 2; /* of &#39;0X&#39; */
+   cnt_printed_chars += printHexa (va_arg (ap, unsigned int), &#39;X&#39;);
+   break;
+ case &#39;o&#39;:
+   putchar (&#39;0&#39;);
+   cnt_printed_chars++;
+   cnt_printed_chars += printOctal (va_arg (ap, unsigned int));
+   break;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意观察一下,PartII的代码其实就是比PartI的代码多一个样式.在16进制数或八进制前加入0x或是o,等等.因此这里就只分析一下PartI咯.&lt;/p&gt;
+
+&lt;p&gt;其实仔细看看PartI的个条case,也就是把参数分发到了更具体的函数用于显示,然后以返回值的形式返回输出个数.对于这些函数就不具体分析了.我们先来看看一些善后处理:&lt;/p&gt;
+
+&lt;p&gt;先看case的default处理.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;default:
+ putchar ((unsigned char) cntrl_string[pos]);
+ cnt_printed_chars++;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;就是直接输出cntrl_string里%号后面的未知字符.应该是一种容错设计处理.&lt;/p&gt;
+
+&lt;p&gt;再看看if (cntrl_string[pos] == &amp;lsquo;%&amp;rsquo;)的else部分&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;else {
+      putchar ((unsigned char) cntrl_string[pos]);
+      cnt_printed_chars++;
+      pos++;
+ }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果不是%开头的,那么直接输出这个字符.&lt;/p&gt;
+
+&lt;p&gt;最后函数返回前&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;  va_end (ap);
+  return cnt_printed_chars;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;va_end处理变长参数的善后工作.并返回输出的字符个数.&lt;/p&gt;
+
+&lt;p&gt;在最后我们有必要谈谈putChar函数以及基本输出的基础函数printChar,先来看看putChar&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;int putchar (int c) {
+  switch ((unsigned char) c) {
+  case &#39;\n&#39; :
+    newLine ();
+    break;
+  case &#39;\r&#39; :
+    carriageReturn ();
+    break;
+  case &#39;\f&#39; :
+    clearScreen ();
+    break;
+  case &#39;\t&#39; :
+    printChar (32); printChar (32); /* 32 = space */
+    printChar (32); printChar (32);
+    printChar (32); printChar (32);
+    printChar (32); printChar (32);
+    break;
+  case &#39;\b&#39;:
+    backspace ();
+    break;
+  case &#39;\a&#39;:
+    beep ();
+    break;
+  default :
+    printChar ((unsigned char) c);
+  }
+  return c;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通览一下,也是switch-case为主体的.主要是用来应对一些特殊字符,如\n,\r,&amp;hellip;.这里需要提一下,关于\t的理解.有些人认为\t就是8个space,有些人则认为,屏幕分为10大列(每个大列8个小列总共80列).一个\t就跳到下一个大列输出.也就是说不管你现在实在屏幕的第1,2,3,4,5,6,7位置输出字符,只要一个\t都在第8个位置开始输出. VS.NET中就是用的这种理解.因此如果按照这个理解的话,\t的实现可以这样&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;int currentX = ((currentX % 10) + 1) * 8;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后在currentX位置输出.&lt;/p&gt;
+
+&lt;p&gt;接下来看printChar也就是输出部分最低层的操作咯&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;void printChar (const byte ch) {
+  *(word *)(VIDEO + y * 160 + x * 2) = ch | (fill_color &amp;lt;&amp;lt; 8);
+  x++;
+  if (x &amp;gt;= WIDTH)
+    newLine ();
+  setVideoCursor (y, x);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里VIDEO表示显存地址也就是0xB8000.通过&lt;code&gt;y * 160 + x&lt;/code&gt;屏幕&lt;code&gt;(x,y)&lt;/code&gt;坐标在显存中的位置.这里需要知道,一个字符显示需要两个字节,一个是ASCII码,第二个是字符属性代码也就是颜色代码.因此才必须&lt;code&gt;y * 80 * 2 + x = y * 160 + x&lt;/code&gt;.那么&lt;code&gt;ch | (fill_color &amp;lt;&amp;lt; 8)&lt;/code&gt;也自然就是写入字符及属性代码用的了.每写一个字符光标位置加1,如果大于屏幕宽度WIDTH就换行.最后通过setVideoCursor设置新的光标位置.完成了整个printChar过程.&lt;/p&gt;
+
+&lt;p&gt;到此,把printf从上到下说了一遍.不知道各位大家感觉如何,如果说得不清楚还大家多提意见.有说得不对的地方请大家多多指教.&lt;/p&gt;
+</description>
     </item>
     
     <item>
@@ -53,7 +428,95 @@
       <guid>http://air.googol.im/post/analysis-of-occ-circle/</guid>
       <description>&lt;p&gt;同学看完我的一段有趣的程序后，给了我一段bt的程序：&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#define _ -F&amp;lt;00||--F-OO--;
+int F=00,OO=00;main(){F_OO();printf(&amp;quot;%1.3f\n&amp;quot;,4.*-F/OO/OO);}F_OO()
+{
+            _-_-_-_
+       _-_-_-_-_-_-_-_-_
+    _-_-_-_-_-_-_-_-_-_-_-_
+  _-_-_-_-_-_-_-_-_-_-_-_-_-_
+ _-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+ _-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+ _-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+ _-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+  _-_-_-_-_-_-_-_-_-_-_-_-_-_
+    _-_-_-_-_-_-_-_-_-_-_-_
+        _-_-_-_-_-_-_-_
+            _-_-_-_
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+&lt;p&gt;俺就又本着人不bt枉少年的精神，又bt的研究了一下。程序贴到vc里，编译出现三个错误，一个是printf未定义，一个是F_00未定义。改动后如下，同时将程序结构改的可读性更强：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include&amp;lt;stdio.h&amp;gt;
+#define _ -F&amp;lt;00||--F-OO--;
+F_OO();
+
+int F=00,OO=00;
+
+main(){
+    F_OO();
+    printf(&amp;quot;%1.3f\n&amp;quot;,4.*-F/OO/OO);
+}
+
+F_OO()
+{
+            _-_-_-_
+       _-_-_-_-_-_-_-_-_
+    _-_-_-_-_-_-_-_-_-_-_-_
+  _-_-_-_-_-_-_-_-_-_-_-_-_-_
+ _-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+ _-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+ _-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+ _-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+  _-_-_-_-_-_-_-_-_-_-_-_-_-_
+    _-_-_-_-_-_-_-_-_-_-_-_
+        _-_-_-_-_-_-_-_
+            _-_-_-_
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;首先，这个程序bt到用00和OO近似来混淆视听！OO是两个大写字母o，可以作为变量名，而00单独写只是数字0，不能作为变量名。&lt;/p&gt;
+
+&lt;p&gt;程序首先定义了一段宏&lt;code&gt;_&lt;/code&gt;（md，又是这个下划线），之后定义了两个变量F和OO，并赋予初值0。这里要注意，宏里使用到的就是这两个变量。&lt;/p&gt;
+
+&lt;p&gt;之后定义了一个函数F_00()，大量调用了这个宏，来改变变量F和OO的值。虽然程序看起来bt，但实际上归结起来只有两种语句“&lt;code&gt;_&lt;/code&gt;”和“&lt;code&gt;-_&lt;/code&gt;”两种。这两语句在进行宏替换后分别为“&lt;code&gt;-F&amp;lt;00||--F-OO--;&lt;/code&gt;”和“&lt;code&gt;--F&amp;lt;00||--F-OO--;&lt;/code&gt;”&lt;/p&gt;
+
+&lt;p&gt;语句“&lt;code&gt;-F&amp;lt;00||--F-OO--;&lt;/code&gt;”根据优先级判断，先执行&lt;code&gt;||&lt;/code&gt;左边的部分，由于F=0，所以左部分为假（0&amp;lt;0为假），在执行右半部分，先对F自减1，执行&lt;code&gt;F-OO&lt;/code&gt;，再对OO自减1。最后的结果为-1，再进行&lt;code&gt;||&lt;/code&gt;，舍弃最后结果。折腾半天，只有对F和OO的自减使变量发生了变化，最终的运算结果并不care。&lt;/p&gt;
+
+&lt;p&gt;语句“&lt;code&gt;--F&amp;lt;00||--F-OO--;&lt;/code&gt;”根据优先级判断，先执行&lt;code&gt;||&lt;/code&gt;左边部分，对F自减1后判断是否F&amp;lt;0。经过上个语句后，F值为-1，因此F&amp;lt;0为真，不再执行右半部分。&lt;/p&gt;
+
+&lt;p&gt;但是注意！*在单步跟踪“&lt;code&gt;-_&lt;/code&gt;”语句时，变量的值没有发生任何变化！*也就是说刚才的分析并不是实际情况。由于变量值没有任何改变，可以肯定&lt;code&gt;||&lt;/code&gt;右边的部分根本没有被运行，也就是说&lt;code&gt;||&lt;/code&gt;左边的部分结果为真。如果左边的语句解释为“&lt;code&gt;- -F&amp;lt;00&lt;/code&gt;”（注意两个减号中间的空格），则F的值没有被改变，且其值为真。因此，这里的“&lt;code&gt;-_&lt;/code&gt;”语句实际是被解释成“&lt;code&gt;- -F&amp;lt;00||--F-OO--;&lt;/code&gt;”，也就是“&lt;code&gt;(-(-F))&amp;lt;00||--F-OO--;&lt;/code&gt;”。&lt;/p&gt;
+
+&lt;p&gt;由于“&lt;code&gt;-_&lt;/code&gt;”没有对变量的值进行任何操作，因此函数&lt;code&gt;F_00()&lt;/code&gt;里看似唬人的大球，实际每行只有行首的“&lt;code&gt;_&lt;/code&gt;”语句起作用，是对两个变量的值自减1。因此，整个高度为16的球，实际对两个变量进行16次自减1。真是无聊！！！！！&lt;/p&gt;
+
+&lt;p&gt;主程序就简单多了。首先运行&lt;code&gt;F_00()&lt;/code&gt;改变两个变量的值，最后运行&lt;code&gt;printf(&amp;quot;%1.3f\n&amp;quot;,4.*-F/OO/OO)&lt;/code&gt;语句输出。这个printf语句就简单了，输出一个长度为1，3位小数宽度的浮点数并换行。因为浮点的总长度肯定大于1，所以相当于输出一个3位小数宽的浮点并换行。输出的浮点内容为“&lt;code&gt;4.*-F/OO/OO&lt;/code&gt;”，也就是“&lt;code&gt;(4.)*(-F)/OO/OO&lt;/code&gt;”，此时F和OO的值都是“-16”，结果很显然，没啥大意思了。&lt;/p&gt;
+
+&lt;p&gt;前面所讲到的问题，应该涉及到c语言编译器实现的细节问题。c语言编译器指对宏进行简单替换，而不进行任何语法判断，因此可以肯定，对宏的替换工作是先于语法判断和编译过程的。c编译器在进行语法判断时，使用的是大嘴原则，也就是尽可能将更多的字符解释为运算符等关键字，而实际中并没有将“&lt;code&gt;-_&lt;/code&gt;”解释为“&lt;code&gt;--F&amp;lt;00||--F-OO--;&lt;/code&gt;”，可以认为，编译器在替换前，会对宏的前后进行标识，将宏本身与前后的语句分开，这样，宏本身的运算符就不会与程序前后的运算符关联在一起，改变宏语句本身的运算符的意义。因此，这个程序中的宏最终解释为“&lt;code&gt;- -F&amp;lt;00||--F-OO--;&lt;/code&gt;”。&lt;/p&gt;
+
+&lt;p&gt;另一个值得注意的问题是，“&lt;code&gt;-_&lt;/code&gt;”在解释为“&lt;code&gt;- -F&amp;lt;00||--F-OO--;&lt;/code&gt;”之后，实际宏本身的运算顺序已经改变。这里也是为什么在《c陷阱与缺陷》里，作者特别提到，宏的定义应该加括号，格式为“#define NN (&amp;hellip;)”，以免程序中出现很隐蔽的，改变宏本身运算顺序的逻辑错误。&lt;/p&gt;
+
+&lt;p&gt;为了验证编译器对宏的替换过程，编写了下面的程序：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#define A ++a
+void main(void){
+ int a=0;
+ a=a+++A;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;实际程序运行通过，证明“&lt;code&gt;a=a+++A&lt;/code&gt;”被解释为“&lt;code&gt;a=a+++ ++a&lt;/code&gt;”即“&lt;code&gt;a=(a++)+(++a)&lt;/code&gt;”，而不是“&lt;code&gt;a=a+++++a&lt;/code&gt;”。其中后一种译法会因为大嘴原则译为“&lt;code&gt;a=((a++) ++)+a&lt;/code&gt;”第二层的“&lt;code&gt;++&lt;/code&gt;”会因为左边不是一个有效变量，而引起编译错误：&lt;code&gt;error C2105: &#39;++&#39; needs l-value&lt;/code&gt;。&lt;/p&gt;
+</description>
     </item>
     
     <item>
@@ -64,7 +527,69 @@
       <guid>http://air.googol.im/post/analysis-of-occ-knocker/</guid>
       <description>&lt;p&gt;最近在一个论坛发现了一段简单的C程序很有意思，其中蕴含着不少技巧，在此与大家分享一下。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;原程序如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include &amp;lt;stdio.h&amp;gt;
+main(_){char*x=&amp;quot;*b#**000**I#*******2*0***#-.****5.*-#-.****54.#*******2**6#****00**0.#&amp;quot;;while(_=*x/4)_-=8,printf(&amp;quot;\n%*s&amp;quot;+!!_,_+_,&amp;quot;_/_/_/&amp;quot;+*x++%4*2);}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+&lt;p&gt;表面看起来很奇怪的代码，我把它放到VC++6下面编译，发现不能通过，提示“_”未声明，对以上代码稍加修改，如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include &amp;lt;stdio.h&amp;gt;
+
+main(int _){char*x=&amp;quot;*b#**000**I#*******2*0***#-.****5.*-#-.****54.#*******2**6#****00**0.#&amp;quot;;while(_=*x/4)_-=8,printf(&amp;quot;\n%*s&amp;quot;+!!_,_+_,&amp;quot;_/_/_/&amp;quot;+*x++%4*2);}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;细心的人已经看出来了，就是在main函数的参数“&lt;code&gt;_&lt;/code&gt;”前面加上了变量的类型：&lt;code&gt;int&lt;/code&gt;。此时，以上代码在VC6中就能够正常的编译和连接了。运行的结果如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;  _/                              _/
+  _/  _/  _/_/_/  _/_/_/  _/_/_/  _/  _/                _/_/
+  _/  _/  _/  _/  _/  _/  _/      _/  _/  _/_/_/  _/  _/  _/
+  _/_/    _/  _/  _/  _/  _/      _/_/    _/  _/  _/_/
+  _/_/    _/  _/  _/  _/  _/      _/_/    _/_/_/    _/
+  _/  _/  _/  _/  _/  _/  _/      _/  _/  _/        _/
+  _/  _/  _/  _/  _/_/_/  _/_/_/  _/  _/  _/_/_/    _/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;是用“&lt;code&gt;_/&lt;/code&gt;”组成的单词“knocker”。&lt;/p&gt;
+
+&lt;p&gt;下面我们来分析这个小小的程序，不过为了看起来直观，我把这个程序稍加改动：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include &amp;lt;stdio.h&amp;gt;
+
+main(int _) {
+  char*x=&amp;quot;*b#**000**I#*******2*0***#-.****5.*-#-.****54.#*******2**6#****00**0.#&amp;quot;;
+  while(_=*x/4) {
+    _-=8;
+    printf(&amp;quot;\n%*s&amp;quot;+!!_,_+_,&amp;quot;_/_/_/&amp;quot;+*x++%4*2);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;首先来看看&lt;code&gt;main&lt;/code&gt;函数参数，这个参数的名称比较奇怪“&lt;code&gt;_&lt;/code&gt;”，我们看着有些不习惯，但它确实是合法的变量名称。另外，本来我们常见的&lt;code&gt;main&lt;/code&gt;函数一般都不带参数，如果有参数是因为程序希望处理命令行格式下运行这个程序所需要的参数，一般是这样的：&lt;code&gt;main(int argc, char **argv)&lt;/code&gt;，第一个参数argc表示参数表中参数的个数，argc是一个char型二维数组，保存着参数字符串。&lt;/p&gt;
+
+&lt;p&gt;举个例子，如果我们在命令行下输入命令：&lt;code&gt;dir –s c:\&lt;/code&gt;。此时，argc的值为3（包括命令本身），argv[0]指向字符串：dir，arg[1] 指向字符串：-s，arg[2]指向字符串“&lt;code&gt;c:\&lt;/code&gt;”。那么既然main函数的参数通常要不没有，要不就是两个，而这个程序只有一个，这样做是否合法呢？答案是肯定的！我在《关于C语言中的变量》中提到过，函数中的参数是保存在堆栈中的，所以这就涉及到一个谁来平衡堆栈的问题，是调用者还是被调用者。在使用VC6编译器的时候，如果函数没有特别的声明，默认是调用者清理堆栈。换句话说，运行时库(runtime)调用main函数的时候，只传递一个参数给main函数，这一点它自己是知道的，当main函数调用结束以后，它在平衡堆栈的时候，只清除掉一个函数，因此不会出现任何问题。&lt;/p&gt;
+
+&lt;p&gt;我们接着往下看，下面定义了一个char型指针变量x，指向一个字符串。接下来是while语句，&lt;code&gt;while(_=(*x)/4)&lt;/code&gt;，当表达式&lt;code&gt;_=(*x)/4&lt;/code&gt;的值不为0的时候就执行while的循环体，然而表达式&lt;code&gt;_=(*x)/4&lt;/code&gt;是一个赋值语句，它的值又是多少呢？在这种情况下，通常赋值号右面的表达式的值就是整个表达式的值。第一次执行这个语句的时候，x指向字符‘*’，对应的值为42，以此类推，当&lt;code&gt;x=0&lt;/code&gt;时，也就是字符串结束的时候，循环结束。&lt;/p&gt;
+
+&lt;p&gt;接下来在原来的程序中是：&lt;code&gt;_-=8,printf(&amp;quot;\n%*s&amp;quot;+!!_,_+_,&amp;quot;_/_/_/&amp;quot;+*x++%4*2);&lt;/code&gt;这里的逗号作用有些类似分号，但是逗号两侧组成的是一条语句，而分号则是两条语句。&lt;/p&gt;
+
+&lt;p&gt;我们仔细看printf这条语句，它的格式字符串为：“&lt;code&gt;\n%*s&lt;/code&gt;”，其中&lt;code&gt;%*s&lt;/code&gt;很少见，很多人不知道这是什么格式，不过我们可以在MSDN中找到这样的描述：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;If the width specification is an asterisk (*), an int argument from the argument list supplies the value. The width argument must precede the value being formatted in the argument list.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;意思是说如果宽度用星号(*)来指定，则应该在参数列表中提供一个int型参数作为宽度的值。这样就清楚了，原来这个printf语句是用表达式_+_来控制字符串”%*s”的宽度，也就是替换其中的（*）。&lt;/p&gt;
+
+&lt;p&gt;在仔细一看，原来格式字符串还没有完！完整的应该是：&lt;code&gt;&amp;quot;\n%*s&amp;quot;+!!_&lt;/code&gt;。这就奇怪了，字符串怎么和&lt;code&gt;!!_&lt;/code&gt;相加呢？其实也不奇怪，在这里&lt;code&gt;!!_&lt;/code&gt;是对变量_作了两次“非”的操作，结果应该是0或1。要明确的是，字符串作为参数传递给函数的时候，只是把字符串的首地址传递给了函数，所以字符串&lt;code&gt;&amp;quot;\n%*s&amp;quot;&lt;/code&gt;的首地址就是字符‘&lt;code&gt;\n&lt;/code&gt;’的地址，当这个地址加1的时候，传递给printf函数的格式字符串就变成了&lt;code&gt;&amp;quot;%*s&amp;quot;&lt;/code&gt;，所以这个&lt;code&gt;+!!_&lt;/code&gt;的奥妙就在于控制换行！是不是很有创意？&lt;/p&gt;
+
+&lt;p&gt;当然了，下面的代码同样有创意，就是printf语句要打印的字符串参数：&lt;code&gt;&amp;quot;_/_/_/&amp;quot;+*x++%4*2&lt;/code&gt;。经过刚才的分析，我们不难理解&lt;code&gt;&amp;quot;_/_/_/&amp;quot;&lt;/code&gt;加上后面的表达式的用意了，同样是控制输出字符的个数，是一个“&lt;code&gt;_/&lt;/code&gt;”，两个，还是三个。那么关键就是后面这个表达式了：&lt;code&gt;*x++%4*2&lt;/code&gt;。其实慢慢的分析也不困难，先执行&lt;code&gt;*x%4*2&lt;/code&gt;，然后执行&lt;code&gt;x++&lt;/code&gt;。所以，当在执行while语句的时候，x会指向下一个字符！&lt;/p&gt;
+
+&lt;p&gt;综上所述，这个小程序就是利用一个字符串来控制输出的例子，里面运用了很多技巧，对于初学者需要很好的理解，对今后的编程是很有帮助的！&lt;/p&gt;
+</description>
     </item>
     
   </channel>

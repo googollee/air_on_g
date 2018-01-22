@@ -67,62 +67,12 @@
       
       
     
-    <meta name="generator" content="Hugo 0.21-DEV" />
+    <meta name="generator" content="Hugo 0.16-DEV" />
 
     <link rel="canonical" href="http://air.googol.im/post/supervisor-with-docker-to-manage-processes/" />
 
     
       
-    
-    <script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "publisher": {
-        "@type": "Organization",
-        "name": 
-    },
-    "author": {
-        "@type": "Person",
-        "name": ,
-        
-        "url": http://air.googol.im,
-        "sameAs": [
-            
-            
-             
-             
-             
-             
-             
-            
-        ],
-        "description": 多年生软件工程师，信仰开源
-        
-    },
-    "headline": 在Docker里使用（支持镜像继承的）supervisor管理进程,
-    "name": 在Docker里使用（支持镜像继承的）supervisor管理进程,
-    "wordCount": 163,
-    "timeRequired": "PT1M",
-    "inLanguage": {
-      "@type": "Language",
-      "alternateName": en
-    },
-    "url": http://air.googol.im/post/supervisor-with-docker-to-manage-processes/,
-    "datePublished": 2014-03-28T19:46Z,
-    "dateModified": 2014-03-28T19:46Z,
-    
-    "keywords": docker, operation,
-    "description": ,
-    "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": http://air.googol.im/post/supervisor-with-docker-to-manage-processes/
-    }
-}
-    </script>
-    
-
-
     
 
     
@@ -140,6 +90,11 @@
         
         
         
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
+            </li>
+        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -148,11 +103,6 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -208,9 +158,9 @@
     </header>
 
     <section class="post-content">
-      <p>这篇文章是受<a href="http://dockboard.org">Dockboard</a>之托帮忙翻译的与docker有关的技术文章。<a href="http://dockboard.org">Dockboard</a>致力于在中国建立一个Docker技术的开放社区。</p>
+      
 
-<p></p>
+<p>这篇文章是受<a href="http://dockboard.org">Dockboard</a>之托帮忙翻译的与docker有关的技术文章。<a href="http://dockboard.org">Dockboard</a>致力于在中国建立一个Docker技术的开放社区。</p>
 
 <p>本文译自<a href="http://blog.trifork.com/2014/03/11/using-supervisor-with-docker-to-manage-processes-supporting-image-inheritance">Using Supervisor with Docker to manage processes (supporting image inheritance)</a>，作者Quinten Krijger。</p>
 
@@ -218,7 +168,7 @@
 
 <p>在八月份，我写了一篇关于如何创建tomcat镜像的<a href="http://blog.trifork.com/2013/08/15/using-docker-to-efficiently-create-multiple-tomcat-instances/">blog</a>。从那以后，docker又改进了很多，我对docker的了解也增加了很多。我很高兴和你分们享我找到的关于管理container进程的好办法。在读完这篇文章后，我希望你能善加利用我<a href="https://github.com/Krijger/docker-cookbooks">github仓库</a>里的supervisor镜像。</p>
 
-<h2 id="docker命令">Docker命令</h2>
+<h2 id="docker命令:eddbe14b3d17cb79a51bc21613783b44">Docker命令</h2>
 
 <p>在之前的文章里，我提到Docker（只能）支持运行一个前台进程。我们通常习惯使用类似upstart这种管理服务来初始化启动流程，但是Docker默认没有这些服务的支持。刚开始使用Docker时会很不习惯，你必须指定你想要运行的进程。这种行为和虚拟机相比有个优点，会尽可能的保持轻量的container。你可以通过run命令最后的参数，在启动container时指定进程命令，比如：</p>
 
@@ -243,7 +193,7 @@ CMD echo &quot;hello world&quot;
 
 <p>要注意，因为你可以覆盖掉CMD指定的命令行参数，这个只是个运行时的指令。有趣的事情是，在Linux container里，你可以只调用upstart命令然后得到和普通虚拟机大致相同的行为。</p>
 
-<h2 id="运行多个命令">运行多个命令</h2>
+<h2 id="运行多个命令:eddbe14b3d17cb79a51bc21613783b44">运行多个命令</h2>
 
 <p>运行多个进程是个很正常的想法。比如，一个ssh服务（这样就能登录到正在运行的container）和实际的应用。你可以用下面的方法运行container：</p>
 
@@ -254,13 +204,13 @@ CMD echo &quot;hello world&quot;
 
 <p>所以，在运行更复杂的container的时候，很多人使用复杂的bash脚本。典型的bash脚本会执行一个前台进程，并开启一个或者多个（renegade）守护进程。与只是用Docker命令行的方式相比，这种方法最重要的改进在于，bash脚本是可以做版本控制的：启动脚本在你的Docker镜像里，新的改动可以和软件项目一起分发。不过，使用bash脚本管理进程依旧简陋枯燥，而且容易出错。</p>
 
-<h2 id="使用supervisor">……使用supervisor</h2>
+<h2 id="使用supervisor:eddbe14b3d17cb79a51bc21613783b44">……使用supervisor</h2>
 
 <p>更好的方法是使用<a href="http://supervisord.org/">supervisor</a>。supervisor可以更好的管理进程：使用更加简洁的代码管理进程；在崩溃时可以重启进程；允许重启一组进程并且有命令行工具和网页界面来管理进程。当然，越大的能力要求越大的责任：大量使用supervisor特性的代码，预示着你应该将整个服务更好的拆分成多个小的supervisor来管理。</p>
 
 <p>个人来讲，我喜欢supervisor让我用更清晰的代码管理启动的进程。我见过最简洁的使用例子，是子镜像扩展出一个进程组。比如，如果你经常使用SSH，使用一个SSH镜像作为基础镜像就是很合理的。这种情况，在所有基于这个镜像的扩展镜像上实现启动SSH进程的代码，形式少就是一种重复代码。我来给你们展示下我找到的解决这个问题的好办法。</p>
 
-<h2 id="supervisor基础镜像">supervisor基础镜像</h2>
+<h2 id="supervisor基础镜像:eddbe14b3d17cb79a51bc21613783b44">supervisor基础镜像</h2>
 
 <p>首先，因为我默认使用supervisor，所以我所有的镜像都扩展自一个只包含supervisor和最新版本ubuntu的基础镜像。你可以在<a href="https://github.com/Krijger/docker-cookbooks/blob/master/supervisor/Dockerfile">这里</a>找到这个Dockerfile。这个基础镜像包括一个配置文件<code>/etc/supervisor.conf</code>：</p>
 
@@ -273,7 +223,7 @@ files = /etc/supervisor/conf.d/*.conf
 
 <p>这个配置让supervisor本身以前台进程运行，这样可以让我们的container启动后持续运行。第二，这个配置将包含所有在<code>/etc/supervisor/conf.d/</code>目录下的配置文件，启动任何在这里定义的程序。</p>
 
-<h2 id="扩展基础镜像">扩展基础镜像</h2>
+<h2 id="扩展基础镜像:eddbe14b3d17cb79a51bc21613783b44">扩展基础镜像</h2>
 
 <p><img src="http://blog.trifork.com/wp-content/uploads/2014/02/tomcat-stack-164x300.png" alt="tomcat-stack" /></p>
 
@@ -305,7 +255,7 @@ redirect_stderr=true
 <li><p>你的网络应用程序应当扩展自Tomcat镜像，并安装入真正的应用程序。当启动supervisor的时候，会自动启动Tomcat。</p></li>
 </ul>
 
-<h2 id="一个tomcat网络程序的dockerfile例子">一个Tomcat网络程序的Dockerfile例子</h2>
+<h2 id="一个tomcat网络程序的dockerfile例子:eddbe14b3d17cb79a51bc21613783b44">一个Tomcat网络程序的Dockerfile例子</h2>
 
 <p>如何安装实际的网络应用超出了本文的范畴，不过，作为结束，我给出了个Dockerfile例子，演示如何使用这个工作栈。这个例子完全基于Java Tomcat，所以如果你对这个不感兴趣，别读了，玩别的去吧:)</p>
 
@@ -343,6 +293,7 @@ CMD supervisord -c /etc/supervisor.conf
 </code></pre>
 
 <p>这样就可以将配置暴露给你的应用程序。如果你是个Java开发者，并且也阅读了前一篇文章，希望这让你能开始一段愉快的代码之旅。</p>
+
     </section>
 
 

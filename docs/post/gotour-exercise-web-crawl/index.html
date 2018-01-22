@@ -65,62 +65,12 @@
       
       
     
-    <meta name="generator" content="Hugo 0.21-DEV" />
+    <meta name="generator" content="Hugo 0.16-DEV" />
 
     <link rel="canonical" href="http://air.googol.im/post/gotour-exercise-web-crawl/" />
 
     
       
-    
-    <script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "publisher": {
-        "@type": "Organization",
-        "name": 
-    },
-    "author": {
-        "@type": "Person",
-        "name": ,
-        
-        "url": http://air.googol.im,
-        "sameAs": [
-            
-            
-             
-             
-             
-             
-             
-            
-        ],
-        "description": 多年生软件工程师，信仰开源
-        
-    },
-    "headline": 关于gotour最后一题的一些想法,
-    "name": 关于gotour最后一题的一些想法,
-    "wordCount": 1123,
-    "timeRequired": "PT6M",
-    "inLanguage": {
-      "@type": "Language",
-      "alternateName": en
-    },
-    "url": http://air.googol.im/post/gotour-exercise-web-crawl/,
-    "datePublished": 2012-02-04T20:00Z,
-    "dateModified": 2012-02-04T20:00Z,
-    
-    "keywords": golang,
-    "description": ,
-    "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": http://air.googol.im/post/gotour-exercise-web-crawl/
-    }
-}
-    </script>
-    
-
-
     
 
     
@@ -138,6 +88,11 @@
         
         
         
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
+            </li>
+        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -146,11 +101,6 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -204,11 +154,11 @@
     </header>
 
     <section class="post-content">
-      <p>过年几天，把<a href="http://tour.golang.org/">A Tour of Go</a>看了一遍，算是复习了一遍go语言。其中最后一题<a href="http://tour.golang.org/#70">Exercise: Web Crawler</a>有些复杂，是串行程序转换到并行时常见的问题。这里记录一些当时思考的结果。</p>
+      
 
-<p></p>
+<p>过年几天，把<a href="http://tour.golang.org/">A Tour of Go</a>看了一遍，算是复习了一遍go语言。其中最后一题<a href="http://tour.golang.org/#70">Exercise: Web Crawler</a>有些复杂，是串行程序转换到并行时常见的问题。这里记录一些当时思考的结果。</p>
 
-<h2 id="原题">原题</h2>
+<h2 id="原题:3f205ba6de786238439ce50cd1462d1c">原题</h2>
 
 <p>将下面的网页抓取程序，由串行改为并行。修改Crawl函数，并发抓取url指向的页面，并且保证对同一页面只做一次抓去。</p>
 
@@ -303,7 +253,7 @@ var fetcher = &amp;fakeFetcher{
 
 <p>程序有些长有些长，因为还包括一部分假数据。程序入口在<code>func main</code>里，提供<code>&quot;http://golang.org/&quot;</code>作为起始页面，抓取深度是4，使用fetcher作为抓取算法。</p>
 
-<h2 id="第一次并行化">第一次并行化</h2>
+<h2 id="第一次并行化:3f205ba6de786238439ce50cd1462d1c">第一次并行化</h2>
 
 <p>最初的想法是让每个Crawl单独跑一个goroutine，当Crawl里抓到新的url时，就启动一个新的goroutine。这个改动很简单，只需要修改Crawl函数就行：</p>
 
@@ -326,7 +276,7 @@ var fetcher = &amp;fakeFetcher{
 
 <p>但实际结果却是只打印最初的一条“<a href="http://golang.org/”就结束了。因为go的程序在终止时，并不等待其余goroutine的结束，Crawl内用`go">http://golang.org/”就结束了。因为go的程序在终止时，并不等待其余goroutine的结束，Crawl内用`go</a> Crawl(&hellip;)`的方式递归调用后，main并不等待新建的goroutine的结束，就结束了整个程序，因此其余的url还没有抓取，就结束了。</p>
 
-<h2 id="监视goroutine的启动和退出">监视goroutine的启动和退出</h2>
+<h2 id="监视goroutine的启动和退出:3f205ba6de786238439ce50cd1462d1c">监视goroutine的启动和退出</h2>
 
 <p>因此，程序需要有办法监控总共启动了多少个goroutine，而且还要能知道，是否所有goroutine都已经运行完毕退出了。传统的并发程序，是通过thread id或者thread handler，配合类似join的api来完成的。但是go没有任何对goroutine的控制方法，要想知道goroutine的状态，只能在其内部，通过chan将状态发送给接收者。同时，为了方便对goroutine进行计数，最好将所有goroutine的启动放在一个函数内，这就需要Crawl将新抓到的url发到一个特殊的控制函数，这个控制函数在接收到新的url后，启动新的Crawl进行抓取。程序修改如下：</p>
 
@@ -381,7 +331,7 @@ var fetcher = &amp;fakeFetcher{
 
 <p>这样，整个程序在流程上就没有问题了。</p>
 
-<h2 id="加入cache-对同一网址只crawl一遍">加入cache，对同一网址只Crawl一遍</h2>
+<h2 id="加入cache-对同一网址只crawl一遍:3f205ba6de786238439ce50cd1462d1c">加入cache，对同一网址只Crawl一遍</h2>
 
 <p>因为所有Crawl都是由main函数控制的，因此这个改动只在main里修改即可：</p>
 
@@ -411,7 +361,7 @@ var fetcher = &amp;fakeFetcher{
 
 <p>url_cache是一个key为string，value为bool的map，在有新的url传入时，先以url为key，检查其value是否为true。如果为true说明已经Crawl过，不再处理，如果为false，先将value设置为true，然后启动Crawl对这个url进行抓取。</p>
 
-<h2 id="重构-dry">重构，DRY</h2>
+<h2 id="重构-dry:3f205ba6de786238439ce50cd1462d1c">重构，DRY</h2>
 
 <p>你注意到了么？main函数里有两个地方对url_cache进行操作并启动Crawl。一个是在for循环外面，设置启动url，另一个是在for循环里面，处理新的url。这两个地方所做的事情，本质上都是对一个新url的处理，但为什么要写两遍呢？现在就来试试能不能将其合并：</p>
 
@@ -444,7 +394,7 @@ Loop:
 
 <p>利用已有的urldata chan，将初始url和depth作为参数传入，就可以去掉for外面的Crawl启动代码。不过，由于for的条件判断是前置判断，而go不支持do&hellip;while式的后置判断循环，所以for的终止条件只能移入for的内部，否则<code>for i:=0; i&lt;0;</code>将不会进入循环。</p>
 
-<h2 id="抽象接口">抽象接口</h2>
+<h2 id="抽象接口:3f205ba6de786238439ce50cd1462d1c">抽象接口</h2>
 
 <p>对这道题来说，做完上面的部分，就已经完成了所有任务。不过从设计的角度，这个程序的输入和输出都混在一起（不会有真的只是打印就完事的抓取程序吧？）。能不能实现一个更好的接口呢？</p>
 
@@ -533,7 +483,7 @@ Loop:
 
 <p>对于CrawlLoop这个函数，作为goroutine启动后，可以将url chan视为输入，output chan视为输出，当给url chan传入数据时，启动CrawlLoop的真正执行，结果会在执行过程中从output中逐项输出。由于并发的因素，和传统函数调用不同，输出不是等待函数结束后一次性输出，而是在函数的执行过程中，output随时会输出结果，当函数执行完毕后关闭output。</p>
 
-<h2 id="收工">收工</h2>
+<h2 id="收工:3f205ba6de786238439ce50cd1462d1c">收工</h2>
 
 <p>最后，贴上修改后的所有代码。为了测试是否真正实现并行，我加入了一部分假数据。那么，如何测试是否真的实现了并发呢？有兴趣的可以自己动手实验一下。</p>
 
@@ -691,6 +641,7 @@ var fetcher = &amp;fakeFetcher{
 	},
 }
 </code></pre>
+
     </section>
 
 

@@ -67,62 +67,12 @@
       
       
     
-    <meta name="generator" content="Hugo 0.21-DEV" />
+    <meta name="generator" content="Hugo 0.16-DEV" />
 
     <link rel="canonical" href="http://air.googol.im/post/overload-in-cpp/" />
 
     
       
-    
-    <script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "publisher": {
-        "@type": "Organization",
-        "name": 
-    },
-    "author": {
-        "@type": "Person",
-        "name": ,
-        
-        "url": http://air.googol.im,
-        "sameAs": [
-            
-            
-             
-             
-             
-             
-             
-            
-        ],
-        "description": 多年生软件工程师，信仰开源
-        
-    },
-    "headline": C&#43;&#43;中的重载问题,
-    "name": C&#43;&#43;中的重载问题,
-    "wordCount": 95,
-    "timeRequired": "PT1M",
-    "inLanguage": {
-      "@type": "Language",
-      "alternateName": en
-    },
-    "url": http://air.googol.im/post/overload-in-cpp/,
-    "datePublished": 2007-06-13T20:00Z,
-    "dateModified": 2007-06-13T20:00Z,
-    
-    "keywords": cpp, overload,
-    "description": ,
-    "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": http://air.googol.im/post/overload-in-cpp/
-    }
-}
-    </script>
-    
-
-
     
 
     
@@ -140,6 +90,11 @@
         
         
         
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
+            </li>
+        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -148,11 +103,6 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -217,8 +167,6 @@ void insert(BigWidget* w,   int i = -1);
 void insert(SmallWidget* w, int i = -1);
 </code></pre>
 
-<p></p>
-
 <p>其中xWidget都继承自BaseWidget。这些函数大体功能都一样，只是细微上有一点差别，比如要对BigWidget重新做布局，或者设置ThickWidget的边框。</p>
 
 <p>然后，有人把这些东西改成：</p>
@@ -257,6 +205,7 @@ void insert(SmallWidget* w, int i);
 <p>考虑到C++一般是定义声明分离，而且默认参数的定义是写在声明里，所以，你就等着一头雾水的解Bug吧。</p>
 
 <p>我这两天就闷了几头雾水解这个bug，查到结果后，郁闷死了，那些声明是另一个同事改的，说是为了明确函数声明……</p>
+
     </section>
 
 

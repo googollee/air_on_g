@@ -69,62 +69,12 @@
       
       
     
-    <meta name="generator" content="Hugo 0.21-DEV" />
+    <meta name="generator" content="Hugo 0.16-DEV" />
 
     <link rel="canonical" href="http://air.googol.im/post/mod-3/" />
 
     
       
-    
-    <script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "publisher": {
-        "@type": "Organization",
-        "name": 
-    },
-    "author": {
-        "@type": "Person",
-        "name": ,
-        
-        "url": http://air.googol.im,
-        "sameAs": [
-            
-            
-             
-             
-             
-             
-             
-            
-        ],
-        "description": 多年生软件工程师，信仰开源
-        
-    },
-    "headline": 求3的余数,
-    "name": 求3的余数,
-    "wordCount": 121,
-    "timeRequired": "PT1M",
-    "inLanguage": {
-      "@type": "Language",
-      "alternateName": en
-    },
-    "url": http://air.googol.im/post/mod-3/,
-    "datePublished": 2005-02-04T20:00Z,
-    "dateModified": 2005-02-04T20:00Z,
-    
-    "keywords": mod, c, interview,
-    "description": ,
-    "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": http://air.googol.im/post/mod-3/
-    }
-}
-    </script>
-    
-
-
     
 
     
@@ -142,6 +92,11 @@
         
         
         
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
+            </li>
+        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -150,11 +105,6 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -213,8 +163,6 @@
 
     <section class="post-content">
       <p>北京华为的一道面试题。要求是只使用+-*和移位运算，且不能递减3求得余数。</p>
-
-<p></p>
 
 <p>先在csdn上求，求得以下算法：</p>
 
@@ -277,6 +225,7 @@ while(m&gt;3)
 <p>因此对数n每次取二进制最后两位（四进制的最后一位），并加入除去二进制最后两位的余数（相当于右移2位），如此反复，直到只剩最后两位，此两位二进制数与原数n同余于3。</p>
 
 <p>现在研究的是，求任意数的余数的高效算法是什么呢？</p>
+
     </section>
 
 

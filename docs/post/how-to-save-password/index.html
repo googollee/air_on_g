@@ -65,62 +65,12 @@
       
       
     
-    <meta name="generator" content="Hugo 0.21-DEV" />
+    <meta name="generator" content="Hugo 0.16-DEV" />
 
     <link rel="canonical" href="http://air.googol.im/post/how-to-save-password/" />
 
     
       
-    
-    <script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "publisher": {
-        "@type": "Organization",
-        "name": 
-    },
-    "author": {
-        "@type": "Person",
-        "name": ,
-        
-        "url": http://air.googol.im,
-        "sameAs": [
-            
-            
-             
-             
-             
-             
-             
-            
-        ],
-        "description": 多年生软件工程师，信仰开源
-        
-    },
-    "headline": 到底应该怎么存密码,
-    "name": 到底应该怎么存密码,
-    "wordCount": 145,
-    "timeRequired": "PT1M",
-    "inLanguage": {
-      "@type": "Language",
-      "alternateName": en
-    },
-    "url": http://air.googol.im/post/how-to-save-password/,
-    "datePublished": 2011-12-22T20:00Z,
-    "dateModified": 2011-12-22T20:00Z,
-    
-    "keywords": security,
-    "description": ,
-    "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": http://air.googol.im/post/how-to-save-password/
-    }
-}
-    </script>
-    
-
-
     
 
     
@@ -138,6 +88,11 @@
         
         
         
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
+            </li>
+        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -146,11 +101,6 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -204,13 +154,13 @@
     </header>
 
     <section class="post-content">
-      <p>最近各大网站频频爆出密码泄露的事情，搞得用户“改密码改到手软”。先姑且不说一些政治上的因素导致网站必须保存明文的情况，到底应该如何保存密码，才能保证即便数据库内容被盗，用户的密码本身也是安全的呢？</p>
+      
+
+<p>最近各大网站频频爆出密码泄露的事情，搞得用户“改密码改到手软”。先姑且不说一些政治上的因素导致网站必须保存明文的情况，到底应该如何保存密码，才能保证即便数据库内容被盗，用户的密码本身也是安全的呢？</p>
 
 <p>说到这个问题，先要明确一些原则的问题，然后才能讨论具体的解决方法。</p>
 
-<p></p>
-
-<h2 id="密码安全原则">密码安全原则</h2>
+<h2 id="密码安全原则:4747bee49dcab0f924ac88d24b876247">密码安全原则</h2>
 
 <ol>
 <li><p>非用户本人，不能拿到网站保存的用户密码（不管是明文形式的还是密文形式的）。</p></li>
@@ -226,7 +176,7 @@
 
 <p>这5条原则的强度是逐条递增的。网上的网站教学一般能实现到第4条，第5条是我在翻Rails源码的时候发现的。而这次泄漏密码的那些网站，大概只实现了第1条原则吧。</p>
 
-<h2 id="密码存储算法">密码存储算法</h2>
+<h2 id="密码存储算法:4747bee49dcab0f924ac88d24b876247">密码存储算法</h2>
 
 <p>第1条原则其实是由网站的认证体系保证的，与存储无关。这条十分重要，而且也有大家都不注意的地方，比如实现“记住登录用户”时，cookie对用户身份和验证方法的保存。时刻牢记cookie也是可以随意访问和泄漏的。再有就是密码的传输过程，如果被监听，是否会泄漏明文。以及中间人攻击和钓鱼这些方法，都会导致非用户本人拿到用户密码明文。但是这个和密码的存储关系不大，在此略过。</p>
 
@@ -294,7 +244,7 @@ blowfish  85.100000   0.180000  85.280000 ( 87.112666)
 
 <p>可见blowfish与MD5和SHA1比起来确实相当慢。正因如此，blowfish被OpenBSD采用作为其密码加密算法，而Rails3的has_secure_password也是用的blowfish。</p>
 
-<h2 id="密码存储算法的实现">密码存储算法的实现</h2>
+<h2 id="密码存储算法的实现:4747bee49dcab0f924ac88d24b876247">密码存储算法的实现</h2>
 
 <p>算法的实现与语言本身紧密相关。不过，如果语言提供了blowfish的算法库，直接使用这个库是最好的方法。Ruby的实现如下：</p>
 
@@ -315,6 +265,7 @@ $password_digest = $hasher-&gt;HashPassword($password);  // 根据明文$passwor
 
 $hasher-&gt;CheckPassowrd($password, $password_digest);  // 根据密文$password_digest验证明文$password是否有效
 </code></pre>
+
     </section>
 
 
