@@ -67,12 +67,62 @@
       
       
     
-    <meta name="generator" content="Hugo 0.16-DEV" />
+    <meta name="generator" content="Hugo 0.42.2" />
 
     <link rel="canonical" href="http://air.googol.im/post/go-rest-revolution/" />
 
     
       
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": 
+    },
+    "author": {
+        "@type": "Person",
+        "name": ,
+        
+        "url": http://air.googol.im,
+        "sameAs": [
+            
+            
+             
+             
+             
+             
+             
+            
+        ],
+        "description": 多年生软件工程师，信仰开源
+        
+    },
+    "headline": go-rest演化,
+    "name": go-rest演化,
+    "wordCount": 229,
+    "timeRequired": "PT2M",
+    "inLanguage": {
+      "@type": "Language",
+      "alternateName": en
+    },
+    "url": http://air.googol.im/post/go-rest-revolution/,
+    "datePublished": 2013-12-31T10:48Z,
+    "dateModified": 2013-12-31T10:48Z,
+    
+    "keywords": golang, restful,
+    "description": ,
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": http://air.googol.im/post/go-rest-revolution/
+    }
+}
+    </script>
+    
+
+
     
 
     
@@ -90,11 +140,6 @@
         
         
         
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
-            </li>
-        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -103,6 +148,11 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -159,6 +209,8 @@
 
     <section class="post-content">
       <p>在EXFE创业的两年，虽然项目最终失败了（很可惜），不过自己从头开始写了一个简化RESTful Service实现的Framework——<a href="https://github.com/googollee/go-rest">go-rest</a>，还算有不少收获。这里记录一下go-rest实现过程中一些重要的演变，以及这些演变背后的原因。</p>
+
+<p></p>
 
 <p>最开始，我把Service定义为RPC remote式的调用方法。处理逻辑的函数，基本上是这样：</p>
 
@@ -305,7 +357,6 @@ r.NotFound(prefix(&quot;/static/&quot;), http.FileServer(http.Dir(&quot;.&quot;)
 <li>实现有一些精巧的不易理解的部分，使用时容易造成困惑；</li>
 <li>看上去接口并不清晰。</li>
 </ul>
-
     </section>
 
 

@@ -69,12 +69,62 @@
       
       
     
-    <meta name="generator" content="Hugo 0.16-DEV" />
+    <meta name="generator" content="Hugo 0.42.2" />
 
     <link rel="canonical" href="http://air.googol.im/post/implement-y-combinator-in-cpp-3/" />
 
     
       
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": 
+    },
+    "author": {
+        "@type": "Person",
+        "name": ,
+        
+        "url": http://air.googol.im,
+        "sameAs": [
+            
+            
+             
+             
+             
+             
+             
+            
+        ],
+        "description": 多年生软件工程师，信仰开源
+        
+    },
+    "headline": 尝试用C&#43;&#43;实现Y Combinator（之三）,
+    "name": 尝试用C&#43;&#43;实现Y Combinator（之三）,
+    "wordCount": 28,
+    "timeRequired": "PT1M",
+    "inLanguage": {
+      "@type": "Language",
+      "alternateName": en
+    },
+    "url": http://air.googol.im/post/implement-y-combinator-in-cpp-3/,
+    "datePublished": 2007-09-22T20:00Z,
+    "dateModified": 2007-09-22T20:00Z,
+    
+    "keywords": cpp, y combinator, python,
+    "description": ,
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": http://air.googol.im/post/implement-y-combinator-in-cpp-3/
+    }
+}
+    </script>
+    
+
+
     
 
     
@@ -92,11 +142,6 @@
         
         
         
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
-            </li>
-        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -105,6 +150,11 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -164,6 +214,8 @@
     <section class="post-content">
       <p>基本上，又进行了几次失败的尝试，具体过程不写了，反正写了也没人看。（其实是我没有存……）</p>
 
+<p></p>
+
 <p>难点在于C++的类型是在编译时确定的，也就是说，所有函数的返回类型和参数类型必须在编译前确定。但是，重新考察python的实现：</p>
 
 <pre><code class="language-python">def Y(le):
@@ -193,7 +245,6 @@ typedef boost::function&lt;ftypye(ftype)&gt; letype;
 <p>最终，还是逃不掉再造轮子的宿命。</p>
 
 <p>我命由我不由天口牙~~~~~~~（天渐渐凉了，大家记得多穿衣服，小心寒到……）</p>
-
     </section>
 
 

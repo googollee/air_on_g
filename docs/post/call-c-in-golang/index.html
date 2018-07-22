@@ -67,12 +67,62 @@
       
       
     
-    <meta name="generator" content="Hugo 0.16-DEV" />
+    <meta name="generator" content="Hugo 0.42.2" />
 
     <link rel="canonical" href="http://air.googol.im/post/call-c-in-golang/" />
 
     
       
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": 
+    },
+    "author": {
+        "@type": "Person",
+        "name": ,
+        
+        "url": http://air.googol.im,
+        "sameAs": [
+            
+            
+             
+             
+             
+             
+             
+            
+        ],
+        "description": 多年生软件工程师，信仰开源
+        
+    },
+    "headline": Golang里调用C,
+    "name": Golang里调用C,
+    "wordCount": 145,
+    "timeRequired": "PT1M",
+    "inLanguage": {
+      "@type": "Language",
+      "alternateName": en
+    },
+    "url": http://air.googol.im/post/call-c-in-golang/,
+    "datePublished": 2010-04-18T20:00Z,
+    "dateModified": 2010-04-18T20:00Z,
+    
+    "keywords": c, golang,
+    "description": ,
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": http://air.googol.im/post/call-c-in-golang/
+    }
+}
+    </script>
+    
+
+
     
 
     
@@ -90,11 +140,6 @@
         
         
         
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
-            </li>
-        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -103,6 +148,11 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -159,6 +209,8 @@
 
     <section class="post-content">
       <p>Golang调用C分两个步骤：1 写一个C的wrapper，这个很简单；2 对wrapper做编译，这个步骤有点复杂，而且涉及众多中间文件。应该是有办法用自动化的工具简化这个过程的。</p>
+
+<p></p>
 
 <p>先来展示一下C程序。为了将描述集中在如何调用上，C的程序很简单：</p>
 
@@ -266,7 +318,6 @@ func main() {
 </code></pre>
 
 <p>查看生成的调用程序，可以看到对$GOROOT/pkg/linux_386/libcgo.so和$GOROOT/pkg/linux_386/prints.so两个动态库的引用。发布时需要将这两个库放到发布环境里。</p>
-
     </section>
 
 

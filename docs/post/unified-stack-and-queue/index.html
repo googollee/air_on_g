@@ -67,12 +67,62 @@
       
       
     
-    <meta name="generator" content="Hugo 0.16-DEV" />
+    <meta name="generator" content="Hugo 0.42.2" />
 
     <link rel="canonical" href="http://air.googol.im/post/unified-stack-and-queue/" />
 
     
       
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": 
+    },
+    "author": {
+        "@type": "Person",
+        "name": ,
+        
+        "url": http://air.googol.im,
+        "sameAs": [
+            
+            
+             
+             
+             
+             
+             
+            
+        ],
+        "description": 多年生软件工程师，信仰开源
+        
+    },
+    "headline": 栈和队的统一,
+    "name": 栈和队的统一,
+    "wordCount": 7,
+    "timeRequired": "PT1M",
+    "inLanguage": {
+      "@type": "Language",
+      "alternateName": en
+    },
+    "url": http://air.googol.im/post/unified-stack-and-queue/,
+    "datePublished": 2009-05-28T20:00Z,
+    "dateModified": 2009-05-28T20:00Z,
+    
+    "keywords": stack, queue,
+    "description": ,
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": http://air.googol.im/post/unified-stack-and-queue/
+    }
+}
+    </script>
+    
+
+
     
 
     
@@ -90,11 +140,6 @@
         
         
         
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
-            </li>
-        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -103,6 +148,11 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -160,6 +210,8 @@
     <section class="post-content">
       <p>这是上周软设考试时遇到的一道题，判断对错：可以用两个栈模拟一个队列，也可以用一个队列模拟两个栈。</p>
 
+<p></p>
+
 <p>这个题以前从来没有想过，一直当栈和队都是基本的数据结构，都是从线性表直接衍生出来的，从来没想过相互间的转化。当时蒙了一下。不过既然连需要的数量都给出来了，那说明至少某个单方向是可行的（不然这数还真是有零有整的……）。</p>
 
 <p>很快，两个栈模拟一个队列的情况就想出来了。这里用到一个栈的特性：出栈的顺序与入栈的顺序正好相反。假设有栈A和栈B，其中A负责入队操作，B负责出队操作。首先两个栈都空，入队直接入到A中。可以把A的顶看成被模拟的队的队尾，栈底是队首。如果需要出队，就把A里的所有元素按顺序出栈，并入栈到B里。由于刚才说过出栈入栈顺序正好相反，这时在B里的栈顶就是队首，栈底就是队尾。从B里出栈就相当于从被模拟的队列里面出队。如果需要继续入队，就再把B里的元素按顺序出栈加入A，队尾就又变成了A的栈顶。</p>
@@ -171,7 +223,6 @@
 <p>后来很长一段时间没有想法怎么模拟两个栈，直到突然想到既然这个栈是在出队时增加了一个循环移位整个队列的操作，如果把这个操作换到入队时呢？于是想了一下，果然可以再模拟一个栈。（具体过程就不写了）这时相当于两个栈的栈底是连在一起，两个栈分别向两端增长。</p>
 
 <p>这种模拟使一个栈的出栈的操作是O(m+n)，另一个的入栈操作是O(m+n)，都增大了不少。而且考虑到队列的内存分配问题，似乎没有什么优点。如果是同时使用两个栈，似乎还是栈底分离，相向增长的方式比较好。</p>
-
     </section>
 
 

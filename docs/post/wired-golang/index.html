@@ -65,12 +65,62 @@
       
       
     
-    <meta name="generator" content="Hugo 0.16-DEV" />
+    <meta name="generator" content="Hugo 0.42.2" />
 
     <link rel="canonical" href="http://air.googol.im/post/wired-golang/" />
 
     
       
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": 
+    },
+    "author": {
+        "@type": "Person",
+        "name": ,
+        
+        "url": http://air.googol.im,
+        "sameAs": [
+            
+            
+             
+             
+             
+             
+             
+            
+        ],
+        "description": 多年生软件工程师，信仰开源
+        
+    },
+    "headline": Go语言奇怪的特性,
+    "name": Go语言奇怪的特性,
+    "wordCount": 67,
+    "timeRequired": "PT1M",
+    "inLanguage": {
+      "@type": "Language",
+      "alternateName": en
+    },
+    "url": http://air.googol.im/post/wired-golang/,
+    "datePublished": 2013-04-03T20:00Z,
+    "dateModified": 2013-04-03T20:00Z,
+    
+    "keywords": golang,
+    "description": ,
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": http://air.googol.im/post/wired-golang/
+    }
+}
+    </script>
+    
+
+
     
 
     
@@ -88,11 +138,6 @@
         
         
         
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
-            </li>
-        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -101,6 +146,11 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -154,11 +204,11 @@
     </header>
 
     <section class="post-content">
-      
+      <p>记录了一些使用Go时遇到的违反直觉的特性。</p>
 
-<p>记录了一些使用Go时遇到的违反直觉的特性。</p>
+<p></p>
 
-<h2 id="recover是个特殊的函数:233db65ca46c996a80ce0a42be5c511b">recover是个特殊的函数</h2>
+<h2 id="recover是个特殊的函数">recover是个特殊的函数</h2>
 
 <p>能猜到下面的程序会不会崩溃么？</p>
 
@@ -184,7 +234,7 @@ func main() {
 }
 </code></pre>
 
-<h2 id="slice的引用特性:233db65ca46c996a80ce0a42be5c511b">slice的引用特性</h2>
+<h2 id="slice的引用特性">slice的引用特性</h2>
 
 <p>依旧是先给出程序，猜输出：</p>
 
@@ -210,7 +260,6 @@ func main() {
 <p>就我的理解，slice是一个{指向内存的指针，当前已有元素的长度，内存最大长度}的结构体，其中只有_指向内存的指针_一项是真正具有引用语义的域，另外两项都是每个slice自身的值。因此，对slice做赋值时，会出现两个slice指向同一块内存，但是又分别具有各自的元素长度和最大长度。程序里把array赋值给a和b，所以a和b会同时指向array的内存，并各自保存一份当前元素长度1和最大长度3。之后对a的追加操作，由于没有超出a的最大长度，因此只是把新值2追加到a指向的内存，并把a的“当前已有元素的长度”增加1。之后对b进行追加操作时，因为a和b各自拥有各自的“当前已有元素的长度”，因此b的这个值依旧是1，追加操作依旧写在b所指向内存的偏移为1的位置，也就复写了之前对a追加时写入的2。</p>
 
 <p>为了让slice具有引用语义，同时不增加array的实现负担，又不增加运行时的开销，似乎也只能忍受这个奇怪的语法了。</p>
-
     </section>
 
 

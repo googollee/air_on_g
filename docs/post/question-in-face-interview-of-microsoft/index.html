@@ -67,12 +67,62 @@
       
       
     
-    <meta name="generator" content="Hugo 0.16-DEV" />
+    <meta name="generator" content="Hugo 0.42.2" />
 
     <link rel="canonical" href="http://air.googol.im/post/question-in-face-interview-of-microsoft/" />
 
     
       
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": 
+    },
+    "author": {
+        "@type": "Person",
+        "name": ,
+        
+        "url": http://air.googol.im,
+        "sameAs": [
+            
+            
+             
+             
+             
+             
+             
+            
+        ],
+        "description": 多年生软件工程师，信仰开源
+        
+    },
+    "headline": 终于知道当初微软的面试题，我错在哪里了……,
+    "name": 终于知道当初微软的面试题，我错在哪里了……,
+    "wordCount": 13,
+    "timeRequired": "PT1M",
+    "inLanguage": {
+      "@type": "Language",
+      "alternateName": en
+    },
+    "url": http://air.googol.im/post/question-in-face-interview-of-microsoft/,
+    "datePublished": 2006-10-26T20:00Z,
+    "dateModified": 2006-10-26T20:00Z,
+    
+    "keywords": microsoft, interview,
+    "description": ,
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": http://air.googol.im/post/question-in-face-interview-of-microsoft/
+    }
+}
+    </script>
+    
+
+
     
 
     
@@ -90,11 +140,6 @@
         
         
         
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
-            </li>
-        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -103,6 +148,11 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -160,6 +210,8 @@
     <section class="post-content">
       <p>有两杯液体，一杯蓝色一杯红色，两杯液体的体积一样。从红色液体中取出一试管液体，倒入蓝色液体中，搅匀。再从原来蓝色（现在是混合的）液体中取出同样一试管的液体，倒入红色中，搅匀。问最后两个杯子中，哪个杯子里的杂质更多。</p>
 
+<p></p>
+
 <p>嗯……给出当时我的思路吧：</p>
 
 <p>从红的中取出一试管，倒入蓝的中，搅匀。这时候蓝色溶液里杂质的浓度为a。然后再从这杯杂质浓度为a的液体中取出一试管，倒入红的里。由于红的之前是纯净的，倒入杂质浓度为a的液体后，相当于对这个液体做稀释，因此现在红色这杯子里的杂质浓度小于a。又因为这个时候两杯子里液体体积还是一样的，因此杂质浓度高的杯子里杂质更多，也就是蓝色液体的杯子。</p>
@@ -183,7 +235,6 @@
 <p><code>a</code>的浓度是相对于蓝色液体而言的红色液体浓度，但是，当把这个试管内的液体倒入红色液体的杯子时，杂质的概念变了！对红色杯子而言，蓝色才是杂质，因此，这个试管里的杂质浓度实际上是<code>[1-l/(L+l)]</code>，也就是<code>L/(L+l)</code>！这样，实际被稀释的就是蓝色液体！而<code>L/(L+l)</code>与<code>l/(L+l)</code>明显是不等的！因此之后的推理就全部是错误的了……</p>
 
 <p>ok，想明白了，长出一口气……</p>
-
     </section>
 
 

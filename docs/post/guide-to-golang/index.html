@@ -65,12 +65,62 @@
       
       
     
-    <meta name="generator" content="Hugo 0.16-DEV" />
+    <meta name="generator" content="Hugo 0.42.2" />
 
     <link rel="canonical" href="http://air.googol.im/post/guide-to-golang/" />
 
     
       
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": 
+    },
+    "author": {
+        "@type": "Person",
+        "name": ,
+        
+        "url": http://air.googol.im,
+        "sameAs": [
+            
+            
+             
+             
+             
+             
+             
+            
+        ],
+        "description": 多年生软件工程师，信仰开源
+        
+    },
+    "headline": Golang初探,
+    "name": Golang初探,
+    "wordCount": 560,
+    "timeRequired": "PT3M",
+    "inLanguage": {
+      "@type": "Language",
+      "alternateName": en
+    },
+    "url": http://air.googol.im/post/guide-to-golang/,
+    "datePublished": 2010-01-17T20:00Z,
+    "dateModified": 2010-01-17T20:00Z,
+    
+    "keywords": golang,
+    "description": ,
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": http://air.googol.im/post/guide-to-golang/
+    }
+}
+    </script>
+    
+
+
     
 
     
@@ -88,11 +138,6 @@
         
         
         
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
-            </li>
-        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -101,6 +146,11 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -154,13 +204,13 @@
     </header>
 
     <section class="post-content">
-      
+      <p>Go语言是Google于2009年11月公布的一个新语言项目，其目标是创造一门既简单又有效率的开源编程语言。由于有C语言创始人Ken Thompson的参与，Go一面世，就被看成是C语言的继任者，受到很大关注。Go一方面吸收了C简单清晰、执行效率高的优点，另一方面融合了动态语言的闭包、动态绑定等特性，更加适应目前多核与多机高并发的开发环境和快速敏捷的开发效率。此外，Go并没有跟随主流的以“类和继承”为基础的面向对象实现方式，而是以接口和动态绑定的方式，将封装的粒度做得更细、更灵活，实现了另一种面向对象的代码组织形式。</p>
 
-<p>Go语言是Google于2009年11月公布的一个新语言项目，其目标是创造一门既简单又有效率的开源编程语言。由于有C语言创始人Ken Thompson的参与，Go一面世，就被看成是C语言的继任者，受到很大关注。Go一方面吸收了C简单清晰、执行效率高的优点，另一方面融合了动态语言的闭包、动态绑定等特性，更加适应目前多核与多机高并发的开发环境和快速敏捷的开发效率。此外，Go并没有跟随主流的以“类和继承”为基础的面向对象实现方式，而是以接口和动态绑定的方式，将封装的粒度做得更细、更灵活，实现了另一种面向对象的代码组织形式。</p>
+<p></p>
 
 <p>本文带领大家用Go来实现一个简单的程序。程序本身是对MapReduce的一个模拟，将一组数字交给一组并发的DoubleNode节点做翻倍，然后再由一个SumNode将翻倍后的数累加并输出。节点间的关系类似如图1所示。</p>
 
-<h1 id="node的实现:0db01444229f9ac54f65c54500fa2655">Node的实现</h1>
+<h1 id="node的实现">Node的实现</h1>
 
 <pre><code>SumNode
   |
@@ -173,7 +223,7 @@
 
 <p>图1中的每个Node都是一个独立运行的节点，节点间是并行的。值得提醒的是，Go提倡通过通信来共享数据，而不是通过共享数据来通信。因此每个节点既不访问别的节点的内部状态，也不访问全局变量，节点间通过Go语言的通道机制互相传递消息，通知工作完成并将数据传递给下一个工作节点。</p>
 
-<h2 id="确定node的结构:0db01444229f9ac54f65c54500fa2655">确定Node的结构</h2>
+<h2 id="确定node的结构">确定Node的结构</h2>
 
 <p>首先是确定Node的结构。DoubleNode和SumNode都作为Node的一种特化，不同之处在于在Node执行时执行的功能不一样。统一起见，为Node定义如下接口：</p>
 
@@ -184,7 +234,7 @@
 
 <p>蓝色的部分是Go的关键字，type表示定义一个新的类型，语法上与C语言的typedef类似，只是将被定义的类型名字和类型的顺序颠倒了一下。Go里所有涉及到类型名/变量名和类型的地方，使用顺序都和C是颠倒的。NodeInterface是新类型的名字。interface表示定义的是一个接口，这个接口可以类比C++的纯虚类或者Java的接口，但是在使用的时候是动态绑定，不需要实现者必须继承自接口(后文有更详细的说明)。接口内定义了两个函数receive和run，其中receive接受一个参数i，类型是整数类型int，没有返回值，用处是处理从其他Node接收到的消息;run没有参数，返回值为int，用处是进行Node自身的运算。</p>
 
-<h2 id="定义node内部的状态:0db01444229f9ac54f65c54500fa2655">定义Node内部的状态</h2>
+<h2 id="定义node内部的状态">定义Node内部的状态</h2>
 
 <p>另外定义Node内部的一些状态：</p>
 
@@ -202,7 +252,7 @@
 
 <p>这里值得注意的是，Node使用了类似模版模式的概念，但和C++/Java不同，并没有从NodeInterface继承，而是将NodeInterface作为一个成员。由于Go无法让一个类的成员函数处于未定义的状态，因此无法像C++/Java一样藉由在子类特化父类里未定义的函数来实现模版模式。不过，这样虽然看似麻烦，但是好处在于将Node本身的状态和NodeInterface分离，两部分责任更清晰。</p>
 
-<h2 id="node相关的方法:0db01444229f9ac54f65c54500fa2655">Node相关的方法</h2>
+<h2 id="node相关的方法">Node相关的方法</h2>
 
 <p>之后是Node相关的方法。首先是Node的创建方法：</p>
 
@@ -239,7 +289,7 @@ f()
 
 <p>关键字&lt;-是对chan类型独有的操作。之前说过，chan类型类似于通道，可以把一个数据放进去，并在之后取出来。在例子里，&lt;- from.out_ch是从from实例的out_ch通道里取出一个数，如果通道里没有数，则会阻塞等待。取出数后会把这个数赋值给i。之后将取出的值i通过to.in_ch &lt;- i传入到to实例的in_ch通道里。这样就完成了将from和to两个节点连结起来的功能。</p>
 
-<h2 id="gorountine:0db01444229f9ac54f65c54500fa2655">gorountine</h2>
+<h2 id="gorountine">gorountine</h2>
 
 <p>gorountine是Go语言里很重要的新概念，有点类似线程，但消耗的资源比线程少很多，而且gorountine只是Go内部的概念，不会在操作系统层面有对应的实现。在Go里启动的各个gorountine之间是并行的，每个gorountine可能会映射到一个系统线程，也可能多个gorountine共用一个线程，如果是多核的机器，不同的gorountine会自动分配到不同的核心。gorountine间的切换也由Go来控制，不需要程序员操心。gorountine占用的内存远小于系统线程或进程，gorountine间的切换成本也很低。程序里可以轻易创建数万个gorountine做并行，而不用担心会占用过多的系统资源。</p>
 
@@ -252,7 +302,7 @@ f()
 
 <p>传统的写法不仅多了不少字，而且还要自己注意类型是否匹配。所以Go更推荐使用:=(而且以后如果有Go语言混乱大赛，大概会用这东西来组成颜文字什么的XD)。</p>
 
-<h2 id="node的核心函数run:0db01444229f9ac54f65c54500fa2655">Node的核心函数Run()</h2>
+<h2 id="node的核心函数run">Node的核心函数Run()</h2>
 
 <p>现在来看一下Node的核心函数Run()。</p>
 
@@ -289,7 +339,7 @@ for index, item := range array {} // 相当于Python里的foreach，index是循�
 
 <p>之后调用inode接口的run进行节点自身的处理，并将处理后的返回值赋给ret。最后将ret的内容从out_ch里输出。</p>
 
-<h2 id="defer:0db01444229f9ac54f65c54500fa2655">defer</h2>
+<h2 id="defer">defer</h2>
 
 <p>defer是Go另一个很有意思的特性，借鉴自C++的析构函数和Java的final。defer指定的函数不会立刻执行，而是在当前函数退出时才执行。defer主要是用来做一些清扫类的工作，比如常见的关闭文件、释放缓存。这里的defer用来处理inode.run()在执行时可能出现的异常。</p>
 
@@ -303,11 +353,11 @@ if x != nil { ... }
 
 <p>如果recover得到的值不为nil，就简单输出异常并重新抛出。如果一切正常，就打印一句提示并退出。</p>
 
-<h1 id="应用node来构造各种节点:0db01444229f9ac54f65c54500fa2655">应用Node来构造各种节点</h1>
+<h1 id="应用node来构造各种节点">应用Node来构造各种节点</h1>
 
 <p>上面就是Node的实现。接下来就要展示如何应用Node来构造各种节点了。</p>
 
-<h2 id="doublenode:0db01444229f9ac54f65c54500fa2655">DoubleNode</h2>
+<h2 id="doublenode">DoubleNode</h2>
 
 <p>首先是DoubleNode，结构如下：</p>
 
@@ -339,7 +389,7 @@ func (n *DoubleNode) run() int {
 
 <p>这里将新生成的DoubleNode实例的指针直接作为参数传入了NewNode，Go的编译器会帮你处理背后的工作。注意interface只能接收一个实例的指针，而不能直接接收实例作为参数。</p>
 
-<h2 id="sumnode:0db01444229f9ac54f65c54500fa2655">SumNode</h2>
+<h2 id="sumnode">SumNode</h2>
 
 <p>之后是SumNode的实现：</p>
 
@@ -362,7 +412,7 @@ func (n *SumNode) run() int {
 
 <p>SumNode在接收到其他Node传入的数后，会将其累加到自己的data里，最后只用简单传回data的值就完成了全部工作。其他函数很简单就不细说了。</p>
 
-<h2 id="node组合:0db01444229f9ac54f65c54500fa2655">Node组合</h2>
+<h2 id="node组合">Node组合</h2>
 
 <p>现在是将这些Node组合在一起完成工作的时候了：</p>
 
@@ -476,7 +526,6 @@ func main() {
   println(&lt;- sum.out_ch)
 }
 </code></pre>
-
     </section>
 
 

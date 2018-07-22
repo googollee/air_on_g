@@ -67,12 +67,62 @@
       
       
     
-    <meta name="generator" content="Hugo 0.16-DEV" />
+    <meta name="generator" content="Hugo 0.42.2" />
 
     <link rel="canonical" href="http://air.googol.im/post/optimize-for-continous-reading/" />
 
     
       
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": 
+    },
+    "author": {
+        "@type": "Person",
+        "name": ,
+        
+        "url": http://air.googol.im,
+        "sameAs": [
+            
+            
+             
+             
+             
+             
+             
+            
+        ],
+        "description": 多年生软件工程师，信仰开源
+        
+    },
+    "headline": 为连续读取优化的一种缓存策略,
+    "name": 为连续读取优化的一种缓存策略,
+    "wordCount": 13,
+    "timeRequired": "PT1M",
+    "inLanguage": {
+      "@type": "Language",
+      "alternateName": en
+    },
+    "url": http://air.googol.im/post/optimize-for-continous-reading/,
+    "datePublished": 2009-10-19T20:00Z,
+    "dateModified": 2009-10-19T20:00Z,
+    
+    "keywords": gio, cache,
+    "description": ,
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": http://air.googol.im/post/optimize-for-continous-reading/
+    }
+}
+    </script>
+    
+
+
     
 
     
@@ -90,11 +140,6 @@
         
         
         
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
-            </li>
-        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -103,6 +148,11 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -160,6 +210,8 @@
     <section class="post-content">
       <p>事情的起因是boss要把对samba的支持从kernel转移到user模式的gio。这个迁移到还不是很复杂，改一些接口就可以。迁移过来后发现通过samba播放视频的性能下降的很厉害，在arm平台上，以前能流畅播放的视频现在完全不可看。</p>
 
+<p></p>
+
 <p>于是测了一下速率，使用gio通过gstreamer播放samba的视频，传输率只有100k/s多一点。进一步计时，发现gio在arm平台，即便只拷贝1个字节的文件，也要花0.16s左右的时间，而kernel模式下，只要0.01s。但是在连续读的情况下，gio可以达到600k/s多，而kernel只有400k/s。看来问题在于arm上gio由于引入dbus等操作，导致第一次读取时的延迟很长。因为gstreamer的gio插件默认一次只读4096字节，这样每次读取都要花掉0.16s，与kernel的0.01-0.02s的速度比起来，自然是慢了很多。</p>
 
 <p>另外，由于卧艹的avi格式的存在，简单的顺序缓存效果不好。avi在播放过程中并不是流式读取，而是每隔一段时间就向后跳一段距离，读一小块的内容，然后再跳回来接着读。而且连续读这部分也不是严格连续，每次读取间都有一定的间隔，大概数据类似（偏移/大小）：</p>
@@ -175,7 +227,6 @@
 <p>一个问题是，由于arm本身速度慢，读满一个buffer可能会花很长时间，这个在开始播放和跳转的时候对用户不够流畅。可能的解决办法是先读够用的一小块，然后后面起thread去读。不过我对arm上的thread性能表现表示怀疑。这个已经有了一些实验代码，但还没在arm上实践过。</p>
 
 <p>另一个问题是，为什么user下的gio，连续读取的速度反而要快过kernel呢？</p>
-
     </section>
 
 

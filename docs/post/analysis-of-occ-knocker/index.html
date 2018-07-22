@@ -67,12 +67,62 @@
       
       
     
-    <meta name="generator" content="Hugo 0.16-DEV" />
+    <meta name="generator" content="Hugo 0.42.2" />
 
     <link rel="canonical" href="http://air.googol.im/post/analysis-of-occ-knocker/" />
 
     
       
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": 
+    },
+    "author": {
+        "@type": "Person",
+        "name": ,
+        
+        "url": http://air.googol.im,
+        "sameAs": [
+            
+            
+             
+             
+             
+             
+             
+            
+        ],
+        "description": 多年生软件工程师，信仰开源
+        
+    },
+    "headline": 一段有趣的C程序,
+    "name": 一段有趣的C程序,
+    "wordCount": 134,
+    "timeRequired": "PT1M",
+    "inLanguage": {
+      "@type": "Language",
+      "alternateName": en
+    },
+    "url": http://air.googol.im/post/analysis-of-occ-knocker/,
+    "datePublished": 2004-09-22T20:00Z,
+    "dateModified": 2004-09-22T20:00Z,
+    
+    "keywords": c, occ,
+    "description": ,
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": http://air.googol.im/post/analysis-of-occ-knocker/
+    }
+}
+    </script>
+    
+
+
     
 
     
@@ -90,11 +140,6 @@
         
         
         
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
-            </li>
-        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -103,6 +148,11 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -159,6 +209,8 @@
 
     <section class="post-content">
       <p>最近在一个论坛发现了一段简单的C程序很有意思，其中蕴含着不少技巧，在此与大家分享一下。</p>
+
+<p></p>
 
 <p>原程序如下：</p>
 
@@ -222,7 +274,6 @@ main(int _) {
 <p>当然了，下面的代码同样有创意，就是printf语句要打印的字符串参数：<code>&quot;_/_/_/&quot;+*x++%4*2</code>。经过刚才的分析，我们不难理解<code>&quot;_/_/_/&quot;</code>加上后面的表达式的用意了，同样是控制输出字符的个数，是一个“<code>_/</code>”，两个，还是三个。那么关键就是后面这个表达式了：<code>*x++%4*2</code>。其实慢慢的分析也不困难，先执行<code>*x%4*2</code>，然后执行<code>x++</code>。所以，当在执行while语句的时候，x会指向下一个字符！</p>
 
 <p>综上所述，这个小程序就是利用一个字符串来控制输出的例子，里面运用了很多技巧，对于初学者需要很好的理解，对今后的编程是很有帮助的！</p>
-
     </section>
 
 

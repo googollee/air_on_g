@@ -8,7 +8,9 @@
     <language>zh-CN</language>
     <copyright>除非另有声明，本网站采用&lt;a href=&#39;https://creativecommons.org/licenses/by-nd/3.0/cn/&#39;&gt;知识共享“署名-禁止演绎 3.0 中国大陆”许可协议&lt;/a&gt;授权。</copyright>
     <lastBuildDate>Sat, 28 Nov 2009 20:00:00 +0800</lastBuildDate>
-    <atom:link href="http://air.googol.im/tags/cpp/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="http://air.googol.im/tags/cpp/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>简单的UnitTest框架实现</title>
@@ -18,28 +20,7 @@
       <guid>http://air.googol.im/post/simple-unittest-framework/</guid>
       <description>&lt;p&gt;这几天试了下TDD，需要一个UnitTest框架。以前用过Google Test和JUnit，不过想了一下，印象里Google Test经过几次升级后，似乎只能单独编译，而JUnit只能用在Java里，都不适合嵌入式运行的场合。所以花了半天左右自己写了个框架。&lt;/p&gt;
 
-&lt;p&gt;框架其实很简单，只支持TestCase，Case的自动注册和运行，以及Case运行前后的环境准备和清理。所有的Case的函数签名是bool func()的形式，存在一个全局vector指针数组里。注册的时候可以利用宏：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;#define TEST(name) \
-static bool test##name(); \
-RegisterCase case##name(test##name, #name); \
-bool test##name()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;创建Case的时候，只要像这样就可以：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;Test(SomeCase)
-{ ... }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;因为注册是通过全局类实例RegisterCase的构造函数完成的，因此在main执行之前，这些Case就已经完成了注册。main里只要遍历vector，并执行就可以。同时对返回值做判断，如果true则继续下一个Case，false则退出。&lt;/p&gt;
-
-&lt;p&gt;在实际使用中，发现其实断言还是需要的。默认的assert只能打出错误位置，不能提示更多的错误信息。好的断言应该既可以提供错误位置信息，也可以打出当前错误的语句内容，甚至要是能打点自定义的信息就更好了。另外断言最好是用宏抛异常throw，或者访问NULL，这样在调试时可以不用设断点。&lt;/p&gt;
-
-&lt;p&gt;另外发现其实还是需要TestSuite。每个Suite内的Case共享同样的环境准备/清理函数，而Suite之前的环境准备/清理函数则不同。不然的话就要写好几个Test程序。从粒度上讲到是也不错，不过编译脚本写起来比较烦。&lt;/p&gt;
-
-&lt;p&gt;至于报告输出……恩……其实还是应该输出的，不过我们还没有集成的自动测试环境，这个就先省了吧。&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -50,54 +31,7 @@ bool test##name()
       <guid>http://air.googol.im/post/thinking-of-cpp-ptr/</guid>
       <description>&lt;p&gt;最近在公司的项目里开始实践用C++的析构来自动释放已申请的指针，同时保证程序的效率不变。&lt;/p&gt;
 
-&lt;p&gt;由于要使用C库，因此自己写了三个类：local_ptr，local_ptr_f，auto_ptr_f。其中第一个类是类似std::autor_ptr，只是没有拷贝构造函数和赋值构造函数，只能本地使用。两个带_f后缀的，在构造时分别多了一个用于释放内存的函数做参数，目的是可以自动管理C的内存分配。&lt;/p&gt;
-
-&lt;p&gt;为什么不直接用boost::share_ptr？首先，我觉得引用计数这东西在大部分场合用不到。用到的时候，也应该作为确认实例生命周期的工具而存在（比如类似COM的应用），而不是成为指针的一部分；另一方面，虽然引用计数引入的操作不多，但是蚂蚁啃大象，直接使用share_ptr会在不知不觉中引入很多没必要的计数操作，降低效率（记得许老大的blog上有提到过这种情况）。尤其是将share_ptr直接扔到container里的行为，在我看来，这简直就是对C/C++追求效率的宗旨的肆意践踏！先不说多出来的内存占用量，由于container自身一些调整行为导致的引用计数操作，简直就是不可预测的！&lt;/p&gt;
-
-&lt;p&gt;由于没有了share_ptr，weak_ptr自然也就没有存在的必要了。对于不释放的内存引用，直接用原生指针就行。对于不需要在函数间传递的内存引用，使用local_ptr/local_ptr_f，例如：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;{
-  local_ptr&amp;lt;SomeClass&amp;gt; p = new SomeClass;
-  // blablabla
-}
-
-{
-  local_ptr_f&amp;lt;FILE&amp;gt; f(fopen(...), fclose);
-  // blablabla
-}
-
-{
-  local_ptr_f&amp;lt;char&amp;gt; str(strdup(...), free);
-  // blablabla
-}
-
-{
-  local_ptr_f&amp;lt;GFileEnumerator&amp;gt; enum(g_file_enumerate_children(...), g_object_unref);
-  GFileInfo* info = NULL;
-  while ( (info = g_file_enumerator_next_file(enum.get(), ...)) != NULL )
-  {
-    local_ptr_f&amp;lt;GFileInfo&amp;gt; p(info, g_object_unref);
-    // blablabla
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;对于需要传递实例所有权的情况，使用auto_ptr/auto_ptr_f。这个各类C++书籍都有介绍，我就不展示代码了。&lt;/p&gt;
-
-&lt;p&gt;使用这些函数，依旧要求程序员像C一样明确一个实例的生存周期，而且还要分辨这个周期中的持有者（对持有者使用local_ptr/local_ptr_f），传递者（对传递者使用auto_ptr/auto_ptr_f）和引用者（对引用者使用原生指针）。优点是：利用C++析构函数自动调用的优点，不需要手动为每一个内存释放点写释放代码；对C风格来说，申请内存的函数和释放内存的函数靠的很近，可以避免误配对；保证对一种内存实例使用同一个内存释放函数。&lt;/p&gt;
-
-&lt;p&gt;也有一个缺点：从阅读角度，创建内存实例的时候，赋值操作看着不明显了。比较：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;char* str = strdup(...);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;和&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;local_ptr_f&amp;lt;char&amp;gt; str(strdup(...), free);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;就我自己的感觉，在一堆堆的代码里，前者因为有“=”的存在，能更轻易的被发现，而且现代编辑器可能还会用特殊的颜色标识出来。而后者会和函数调用等语句混在一起，不利于阅读。目前没有想到解决办法。另一个不好的地方是，会把变量初始化的语句写的很长。这个可以通过适当的折行来缩短，不算什么太大的问题。&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -108,36 +42,7 @@ bool test##name()
       <guid>http://air.googol.im/post/implement-y-combinator-in-cpp-3/</guid>
       <description>&lt;p&gt;基本上，又进行了几次失败的尝试，具体过程不写了，反正写了也没人看。（其实是我没有存……）&lt;/p&gt;
 
-&lt;p&gt;难点在于C++的类型是在编译时确定的，也就是说，所有函数的返回类型和参数类型必须在编译前确定。但是，重新考察python的实现：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def Y(le):
-  def _anon(cc):
-    return le(lambda x: cc(cc)(x))
-  return _anon(_anon)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;你能说清楚那个cc的准确类型么？是，cc返回一个int(int)的函数（是真的函数，不是函数指针！），但是参数类型呢？还是cc，而这个cc的类型还是cc……&lt;/p&gt;
-
-&lt;p&gt;难怪说动态语言能实现无穷，实际是这里的类型是无穷递归的……&lt;/p&gt;
-
-&lt;p&gt;但是python这里为啥就没有问题呢？原因是python的类型并不是在编译时确定，而是在运行时，也就是说，当执行到cc(cc)时，才确认cc是一个函数，以及这个函数的返回值和参数。你问为啥cc会是个函数？使用者（也就是调用_anon的地方）决定的呗，调用的时候就传入的是个函数。你还问要不是函数咋办？不是函数……抛异常崩溃呗，蓝屏的，见过吧？（还是微软六厂的呢！）&lt;/p&gt;
-
-&lt;p&gt;所以说，想靠C++的正常手段实现Y Combinator是没有希望了。C++在编译时可写不出无穷递归的参数类型。不过，我们有void*。（这方面讲，C#和Java的反射也能达到运行时确定参数类型的目的，就是麻烦点。但C#的delegate估计就没戏了。）&lt;/p&gt;
-
-&lt;p&gt;不过，由于boost::function的一些在我看来很奇怪的限制，导致我可能要真的重新实现一个function的东西了。比如下面这段居然就编译不过去：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;typedef boost::function&amp;lt;int(int)&amp;gt; ftype;
-typedef boost::function&amp;lt;ftypye(ftype)&amp;gt; letype;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;而int(int)()(int(int))（天，我竟然能写出这么bt的类型签名，《C专家编程》没白读……）类型正是Y的参数le的类型，也是_1的返回类型。如此重要的类型居然没法用function定义出来……&lt;/p&gt;
-
-&lt;p&gt;啊？你说为啥非要用function？这个_1的返回值_fn可是有enclosure在里面的，没有个functor怎么实现？既然有了functor，那普通的函数指针肯定没戏，只能找个类似function的东西。&lt;/p&gt;
-
-&lt;p&gt;最终，还是逃不掉再造轮子的宿命。&lt;/p&gt;
-
-&lt;p&gt;我命由我不由天口牙~~~~~~~（天渐渐凉了，大家记得多穿衣服，小心寒到……）&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -150,124 +55,7 @@ typedef boost::function&amp;lt;ftypye(ftype)&amp;gt; letype;
 
 &lt;p&gt;其实，上篇还写错了……&lt;/p&gt;
 
-&lt;p&gt;那个combinator::operator()的返回值是int，但是，看那个Python实现：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt; def _1(factorial):
-     def _fn(n):
-         if n == 0: return 1
-         else:
-             return n*factorial(n-1)
-     return _fn
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;很明显，这个返回值是一个函数……&lt;/p&gt;
-
-&lt;p&gt;那么，现在是到了仔细想想_1返回值类型的时候了。简单来说，返回的是个函数，这个函数以一个int为参数，返回一个int值。也就是_1的返回值是int (*)(int)类型。&lt;/p&gt;
-
-&lt;p&gt;很明显， _1的返回值和combinator::operator()的返回值不一致。&lt;/p&gt;
-
-&lt;p&gt;问题是，怎么才能把他们写的一致呢？由于_fn函数保存了_1传入的参数factorial，所以_fn一定不是一个传统意义上的C++函数，而应该是个仿函数。由于_fn是个仿函数，那就必然有类的实例的生命周期的问题存在，一个不考虑释放内存的_fn应该是这样：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;class _fn
-{
-public:
-    typedef int(*func_type)(int);
-
-    _fn(func_type factorial) : func_(factorial), type_(FUNCTION), functor_(0)
-    {}
-
-    _fn(_fn *factorial) : type_(FUNCTOR), func_(0), functor_(factorial)
-    {}
-
-    int operator()(int n)
-    {
-        if (n == 0)
-            return 1;
-        else
-        {
-            switch (type_)
-            {
-            case FUNCTION:
-                return n * func_(n - 1);
-                break;
-            case FUNCTOR:
-                return n * (*functor_)(n - 1);
-                break;
-            }
-        }
-        throw;
-    }
-
-private:
-    enum
-    {
-        FUNCTION,
-        FUNCTOR,
-    } type_;
-    func_type func_;
-    _fn *functor_;
-};
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;对应的_1有两个，分别对应传入参数为函数和仿函数的情况：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;_fn* _1(_fn::func_type factorial)
-{
-    return new _fn(factorial);
-}
-
-_fn* _1(_fn *factorial)
-{
-    return new _fn(factorial);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;实验一下：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;int error(int n)
-{
-    throw;
-}
-
-int main(int argc, char* argv[])
-{
-    _fn* f1 = _1(error);
-
-    cout &amp;lt;&amp;lt; (*f1)(0) &amp;lt;&amp;lt; endl; // print 1
-    //cout &amp;lt;&amp;lt; (*f1)(1) &amp;lt;&amp;lt; endl; // throw
-
-    _fn* f2 = _1(_1(error));
-    cout &amp;lt;&amp;lt; (*f2)(0) &amp;lt;&amp;lt; endl; // print 1
-    cout &amp;lt;&amp;lt; (*f2)(1) &amp;lt;&amp;lt; endl; // print 1
-    //cout &amp;lt;&amp;lt; (*f2)(2) &amp;lt;&amp;lt; endl; // throw
-
-    _fn* f3 = _1(_1(_1(_1(error))));
-    cout &amp;lt;&amp;lt; (*f3)(0) &amp;lt;&amp;lt; endl; // print 1
-    cout &amp;lt;&amp;lt; (*f3)(1) &amp;lt;&amp;lt; endl; // print 1
-    cout &amp;lt;&amp;lt; (*f3)(2) &amp;lt;&amp;lt; endl; // print 2
-    cout &amp;lt;&amp;lt; (*f3)(3) &amp;lt;&amp;lt; endl; // print 6
-    //cout &amp;lt;&amp;lt; (*f3)(4) &amp;lt;&amp;lt; endl; // throw
-
-    return 0;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;看上去成功了耶~~~~~&lt;/p&gt;
-
-&lt;p&gt;当然，我也考虑过不使用指针，而是使用实例，也就是_fn的构造类似：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;_fn(_fn &amp;amp;factorial) : type_(FUNCTOR), func_(0), functor_(factorial) // need copy ctor here
-{}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;但这是对应functor_(factorial)，就需要一个类_fn的拷贝构造函数，又由于_fn(_fn &amp;amp;factorial)实际就是_fn的拷贝构造函数，也就是说这里递归了……（x，又是递归！）由于Y Combinator的本意就是不用递归而写出递归，所以这里我就不考虑这种情况了。&lt;/p&gt;
-
-&lt;p&gt;另一个不考虑的，就是每个_1都会在堆上建一个_fn的实例，这个实例何时销毁？当然是在最后一个_fn销毁的时候销毁。但是……谁有保证不会有人写出&amp;rdquo;&lt;code&gt;_fn *f4 = _1(f3)&lt;/code&gt;&amp;ldquo;呢？f4销毁的时候，可能有别的地方还在用f3……所以说，gc啊gc，开门吧~~~~~~（就是说，期待C++ 0x的gc吧）&lt;/p&gt;
-
-&lt;p&gt;再有，就是诡异的语法了。&lt;code&gt;(*f1)()&lt;/code&gt;之类的东西实在看的别扭。或者也可以写&amp;rdquo;&lt;code&gt;_fn &amp;amp;f1 = *_1(_1(...))&lt;/code&gt;&amp;ldquo;……总之，甘蔗不能两头甜，大床不能两头睡，凑合吧……&lt;/p&gt;
-
-&lt;p&gt;不管怎么说，总算实现了看上去像Y Combinator的东西，下次总该能真正实现个浪费内存诡异语法的Y Combinator了吧？&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -278,142 +66,7 @@ int main(int argc, char* argv[])
       <guid>http://air.googol.im/post/implement-y-combinator-in-cpp-1/</guid>
       <description>&lt;p&gt;恩……程序员的一大特点：看到别人有个轮子，就想自己动手造个出来……（这样不好，不好……）&lt;/p&gt;
 
-&lt;p&gt;上篇文章翻译了用Python实现Y Combinator。托作者之福，写的清晰易懂，算是让我大概理解了Y Combinator是个什么东西。其实就是把单递归抽象出来嘛，把递归的概念和递归体分离开，这个Y Combinator就是实现了递归概念的函数而已。（真是站着说话不腰疼啊……）&lt;/p&gt;
-
-&lt;p&gt;然后，想试试用C++能不能实现这个玩意儿。&lt;/p&gt;
-
-&lt;p&gt;基本上，这真是个让我吐血的想法……&lt;/p&gt;
-
-&lt;p&gt;最早想一步实现Y Combinator。琢磨着怎么有模板有运算符重载有类的C++，还模拟不出来个函数编程么？结果……唉，具体实现先不提。后来尝试按照文章里讲解Y Combinator的过程，实现某个非递归版本的函，比如那个阶乘：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;class combinator
-{
-public:
-    typedef int (*func_type)(int);
-
-    combinator(func_type arg) : factorial_(arg)
-    {}
-
-    int _fn(int n)
-    {
-        if (n == 0)
-            return 1;
-        else
-            return n * factorial_(n-1);
-    }
-
-    int operator()(int arg)
-    {
-        return _fn(arg);
-    }
-private:
-    func_type factorial_;
-};
-
-int error(int n)
-{
-    throw;
-}
-
-int main(int argc, char** argv)
-{
-    combinator _1(error);
-
-    cout &amp;lt;&amp;lt; _1(0) &amp;lt;&amp;lt; endl; // print 1
-    //cout &amp;lt;&amp;lt; _1(1) &amp;lt;&amp;lt; endl; // throw exception
-    return 0;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;看吧，看吧，果然实现了！&lt;/p&gt;
-
-&lt;p&gt;但是，当我想进一步递归的时候，问题出现了……因为对combinator的调用，是通过仿函数实现的，这个没法再次用函数的形式，去构造另一个combinator实例，比如：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;combinator _2(_1); // 这个不会通过编译的……
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;真是死人。没关系，我们有重载……这样：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;class combinator
-{
-public:
-    typedef int (*func_type)(int);
-
-    combinator(func_type arg) : factorial_(arg), type_(Function)
-    {}
-
-    combinator(combinator *instance/* really want to use ref here, but that can&#39;t differ from copy ctor */) : combinator_(instance), type_(Functor)
-    {}
-
-    int _fn(int n)
-    {
-        if (n == 0)
-            return 1;
-        else
-        {
-            switch (type_)
-            {
-            case Function:
-                return n * factorial_(n-1);
-            case Functor:
-                return n * (*combinator_)(n-1);
-            }
-            throw;
-        }
-    }
-
-    int operator()(int arg)
-    {
-        return _fn(arg);
-    }
-
-protected:
-    combinator(const combinator&amp;amp; arg) // copy ctor be protected can avoid miss usage.
-    {}
-
-private:
-    enum
-    {
-        Function,
-        Functor,
-    } type_;
-    func_type factorial_;
-    combinator *combinator_; // instance is better than pointer here, for pointer may be deleted. But, how...
-};
-
-int error(int n)
-{
-    throw;
-}
-
-int main(int argc, char* argv[])
-{
-    combinator _1(error); // can be writen like _1(&amp;amp;error) :)
-
-    cout &amp;lt;&amp;lt; _1(0) &amp;lt;&amp;lt; endl; // print 1
-    //cout &amp;lt;&amp;lt; _1(1) &amp;lt;&amp;lt; endl; // throw exception
-
-    combinator _2(&amp;amp;_1); // well, a little different with python
-
-    cout &amp;lt;&amp;lt; _2(0) &amp;lt;&amp;lt; endl; // print 1
-    cout &amp;lt;&amp;lt; _2(1) &amp;lt;&amp;lt; endl; // print 1
-    //cout &amp;lt;&amp;lt; _2(2) &amp;lt;&amp;lt; endl; // throw exception
-
-    combinator _3(&amp;amp;_2);
-
-    cout &amp;lt;&amp;lt; _3(0) &amp;lt;&amp;lt; endl; // print 1
-    cout &amp;lt;&amp;lt; _3(1) &amp;lt;&amp;lt; endl; // print 1
-    cout &amp;lt;&amp;lt; _3(2) &amp;lt;&amp;lt; endl; // print 2
-    //cout &amp;lt;&amp;lt; _3(3) &amp;lt;&amp;lt; endl; // throw exception
-
-    return 0;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;怎么样？很厉害吧？不过，本来在Python里挺短的程序，居然写了这么长，真是Orz！另外，类不能重载么？在类里面存在个type_来判断到底存的是函数还是仿函数，真是不优雅。不过，莫非要我再用类继承来消掉这个type_？那就不仅仅是这么长的代码了！算了，有兴趣追求优雅的，自己去写吧，我忍了……&lt;/p&gt;
-
-&lt;p&gt;居然写这个东西要写这么半天，郁闷！而且貌似再往后也不是那么好写的。最终的Y Combinator实现，留到下次吧……&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -431,45 +84,7 @@ void insert(BigWidget* w,   int i = -1);
 void insert(SmallWidget* w, int i = -1);
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;其中xWidget都继承自BaseWidget。这些函数大体功能都一样，只是细微上有一点差别，比如要对BigWidget重新做布局，或者设置ThickWidget的边框。&lt;/p&gt;
-
-&lt;p&gt;然后，有人把这些东西改成：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;void insert(BaseWidget* w,  int i = -1);
-void insert(ThinWidget* w,  int i);
-void insert(ThickWidget* w, int i);
-void insert(BigWidget* w,   int i);
-void insert(SmallWidget* w, int i);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;结果会怎么样呢？&lt;/p&gt;
-
-&lt;p&gt;那就是，所有忽略i值的调用都会自动转向：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;insert(BaseWidget* w,  int i = -1)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;编译不会出错，运行不会出错，行为…………自然就出错了………………&lt;/p&gt;
-
-&lt;p&gt;原因是，如果有ThinWidget *thinW，那么调用：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;insert(thinW)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;最初的设计会调用重载：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;void insert(ThinWidget* w,  int i = -1)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;但如过按照后来的设计，由于最后一个参数i没有默认值，调用也就无法匹配到正确的函数，只好退而求其次，寻找父类匹配，结果就调用到了：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;void insert(BaseWidget* w,  int i = -1)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;考虑到C++一般是定义声明分离，而且默认参数的定义是写在声明里，所以，你就等着一头雾水的解Bug吧。&lt;/p&gt;
-
-&lt;p&gt;我这两天就闷了几头雾水解这个bug，查到结果后，郁闷死了，那些声明是另一个同事改的，说是为了明确函数声明……&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -480,77 +95,7 @@ void insert(SmallWidget* w, int i);
       <guid>http://air.googol.im/post/about-new-in-cpp/</guid>
       <description>&lt;p&gt;首先的一点是，C++中new失败后，默认抛异常bad_alloc()，也就是说，判断返回值是否为NULL的方法在现代编译器面前毫无用处——判断执行之前，程序就随着异常的栈展开而销毁了！&lt;/p&gt;
 
-&lt;p&gt;用异常的好处，不用再反反复复的写对new失败的判断了，只用在一个地方捕获异常，即可判断程序中所有的这类情况。&lt;/p&gt;
-
-&lt;p&gt;但是，另一方面，我们又很想知道是哪个地方，或者哪个类new失败了。这两个信息中，类new失败对程序的维护更加重要。因为如果一个类重载了new方法，那么new失败的情况很有可能是自己操作不当造成的。而普通的new失败信息，一般是内存用尽，这种情况与程序本身的逻辑没有关系（除非有不可饶恕的内存泄漏），因此知道具体的类，对程序的维护并无太大帮助。那好，这里就谈谈如何在new抛bad_alloc时，记录下一些特定的信息。&lt;/p&gt;
-
-&lt;p&gt;new在失败后，并不是直接抛异常，而是会调用一个new_handler的回调函数，期待能让程序通过这个函数获得更多的可用内存。如果没有注册这个回调函数，或者这个函数调用后内存依旧不够用，才会抛异常。这个回调函数可以用set_new_handler来注册。大体流程如下：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;if (alloc 失败)
-{
-  std::new_handler old_handler = 0;
-  while(true)
-  {
-    old_handler = std::set_new_handler(0);
-    if (old_handler == 0)
-    {
-      throw std::bad_alloc();
-    }
-    old_handler();
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;那么，我们可以写如下的类，在真正alloc之前插入我们自己的new_handler，并在new_handler中记录alloc失败的情况：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;class NewHandlerHolder // 这是个辅助类，可以自动保存旧的new_handler
-{
-public:
-  NewHandlerHolder(std::new_hander arg)
-    : holder_(arg)
-  {}
-
-  ~NewHandlerHolder()
-  {
-    std::set_new_handler(holder_);
-  }
-
-private:
-  std::new_hander holder_;
-  // 阻止拷贝构造和赋值函数
-  NewHandlerHolder(const NewHandlerHolder&amp;amp;);
-  NewHandlerHolder&amp;amp; operator =(const NewHandlerHolder&amp;amp;);
-}
-
-class MyClass
-{
-public:
-  void* operator new(size_t arg)
-  {
-    NewHandlerHolder
-      holder(std::set_new_handler(&amp;amp;MyClass::myClassNewHandler));
-    return ::operator new(arg);
-  }
-
-private:
-  static void myClassNewHandler();
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;但是，写个优秀的MyClass::myClassNewHandler并不是那么简单。如果仅仅是使用cout或者printf输出，能保证cout和printf内部没有做内存的动态分配么？别忘了，调用这个函数时，内存已经极为紧张，无法保证正常的分配了。&lt;/p&gt;
-
-&lt;p&gt;我个人的一个想法：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;extern const char* badAllocClassName;
-
-void MyClass::myClassNewHandler()
-{
-  badAllocClassName = &amp;quot;MyClass&amp;quot;;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这样，当捕获到bad_alloc异常时，输出badAllocClassName的内容，就可以得到抛异常的类的名字了。&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>

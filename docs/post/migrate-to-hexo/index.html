@@ -69,12 +69,62 @@
       
       
     
-    <meta name="generator" content="Hugo 0.16-DEV" />
+    <meta name="generator" content="Hugo 0.42.2" />
 
     <link rel="canonical" href="http://air.googol.im/post/migrate-to-hexo/" />
 
     
       
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": 
+    },
+    "author": {
+        "@type": "Person",
+        "name": ,
+        
+        "url": http://air.googol.im,
+        "sameAs": [
+            
+            
+             
+             
+             
+             
+             
+            
+        ],
+        "description": 多年生软件工程师，信仰开源
+        
+    },
+    "headline": 迁移到HEXO,
+    "name": 迁移到HEXO,
+    "wordCount": 18,
+    "timeRequired": "PT1M",
+    "inLanguage": {
+      "@type": "Language",
+      "alternateName": en
+    },
+    "url": http://air.googol.im/post/migrate-to-hexo/,
+    "datePublished": 2013-04-24T08:34Z,
+    "dateModified": 2013-04-24T08:34Z,
+    
+    "keywords": hexo, nodejs, ruby,
+    "description": ,
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": http://air.googol.im/post/migrate-to-hexo/
+    }
+}
+    </script>
+    
+
+
     
 
     
@@ -92,11 +142,6 @@
         
         
         
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
-            </li>
-        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -105,6 +150,11 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -164,6 +214,8 @@
     <section class="post-content">
       <p>前几天把这个blog的框架从<a href="https://github.com/mojombo/jekyll">jekyll</a>迁移到了<a href="http://zespia.tw/hexo/">HEXO</a>。因为会重新生成feed，uuid和原来的不一样，所以有刷屏，抱歉。</p>
 
+<p></p>
+
 <p>总体上，HEXO的完成度要比jekyll高。不过这么比并不公平：对应HEXO的应该是<a href="http://octopress.org">Octopress</a>。不过总体使用感受比jekyll好很多。</p>
 
 <p>因为HEXO是node.js上模仿Octopress的作品，而Octopress又是基于jekyll的，所以整个迁移过程十分顺畅，而且迁移后所有文章的URL都不会变化，Disque和Google Analytics的数据都不需要更新就可以直接合并过来，很爽。迁移后，RVM终于没有了存在的理由，删之。</p>
@@ -175,7 +227,6 @@
 <p>后来<a href="https://twitter.com/ilrcat/status/325092691882954752">@ilrcat</a> 推荐用HEXO，正巧这两天也在用node.js弄一些东西，于是就装了一下。速度比基于Ruby的jekyll快不少，虽然感觉还是比Gor慢一些，但是也够用了，而且迁移很快，于是就花了一晚上搞定。</p>
 
 <p>说到js，这种能执行出 <em>3755933696 | 0xffff != 3755933696</em> 的语言实在太可怕了！向所有写js的程序员致敬： <em>你们受</em> 苦了！</p>
-
     </section>
 
 

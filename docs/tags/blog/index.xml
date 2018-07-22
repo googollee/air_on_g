@@ -8,7 +8,9 @@
     <language>zh-CN</language>
     <copyright>除非另有声明，本网站采用&lt;a href=&#39;https://creativecommons.org/licenses/by-nd/3.0/cn/&#39;&gt;知识共享“署名-禁止演绎 3.0 中国大陆”许可协议&lt;/a&gt;授权。</copyright>
     <lastBuildDate>Sun, 19 Feb 2017 10:54:24 +0100</lastBuildDate>
-    <atom:link href="http://air.googol.im/tags/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="http://air.googol.im/tags/blog/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>这个Blog又复活了</title>
@@ -18,32 +20,7 @@
       <guid>http://air.googol.im/post/migrate-to-hugo/</guid>
       <description>&lt;p&gt;嗯，这个Blog过了几年，又复活了。&lt;/p&gt;
 
-&lt;p&gt;有时候觉得还是想想要写些东西会比较好，不一定很长，但是多年后回顾一下还是很有用的。&lt;/p&gt;
-
-&lt;p&gt;比如这次迁移Blog的过程，发现居然以前还试图用C++实现y combinator。复习了一下当时的想法，也略有收获。&lt;/p&gt;
-
-&lt;p&gt;这次Blog使用&lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt;搭建。选择这个服务有以下几个考虑：&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;静态页面&lt;/p&gt;
-
-&lt;p&gt;我依旧觉得Blog使用静态页面是坠吼的。一来服务端很轻量，不需要搭建一堆复杂的软件。另外所有文本以文件方式保存，方便查找和管理，尤其是配合Git的版本管理。如果使用数据库，总会遇到版本升级（比如Php7就抛弃了对MySQL的支持）时各种各样的问题。如果要多人协作，也可以利用GitHub这种非常成熟的方式来简化流程。另外，现在Markdown已经非常成熟，而且很多效果可以通过Javascript直接显示。这些都让静态页面成为非常好的选择。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;静态编译二进制&lt;/p&gt;
-
-&lt;p&gt;Hugo是以Go编写的静态页面建站工具。使用Go的好处是，执行文件是一个单一无依赖的二进制文件，使用时不需要配置各种依赖环境。之前最早从Jekyll迁移到Hexo的最大原因，就是一段时间没有更新Jekyll的依赖，导致重新安装时一些插件已经无法支持最新版本的主程序，最后放弃使用。我相信Node.js的版本管理要比Ruby好很多，但是如果能抛弃掉这一坨东西不是更好么？&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;支持的功能&lt;/p&gt;
-
-&lt;p&gt;我需要的功能都有了，而且选了一个主题还不错。Hugo这么多年也算养肥了，执行效率也很高，写Blog的时候也很方便。&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;这次迁移，还把Blog从自己租的VPS上换到了GitHub Page。主要想法是，自己折腾VPS挂掉的时候可以不会影响Blog。不过这样有可能会导致撞墙。如果哪天发现有问题的话，我还会迁回到VPS上。反正静态页面迁移太简单了。&lt;/p&gt;
-
-&lt;p&gt;这次迁移如果说可惜的地方，就是Hugo没办法完全支持Hexo的url格式，导致之前所有Disqus上的留言都无法正常显示。略可惜。不过我不想折腾了。&lt;/p&gt;
-
-&lt;p&gt;以上。&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>

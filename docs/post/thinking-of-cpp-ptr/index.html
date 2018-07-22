@@ -67,12 +67,62 @@
       
       
     
-    <meta name="generator" content="Hugo 0.16-DEV" />
+    <meta name="generator" content="Hugo 0.42.2" />
 
     <link rel="canonical" href="http://air.googol.im/post/thinking-of-cpp-ptr/" />
 
     
       
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": 
+    },
+    "author": {
+        "@type": "Person",
+        "name": ,
+        
+        "url": http://air.googol.im,
+        "sameAs": [
+            
+            
+             
+             
+             
+             
+             
+            
+        ],
+        "description": 多年生软件工程师，信仰开源
+        
+    },
+    "headline": 关于C&#43;&#43;智能指针的思考,
+    "name": 关于C&#43;&#43;智能指针的思考,
+    "wordCount": 64,
+    "timeRequired": "PT1M",
+    "inLanguage": {
+      "@type": "Language",
+      "alternateName": en
+    },
+    "url": http://air.googol.im/post/thinking-of-cpp-ptr/,
+    "datePublished": 2009-11-07T20:00Z,
+    "dateModified": 2009-11-07T20:00Z,
+    
+    "keywords": cpp, auto_ptr,
+    "description": ,
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": http://air.googol.im/post/thinking-of-cpp-ptr/
+    }
+}
+    </script>
+    
+
+
     
 
     
@@ -90,11 +140,6 @@
         
         
         
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
-            </li>
-        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -103,6 +148,11 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -160,6 +210,8 @@
     <section class="post-content">
       <p>最近在公司的项目里开始实践用C++的析构来自动释放已申请的指针，同时保证程序的效率不变。</p>
 
+<p></p>
+
 <p>由于要使用C库，因此自己写了三个类：local_ptr，local_ptr_f，auto_ptr_f。其中第一个类是类似std::autor_ptr，只是没有拷贝构造函数和赋值构造函数，只能本地使用。两个带_f后缀的，在构造时分别多了一个用于释放内存的函数做参数，目的是可以自动管理C的内存分配。</p>
 
 <p>为什么不直接用boost::share_ptr？首先，我觉得引用计数这东西在大部分场合用不到。用到的时候，也应该作为确认实例生命周期的工具而存在（比如类似COM的应用），而不是成为指针的一部分；另一方面，虽然引用计数引入的操作不多，但是蚂蚁啃大象，直接使用share_ptr会在不知不觉中引入很多没必要的计数操作，降低效率（记得许老大的blog上有提到过这种情况）。尤其是将share_ptr直接扔到container里的行为，在我看来，这简直就是对C/C++追求效率的宗旨的肆意践踏！先不说多出来的内存占用量，由于container自身一些调整行为导致的引用计数操作，简直就是不可预测的！</p>
@@ -207,7 +259,6 @@
 </code></pre>
 
 <p>就我自己的感觉，在一堆堆的代码里，前者因为有“=”的存在，能更轻易的被发现，而且现代编辑器可能还会用特殊的颜色标识出来。而后者会和函数调用等语句混在一起，不利于阅读。目前没有想到解决办法。另一个不好的地方是，会把变量初始化的语句写的很长。这个可以通过适当的折行来缩短，不算什么太大的问题。</p>
-
     </section>
 
 

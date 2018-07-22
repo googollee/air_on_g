@@ -7,8 +7,23 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>除非另有声明，本网站采用&lt;a href=&#39;https://creativecommons.org/licenses/by-nd/3.0/cn/&#39;&gt;知识共享“署名-禁止演绎 3.0 中国大陆”许可协议&lt;/a&gt;授权。</copyright>
-    <lastBuildDate>Wed, 10 Jan 2018 15:24:03 +0800</lastBuildDate>
-    <atom:link href="http://air.googol.im/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 21 Jul 2018 11:10:00 +0200</lastBuildDate>
+    
+	<atom:link href="http://air.googol.im/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>一个Go开发者的Rust体验</title>
+      <link>http://air.googol.im/post/rust-view-from-a-gopher/</link>
+      <pubDate>Sat, 21 Jul 2018 11:10:00 +0200</pubDate>
+      
+      <guid>http://air.googol.im/post/rust-view-from-a-gopher/</guid>
+      <description>&lt;p&gt;一直很关注Rust这门语言的发展，不过没有实际使用过。最近Rust准备以2018 Rust的名义发布可以用作生产环境的稳定版本，又赶上有兴趣写点东西，所以把一个基础模块同时用Rust和Go实现了一下。本文就是这次实现的一些结果。&lt;/p&gt;
+
+&lt;p&gt;我自己有很长的Go使用经历，所以本文对Go的看法会相对比较准确。Rust虽然关注了很长时间，但代码基本上是最近一个星期左右的成果，可能看法有偏颇。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>我对Go 2类型系统的期望</title>
@@ -18,156 +33,7 @@
       <guid>http://air.googol.im/post/what-i-want-in-go2-type-system/</guid>
       <description>&lt;p&gt;我应该算是第一批使用Go做实际开发的程序员，也写过一些比较深入的项目（比如go-socket.io)。我想总结一下Go里关于类型系统好用的部分以及不好用的部分。这些特性会集中在语言层面，而且基本上是Go 1基本不可能有改动的特性。&lt;/p&gt;
 
-&lt;p&gt;我现在对于语言的类型系统的看法：类型系统是对程序承诺行为的一组静态约束。比如，对一个变量的类型约束为int8，表示这个变量具有以1 byte为存储单位，带有符号位的整数数字的行为。这种约束的好处，一方面可以让编译器根据承诺的行为来做优化（比如为这个变量分配1 byte而不是默认寄存器字长），另一方面可以让代码本身包含更多的意义，方便读代码和静态检查是否违反了约束。&lt;/p&gt;
-
-&lt;p&gt;由此，类型系统的灵活性，决定了语言能写出多强大的静态约束，能在多大程度上帮助程序员不犯错误。&lt;/p&gt;
-
-&lt;p&gt;先简要说一下好的部分吧。&lt;/p&gt;
-
-&lt;p&gt;在Go之前，主流的语言的都认为面向对象（OO）是大型工程代码的组织方式，再往前主流的组织方式分成以描述过程为主的组织方式（过程式编程），和描述转化为主的组织方式（函数式编程）。面向对象更像是试图结合过程式编程和函数式编程的一次尝试：将过程式的描述进行封装，对外暴露转化行为（接口），并在更高层次上统一处理某一类的转化（多态）。其目的是将状态管理集中在类的一组方法中，外部不直接操作状态，而是通过方法调用来让类的实例产生行为。这种方法很适合将各种功能解耦，由专门的人来负责开发维护。功能内的状态只由内部维护；功能间依靠接口来约束行为。这让功能间的耦合可以脱离具体数据，只关心状态的变化和流程。由于数据的变化和维护要远难于状态转化的变化和维护（想一想历史数据清洗和迁移），这种组织方式很适合现代大规模软件工程。&lt;/p&gt;
-
-&lt;p&gt;但是面向对象普遍使用的继承，会在父类和子类之间共享状态，而且很容易出现状态同时被父类和子类修改的情况。另外多继承导致的状态不一致也是很大的问题。&lt;/p&gt;
-
-&lt;p&gt;Go对此的解决方案是，取消继承，将多态的功能完全交给接口来实现，并通过匿名组合来实现复用。这样，面向对象的三大基本思想“封装，继承，多态”就分别由“struct，compose，interface”三个特性来完成。由于组合不会在类型间共享状态，也就避免了继承以及多重继承带来的一系列问题。&lt;/p&gt;
-
-&lt;p&gt;由此，Go在编写实现的时候会重点关注struct内部的数据。如果封装合理，struct应该和业务逻辑有一对一的实现。同时，模块之间使用interface来约束行为。由于interface没有状态，所以可以轻易组合interface来产生新的行为类。&lt;/p&gt;
-
-&lt;p&gt;然后，Go类型系统的好处，大概就这么多了。&lt;/p&gt;
-
-&lt;p&gt;Go目前被人诟病最多的，大概就是错误处理时遍地&lt;code&gt;if err != nil&lt;/code&gt;。Go函数习惯上会利用多返回值的最后一个值，作为错误标志。但是，语法上这些返回值是并列关系，并不互斥。也就是说，完全可以在前面的值返回合法值的同时，最后返回一个错误。而且Go的标准库里就有类似的情况：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// ...
-// When Read encounters an error or end-of-file condition after
-// successfully reading n &amp;gt; 0 bytes, it returns the number of
-// bytes read. It may return the (non-nil) error from the same call
-// or return the error (and n == 0) from a subsequent call.
-// An instance of this general case is that a Reader returning
-// a non-zero number of bytes at the end of the input stream may
-// return either err == EOF or err == nil. The next Read should
-// return 0, EOF.
-// ...
-type Reader interface {
-    Read(p []byte) (n int, err error)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;io.Reader接口的Read方法，在读取到结束状态时，既可以n返回非0值的同时返回读取结束（非nil）的错误，也可以在下一次调用时n返回0的时候返回读取结束的错误。首先，这个约束无法用Go的语法描述出来，只能通过注释的方式写明。其次，这个约束其实描述了两种不同的处理方式，导致这个函数语义与其他Go函数返回错误的语义完全不一致（比如NewXXX()类的函数语义就是有错误不创建，创建成功没错误）。&lt;/p&gt;
-
-&lt;p&gt;一个比较好的解决这种问题的方案就是更新类型系统。Go的类型组合可以认为是一个“和”类型的语义，但是缺乏组合“或”的语义。如果可以用&lt;code&gt;A | B&lt;/code&gt;来表示某个类型是“类型A或类型B”，那么上一个接口就可以表示为：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;type Reader interface {
-    Read(p []byte) (int | error)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这样，Read函数就非常明确的表示出，要么返回读取成功的字节数，要么读取错误。&lt;/p&gt;
-
-&lt;p&gt;“或”类型有另外一个好处，就是可以将nil定义为一个单独的类型，所有的*类型，都可以认为是某个类型&lt;code&gt;T | nil&lt;/code&gt;的另一种写法。而nil类型只有唯一的一个值nil。这样就可以避免Go里令人恼火的另一个问题&lt;code&gt;(*int)(nil) != nil&lt;/code&gt;。&lt;/p&gt;
-
-&lt;p&gt;这里涉及到一个后续的问题，如何处理错误。即便有了或语义，可能错误处理会类似：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;ret := f.Read(p)
-if err := ret.(error); err != nil {
-    // block a
-    return
-}
-// block b
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这个至少看上去，不比原来的&lt;code&gt;if err != nil&lt;/code&gt;要差（反正原来打字也要写不少）。不过问题在于，ret的类型为int或error，而if语句已经判断了ret为error的情况，那么在block a里，ret的类型应当自动被识别成error，而由于有return的存在（假设没有跨语句块的goto），block b里应当可以将ret当作int来直接使用，而不需要再次cast。否则使用ret的时候就会显得很啰嗦。不过这种判断并不好实现，if内部可能没有return，而是用某种panic的手段来停止程序，而这个panic可能会隐藏在很深的函数里。同时goto的存在会让整个情况更加难以判断。如果是某种可以恢复的if语句，会让整个逻辑更加复杂，比如：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;f := io.Open(file)
-if err := f.(error); err != nil {
-    f = io.Create(file)
-    if err := f.(error); err != nil {
-        return err
-    }
-}
-
-// f should be file, not error
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;另一种可行的方法是类似Rust的match，或者说让switch支持返回值的方式，来处理返回值。比如：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;f := switch v := io.Open(file).(type) {
-case error:
-    return v
-default:
-    v
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;其中&lt;code&gt;return v&lt;/code&gt;依旧是退出外部函数的语义，而&lt;code&gt;default&lt;/code&gt;分支里的&lt;code&gt;v&lt;/code&gt;则是switch语句整体的返回值，会赋值给f。不过总觉得这样的处理语句并不如if来的明确。另外，如果在error分支里需要做一些处理，则会让switch语句有很深的嵌套。&lt;/p&gt;
-
-&lt;p&gt;当然，类似Rust实现一个&lt;code&gt;Result&amp;lt;T, E&amp;gt;&lt;/code&gt;类型也是个办法，但这就需要语言具备处理泛型的能力。是否要支持泛型，已经是Go的月经问题，在此不做展开讨论。&lt;/p&gt;
-
-&lt;p&gt;另外，Go的多值返回目前看起来也是一个不够完善的特性。函数的多值返回是个需求，但是由于Go的类型系统没有“轻量”组合类型的能力，导致不得不增加一个特殊语法来支持多值返回。如果Go的类型系统支持其他语言里的元组（Tuple）概念，则可以通过类型系统达到更广泛的支持。&lt;/p&gt;
-
-&lt;p&gt;所谓元组，就是&lt;code&gt;(A, B)&lt;/code&gt;会定义一个新类型，包含A和B两个类型。如果元组还支持匹配赋值的能力的话，就可以这样实现多值返回：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func f() (int, bool) {
-    return 1, true
-}
-
-(i, ok) := f()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;如果配合之前的类型“或”的能力，就能实现更加复杂的函数约束：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func f() ((int, bool) | error) {
-    ...
-}
-
-ret := f()
-if ret.(error) != nil {
-    return
-}
-
-(i, ok) := ret
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;不过这样的话，括号&lt;code&gt;()&lt;/code&gt;就会具有两种语义：改变表达式优先级和定义元组。这个大概不太符合Go的语法习惯。&lt;/p&gt;
-
-&lt;p&gt;如果展开一点，将error作为环境上下文来看待，类比Haskell的Monad的话，可以将error作为一个附加在函数上的上下文，根据error的值来做处理：要么退出一个语句块，要么经过处理回复error。其实其他语言里的try/catch就是这种环境的一个实现。只不过，在支持Monad的类型里，可以不依赖编译器的语法，来实现类似try/catch。&lt;/p&gt;
-
-&lt;p&gt;既然这里提到了Monad，多说一下。Go的defer/context，目前在Python和Node.js里大热的future，都是类似的给函数附加上下文的语义。比如，defer附加了延迟执行的功能，contenxt附加了deadline和一些值，future附加了异步执行的功能。甚至顺序执行本身，都可以看作一组函数，根据顺序附加了执行先后次序（IO Monad）。&lt;/p&gt;
-
-&lt;p&gt;Monad利用回调机制，将函数注册到一个符合某个Monad的类型的实例里，然后由这个实例，按照某种规则，调用所有/部分注册进来的函数。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;type Maybe struct {
-    f []FuncType
-}
-
-func (m *Maybe) Map(f FuncType) {
-    m.f = append(m.f, f)
-}
-
-func (m *Maybe) Do(arg ArgType, ...) RetType {
-    for _, f := range m.f {
-        ret := f(arg, ...)
-        if ret.(error) != nil {
-            return ret
-        }
-        (arg, ...) = ret
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;为了让Monad足够灵活，不能对回调函数做过多限制，所以经典的泛型方案也不能完全实现Monad的意图。比如，刚才的代码是无法写出FuncType的定义的。FuncType看上去应该是&lt;code&gt;func (...) ...&lt;/code&gt;类型， 同时要求返回的值必须存在error的可能。如果利用上面提到的机制，就是类似&lt;code&gt;func (...) (... | error)&lt;/code&gt;。为了保证灵活，函数的签名部分不能约束参数个数，而返回值其他的可能类型也不能被约束。利用泛型，可以做到返回值的其他可能类型不被约束，但是无法做到不约束参数个数。所以即便支持了泛型，也无法完全实现Monad。&lt;/p&gt;
-
-&lt;p&gt;Haskell等函数式语言对此的解决办法是，函数柯里化。对于&lt;code&gt;func (a A, b B, c C) D&lt;/code&gt;，将其看作&lt;code&gt;f: A -&amp;gt; B -&amp;gt; C -&amp;gt; D&lt;/code&gt;，这样，就可以不管函数有多少个输入参数，统一写为&lt;code&gt;X -&amp;gt; Y&lt;/code&gt;，对于刚才的f，有&lt;code&gt;X := A, Y := B -&amp;gt; C -&amp;gt; D, f: X -&amp;gt; Y = A -&amp;gt; (B -&amp;gt; C -&amp;gt; D) = A -&amp;gt; B -&amp;gt; C -&amp;gt; D&lt;/code&gt;。柯里化后，FuncType就可以直接定义为&lt;code&gt;FuncType: X -&amp;gt; Monad Y&lt;/code&gt;。对于返回的约束，由于Haskell支持高阶类型，所以并不是直接约束返回值，而是将Monad定义为一个高阶类型，并且要求&lt;code&gt;Map: Monad X -&amp;gt; (X -&amp;gt; Monad Y) -&amp;gt; Monad Y&lt;/code&gt;，从而让Map可以对Monad链式执行。&lt;/p&gt;
-
-&lt;p&gt;上面Maybe类型实现时，另一个无法做到的事情是，如何在Do里将不确定个数的参数传递到内部函数调用f上。和之前分析一样，这个无法使用泛型来解决，而Haskell依旧使用柯里化避免了这个问题。&lt;/p&gt;
-
-&lt;p&gt;另一方面，go generate也无法辅助定义FuncType。假设可以用某种WrapFunc来包装FuncType的实例，使其类型统一变成某个类型WrappedFunc，而这个WrapFunc可以通过go generate的方式执行，检查某个func的签名并生成一段特殊的代码来实现Wrap功能。那么，当对属于另外的package的func做Wrap时，比如：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;maybe.Map(wrap(os.Open, &amp;quot;...&amp;quot;))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;如果要生成wrap，需要知道os.Open的函数签名。而使用go generate解析函数签名的时候，需要拿到对应的源代码。也就是说，如果我能写出一个generator，这个generator需要实现一部分go编译器的行为：根据import查找对应的源代码。而这个行为，和go generate的设计用途不一致，实现起来也会有很多问题。&lt;/p&gt;
-
-&lt;p&gt;我个人还是很希望Go 2能有一种方法，能够对某类类型批量生成一系列的行为，而不用为每个类型手写一遍。&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -178,70 +44,7 @@ func (m *Maybe) Do(arg ArgType, ...) RetType {
       <guid>http://air.googol.im/post/vim-config/</guid>
       <description>&lt;p&gt;最近在Windows 10上折腾Windows Subsystem for Linux。为了减少折腾的复杂性和不一致性，决定在这个环境里用VIM。这里记录了这次配置VIM的经历。&lt;/p&gt;
 
-&lt;p&gt;Linux Subsystem on Windows是Windows 10上的一个Linux模拟层，类似Wine。这个模拟层在底层模拟了Linux的系统调用，最早目的是在Windows RT上执行Android程序。后来随着Windows Mobile的衰落，这个项目就没用了。不过近几年微软实在好心，最终还是把这个项目废物利用，变成了Windows下兼容Linux的一套运行层环境。最早在Windows 10里叫Bash on Ubuntu on Windows，是和Ubuntu合作的一个项目。微软负责模拟层，Ubuntu负责基于模拟层搭建Ubuntu 14.04环境。在最新的Windows 10 Updates里，微软把这个模拟层改名叫Windows Subsystem for Linux，除了名字太长，至少没有前一个那么多的槽点了（其实还不如改名叫Line，和Wine凑一对）。自带的Ubuntu也升级到了16.04（都2017年了，不过至少是个LTS）。&lt;/p&gt;
-
-&lt;p&gt;不过我倒是不打算继续使用Ubuntu了。这货2年一更新，作为开发环境要配置一堆私有源才能工作。所以这次首先就想能不能换成一个Rolling的发行版。之后在社区发现&lt;a href=&#34;https://github.com/RoliSoft/WSL-Distribution-Switcher&#34;&gt;WSL Distribution Switcher&lt;/a&gt;这个项目，配合Docker可以安装几乎所有的发行版。于是就把这个模拟层的发行版换成了Debian testing。既足够稳定（一个包要在unstable里保证5天没bug才会切入testing），又能够及时滚动更新（上游package更新后就会立刻启动upstream-&amp;gt;unstable-&amp;gt;testing这个流程）。&lt;/p&gt;
-
-&lt;p&gt;这个环境依然有两个麻烦的地方，首先是模拟环境的文件系统和Windows 10的文件系统是分离的，可以把Windows 10的文件系统通过&lt;code&gt;/mnt/c&lt;/code&gt;的方式挂载到模拟层里（先不吐槽所有文件挂载后0777的访问属性）。其次是Linux模拟环境下默认没有X，不能操作任何GUI，只能使用命令行交互（愿意的话可以通过SDL的方式装X，但我不愿意这么折腾）。第一次尝试的时候打算直接把工作目录通过软连接，进入&lt;code&gt;/mnt/c&lt;/code&gt;下的工作目录。编辑文件在Windows 10里用Atom，编译执行在Linux环境。这样麻烦在于，我需要在Windows和Linux两个环境里同时配置一些运行环境，比如golang，lint等工具，才能在编辑的时候能够自动执行，也能在命令行下执行。这种在两个地方配置一套类似的东西，最后总会出现维护上的问题。&lt;/p&gt;
-
-&lt;p&gt;最后决定下狠心，放弃Atom，直接在命令行里使用VIM。&lt;/p&gt;
-
-&lt;p&gt;使用Switcher安装的Debian testing，默认的VIM不带任何脚本程序（Python，Ruby）支持，所以VIM插件会有限制（主要是YouCompleteMe这个插件）首先更新VIM：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo apt-get purge vim
-$ sudo apt-get install vim-nox
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;由于这个包使用Python 3作为Python的默认支持，为了简化配置，将环境的Python也默认设置为Python 3（反正我不用Python）：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 1
-sudo update-alternatives --config python
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;之后安装&lt;a href=&#34;https://github.com/VundleVim/Vundle.vim&#34;&gt;Vundle.vim&lt;/a&gt;作为插件管理：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ mkdir -p ~/.vim/bundle
-$ cd ~/.vim/bundle
-
-# 以下两组命令2选1
-
-# 1 直接使用Vindle.vim
-$ git clone https://github.com/VundleVim/Vundle.vim
-
-# 2 使用submodule管理Vindle.vim
-$ git submodule add https://github.com/VundleVim/Vundle.vim
-$ git submodule update --init Vundle.vim
-
-$ cat &amp;gt; ~/.vimrc &amp;lt;&amp;lt;EOF
-set nocompatible
-filetype off
-
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-Plugin &#39;VundleVim/Vundle.vim&#39;
-
-call vundle#end()
-
-filetype plugin indent on
-EOF
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;最终安装并配置插件后的配置文件可以直接参考&lt;a href=&#34;https://github.com/googollee/my_sys/blob/master/vim/vimrc&#34;&gt;.vimrc&lt;/a&gt;。这个配置会利用&lt;code&gt;Ctrl-e&lt;/code&gt;来循环打开NERDTree和TagBar，并可以按住&lt;code&gt;Ctrl&lt;/code&gt;后，使用&lt;code&gt;hjkl&lt;/code&gt;来切换不同的Window，使用&lt;code&gt;w&lt;/code&gt;创建新的Tab，使用&lt;code&gt;nm&lt;/code&gt;来切换不同的Tab（其实我更想使用&lt;code&gt;Ctrl-,.&lt;/code&gt;来切换Tab，无奈似乎不能map）。使用&lt;code&gt;Ctrl-p&lt;/code&gt;可以在当前目录下根据文件名快速定位文件。&lt;/p&gt;
-
-&lt;p&gt;修改好配制后，需要进入VIM执行&lt;code&gt;:PluginInstall&lt;/code&gt;来安装所有的插件。插件安装好后，需要编译YouCompleteMe插件：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo apt-get install build-essential cmake
-$ cd ~/.vim/bundle/YouCompleteMe
-$ python ./install.py --clang-completer --gocode-completer --tern-completer
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这个编译保证能对clang，golang和Javascript进行补全。&lt;/p&gt;
-
-&lt;p&gt;再次进入VIM，就可以正常使用了。&lt;/p&gt;
-
-&lt;p&gt;如果要更新插件，可以进入VIM执行&lt;code&gt;:PluginInstall&lt;/code&gt;。&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -252,32 +55,7 @@ $ python ./install.py --clang-completer --gocode-completer --tern-completer
       <guid>http://air.googol.im/post/go-in-action/</guid>
       <description>&lt;p&gt;受谢大邀请，去年在负责翻译《Go in Action》一书。上周末，这本书的中文版《Go语言实战》终于上架开卖了，可以在&lt;a href=&#34;http://www.epubit.com.cn/book/details/4291&#34;&gt;这里&lt;/a&gt;，或者去各大电商购买。&lt;/p&gt;
 
-&lt;p&gt;说起来这本书的翻译过程还很波折。最开始是谢大邀我一起合译，后来谢大因为工作忙，就全部交由我来翻译。我当时因为正好没啥事情，翻译的速度还挺快的。不过翻译完成后，编辑迟迟没有把书出版。后来过了一段时间才跟我说，书被选为优秀译书，要进一步编辑加工。于是又经历了大概辆三轮和编辑往复敲定所有译文细节，而且文风大变，由原来的非常口语化的译文改为了略微正式的译文，同时对很多术语做了纠正。很感谢编辑在这个过程中指出很多我很随意的译文，也让我有机会能更深入的理解文章，并正确翻译。&lt;/p&gt;
-
-&lt;p&gt;这本书对Go的很多语义做了更深入的探讨，比如Interface，比如并发，比如测试打包。对于想进阶的Go使用者来说，可以读一读这本书，理解一些语法背后的理论。&lt;/p&gt;
-
-&lt;p&gt;这里想再讨论一下最近的Rust语言。&lt;/p&gt;
-
-&lt;p&gt;最近看了一下Rust。这个语言的目标非常宏大：在不引入执行期代价的情况下在语法层面解决资源自动回收的问题。传统上解决资源回收问题，都是通过GC来完成的。这个做法最大的问题在于对程序加入了不小的额外负担。Go这几个版本的迭代都在加强Gc，尽量减小Gc对程序逻辑的影响。目前Go 1.8能够做到并行Gc停世界的时间在100ms内，这已经是个非常好的Gc了，但是依然有影响。Rust则是通过对所有资源引入明确的所有者，在编译期自动追踪资源是否不再有所有者，并在适当的时候插入资源释放代码。&lt;/p&gt;
-
-&lt;p&gt;不过Rust为了达到这个目的，不得不让程序员手动控制更多的概念。比如在所有者在栈分配的资源上定义的概念，但是遇到堆分配，就不得不再多引入Box，Rc，Weak三个概念。当遇到多线程的时候，又要引入Arc这个概念。同时还要在函数层面明确引入生命周期这个概念来让程序员手动控制所有者的关联关系。比如对于一个输入是两个int的引用，返回是一个int引用的几个函数：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-rust&#34;&gt;fn f1&amp;lt;&#39;a&amp;gt;(a: &amp;amp;&#39;a int, b: &amp;amp;&#39;a int) -&amp;gt; &amp;amp;&#39;a int {}
-fn f2&amp;lt;&#39;a, &#39;b&amp;gt;(a： &amp;amp;&#39;a int, b: &amp;amp;&#39;b int) -&amp;gt; &amp;amp;&#39;a int{}
-fn f3&amp;lt;&#39;a, &#39;b&amp;gt;(a： &amp;amp;&#39;a int, b: &amp;amp;&#39;b int) -&amp;gt; &amp;amp;&#39;b int{}
-fn f4&amp;lt;&#39;a, &#39;b, &#39;c&amp;gt;(a： &amp;amp;&#39;a int, b: &amp;amp;&#39;b int) -&amp;gt; &amp;amp;&#39;c int{}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这几个函数是完全不同的函数，原因在于输入值和返回值的生命周期是不一致的。这种手动控制生命周期，在我感觉甚至是程序语言的一种倒退：现代程序语言出现时的第一个目的就是为了解决汇编需要手动管理生命周期的问题。而生命周期配合所有权转移，一定会让程序编写变得非常困难，甚至让程序无法表达一些正常的行为。&lt;/p&gt;
-
-&lt;p&gt;不过Rust对于并发倒是十分深思熟虑。Rust希望利用所有权来实现并发安全：并发开始时要么转移资源所有权，要么资源是静态的；并发过程中，要么是用特殊的行为跨执行单元转移所有权，要么使用Arc配合锁来访问资源。而且这套规则完全可以通过编译器在编译时进行保障。具体可以参见Rust的&lt;a href=&#34;https://blog.rust-lang.org/2015/04/10/Fearless-Concurrency.html&#34;&gt;这篇文章&lt;/a&gt;。由此也可以给Go一个提示：在需要传递资源所有权的时候，使用Chan；在共享访问资源的时候，使用Locker。&lt;/p&gt;
-
-&lt;p&gt;不过Rust目前对并发的支持只到此为止，并没有成熟的官方库来真正实现并发。所以现在用Rust写并发并不像Go一样可以拿来就用。&lt;/p&gt;
-
-&lt;p&gt;所以，最后我跑去看Haskell了。毕竟Haskell有现在最成熟的类型系统。“其他语言所谓的新特性，只不过是Haskell里已经实现的功能而已”。&lt;/p&gt;
-
-&lt;p&gt;我会继续关注Rust。今年Rust社区会以易用为目标。拭目以待。Go依旧是将工程，性能，开发门槛平衡的很好的语言。&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -288,32 +66,7 @@ fn f4&amp;lt;&#39;a, &#39;b, &#39;c&amp;gt;(a： &amp;amp;&#39;a int, b: &amp;am
       <guid>http://air.googol.im/post/migrate-to-hugo/</guid>
       <description>&lt;p&gt;嗯，这个Blog过了几年，又复活了。&lt;/p&gt;
 
-&lt;p&gt;有时候觉得还是想想要写些东西会比较好，不一定很长，但是多年后回顾一下还是很有用的。&lt;/p&gt;
-
-&lt;p&gt;比如这次迁移Blog的过程，发现居然以前还试图用C++实现y combinator。复习了一下当时的想法，也略有收获。&lt;/p&gt;
-
-&lt;p&gt;这次Blog使用&lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt;搭建。选择这个服务有以下几个考虑：&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;静态页面&lt;/p&gt;
-
-&lt;p&gt;我依旧觉得Blog使用静态页面是坠吼的。一来服务端很轻量，不需要搭建一堆复杂的软件。另外所有文本以文件方式保存，方便查找和管理，尤其是配合Git的版本管理。如果使用数据库，总会遇到版本升级（比如Php7就抛弃了对MySQL的支持）时各种各样的问题。如果要多人协作，也可以利用GitHub这种非常成熟的方式来简化流程。另外，现在Markdown已经非常成熟，而且很多效果可以通过Javascript直接显示。这些都让静态页面成为非常好的选择。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;静态编译二进制&lt;/p&gt;
-
-&lt;p&gt;Hugo是以Go编写的静态页面建站工具。使用Go的好处是，执行文件是一个单一无依赖的二进制文件，使用时不需要配置各种依赖环境。之前最早从Jekyll迁移到Hexo的最大原因，就是一段时间没有更新Jekyll的依赖，导致重新安装时一些插件已经无法支持最新版本的主程序，最后放弃使用。我相信Node.js的版本管理要比Ruby好很多，但是如果能抛弃掉这一坨东西不是更好么？&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;支持的功能&lt;/p&gt;
-
-&lt;p&gt;我需要的功能都有了，而且选了一个主题还不错。Hugo这么多年也算养肥了，执行效率也很高，写Blog的时候也很方便。&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;这次迁移，还把Blog从自己租的VPS上换到了GitHub Page。主要想法是，自己折腾VPS挂掉的时候可以不会影响Blog。不过这样有可能会导致撞墙。如果哪天发现有问题的话，我还会迁回到VPS上。反正静态页面迁移太简单了。&lt;/p&gt;
-
-&lt;p&gt;这次迁移如果说可惜的地方，就是Hugo没办法完全支持Hexo的url格式，导致之前所有Disqus上的留言都无法正常显示。略可惜。不过我不想折腾了。&lt;/p&gt;
-
-&lt;p&gt;以上。&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -324,85 +77,7 @@ fn f4&amp;lt;&#39;a, &#39;b, &#39;c&amp;gt;(a： &amp;amp;&#39;a int, b: &amp;am
       <guid>http://air.googol.im/post/contiguous-stacks-in-go/</guid>
       <description>&lt;p&gt;本文译自&lt;a href=&#34;http://agis.io/2014/03/25/contiguous-stacks-in-go.html&#34;&gt;Contiguous stacks in Go&lt;/a&gt;。介绍了Go 1.3版本在栈管理上的变化，以及由此带来的性能改进。&lt;/p&gt;
 
-&lt;p&gt;Go里的连续栈&lt;/p&gt;
-
-&lt;p&gt;我用了一段时间Go，非常喜欢这种语言。1.3版本计划在2014年六月释出，这个版本会有不少关于性能的改进，其中一项性能改进是连续栈技术。让我们来看看连续栈到底是什么。&lt;/p&gt;
-
-&lt;p&gt;分段栈（segmented stacks）&lt;/p&gt;
-
-&lt;p&gt;The 1.2 runtime uses segmented stacks, also known as split stacks.
-Go 1.2版本运行时使用分段栈，也被叫做切分栈（split stacks）。&lt;/p&gt;
-
-&lt;p&gt;分段栈是一种用来实现不连续且会连续增长的栈的方法。&lt;/p&gt;
-
-&lt;p&gt;Each stack starts with a single segment. When the stack needs to grow another segment is allocated and linked to the previous one, and so forth. Each stack is effectively a doubly linked list of one or more segments.
-每个栈开始时只有一个单独的段。随着栈增长，就会分配新的段，并与上一个段相连，如此保证栈可以不断增长。每个栈都是一个或多个靠高效的双向互链的段组成的。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://air.googol.im/images/segmented-stacks.png&#34; alt=&#34;分段栈&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;这种方法的优点是，栈可以一开始时很小，根据需要增长或者收缩。比如说，1.1版本的栈一开始是4kb，1.2版本的栈一开始是8kb。&lt;/p&gt;
-
-&lt;p&gt;当然，这种方法也会有问题。&lt;/p&gt;
-
-&lt;p&gt;考虑在栈接近满的时候，发生了一个函数调用。调用会强迫栈赠长，导致需要分配新的段。当这个函数返回时，这个新分配的段会被释放，栈也会再次收缩。&lt;/p&gt;
-
-&lt;p&gt;现在，假设这个调用发生的非常频繁。比如：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;func main() {
-    for {
-        big()
-    }
-}
-
-func big() {
-    var x [8180]byte
-    // 对x做些事情
-
-    return
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;对&lt;code&gt;big()&lt;/code&gt;的调用会申请新的段，这个新的段会在函数返回时释放。在循环里，这个申请释放的过程会反复发生。&lt;/p&gt;
-
-&lt;p&gt;这类情况里，恰巧在循环里遇到了栈的容量触及边界的情况，反复创建和销毁段时的开销会非常明显。在Go社区内部，这种情况被称作“切分热点”。Rust社区面对同样的问题，只不过将其称作“锻打栈”。&lt;/p&gt;
-
-&lt;p&gt;连续栈&lt;/p&gt;
-
-&lt;p&gt;在Go 1.3里会因为使用了连续栈实现而不再有“切分热点”问题。&lt;/p&gt;
-
-&lt;p&gt;现在，如果栈需要增长，不再申请新的段，而是按如下方式操作：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;创建一个新的，更大的栈&lt;/li&gt;
-&lt;li&gt;将老栈的内容复制到新栈&lt;/li&gt;
-&lt;li&gt;调整所有被复制的指针到新的地址&lt;/li&gt;
-&lt;li&gt;销毁老栈&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;调整指针的操作会受到编译器的逃逸分析算法影响。这个算法保证只有指向栈上数据的指针会存储在同一个栈上（当然，也有一些例外）。如果某个指针有逃逸（比如，指针要返回给调用者，或者写入了一个全局变量），就意味着分配的数据需要保存在堆上。&lt;/p&gt;
-
-&lt;p&gt;这种方法当然也有一些挑战。1.2版本在运行时并不知道栈上一个指针大小的字，真的是个指针，还是别的同样大小的数据。也许是浮点数或者是更不常见的将一个整形数当作指针，真的指向某个数据。&lt;/p&gt;
-
-&lt;p&gt;由于缺少关于数据的理解，垃圾收集器只能保守考虑，将所有位于栈帧上的地址当作根。结果就导致了内存泄露的可能，尤其是在内存池更小的32位架构上。&lt;/p&gt;
-
-&lt;p&gt;如果是复制整个栈，就能避免这种问题，在调整指针时只考虑真正的指针。&lt;/p&gt;
-
-&lt;p&gt;工作就这么做完了，栈上活指针的信息现在嵌入了二进制程序里，并可以在运行时使用这些信息。这意味着1.3版本的垃圾收集器不仅可以精确收集栈数据，还可以调整栈上的指针。&lt;/p&gt;
-
-&lt;p&gt;1.3版本的初始栈大小很保守，设置为4kb，在1.4版本里可能会进一步缩小。对于收缩机制，在垃圾收集器执行时，栈使用了少于1/4的总空间时，会缩减一半的大小。&lt;/p&gt;
-
-&lt;p&gt;虽然连续栈会造成一些内存碎片的问题，但是使用json和html/template做性能测试的结果显示，连续栈的性能有很大改善。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://air.googol.im/images/json-benchmark.png&#34; alt=&#34;json benchmark&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://air.googol.im/images/html-benchmark.png&#34; alt=&#34;html benchmark&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;来源：&lt;a href=&#34;https://docs.google.com/document/d/1wAaf1rYoM4S4gtnPh0zOlGzWtrZFQ5suE8qr2sD8uWQ/pub&#34;&gt;contiguous stacks design document&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;结论&lt;/p&gt;
-
-&lt;p&gt;Go 1.3将会是一个有重多性能改善和其他重要更新的大版本。我很期待。&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -411,142 +86,9 @@ func big() {
       <pubDate>Fri, 28 Mar 2014 19:46:44 +0800</pubDate>
       
       <guid>http://air.googol.im/post/supervisor-with-docker-to-manage-processes/</guid>
-      <description>
+      <description>&lt;p&gt;这篇文章是受&lt;a href=&#34;http://dockboard.org&#34;&gt;Dockboard&lt;/a&gt;之托帮忙翻译的与docker有关的技术文章。&lt;a href=&#34;http://dockboard.org&#34;&gt;Dockboard&lt;/a&gt;致力于在中国建立一个Docker技术的开放社区。&lt;/p&gt;
 
-&lt;p&gt;这篇文章是受&lt;a href=&#34;http://dockboard.org&#34;&gt;Dockboard&lt;/a&gt;之托帮忙翻译的与docker有关的技术文章。&lt;a href=&#34;http://dockboard.org&#34;&gt;Dockboard&lt;/a&gt;致力于在中国建立一个Docker技术的开放社区。&lt;/p&gt;
-
-&lt;p&gt;本文译自&lt;a href=&#34;http://blog.trifork.com/2014/03/11/using-supervisor-with-docker-to-manage-processes-supporting-image-inheritance&#34;&gt;Using Supervisor with Docker to manage processes (supporting image inheritance)&lt;/a&gt;，作者Quinten Krijger。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://blog.trifork.com/wp-content/uploads/2013/08/Docker-logo.png&#34; alt=&#34;Docker-logo&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;在八月份，我写了一篇关于如何创建tomcat镜像的&lt;a href=&#34;http://blog.trifork.com/2013/08/15/using-docker-to-efficiently-create-multiple-tomcat-instances/&#34;&gt;blog&lt;/a&gt;。从那以后，docker又改进了很多，我对docker的了解也增加了很多。我很高兴和你分们享我找到的关于管理container进程的好办法。在读完这篇文章后，我希望你能善加利用我&lt;a href=&#34;https://github.com/Krijger/docker-cookbooks&#34;&gt;github仓库&lt;/a&gt;里的supervisor镜像。&lt;/p&gt;
-
-&lt;h2 id=&#34;docker命令:eddbe14b3d17cb79a51bc21613783b44&#34;&gt;Docker命令&lt;/h2&gt;
-
-&lt;p&gt;在之前的文章里，我提到Docker（只能）支持运行一个前台进程。我们通常习惯使用类似upstart这种管理服务来初始化启动流程，但是Docker默认没有这些服务的支持。刚开始使用Docker时会很不习惯，你必须指定你想要运行的进程。这种行为和虚拟机相比有个优点，会尽可能的保持轻量的container。你可以通过run命令最后的参数，在启动container时指定进程命令，比如：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;docker run ubuntu echo &amp;quot;hello world&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;另外一种方法，你可以利用&lt;a href=&#34;http://docs.docker.io/en/latest/reference/builder/#cmd&#34;&gt;CMD&lt;/a&gt;指令，在Dockerfile里指定docker run命令的默认参数。比如，如果你目录下的Dockerfile包含以下内容：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;FROM ubuntu
-CMD echo &amp;quot;hello world&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;再使用下面的指令构造&lt;code&gt;hello_world_printer&lt;/code&gt;镜像：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;docker build -t &amp;quot;hello_world_printer&amp;quot; .
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;使用下面的命令，你可以得到和之前run命令相同的执行结果。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;docker run hello_world_printer
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;要注意，因为你可以覆盖掉CMD指定的命令行参数，这个只是个运行时的指令。有趣的事情是，在Linux container里，你可以只调用upstart命令然后得到和普通虚拟机大致相同的行为。&lt;/p&gt;
-
-&lt;h2 id=&#34;运行多个命令:eddbe14b3d17cb79a51bc21613783b44&#34;&gt;运行多个命令&lt;/h2&gt;
-
-&lt;p&gt;运行多个进程是个很正常的想法。比如，一个ssh服务（这样就能登录到正在运行的container）和实际的应用。你可以用下面的方法运行container：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;docker run ... /usr/sbin/sshd &amp;amp;&amp;amp; run_your_app_in_foreground
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这在开发时很方便。这样，当应用进程退出后，因为唯一的前台程序退出了，container会自动关闭。当然你可以使用&lt;code&gt;using /usr/bin/sshd -D&lt;/code&gt;保证container不会退出，但是这里真正的问题是，这种使用run命令设置初始程序的方式不够简洁。而且，随着你的container变复杂，run命令会越来越长。&lt;/p&gt;
-
-&lt;p&gt;所以，在运行更复杂的container的时候，很多人使用复杂的bash脚本。典型的bash脚本会执行一个前台进程，并开启一个或者多个（renegade）守护进程。与只是用Docker命令行的方式相比，这种方法最重要的改进在于，bash脚本是可以做版本控制的：启动脚本在你的Docker镜像里，新的改动可以和软件项目一起分发。不过，使用bash脚本管理进程依旧简陋枯燥，而且容易出错。&lt;/p&gt;
-
-&lt;h2 id=&#34;使用supervisor:eddbe14b3d17cb79a51bc21613783b44&#34;&gt;……使用supervisor&lt;/h2&gt;
-
-&lt;p&gt;更好的方法是使用&lt;a href=&#34;http://supervisord.org/&#34;&gt;supervisor&lt;/a&gt;。supervisor可以更好的管理进程：使用更加简洁的代码管理进程；在崩溃时可以重启进程；允许重启一组进程并且有命令行工具和网页界面来管理进程。当然，越大的能力要求越大的责任：大量使用supervisor特性的代码，预示着你应该将整个服务更好的拆分成多个小的supervisor来管理。&lt;/p&gt;
-
-&lt;p&gt;个人来讲，我喜欢supervisor让我用更清晰的代码管理启动的进程。我见过最简洁的使用例子，是子镜像扩展出一个进程组。比如，如果你经常使用SSH，使用一个SSH镜像作为基础镜像就是很合理的。这种情况，在所有基于这个镜像的扩展镜像上实现启动SSH进程的代码，形式少就是一种重复代码。我来给你们展示下我找到的解决这个问题的好办法。&lt;/p&gt;
-
-&lt;h2 id=&#34;supervisor基础镜像:eddbe14b3d17cb79a51bc21613783b44&#34;&gt;supervisor基础镜像&lt;/h2&gt;
-
-&lt;p&gt;首先，因为我默认使用supervisor，所以我所有的镜像都扩展自一个只包含supervisor和最新版本ubuntu的基础镜像。你可以在&lt;a href=&#34;https://github.com/Krijger/docker-cookbooks/blob/master/supervisor/Dockerfile&#34;&gt;这里&lt;/a&gt;找到这个Dockerfile。这个基础镜像包括一个配置文件&lt;code&gt;/etc/supervisor.conf&lt;/code&gt;：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;[supervisord]
-nodaemon=true
-
-[include]
-files = /etc/supervisor/conf.d/*.conf
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这个配置让supervisor本身以前台进程运行，这样可以让我们的container启动后持续运行。第二，这个配置将包含所有在&lt;code&gt;/etc/supervisor/conf.d/&lt;/code&gt;目录下的配置文件，启动任何在这里定义的程序。&lt;/p&gt;
-
-&lt;h2 id=&#34;扩展基础镜像:eddbe14b3d17cb79a51bc21613783b44&#34;&gt;扩展基础镜像&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://blog.trifork.com/wp-content/uploads/2014/02/tomcat-stack-164x300.png&#34; alt=&#34;tomcat-stack&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;是的，想法很简单。所有的子container通过将特定的service.sv.conf放到特定的目录的方式，将其自己的服务加入到supervisor的管理里。之后，使用如下命令启动container：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;docker run child_image_name &amp;quot;supervisor -c /etc/supervisor.conf&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;会自动启动所有指定的进程。你可以对镜像做多层扩展，每层扩展加入一个或者多个服务到配置目录。在Docker里使用supervisor启动命令代替upstart也更有效和有范。&lt;/p&gt;
-
-&lt;p&gt;作为例子，让我们看看之前blog提到的Tomcat工作栈，是如何使用这种改进后的方法的。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;首先，和之前讨论的一样，我们使用从ubuntu扩展而来的supervisor基础镜像&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;之后，我们使用在supervisor上安装了Java的&lt;a href=&#34;https://github.com/Krijger/docker-cookbooks/tree/master/jdk7-oracle&#34;&gt;JDK镜像&lt;/a&gt;。Java只是其他服务使用的库，所以我们在这层不指定任何启动服务。这层要做一些类似设置JAVA_HOME环境变量的通常任务&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Tomcat镜像在工作栈上安装Tomcat并暴露8080端口。这层包括一个名字是Tomcat的服务，定义在&lt;a href=&#34;https://github.com/Krijger/docker-cookbooks/blob/master/tomcat7/tomcat.sv.conf&#34;&gt;tomcat.sv.conf&lt;/a&gt;：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;[program:webapp]
-command=/bin/bash -c &amp;quot;env &amp;gt; /tmp/tomcat.env &amp;amp;&amp;amp; cat /etc/default/tomcat7 &amp;gt;&amp;gt; /tmp/tomcat.env &amp;amp;&amp;amp; mv /tmp/tomcat.env /etc/default/tomcat7 &amp;amp;&amp;amp; service tomcat7 start&amp;quot;
-redirect_stderr=true
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;执行Tomcat服务的命令并不像我喜欢的那样简洁，将其放到一个专门的脚本里会更好。命令先添加了一些环境变量，比如&lt;a href=&#34;http://docs.docker.io/en/latest/use/working_with_links_names/&#34;&gt;container的关联参数&lt;/a&gt;，到&lt;code&gt;/etc/default/tomcat7&lt;/code&gt;，这样我们可以在之后的配置中使用这些参数，后面的例子会展示这种用法。也许使用类似etcd的键值存储会更好，不过这超出了本文的范畴。&lt;/p&gt;
-
-&lt;p&gt;当然，我们这里只安装了默认的文件，没有真正的网络应用程序。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;你的网络应用程序应当扩展自Tomcat镜像，并安装入真正的应用程序。当启动supervisor的时候，会自动启动Tomcat。&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;一个tomcat网络程序的dockerfile例子:eddbe14b3d17cb79a51bc21613783b44&#34;&gt;一个Tomcat网络程序的Dockerfile例子&lt;/h2&gt;
-
-&lt;p&gt;如何安装实际的网络应用超出了本文的范畴，不过，作为结束，我给出了个Dockerfile例子，演示如何使用这个工作栈。这个例子完全基于Java Tomcat，所以如果你对这个不感兴趣，别读了，玩别的去吧:)&lt;/p&gt;
-
-&lt;p&gt;假设，我们有一个使用Elasticsearch的网络应用：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;FROM quintenk/tomcat:7
-
-# 安装一些项目的依赖，这些依赖在每次更新时不会改变
-# RUN apt-get -y install ...
-
-RUN rm -rf /var/lib/tomcat7/webapps/*
-
-# 将配置加入/etc/default/tomcat7，比如：
-...
-RUN echo &#39;DOCKER_OPTS=&amp;quot;-DELASTICSEARCH_SERVER_URL=${ELASTICSEARCH_PORT_9200_TCP_ADDR}&amp;quot;&#39; &amp;gt;&amp;gt; /etc/default/tomcat7
-RUN echo &#39;CATALINA_OPTS=&amp;quot;... ${DOCKER_OPTS}&amp;quot;&#39; &amp;gt;&amp;gt; /etc/default/tomcat7
-
-# 加入类似log4j.properties的配置文件，并将其chown root:tomcat7
-
-# 假设项目已经构建好了，而且ROOT.war在你构建Docker的目录（包含Dockerfile的目录）。基于缓存的考虑，这个作为最后的步骤
-ADD ROOT.war /var/lib/tomcat7/webapps/
-RUN chown root:tomcat7 /var/lib/tomcat7/webapps/ROOT.war
-
-CMD supervisord -c /etc/supervisor.conf
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这段代码里，elasticsearch的相关环境变量（搜索索引）已经被设置了，因为supervisor关于Tomcat的配置，会在启动时将所有环境变量添加到/etc/default/tomcat7。当然，我们在启动网络应用镜像时需要关联到elasticsearch containter，比如：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;docker run -link name_of_elasticsearch_instance:elasticsearch -d name_of_webapp_image &amp;quot;supervisor -c /etc/supervisor.conf&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;你现在的网络应用可以去访问&lt;code&gt;ELASTICSEARCH_SERVER_URL&lt;/code&gt;路径了。你可以在配置文件里使用这个变量，像这样：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;elastic.unicast.hosts=${ELASTICSEARCH_SERVER_URL}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这样就可以将配置暴露给你的应用程序。如果你是个Java开发者，并且也阅读了前一篇文章，希望这让你能开始一段愉快的代码之旅。&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -555,518 +97,11 @@ CMD supervisord -c /etc/supervisor.conf
       <pubDate>Sat, 15 Mar 2014 10:52:46 +0800</pubDate>
       
       <guid>http://air.googol.im/post/go-concurrency-patterns-pipelines-and-cancellation/</guid>
-      <description>
-
-&lt;p&gt;译自&lt;a href=&#34;http://blog.golang.org/pipelines&#34;&gt;http://blog.golang.org/pipelines&lt;/a&gt;。&lt;/p&gt;
+      <description>&lt;p&gt;译自&lt;a href=&#34;http://blog.golang.org/pipelines&#34;&gt;http://blog.golang.org/pipelines&lt;/a&gt;。&lt;/p&gt;
 
 &lt;p&gt;这是Go官方blog的一篇文章，介绍了如何使用Go来编写并发程序，并按照程序的演化顺序，介绍了不同模式遇到的问题以及解决的问题。主要解释了用管道模式链接不同的线程，以及如何在某个线程取消工作时，保证所有线程以及管道资源的正常回收。&lt;/p&gt;
 
-&lt;p&gt;Go并发模式：管道和取消&lt;/p&gt;
-
-&lt;p&gt;作者：Sameer Ajmani，&lt;a href=&#34;http://blog.golang.org&#34;&gt;blog.golang.org&lt;/a&gt;，写于2014年3月13日。&lt;/p&gt;
-
-&lt;h3 id=&#34;介绍:2d50c6f072dc473726b3112d307a758f&#34;&gt;介绍&lt;/h3&gt;
-
-&lt;p&gt;Go本身提供的并发特性，可以轻松构建用于处理流数据的管道，从而高效利用I/O和多核CPU。这篇文章就展示了这种管道的例子，并关注当操作失败时要处理的一些细节，并介绍了如何干净的处理错误的技巧。&lt;/p&gt;
-
-&lt;h3 id=&#34;什么是管道:2d50c6f072dc473726b3112d307a758f&#34;&gt;什么是管道？&lt;/h3&gt;
-
-&lt;p&gt;Go语言里没有明确定义管道，而只是把管道当作一类并发程序。简单来说，管道是一系列由channel联通的状态（stage），而每个状态是一组运行相同函数的Goroutine。每个状态上，Goroutine&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;通过流入（inbound）channel接收上游的数值&lt;/li&gt;
-&lt;li&gt;运行一些函数来处理接收的数据，一般会产生新的数值&lt;/li&gt;
-&lt;li&gt;通过流出（outbound）channel将数值发给下游&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;每个语态都会有任意个流入或者流出channel，除了第一个状态（只有流出channel）和最后一个状态（只有流入channel）。第一个状态有时被称作源或者生产者；最后一个状态有时被称作槽（sink）或者消费者。&lt;/p&gt;
-
-&lt;p&gt;我们先从一个简单的管道例子开始解释这些想法和技术。之后，我们再来看一些更真实的例子。&lt;/p&gt;
-
-&lt;h3 id=&#34;求平方数:2d50c6f072dc473726b3112d307a758f&#34;&gt;求平方数&lt;/h3&gt;
-
-&lt;p&gt;考虑一个管道和三个状态。&lt;/p&gt;
-
-&lt;p&gt;第一个状态，&lt;code&gt;gen&lt;/code&gt;，是一个将一系列整数一一传入channel的函数。&lt;code&gt;gen&lt;/code&gt;函数启动一个Goroutine，将整数数列发送给channel，如果所有数都发送完成，关闭这个channel：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func gen(nums ...int) &amp;lt;-chan int {
-    out := make(chan int)
-    go func() {
-        for _, n := range nums {
-            out &amp;lt;- n
-        }
-        close(out)
-    }()
-    return out
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;第二个状态，&lt;code&gt;sq&lt;/code&gt;，从一个channel接收整数，并求整数的平方，发送给另一个channel。当流入channel被关闭，而且状态已经把所有数值都发送给了下游，关闭流出channel：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func sq(in &amp;lt;-chan int) &amp;lt;-chan int {
-    out := make(chan int)
-    go func() {
-        for n := range in {
-            out &amp;lt;- n * n
-        }
-        close(out)
-    }()
-    return out
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;主函数建立起管道，并执行最终的状态：从第二个状态接收所有的数值并打印，直到channel被关闭：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func main() {
-    // 建立管道
-    c := gen(2, 3)
-    out := sq(c)
-
-    // 产生输出
-    fmt.Println(&amp;lt;-out) // 4
-    fmt.Println(&amp;lt;-out) // 9
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;因为&lt;code&gt;sq&lt;/code&gt;有相同类型的流入和流出channel，我们可以将其组合任意次。我们也可以将&lt;code&gt;main&lt;/code&gt;函数写成和其他状态类似的范围循环的形式：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func main() {
-    // 建立管道并产生输出
-    for n := range sq(sq(gen(2, 3))) {
-        fmt.Println(n) // 16 和 81
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;扇出-扇入:2d50c6f072dc473726b3112d307a758f&#34;&gt;扇出，扇入&lt;/h3&gt;
-
-&lt;p&gt;多个函数可以同时从一个channel接收数据，直到channel关闭，这种情况被称作_扇出_。这是一种将工作分布给一组工作者的方法，目的是并行使用CPU和I/O。&lt;/p&gt;
-
-&lt;p&gt;一个函数同时接收并处理多个channel输入并转化为一个输出channel，直到所有的输入channel都关闭后，关闭输出channel。这种情况称作_扇入_。&lt;/p&gt;
-
-&lt;p&gt;我们可以将我们的管道改为同时执行两个&lt;code&gt;sq&lt;/code&gt;实例，每个都从同样的输入channel读取数据。我们还引入新函数，&lt;code&gt;merge&lt;/code&gt;，来扇入所有的结果：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func main() {
-    in := gen(2, 3)
-
-    // 在两个从in里读取数据的Goroutine间分配sq的工作
-    c1 := sq(in)
-    c2 := sq(in)
-
-    // 输出从c1和c2合并的数据
-    for n := range merge(c1, c2) {
-        fmt.Println(n) // 4 和 9, 或者 9 和 4
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;merge&lt;/code&gt;对每个流入channel启动一个Goroutine，并将流入的数值复制到流出channel，由此将一组channel转换到一个channel。一旦启动了所有的&lt;code&gt;output&lt;/code&gt; Goroutine，&lt;code&gt;merge&lt;/code&gt;函数会多启动一个Goroutine，这个Goroutine在所有的输入channel输入完毕后，关闭流出channel。&lt;/p&gt;
-
-&lt;p&gt;往一个已经关闭的channel输出会产生异常（panic），所以一定要保证所有数据发送完成后再执行关闭。&lt;a href=&#34;http://golang.org/pkg/sync/#WaitGroup&#34;&gt;&lt;code&gt;sync.WaitGroup&lt;/code&gt;&lt;/a&gt;类型提供了方便的方法，来保证这种同步：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func merge(cs ...&amp;lt;-chan int) &amp;lt;-chan int {
-    var wg sync.WaitGroup
-    out := make(chan int)
-
-    // 为cs中每个输入channel启动输出Goroutine。output从c中复制数值，直到c被关闭
-    // 之后调用wg.Done
-    output := func(c &amp;lt;-chan int) {
-        for n := range c {
-            out &amp;lt;- n
-        }
-        wg.Done()
-    }
-    wg.Add(len(cs))
-    for _, c := range cs {
-        go output(c)
-    }
-
-    // 启动一个Goroutine，当所有output Goroutine都工作完后（wg.Done），关闭out，
-    // 保证只关闭一次。这个Goroutine必须在wg.Add之后启动
-    go func() {
-        wg.Wait()
-        close(out)
-    }()
-    return out
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;突然关闭:2d50c6f072dc473726b3112d307a758f&#34;&gt;突然关闭&lt;/h3&gt;
-
-&lt;p&gt;我们的管道函数里有个模式：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;状态会在所有发送操作做完后，关闭它们的流出channel&lt;/li&gt;
-&lt;li&gt;状态会持续接收从流入channel输入的数值，直到channel关闭&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;这个模式使得每个接收状态可以写为一个&lt;code&gt;range&lt;/code&gt;循环，并保证所有的Goroutine在将所有的数值发送成功给下游后立刻退出。&lt;/p&gt;
-
-&lt;p&gt;但是实际的管道，状态不能总是接收所有的流入数值。有时这是设计决定的：接收者可能只需要一部分数值做进一步处理。更常见的情况是，一个状态会由于从早先的状态流入的数值有误而退出。不管哪种情况，接收者都不应该继续等待剩下的数值，而且我们希望早先的状态可以停止生产后续状态不需要的数据。&lt;/p&gt;
-
-&lt;p&gt;在我们的管道例子里，如果一个状态无法处理所有的流入数值，试图发送那些数值的Goroutine会被永远阻塞住：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;    // 处理输出的第一个数值
-    out := merge(c1, c2)
-    fmt.Println(&amp;lt;-out) // 4 或者 9
-    return
-    // 由于我们不再接收从out输出的第二个数值，其中一个输出Goroutine会由于试图发送数值而挂起
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这是资源泄漏：Goroutine会占用内存和运行时资源，而且Goroutine栈里的堆引用会一直持有数据，这些数据无法被垃圾回收。Goroutine本身也无法被垃圾回收，它们必须靠自己退出（而不是被其他人杀死）。&lt;/p&gt;
-
-&lt;p&gt;即便下游的状态无法接收所有的流入数值，我们依然需要让管道里的上游状态正常退出。一种方法是修改流出channel，使其含有缓冲区。缓冲区可以持有固定数量的数值，当缓冲区有空间时，发送操作会立刻完成（，不会产生阻塞）。&lt;/p&gt;
-
-&lt;p&gt;在创建channel时，如果已经知道要发送数值的数量，缓冲区可以简化代码。比如，我们可以让&lt;code&gt;gen&lt;/code&gt;把整数列表里的数复制进channel缓冲区，而不需使用新的Goroutine：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func gen(nums ...int) &amp;lt;-chan int {
-    out := make(chan int, len(nums))
-    for _, n := range nums {
-        out &amp;lt;- n
-    }
-    close(out)
-    return out
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;回到我们管道的阻塞问题上来，我们可以考虑给&lt;code&gt;merge&lt;/code&gt;的流出channel加上缓冲区：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func merge(cs ...&amp;lt;-chan int) &amp;lt;-chan int {
-    var wg sync.WaitGroup
-    out := make(chan int, 1) // 1个空间足够应付未读的输入
-    // ... 其余未变 ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这个改动当然修正了程序中阻塞Goroutine的问题，但这不是好的代码。缓冲区的大小为1，依赖于我们已经知道我们将要&lt;code&gt;merge&lt;/code&gt;的数值总数和下游状态要处理的数值总数。这太脆弱了：如果我们从&lt;code&gt;gen&lt;/code&gt;传入额外的数值，或者下游状态再多读一些数值，我们仍将看到Goroutine被阻塞住了。&lt;/p&gt;
-
-&lt;p&gt;不使用缓冲区的话，我们需要提供一种方法，让下游状态通知发送者，下游状态将停止接收输入。&lt;/p&gt;
-
-&lt;h3 id=&#34;显式取消:2d50c6f072dc473726b3112d307a758f&#34;&gt;显式取消&lt;/h3&gt;
-
-&lt;p&gt;当&lt;code&gt;main&lt;/code&gt;要在不接收所有来自&lt;code&gt;out&lt;/code&gt;的数值前退出，就需要告诉所有上游状态的Goroutine，放弃尝试发送数值的行为。这可以通过发送数值到一个叫做&lt;code&gt;done&lt;/code&gt;的channel来完成。例子里有两个潜在的会被阻塞的发送者，所以给&lt;code&gt;done&lt;/code&gt;发送了两个数值：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func main() {
-    in := gen(2, 3)
-
-    // 发布sq的工作到两个都从in里读取数据的Goroutine
-    c1 := sq(in)
-    c2 := sq(in)
-
-    // 处理来自output的第一个数值
-    done := make(chan struct{}, 2)
-    out := merge(done, c1, c2)
-    fmt.Println(&amp;lt;-out) // 4 或者 9
-
-    // 通知其他发送者，该退出了
-    done &amp;lt;- struct{}{}
-    done &amp;lt;- struct{}{}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;发送Goroutine将发送操作替换为一个&lt;code&gt;select&lt;/code&gt;语句，要么把数据发送给&lt;code&gt;out&lt;/code&gt;，要么处理来自&lt;code&gt;done&lt;/code&gt;的数值。&lt;code&gt;done&lt;/code&gt;的类型是个空结构，因为具体数值并不重要：接收事件本身就指明了应当放弃继续发送给out的动作。而&lt;code&gt;output&lt;/code&gt; Goroutine会继续循环处理流入的channel，&lt;code&gt;c&lt;/code&gt;,而不会阻塞上游状态：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func merge(done &amp;lt;-chan struct{}, cs ...&amp;lt;-chan int) &amp;lt;-chan int {
-    var wg sync.WaitGroup
-    out := make(chan int)
-
-    // 为每个cs中的输入channel启动一个output Goroutine。outpu从c里复制数值直到c被关闭
-    // 或者从done里接收到数值，之后output调用wg.Done
-    output := func(c &amp;lt;-chan int) {
-        for n := range c {
-            select {
-            case out &amp;lt;- n:
-            case &amp;lt;-done:
-            }
-        }
-        wg.Done()
-    }
-    // ... 其余的不变 ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;但是这种方法有个问题：下游的接收者需要知道潜在会被阻塞的上游发送者的数量。追踪这些数量不仅枯燥，还容易出错。&lt;/p&gt;
-
-&lt;p&gt;我们需要一种方法，让不知道也不限制数量的Goroutine，停止往它们下游发送数据的行为。在Go里，我们可以通过关闭channel来实现这个工作，因为&lt;a href=&#34;http://golang.org/ref/spec#Receive_operator&#34;&gt;channel被关闭时，接收工作会立刻执行，并产生一个符合类型的0值&lt;/a&gt;。&lt;/p&gt;
-
-&lt;p&gt;这就是说，&lt;code&gt;main&lt;/code&gt;可以容易的通过关闭&lt;code&gt;done&lt;/code&gt;channel来释放所有的发送者。关闭是个高效的发送给所有发送者的广播信号。我们扩展管道里的每个函数，让其以参数方式接收&lt;code&gt;done&lt;/code&gt;，并通过&lt;code&gt;defer&lt;/code&gt;语句在函数退出时执行关闭操作，这样&lt;code&gt;main&lt;/code&gt;里所有的退出路径都会触发管道里的所有状态退出。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func main() {
-    // 构建done channel，整个管道里分享done，并在管道退出时关闭这个channel
-    // 以此通知所有Goroutine该推出了。
-    done := make(chan struct{})
-    defer close(done)
-
-    in := gen(done, 2, 3)
-
-    // 发布sq的工作到两个都从in里读取数据的Goroutine
-    c1 := sq(done, in)
-    c2 := sq(done, in)
-
-    // 处理来自output的第一个数值
-    out := merge(done, c1, c2)
-    fmt.Println(&amp;lt;-out) // 4 或者 9
-
-    // done会通过defer调用而关闭
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;管道里的每个状态现在都可以随意的提早退出了：&lt;code&gt;sq&lt;/code&gt;可以在它的循环中退出，因为我们知道如果&lt;code&gt;done&lt;/code&gt;已经被关闭了，也会关闭上游的&lt;code&gt;gen&lt;/code&gt;状态。&lt;code&gt;sq&lt;/code&gt;通过&lt;code&gt;defer&lt;/code&gt;语句，保证不管从哪个返回路径，它的&lt;code&gt;out&lt;/code&gt; channel都会被关闭。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func sq(done &amp;lt;-chan struct{}, in &amp;lt;-chan int) &amp;lt;-chan int {
-    out := make(chan int)
-    go func() {
-        defer close(out)
-        for n := range in {
-            select {
-            case out &amp;lt;- n * n:
-            case &amp;lt;-done:
-                return
-            }
-        }
-    }()
-    return out
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;下面列出了构建管道的指南：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;状态会在所有发送操作做完后，关闭它们的流出channel&lt;/li&gt;
-&lt;li&gt;状态会持续接收从流入channel输入的数值，直到channel关闭或者其发送者被释放。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;管道要么保证足够能存下所有发送数据的缓冲区，要么接收来自接收者明确的要放弃channel的信号，来保证释放发送者。&lt;/p&gt;
-
-&lt;h3 id=&#34;对目录做摘要:2d50c6f072dc473726b3112d307a758f&#34;&gt;对目录做摘要&lt;/h3&gt;
-
-&lt;p&gt;来考虑一个更现实的管道。&lt;/p&gt;
-
-&lt;p&gt;MD5是一个摘要算法，经常在对文件的校验的时候使用。命令行上使用&lt;code&gt;md5sum&lt;/code&gt;来打印出一系列文件的摘要数值。&lt;/p&gt;
-
-&lt;p&gt;我们的程序类似&lt;code&gt;md5sum&lt;/code&gt;，但是参数是一个目录，之后会打印出这个目录下所有常规文件的摘要值，以文件路径名排序。&lt;/p&gt;
-
-&lt;p&gt;我们的主函数包含一个&lt;code&gt;MD5All&lt;/code&gt;的辅助函数，返回一个路径名到摘要值的映射，之后排序并打印结果：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func main() {
-    // 计算指定目录下所有文件的MD5值，之后按照目录名排序并打印结果
-    m, err := MD5All(os.Args[1])
-    if err != nil {
-        fmt.Println(err)
-        return
-    }
-    var paths []string
-    for path := range m {
-        paths = append(paths, path)
-    }
-    sort.Strings(paths)
-    for _, path := range paths {
-        fmt.Printf(&amp;quot;%x  %s\n&amp;quot;, m[path], path)
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;MD5All&lt;/code&gt;函数是我们讨论的焦点。在&lt;a href=&#34;http://blog.golang.org/pipelines/serial.go&#34;&gt;&lt;code&gt;serial.go&lt;/code&gt;&lt;/a&gt;文件里，是非并发的函数实现，再扫描目录树时简单读取并计算每个文件。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// MD5All读取文件目录root下所有文件，并返回从文件路径到文件内容MD5值的映射。如果扫描目录
-// 出错或者任何操作失败，MD5All返回失败。
-func MD5All(root string) (map[string][md5.Size]byte, error) {
-    m := make(map[string][md5.Size]byte)
-    err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
-        if err != nil {
-            return err
-        }
-        if info.IsDir() {
-            return nil
-        }
-        data, err := ioutil.ReadFile(path)
-        if err != nil {
-            return err
-        }
-        m[path] = md5.Sum(data)
-        return nil
-    })
-    if err != nil {
-        return nil, err
-    }
-    return m, nil
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;并行摘要:2d50c6f072dc473726b3112d307a758f&#34;&gt;并行摘要&lt;/h3&gt;
-
-&lt;p&gt;在&lt;a href=&#34;http://blog.golang.org/pipelines/parallel.go&#34;&gt;&lt;code&gt;parallel.go&lt;/code&gt;&lt;/a&gt;里，我们把&lt;code&gt;MD5All&lt;/code&gt;分解为两个状态的管道。第一个状态，&lt;code&gt;sumFiles&lt;/code&gt;，遍历目录，在一个新的Goroutine里对每个文件做摘要，并把结果发送到类型为&lt;code&gt;result&lt;/code&gt;的channel：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;type result struct {
-    path string
-    sum  [md5.Size]byte
-    err  error
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;sumFiles&lt;/code&gt;返回两个channel：一个用来传递&lt;code&gt;result&lt;/code&gt;，另一个用来返回&lt;code&gt;filepath.Walk&lt;/code&gt;的错误。遍历函数启动一个新的Goroutine来处理每个常规文件，之后检查&lt;code&gt;done&lt;/code&gt;。如果&lt;code&gt;done&lt;/code&gt;已经被关闭了，遍历就立刻停止：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func sumFiles(done &amp;lt;-chan struct{}, root string) (&amp;lt;-chan result, &amp;lt;-chan error) {
-    // 对每个常规文件，启动一个Goroutine计算文件内容并发送结果到c。发送walk的结果到errc
-    c := make(chan result)
-    errc := make(chan error, 1)
-    go func() {
-        var wg sync.WaitGroup
-        err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
-            if err != nil {
-                return err
-            }
-            if info.IsDir() {
-                return nil
-            }
-            wg.Add(1)
-            go func() {
-                data, err := ioutil.ReadFile(path)
-                select {
-                case c &amp;lt;- result{path, md5.Sum(data), err}:
-                case &amp;lt;-done:
-                }
-                wg.Done()
-            }()
-            // 如果done被关闭了，停止walk
-            select {
-            case &amp;lt;-done:
-                return errors.New(&amp;quot;walk canceled&amp;quot;)
-            default:
-                return nil
-            }
-        })
-        // walk已经返回，所有wg.Add的工作都做完了。开启新进程，在所有发送完成后
-        // 关闭c。
-        go func() {
-            wg.Wait()
-            close(c)
-        }()
-        // 因为errc有缓冲区，所以这里不需要select。
-        errc &amp;lt;- err
-    }()
-    return c, errc
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;MD5All&lt;/code&gt;从&lt;code&gt;c&lt;/code&gt;接收所有的摘要值。&lt;code&gt;MD5All&lt;/code&gt;返回早先的错误，通过&lt;code&gt;defer&lt;/code&gt;关闭&lt;code&gt;done&lt;/code&gt;：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func MD5All(root string) (map[string][md5.Size]byte, error) {
-    // MD5All在返回时关闭done channel；这个可能在从c和errc收到所有的值之前被调用
-    done := make(chan struct{})
-    defer close(done)
-
-    c, errc := sumFiles(done, root)
-
-    m := make(map[string][md5.Size]byte)
-    for r := range c {
-        if r.err != nil {
-            return nil, r.err
-        }
-        m[r.path] = r.sum
-    }
-    if err := &amp;lt;-errc; err != nil {
-        return nil, err
-    }
-    return m, nil
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;受限的并发:2d50c6f072dc473726b3112d307a758f&#34;&gt;受限的并发&lt;/h3&gt;
-
-&lt;p&gt;在&lt;a href=&#34;http://blog.golang.org/pipelines/parallel.go&#34;&gt;&lt;code&gt;parallel.go&lt;/code&gt;&lt;/a&gt;里实现的&lt;code&gt;MD5All&lt;/code&gt;对每个文件启动一个新的Goroutine。如果目录里含有很多大文件，这可能会导致申请大量内存，超出机器上的可用内存。&lt;/p&gt;
-
-&lt;p&gt;我们可以通过控制并行读取的文件数量来限制内存的申请。在&lt;a href=&#34;http://blog.golang.org/pipelines/bounded.go&#34;&gt;&lt;code&gt;bounded.go&lt;/code&gt;&lt;/a&gt;，我们创建固定数量的用于读取文件的Goroutine，来限制内存使用。现在整个管道有三个状态：遍历树，读取并对文件做摘要，收集摘要值。&lt;/p&gt;
-
-&lt;p&gt;第一个状态，&lt;code&gt;walkFiles&lt;/code&gt;，发送树里的每个常规文件的路径：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func walkFiles(done &amp;lt;-chan struct{}, root string) (&amp;lt;-chan string, &amp;lt;-chan error) {
-    paths := make(chan string)
-    errc := make(chan error, 1)
-    go func() {
-        // 在Walk之后关闭paths channel
-        defer close(paths)
-        // 因为errc有缓冲区，所以这里不需要select。
-        errc &amp;lt;- filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
-            if err != nil {
-                return err
-            }
-            if info.IsDir() {
-                return nil
-            }
-            select {
-            case paths &amp;lt;- path:
-            case &amp;lt;-done:
-                return errors.New(&amp;quot;walk canceled&amp;quot;)
-            }
-            return nil
-        })
-    }()
-    return paths, errc
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;中间的状态启动固定数量的&lt;code&gt;digester&lt;/code&gt; Goroutine，从&lt;code&gt;paths&lt;/code&gt;接收文件名，并将结果&lt;code&gt;result&lt;/code&gt;发送到channel &lt;code&gt;c&lt;/code&gt;：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func digester(done &amp;lt;-chan struct{}, paths &amp;lt;-chan string, c chan&amp;lt;- result) {
-    for path := range paths {
-        data, err := ioutil.ReadFile(path)
-        select {
-        case c &amp;lt;- result{path, md5.Sum(data), err}:
-        case &amp;lt;-done:
-            return
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;不象之前的例子，&lt;code&gt;digester&lt;/code&gt;并不关闭输出channel，因为多个Goroutine会发送到共享的channel。另一边，&lt;code&gt;MD5All&lt;/code&gt;中的代码会在所有&lt;code&gt;digester&lt;/code&gt;完成后关闭channel：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;    // 启动固定数量的Goroutine来读取并对文件做摘要。
-    c := make(chan result)
-    var wg sync.WaitGroup
-    const numDigesters = 20
-    wg.Add(numDigesters)
-    for i := 0; i &amp;lt; numDigesters; i++ {
-        go func() {
-            digester(done, paths, c)
-            wg.Done()
-        }()
-    }
-    go func() {
-        wg.Wait()
-        close(c)
-    }()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;我们也可以让每个&lt;code&gt;digester&lt;/code&gt;创建并返回自己的输出channel，但是这就需要一个单独的Goroutine来扇入所有结果。&lt;/p&gt;
-
-&lt;p&gt;最终从&lt;code&gt;c&lt;/code&gt;收集到所有结果&lt;code&gt;result&lt;/code&gt;，并检查从&lt;code&gt;errc&lt;/code&gt;传入的错误。这个错误的检查不能提早，因为在这个时间点之前，&lt;code&gt;walkFiles&lt;/code&gt;可能会因为正在发送消息给下游而阻塞：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;    m := make(map[string][md5.Size]byte)
-    for r := range c {
-        if r.err != nil {
-            return nil, r.err
-        }
-        m[r.path] = r.sum
-    }
-    // 检查Walk是否失败
-    if err := &amp;lt;-errc; err != nil {
-        return nil, err
-    }
-    return m, nil
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;结论:2d50c6f072dc473726b3112d307a758f&#34;&gt;结论&lt;/h3&gt;
-
-&lt;p&gt;这篇文章展示了使用Go构建流数据管道的技术。要慎重处理这种管道产生的错误，因为管道里的每个状态都可能因为向下游发送数值而阻塞，而下游的状态却不再关心输入的数据。我们展示了如何将关闭channel作为“完成”信号广播给所有由管道启动的Goroutine，并且定义了正确构建管道的指南。&lt;/p&gt;
-
-&lt;p&gt;进一步阅读：&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://talks.golang.org/2012/concurrency.slide#1&#34;&gt;Go并发模式&lt;/a&gt;（&lt;a href=&#34;https://www.youtube.com/watch?v=f6kdp27TYZs&#34;&gt;视频&lt;/a&gt;）展示了Go的并发特性的基础知识，并演示了应用这些知识的方法。
-&lt;a href=&#34;http://blog.golang.org/advanced-Go-concurrency-patterns&#34;&gt;高级Go并发模式&lt;/a&gt;（&lt;a href=&#34;http://www.youtube.com/watch?v=QDDwwePbDtw&#34;&gt;视频&lt;/a&gt;）覆盖了关于Go特性更复杂的使用场景，尤其是select。
-Douglas McIlroy的论文&lt;a href=&#34;http://swtch.com/~rsc/thread/squint.pdf&#34;&gt;《一窥级数数列》&lt;/a&gt;展示了Go使用的这类并发技术是如何优雅地支持复杂计算。&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -1079,24 +114,7 @@ Douglas McIlroy的论文&lt;a href=&#34;http://swtch.com/~rsc/thread/squint.pdf&
 
 &lt;p&gt;我做大数据其实时间并不长，对大数据的理解也还处于很粗浅的阶段，欢迎大家讨论。&lt;/p&gt;
 
-&lt;p&gt;大数据这事其实有两层意思：一层是单纯从业务上说，到底如何收集并有效利用数据做决策；另一层是指如何处理数据并完成决策所需要的数据支持。&lt;/p&gt;
-
-&lt;p&gt;业务上利用数据做决策，是算法科学家或者现在所谓的大数据科学家，甚至是管理层和客户的事情。他们首先要了解运行的业务是什么，然后找出可以量化的关键点，再通过数据来检验这些量化指标，最终得出决策，听上去和程序员debug差不多。&lt;/p&gt;
-
-&lt;p&gt;处理数据是公司的基础it架构，属于运维和开发的范畴，google的map/reduce，后来的hadoop都是在解决这一块的问题。&lt;/p&gt;
-
-&lt;p&gt;一般来说，公司小的时候数据不多，用excel就能很好的处理。随着数据增加，使用数据库存储数据，配合脚本计算是常用的方法。如果业务很大，需要计算的数值变化频繁和数据量的增加，单点的数据库效率会变得越来越低，直到完全没法忍受。这时候就需要考虑使用mapreduce的分布式解决方案。这也是hadoop的真正用武之地。&lt;/p&gt;
-
-&lt;p&gt;数据量会暴涨的一个主要原因，是互联网正在量化越来越多的行为，由此产生了越来越多的数据。以前只能通过抽样调查得到的数据（比如收视率，用户的使用习惯），现在可以通过各种方式直接拿到所有用户的数据。既然有数据了就要利用，所以现在企业用来分析的数据也不再是采样数据，而更多是全量数据。所以有人也会把现在的大数据称作全数据。&lt;/p&gt;
-
-&lt;p&gt;讲个牛逼的八卦：美国80年代有家叫尼尔森的公司，专门做收视率调查。他们做法非常牛逼，会和家庭签协议，调查这个家庭的一些背景，并放一个与有线电视网联通的盒子在电视机旁边。这个盒子可不是小米盒子，而是个录音盒，目的在根据录音判断这家人看到了哪些广告。这事到这，只能说明当年大家想要收集一些数据都很辛苦，而且收集到的数据有很大的随机性。但是这事没完。后来全世界人民都非常开心的把自己的信息主动写在一个网站上，而尼尔森公司也看到这个机会，就和这家网站合作，取得了大量用户的背景信息（当然理论上是不能反查到个人的），并利用这些信息和自己的收视率数据合并，于是尼尔森公司就能更加准确地提供收视率了。这家网站，叫Facebook。&lt;/p&gt;
-
-&lt;p&gt;这事可以说是数据上，从抽样数据转向全量数据的典型。现在各大网站利用cookie这些浏览信息暗中串通记录用户信息也不是什么秘密了，也一直有人说个人的行为在互联网上完全没法隐藏。既然公司买卖的都是全量数据，那么拿来做分析的当然也不会再仅限于抽样数据，也进入了全量数据处理的时代。&lt;/p&gt;
-
-&lt;p&gt;大数据的架构，除了要解决使用单点数据库的性能，方便业务扩展时横向扩展系统的最大性能，另一方面也要考虑数据的提出者和使用者并不是程序员，而是对技术理解欠佳的决策层和科学家。从技术的发展脉络上来看，是让人家写c++/java（传统mapreduce），还是翻译更简单使用更广泛的sql（hive）？而hive是批处理模式不适合快速查询，于是spark是如何引入内存加速，而storm又是如何引入流来加快分析周期？aws又是如何提供hadoop集群来简化部署？&lt;/p&gt;
-
-&lt;p&gt;最后试着用一句话总结一下：如果是公司层面思考大数据，更多应该关心如何拿到全量数据，如何才能从全量数据里拿到有效决策；而如果是工程层面思考大数据，就是如何搭起一套通用灵活的架构，来满足日益增长的分析业务。&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -1105,9 +123,7 @@ Douglas McIlroy的论文&lt;a href=&#34;http://swtch.com/~rsc/thread/squint.pdf&
       <pubDate>Fri, 07 Mar 2014 01:20:00 +0800</pubDate>
       
       <guid>http://air.googol.im/post/first-glance-at-atom/</guid>
-      <description>
-
-&lt;p&gt;传说上古之时，上帝为了防止人们齐心协力制造能够通向天堂的通天塔，给了不同人群不同的编辑器，其中最大的两群人分别拿到了叫做VI和Emacs的编辑器，其余的nano，ed，UltraEdit之类不一一详叙。自此以后，人类为了使用什么编辑器来编写通天塔的文档吵个不停，再也没有心思去修通天塔了……&lt;/p&gt;
+      <description>&lt;p&gt;传说上古之时，上帝为了防止人们齐心协力制造能够通向天堂的通天塔，给了不同人群不同的编辑器，其中最大的两群人分别拿到了叫做VI和Emacs的编辑器，其余的nano，ed，UltraEdit之类不一一详叙。自此以后，人类为了使用什么编辑器来编写通天塔的文档吵个不停，再也没有心思去修通天塔了……&lt;/p&gt;
 
 &lt;p&gt;后来，有不同的英雄察觉了上帝的企图，决定以个人之力重新统一人们的编辑器，并赋予其更强大的弑神之力。这些英雄的名字不仅仅限于Text Mate，Sublime……&lt;/p&gt;
 
@@ -1115,62 +131,7 @@ Douglas McIlroy的论文&lt;a href=&#34;http://swtch.com/~rsc/thread/squint.pdf&
 
 &lt;p&gt;&lt;em&gt;本文使用Atom编写&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;决定还是好好说话。Atom是github最近的一个桌面编辑器项目。刚一发布，立刻引起了众人围观，不仅仅在hack news上有着诸多报道，其github repo也被迅速关注，而为其编写的package更是一夜之间遍布各个领域。&lt;/p&gt;
-
-&lt;p&gt;为什么Atom能如此受到关注？除了github本身的光环，以及开箱即用的功能，对其目标人群——程序员——来说，基于web技术理念设计的桌面软件，大概是最吸引人的特点。&lt;/p&gt;
-
-&lt;h2 id=&#34;什么是web技术理念的桌面软件:aeed4bc0d231faf74894f342139f0801&#34;&gt;什么是web技术理念的桌面软件？&lt;/h2&gt;
-
-&lt;p&gt;简单来讲，Atom其实是一个跑在本地的网页。Atom编辑器本身是个Chromium项目，运行时会在NaCl（Native Client）环境里启动一个node.js的进程处理编辑器的核心功能，在界面上利用Chromium显示由node.js支持的网页，并在页面上为使用者提供功能。目前在Atom的界面上，还可以随时用Chromium的快捷键cmd+alt+i来打开控制台，查看整个Atom程序的页面布局：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://air.googol.im/images/atom-inspector.png&#34; alt=&#34;在Atom里打开Chromium的Inspector&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;由于Atom的界面本身就是网页，那么主题这种表现层的东西就交由css完成。实际上，Atom的主题确实就是一段css代码，比如默认主题&lt;a href=&#34;https://github.com/atom/atom-dark-ui/blob/master/stylesheets/text.less&#34;&gt;atom-dark-ui&lt;/a&gt;。使用node.js来提供后台服务，也让Atom的功能插件可以从前到后都使用javascript一种语言搞定。&lt;/p&gt;
-
-&lt;p&gt;以css和javascript作为基础，大大简化了为Atom开发的门槛，只要有web的编程基础，再加上好的创意，就能为Atom编写插件。这也能解释从Atom发布到现在不长的时间里，Atom的package数量就快速增长，覆盖了各个领域（参见&lt;a href=&#34;https://atom.io/packages/list&#34;&gt;package页面&lt;/a&gt;）。&lt;/p&gt;
-
-&lt;h2 id=&#34;实际使用:aeed4bc0d231faf74894f342139f0801&#34;&gt;实际使用&lt;/h2&gt;
-
-&lt;p&gt;由于Atom还在邀请使用的阶段，如果还没有的同学，请发挥自己的人脉，或者善用Google，找到安装包。目前的安装包似乎只有Mac上的版本……&lt;/p&gt;
-
-&lt;p&gt;打开Atom，第一感觉是……咋和Sublime这么像？除了默认字体是Monaco，而Sublime默认使用Menlo外，界面布局几乎完全一样。顺手按下cmd+shift+p，不出所料的调出了命令面板（Command Palette）。在命令面板里键入&lt;code&gt;install packages&lt;/code&gt;打开设置界面，嗯，终于有些不一样了。Atom的设置界面长的更像一个网页，内容信息完全超过Sublime以行为主的简单搜索。&lt;/p&gt;
-
-&lt;p&gt;设置界面的右侧列表里列出了Atom自带的所有package。简单浏览一下，各种语言支持全面，还有对git和markdown的支持，不愧是github的产品。比较有趣的模块是&lt;code&gt;Metrics&lt;/code&gt;，点进去看一下，居然是用Google Analytics来统计Atom的使用情况！&lt;/p&gt;
-
-&lt;p&gt;程序员会更喜欢使用命令行调用编辑器。点击&lt;code&gt;Atom&lt;/code&gt;菜单，选择&lt;code&gt;Install Shell Commands&lt;/code&gt;，就会在系统里安装&lt;code&gt;atom&lt;/code&gt;和&lt;code&gt;apm&lt;/code&gt;两个命令。&lt;code&gt;atom&lt;/code&gt;命令可以在命令行启动Atom程序，并打开文件，&lt;code&gt;apm&lt;/code&gt;则类似node.js的&lt;code&gt;npm&lt;/code&gt;，是Atom的package管理程序。&lt;/p&gt;
-
-&lt;p&gt;与Sublime不同，Atom会根据打开文件所在的目录，决定是否使用一个新的窗口打开文件。比如在目录A下打开文件a &lt;code&gt;A&amp;gt; atom a&lt;/code&gt;，和目录B下打开文件b &lt;code&gt;B&amp;gt; atom b&lt;/code&gt;，会打开两个Atom窗口，两个窗口的布局和右侧的目录视图都不同，方便在多个项目间切换。&lt;/p&gt;
-
-&lt;p&gt;Atom内建对git的支持。如果打开的文件所在的目录是个git项目，会在右下角的状态行显示repo的分支，该文件和git repo上最后一个版本的差异，左侧的目录树也会显示哪些文件有改动，哪些文件是新增的。&lt;/p&gt;
-
-&lt;p&gt;Atom默认支持github的markdown预览。编辑markdown文件时，可以在命令面板里输入&lt;code&gt;markdown preview&lt;/code&gt;，或者按ctrl-shift-m，就可以打开markdown的预览。不过这个预览只能显示已经存盘的文件内容，如果能实时显示编辑的文件内容该多好。Atom还支持github定义的&lt;code&gt;\&lt;/code&gt;`` `代码块，并根据代码内容做高亮：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://air.googol.im/images/atom-markdown-highlight.png&#34; alt=&#34;Atom的markdown对代码高亮的支持&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;点击&lt;code&gt;Atom&lt;/code&gt;菜单下的&lt;code&gt;Open Your Stylesheet&lt;/code&gt;，就可以打开编辑用户自定义的主题。比如，在打开的Stylesheet最后添加如下内容：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.editor .markup.underline.link.hyperlink {
-  color: #AAA;
-  text-decoration: underline;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;就可以把程序注释里的url稍微高亮，并加上下划线。正好默认的Stylesheet第8行有个url，cmd-s存盘后就能看到效果。&lt;/p&gt;
-
-&lt;p&gt;Atom的配置文件倒是很有特色的选择了cson，而不是更通用的json。当然，cson完全兼容json，把所有的配置当作json来写没有任何问题，甚至还不用拿着放大镜找哪个数组的末尾多写了逗号这种恼人的情况。不过，总有人会讨厌这种混合着yaml和json的格式的。&lt;/p&gt;
-
-&lt;h2 id=&#34;感受:aeed4bc0d231faf74894f342139f0801&#34;&gt;感受&lt;/h2&gt;
-
-&lt;p&gt;我多想最后就写一句话：Atom就是好啊就是好！就是好啊就是好！就是好！&lt;/p&gt;
-
-&lt;p&gt;可惜，这句话不是现实。&lt;/p&gt;
-
-&lt;p&gt;抛开实现还不稳定，经常遇到这样那样的小问题外，对Atom最大的不满，就是慢！这东西太慢了！Atom和Sublime打开的速度对比，让人想起当年Vi对比Emacs打开速度的优势。再有就是Atom编辑大文件实在力不从心，稍微上10k的文件就能感觉到明显的延迟，这还是在使用ssd的MacBook Pro上的情况。打开文件瞬间闪过没有任何高亮的代码，也是拜速度所赐。&lt;/p&gt;
-
-&lt;p&gt;相比Text Mate的沉沦和Sublime的拖沓，还是相信github会对Atom非常上心，会尽可能解决目前存在的问题。Atom社区也会非常活跃的产出各种package，解决不同使用场景下缺失的功能，扩展Atom的能力。&lt;/p&gt;
-
-&lt;p&gt;如果你是程序员，或者是喜欢折腾的Geek，试试Atom吧。不管最终是不是使用Atom，你都会发现其独特的一面。&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -1179,63 +140,9 @@ Douglas McIlroy的论文&lt;a href=&#34;http://swtch.com/~rsc/thread/squint.pdf&
       <pubDate>Sun, 12 Jan 2014 10:13:39 +0800</pubDate>
       
       <guid>http://air.googol.im/post/whats-happening-in-go-tip-2014-01-10/</guid>
-      <description>
+      <description>&lt;p&gt;Go tip是Go语言的实验分支，包含了很多尚在讨论，但很有可能会加入stable分支的特性。“Go tip在做什么”（原文地址：&lt;a href=&#34;http://dominik.honnef.co/go-tip/&#34;&gt;What&amp;rsquo;s happening in Go tip&lt;/a&gt;）分析总结了Go语言尚在开发中的一些重要特性。&lt;/p&gt;
 
-&lt;p&gt;Go tip是Go语言的实验分支，包含了很多尚在讨论，但很有可能会加入stable分支的特性。“Go tip在做什么”（原文地址：&lt;a href=&#34;http://dominik.honnef.co/go-tip/&#34;&gt;What&amp;rsquo;s happening in Go tip&lt;/a&gt;）分析总结了Go语言尚在开发中的一些重要特性。&lt;/p&gt;
-
-&lt;p&gt;本文译自：&lt;a href=&#34;http://dominik.honnef.co/go-tip/2014-01-10/&#34;&gt;What&amp;rsquo;s happening in Go tip (2014-01-10)&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;现在是2014年了，刚刚经历了圣诞和新年前夜，Go团队就已经开始为下一个发布版本而工作了。也因此，“Go tip在做什么”系列也重开了。&lt;/p&gt;
-
-&lt;p&gt;作为这个系列的最新一篇，这篇文章将会有些小调整。最重要的调整是，不会再遵循每周一篇文章的发布周期。一周里可能有几篇文章，也可能一篇都没有。这个调整，一部分由于个人原因，一部分也因为这样可以更灵活的追踪Go的改变。这样做的结果是，每篇文章可能会比以前更短，以便能紧跟最新的开发变化。&lt;/p&gt;
-
-&lt;p&gt;另一个调整是，将会覆盖一些关于没有变化的代码的形成原因和讨论。这是因为Go 1.3将会有重大改变（主要是计划用Go重写整个编译器），有些代码需要及早被大家了解。&lt;/p&gt;
-
-&lt;p&gt;这篇文章我们将会关注类型&lt;code&gt;sync.Pool&lt;/code&gt;。这个类型是Go 1.3标准库新添加的第一个重要功能。&lt;/p&gt;
-
-&lt;h1 id=&#34;做了什么:4c41eef00e9c11f0c0667009de71ae39&#34;&gt;做了什么&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;添加了&lt;code&gt;sync.Pool&lt;/code&gt;类型&lt;/li&gt;
-&lt;li&gt;开发流程的小改变&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;添加了-sync-pool-类型:4c41eef00e9c11f0c0667009de71ae39&#34;&gt;添加了&lt;code&gt;sync.Pool&lt;/code&gt;类型&lt;/h2&gt;
-
-&lt;p&gt;相关CL：&lt;a href=&#34;http://codereview.appspot.com/41860043&#34;&gt;CL 41860043&lt;/a&gt;, &lt;a href=&#34;http://codereview.appspot.com/43990043&#34;&gt;CL 43990043&lt;/a&gt;, &lt;a href=&#34;http://codereview.appspot.com/37720047&#34;&gt;CL 37720047&lt;/a&gt;, &lt;a href=&#34;http://codereview.appspot.com/44080043&#34;&gt;CL 44080043&lt;/a&gt;, &lt;a href=&#34;http://codereview.appspot.com/44150043&#34;&gt;CL 44150043&lt;/a&gt;, &lt;a href=&#34;http://codereview.appspot.com/44060044&#34;&gt;CL 44060044&lt;/a&gt;, &lt;a href=&#34;http://codereview.appspot.com/44050044&#34;&gt;CL 44050044&lt;/a&gt;, &lt;a href=&#34;http://codereview.appspot.com/44680043&#34;&gt;CL 44680043&lt;/a&gt;, &lt;a href=&#34;http://codereview.appspot.com/46010043&#34;&gt;CL 46010043&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;像JVM这种项目，花了很多的精力来改进垃圾收集系统，来保证其所要处理回收的众多垃圾。另一方面Go，大致上采用了在第一时间避免垃圾的设计方法，需要一个不那么时髦的垃圾收集系统，来保证将内存的控制权交还给程序员。&lt;/p&gt;
-
-&lt;p&gt;由于这点，标准库里一些包分别实现了重用对象的池，来避免产生过多的垃圾。&lt;code&gt;regexp&lt;/code&gt;包为了保证并发时使用同一个正则，而维护了一组状态机，&lt;code&gt;fmt&lt;/code&gt;包有众多的打印实例，其他包也有各自的池，或者可以采用这种技术。&lt;/p&gt;
-
-&lt;p&gt;不过，这种方法有两个问题。最明显的问题是代码重复：即便重要的代码大都相同，所有的包也需要实现一份自己的池。比较细微的问题是，没有办法回收池持有的空间。这种简单的实现从来不会释放内存，违反了使用垃圾回收的语言的原则，导致过高但不必要的内存使用。&lt;/p&gt;
-
-&lt;p&gt;因为这些问题，Brad Fizpatrick&lt;a href=&#34;https://code.google.com/p/go/issues/detail?id=4720&#34;&gt;曾建议&lt;/a&gt;在&lt;code&gt;sync&lt;/code&gt;包里加入一个公开的&lt;code&gt;Cache&lt;/code&gt;类型。这个建议引发了一长串的讨论。Go语言应该在标准库里提供一个这个样子的类型，还是应当将这个类型作为私下的实现？这个实现应该真的释放内存么？如果释放，什么时候释放？这个类型应当叫做&lt;code&gt;Cache&lt;/code&gt;，或者更应该叫做&lt;code&gt;Pool&lt;/code&gt;？&lt;/p&gt;
-
-&lt;p&gt;我先解释一下缓存（cache）和池（pool）的区别，以及为什么这个区别对讨论很重要。Brad Fizpatrick建议的类型实际上是一种池：一组可以互换的值，取出时并不关心具体的值是什么，因为每个值都是刚被初始化的状态，值是相同的。你甚至分不出来刚刚拿到的值是从池里取出来的，还是新创建的。另一方面，缓存是一些相呼映射的键和值。一个明显的例子是磁盘缓存。磁盘缓存将慢速存储中的文件缓存在系统主内存里，以便提高访问速度。如果缓存里有对应键A和B的值（磁盘缓存的例子里，就是文件名），而你请求了与A对应的值，你显然不想得到B所对应的值。实际上，缓存里的值是互不相同的，增加了缓存清除机制的复杂性，就是说到底哪个值应该被清除出缓存。&lt;a href=&#34;http://en.wikipedia.org/wiki/Cache_algorithms&#34;&gt;维基百科上关于缓存算法的页面&lt;/a&gt;，列举了13种不同的清除缓存的算法，从著名的LRU缓存到更复杂的比如&lt;a href=&#34;http://en.wikipedia.org/wiki/LIRS_caching_algorithm&#34;&gt;LIRS缓存算法&lt;/a&gt;。&lt;/p&gt;
-
-&lt;p&gt;按照这种方式，我们的池真正要关心的问题，只是什么时候回收池占有的空间。而且大家提到了几乎各种可能性：一些在GC前回收，一些在GC后，基于时钟或者采用弱引用指针。所有的建议都有其弊病。&lt;/p&gt;
-
-&lt;p&gt;在经历了漫长的讨论后，Russ Cox最终&lt;a href=&#34;https://groups.google.com/forum/#!searchin/golang-dev/gc-aware/golang-dev/kJ_R6vYVYHU/LjoGriFTYxMJ&#34;&gt;提议的API和回收策略&lt;/a&gt;非常简单：在垃圾收集时回收池空间。这个建议提醒我们，类型&lt;code&gt;Pool&lt;/code&gt;的目的是在垃圾收集之间重用内存。它不应该避免垃圾回收，而是让垃圾回收变得更有效。&lt;/p&gt;
-
-&lt;p&gt;实现了这个提议，并在几次讨论后，提交到Go的代码库。当然，这个CL不是最终结果。首先，所有的池都要改写为&lt;code&gt;sync.Pool&lt;/code&gt;。这些改写由&lt;a href=&#34;http://codereview.appspot.com/43990043&#34;&gt;CL 43990043&lt;/a&gt;，&lt;a href=&#34;http://codereview.appspot.com/37720047&#34;&gt;CL 37720047&lt;/a&gt;，&lt;a href=&#34;http://codereview.appspot.com/44080043&#34;&gt;CL 44080043&lt;/a&gt;，&lt;a href=&#34;http://codereview.appspot.com/44150043&#34;&gt;CL 44150043&lt;/a&gt;，&lt;a href=&#34;http://codereview.appspot.com/44060044&#34;&gt;CL 44060044&lt;/a&gt;追踪，但&lt;strong&gt;不&lt;/strong&gt;包括&lt;a href=&#34;http://codereview.appspot.com/44050044&#34;&gt;CL 44050044&lt;/a&gt;。&lt;a href=&#34;http://codereview.appspot.com/44050044&#34;&gt;CL 44050044&lt;/a&gt;关注在尝试将&lt;code&gt;encoding/gob&lt;/code&gt;包里使用的本地释放链表替换为&lt;code&gt;sync.Pool&lt;/code&gt;。本地是个关键词。一个释放链表会和一个解码器（decoder）的生存时期一样长，直到这个解码器被销毁，才会释放这个链表。Russ Cox&lt;a href=&#34;https://codereview.appspot.com/44050044/#msg10&#34;&gt;回复了这个CL&lt;/a&gt;，明确了&lt;code&gt;sync.Pool&lt;/code&gt;的目的，以及它不能用来做什么。直到这时，Rob Pike提交并回复了&lt;a href=&#34;http://codereview.appspot.com/44680043&#34;&gt;CL 44680043&lt;/a&gt;，扩展了&lt;code&gt;sync.Pool&lt;/code&gt;类型的文档，将其目的描述得更清楚。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;code&gt;Pool&lt;/code&gt;设计用意是在全局变量里维护的释放链表，尤其是被多个goroutine同时访问的全局变量。使用&lt;code&gt;Pool&lt;/code&gt;代替自己写的释放链表，可以让程序运行的时候，在恰当的场景下从池里重用某项值。&lt;code&gt;sync.Pool&lt;/code&gt;一种合适的方法是，为临时缓冲区创建一个池，多个客户端使用这个缓冲区来共享全局资源。另一方面，如果释放链表是某个对象的一部分，并由这个对象维护，而这个对象只由一个客户端使用，在这个客户端工作完成后释放链表，那么用&lt;code&gt;Pool&lt;/code&gt;实现这个释放链表是不合适的。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;从回复（和更早的讨论）来看，加入&lt;code&gt;sync.Pool&lt;/code&gt;还是一种试验，如果&lt;code&gt;Pool&lt;/code&gt;没有实现它的功能，有可能发布Go 1.3之前将其完全移除。这件事情由&lt;a href=&#34;https://code.google.com/p/go/issues/detail?id=6984&#34;&gt;Issue 6984&lt;/a&gt;跟踪。&lt;/p&gt;
-
-&lt;p&gt;虽然本文对&lt;code&gt;sync.Pool&lt;/code&gt;的探索结束了，但是关于池的讨论还没有结束。还有&lt;a href=&#34;http://codereview.appspot.com/46010043&#34;&gt;CL 46010043&lt;/a&gt;，为了更适合并发时使用，改进了非常简单的初始化实现。但这个CL在目前还没有通过审核。&lt;/p&gt;
-
-&lt;h2 id=&#34;开发流程的小改变:4c41eef00e9c11f0c0667009de71ae39&#34;&gt;开发流程的小改变&lt;/h2&gt;
-
-&lt;p&gt;从Go 1.3的周期开始，开发的流程有一些小的变化。这些变化只会影响到直接参与开发流程的人，以及像我一样，紧跟最新变动的人。&lt;/p&gt;
-
-&lt;p&gt;启用了一个新的邮件列表，&lt;a href=&#34;https://groups.google.com/forum/#!forum/golang-codereviews&#34;&gt;golang-coderreviews&lt;/a&gt;，并作为新CL的默认抄送对象，替代了原有的&lt;a href=&#34;https://groups.google.com/forum/#!forum/golang-dev&#34;&gt;golang-dev&lt;/a&gt;。这个想法是为了降低golang-dev里的噪音，以便让其关注真正的讨论。&lt;/p&gt;
-
-&lt;p&gt;同时也启用了一个新的信息板，允许提交者更容易的跟踪还在开放的Issue和CL。任何对Go团队的工作方式感兴趣的人，都可以在这个新的信息板上找到有用的说明。&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -1246,152 +153,7 @@ Douglas McIlroy的论文&lt;a href=&#34;http://swtch.com/~rsc/thread/squint.pdf&
       <guid>http://air.googol.im/post/go-rest-revolution/</guid>
       <description>&lt;p&gt;在EXFE创业的两年，虽然项目最终失败了（很可惜），不过自己从头开始写了一个简化RESTful Service实现的Framework——&lt;a href=&#34;https://github.com/googollee/go-rest&#34;&gt;go-rest&lt;/a&gt;，还算有不少收获。这里记录一下go-rest实现过程中一些重要的演变，以及这些演变背后的原因。&lt;/p&gt;
 
-&lt;p&gt;最开始，我把Service定义为RPC remote式的调用方法。处理逻辑的函数，基本上是这样：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func Handler(input InputType) OutputType { ... }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;框架主要是解决HTTP协议的处理，以及将Request Post的body部分反序列化为InputType的实例，根据url调用相应的函数，并序列化函数的输出结果。&lt;/p&gt;
-
-&lt;p&gt;因此，当时的框架使用起来类似下面的样子（因为最老的一版代码找不到了，这个是凭印象写的）：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;
-func Handler1(input InputType) OutputType { ... }
-func Handler2(input InputType) (OutputType, error) { ... }
-
-func main() {
-	r := rest.New()
-	r.Add(&amp;quot;/handler1&amp;quot;, Handler1)
-	r.Add(&amp;quot;/handler2&amp;quot;, Handler2)
-
-	http.ListenAndServe(&amp;quot;:8000&amp;quot;, r)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;优点：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;自动处理HTTP协议，根据mime选择合适的序列化方法；&lt;/li&gt;
-&lt;li&gt;自动将Request Body和Response Body序列化/反序列化为对应的参数结构，处理函数内不需要考虑序列化问题；&lt;/li&gt;
-&lt;li&gt;逻辑函数易于测试。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;缺点：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;无法自定义任何HTTP协议的处理过程，无法做url参数化或者对url的参数做处理，无法使用HTTP Header信息；&lt;/li&gt;
-&lt;li&gt;只能固定使用POST方法做请求；&lt;/li&gt;
-&lt;li&gt;返回值格式固定，如果出错（处理函数的error返回不为nil），只能使用500一种返回码，调用者无法知道错误细节；&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;为了解决缺点，最开始使用gorilla/mux库做路由，解决了不能自定义HTTP method的问题。之后为了利用起HTTP协议本身的各种参数化和配置方法，达到更加RESTful的状态，go-rest第二版引入了Context的概念。在注册处理函数时，参考&lt;a href=&#34;https://code.google.com/p/gorest/&#34;&gt;gorest&lt;/a&gt;也引入了使用将struct做配置的方法。&lt;/p&gt;
-
-&lt;p&gt;第二版里定义一个用于处理逻辑的struct如下所示：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;type RestExample struct {
-    rest.Service `prefix:&amp;quot;/prefix&amp;quot; mime:&amp;quot;application/json&amp;quot;`
-
-    postSample rest.SimpleNode `method:&amp;quot;POST&amp;quot; route:&amp;quot;/post&amp;quot;`
-    getSample  rest.SimpleNode `method:&amp;quot;GET&amp;quot; route:&amp;quot;/get/:id&amp;quot;`
-}
-
-func (r *RestExample) PostSample(ctx rest.Context, arg InputType) {
-    ...
-}
-
-func (r *RestExample) GetSample(ctx rest.Context) {
-    var id int
-    ctx.Bind(&amp;quot;id&amp;quot;, &amp;amp;id)
-    if err := ctx.Error(); err != nil {
-        ctx.Return(http.StatusBadRequest, err.Error())
-        return
-    }
-    ...
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;优点：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;url配置更加灵活，可以为每个Service分别添加前缀；&lt;/li&gt;
-&lt;li&gt;参数化url，可以写表达性更强的url，而且可以保证处理函数不需要牵涉到HTTP协议的细节；&lt;/li&gt;
-&lt;li&gt;可以使用Context来访问HTTP报文相关内容，比如拿到Request Header，或者改变HTTP Response Code（见GetSample）；&lt;/li&gt;
-&lt;li&gt;使用Context.Bind来处理url参数解析，声明式比过程式更易懂；&lt;/li&gt;
-&lt;li&gt;配置统一定义在RestExample里。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;缺点：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;使用Context处理HTTP相关信息的时候引入了HTTP协议细节，不易测试；&lt;/li&gt;
-&lt;li&gt;函数名和配置变量对应依靠首字母大小写来对应，过于隐晦；&lt;/li&gt;
-&lt;li&gt;没有中间层，对于一些通用处理显得繁琐，比如log，auth等。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;因为要对HTTP的细节作处理（Header，url参数化等等），而引入的Context，最终却变成了逻辑函数里额外的部分，导致测试时需要花费很大精力准备一个合法的Context，是这次变动中最失败的部分。但是由于更加符合业务要求，实现出来的接口更容易理解且符合RSETful的要求，这个实现大概维持了1年左右没有变化。&lt;/p&gt;
-
-&lt;p&gt;后来团队解散后空余时间比较多，也因为Node.js很火爆，就跑去看了看Node.js上最流行的框架Express.js。Express.js使用的Connect库做到的中间件很有意思。借鉴Connect的中间件思想，就有了go-rest最新的一次改版。这次改版的主要思路在于，使用中间件来处理与HTTP协议相关的逻辑，保持最终的业务逻辑是一个独立的函数，不引入任何与框架相关的约束和假设。改版后的框架使用起来像下面这个样子：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;
-r := rest.New()
-
-// add log midware
-r.Use(rest.NewLog(nil))
-
-// add router. router must before mime parser because parser need handler&#39;s parameter inserted by router.
-r.Use(rest.NewRouter())
-
-// parse json
-r.Use(rest.NewJSON()))
-
-// get sample
-r.Get(&amp;quot;/get/:id&amp;quot;, func(params rest.Params) error {
-    var id int
-    params.Bind(&amp;quot;id&amp;quot;, &amp;amp;id)
-    if err := params.Error(); err != nil {
-        return resp.Error(http.StatusBadRequest, err.Error())
-    }
-    ...
-})
-
-// post sample
-r.Post(&amp;quot;/post&amp;quot;, func(arg InputType) {
-	...
-})
-
-// custom midware
-func prefix(prefix string) http.HandlerFunc {
-    return func(w http.ResponseWriter, r *http.Request) {
-        if !strings.HasPrefix(r.URL.Path, prefix) {
-            http.NotFound(w, r)
-            return
-        }
-    }
-}
-
-// a handler with special midware
-r.NotFound(prefix(&amp;quot;/static/&amp;quot;), http.FileServer(http.Dir(&amp;quot;.&amp;quot;)))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;由于有了灵活的中间件机制（通过Use引入），可以将所有和HTTP解析相关的代码改写为中间件并复用。同时，可以给每个处理函数单独配置自己的中间件，这样不同处理函数也可以复用一些相似的逻辑。需要从HTTP内解析出的变量，通过rest.Params传入处理函数。而rest.Params只是map[string]interface{}的简单封装，测试时很容易构造其中的内容。Params.Bind的部分目前还没有实现，其实这部分可以通过中间件完成的，写在这里是为了展示效果。如果error返回的不是一个rest.Response或者rest.Error，HTTP就会以StatusServerInternalError作为Response Code。&lt;/p&gt;
-
-&lt;p&gt;这个框架本身还可以支持多参数的处理函数，不过要自己写相应的中间件对参数顺序做布局。由于通用性不高，我就没有实现相关的内容。&lt;/p&gt;
-
-&lt;p&gt;这个框架的优点：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;中间件机制灵活，可以对某个处理分支加入单独的中间件；&lt;/li&gt;
-&lt;li&gt;处理函数与HTTP协议无关，方便测试和重构；&lt;/li&gt;
-&lt;li&gt;中间件可以改变处理函数需要的参数和返回值的类型，支持类似wrapper的特性而不需要改动业务处理函数。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;缺点：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;实现有一些精巧的不易理解的部分，使用时容易造成困惑；&lt;/li&gt;
-&lt;li&gt;看上去接口并不清晰。&lt;/li&gt;
-&lt;/ul&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -1402,28 +164,7 @@ r.NotFound(prefix(&amp;quot;/static/&amp;quot;), http.FileServer(http.Dir(&amp;q
       <guid>http://air.googol.im/post/shy-note-project-management/</guid>
       <description>&lt;p&gt;这周进行了一周的Scrum演练，谈谈感受。&lt;/p&gt;
 
-&lt;p&gt;其实并不是完全意义的Scrum，只是引入了迭代的概念、迭代开始的项目会议和进度管理，等这次周期结束还打算进行回顾展示会议。&lt;/p&gt;
-
-&lt;p&gt;要说这次引入开始的项目会议，还是有很大作用的。会议本身是个让开发者明确产品需求的时机，两个前端能在会议上明确讨论需求的大致实现方法，同时所有人能对别人做的事情有更好的了解。&lt;/p&gt;
-
-&lt;p&gt;一些经验：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;在会议开始前，要做好backlog的准备工作。这个是Scrum master要和产品在会前得出结论的，包括足够的需求和需求的重要度。我在这次实践还让产品经理去估计项目的时间（按照人天，最短0.5人天为单位），目的是让产品能感受到他自己的时间估计和实际时间的偏差。不过后起来看这个可能会效果不大。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;为这个会议留足讨论的时间。如果输入的需求足够细致，自然时间就不会很长。但是一旦需求不够明确，没有足够的时间就会导致讨论不够细致，为之后的开发带来隐患。不过会议中间应该注意休息，大概一小时休息一次的节奏会比较合适。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;会上要让全体一起估计每个需求的时间，哪怕这个需求最后只归结到某个人去做，也要让大家一起参与。一方面当大家偏差较大时，说明大家对需求的理解不一致，需要继续讨论，另一方面也是尽量阻止有人思想溜号，只关心自己的部分。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;会议上要合理将需求分解为可控的任务，如果是新功能，分解的任务需要包含测试和返工的时间。对于很纠结的产品经理，一定要把任务拆的尽量细，然后争取在每个任务完成后进行反馈，这样能尽早展现做完的形象。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Scrum Master可以记录每个需求的讨论时间，用来衡量需求本身质量的高低。如果一个需求的质量还没有达到可以开发的地步，就会有大量的时间花费在这个需求，确认各种细节和实现，导致这个需求的讨论时间非常长。这次有两个需求的讨论时间超出了30分钟，最后的实现阶段这两个需求都出现了延期。&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;在一开始，可能还不会有很好的方式做scrum log，我现在都是自己用number来追踪项目的完成度和时间。不过另一方面的经验，scrum log的维护可能还是要有一个专人来完成，不然慢慢就没人做了。&lt;/p&gt;
-
-&lt;p&gt;不过现在trello的用法很奇怪。居然要求第一阶段的request尽量空，而第二阶段的plan却堆满了东西。从trello里完全看不出一个迭代内应该做的事情。反正事情我劝了，不接受我也没办法。如果以后做Scrum，需要在各种视图上都明确出迭代的阶段，一方面让产品了解什么时候该准备需求，什么时候该讨论需求，另一方面让团队有节奏感，知道什么时候应该突击功能，什么时候应该重构代码。老大现在一直不愿意让团队有喘息的机会，生怕闲下来出现偷懒摸鱼的人，唉……&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -1434,39 +175,7 @@ r.NotFound(prefix(&amp;quot;/static/&amp;quot;), http.FileServer(http.Dir(&amp;q
       <guid>http://air.googol.im/post/shy-note-over-design/</guid>
       <description>&lt;p&gt;今天打算来专门聊一聊过渡设计的事情。&lt;/p&gt;
 
-&lt;p&gt;过渡设计可能对每个程序员来说都不陌生。基本上，凡是设计一些不知道现阶段该怎么用的东西，都属于过渡设计。&lt;/p&gt;
-
-&lt;p&gt;过渡设计有可能会隐藏在一种听起来很合理的理由背后出现：我们应该设计成的样子。为了这个想象中的样子，最终会定下很多过于理想的需求，这些需求，就是过度设计的体现。
-大家平时讨论产品的时候，尤其是有产品经理参与的情况下，很容易就陷入“理想中的样子”的怪圈。大家说起某个功能应该有的样子的时候，都会很兴奋，不由自主把需求不断泛化扩展，觉得如果做成这样，这功能就无敌了！不过，在一个目标还不确定，真正的客户没有体现出这种需求的时候，就预先实现一些相关概念，显然是不值当的。&lt;/p&gt;
-
-&lt;p&gt;这次的开发，遇到的过渡设计主要有：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;时间的表示&lt;/p&gt;
-
-&lt;p&gt;为了追求能灵活表示时间，不仅显示的时候没有使用标准的时间表示而是用了更加口语化的表述，而且还加入了所谓模糊时间的概念。比如早餐，午餐这种模糊时间以及周末这种模糊日期。当时时间前前后后争论了大概有一周，才算定下了一些输入输出的例子，而这些例子一方面要用不同语言都实现一遍，另一方面也为如何输入时间造成了麻烦。现在的时间实现无法直接利用任何现有基础库来完成转换，或者本地化，而这种灵活时间并没有给项目带来可见的优势，常见的日期输入还是以标准日期为主。倒是today这个模糊日期被命中率很高。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;tag的滥用&lt;/p&gt;
-
-&lt;p&gt;在设计新的地图时，为了能灵活表现地标的一些属性，设计了tag这个属性。有些tag会有特殊的属性，比如在一张地图里某个tag会有唯一性，或者会同步一个属性。而实现时，由于tag无法随机访问，每次查看是否具有某些属性，需要遍历所有的tag。一方面遍历效率不高，另一方面一些唯一性的逻辑难以实现，唯一性只能把所有地标取出来，然后遍历来确认是否某个tag唯一。一个地图上地标不多，所以这个操作倒是目前还没有性能问题（当然，也没多少用户），但是显然从设计上，是没有什么扩展性可言的。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;复杂的失败机制&lt;/p&gt;
-
-&lt;p&gt;在app上，有可能遇到因为网络问题造成的提交失败。一般来说，处理这种失败有两种办法：简单的话，同步提示失败，然后数据恢复到没提交的状态；复杂的话，缓存失败的请求，在网络恢复时再次提交。后一种有很多事情需要考虑，比如再提交时，多个请求需要保证提交的顺序与发起时的顺序一致，需要区别对资源的修改请求和获取请求，而如果要修改的数据与数据源的数据不一致，那么是否要提交这次修改就又面临很多选择的问题。基本上，可以把后者看成一种分布式版本管理库，需要处理本地分支和合并。从使用上讲，普通用户是否是git的目标用户？至于实现难度……反正这次开发选择了后者。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;过早泛化widget&lt;/p&gt;
-
-&lt;p&gt;widget其实也是一种类似tag的泛化机制，比tag要多出很多行为和数据存储。而实际开发过程中，随着项目切入点的变化，到底给用户显示的是某个widget，还是容纳widget的容器，也一直变来变去。而为了配合前端获取数据的效率，一些widget的数据就变成不得不附加在整个widgets所在的容器，递交给前端去处理。而这种请求，不仅加剧了请求容器时需要处理的请求数量，还会导致在请求widget数据时，widget有可能还会返回去请求整个容器的一些属性。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;post&lt;/p&gt;
-
-&lt;p&gt;post最早设计思想是一种即时贴的感觉，可以贴到任何对象上。嗯，我说完这个就觉得这东西好可怕，因为这个附加的对象只是一段字符，而被贴的对象要对外暴露属性时，还要去查询一次post。当然，最后这东西也只用在了conversation一个对象上。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;消息传输机制&lt;/p&gt;
-
-&lt;p&gt;理想中的bus，多机互联互通，服务自动发现，会自动就近存取数据，自动路由，消息交换成本低，速度快，甚至带有队列和失败机制。我觉得我要能写出这个东西，我就去发个paper，然后等别人引用我的paper，就能了此一生了。不过这个功能，最初讨论的时候我也很兴奋，觉得有了这个就能实现很多自动管理的机制。也许当初讨论的时候更加现实一些会更好。或许，等我们真的有了多台机器的时候，再考虑这些，就能找到更明确的需求了。&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -1477,24 +186,7 @@ r.NotFound(prefix(&amp;quot;/static/&amp;quot;), http.FileServer(http.Dir(&amp;q
       <guid>http://air.googol.im/post/shy-notes/</guid>
       <description>&lt;p&gt;开发手札，嗯……我不是在捏纯爱手札的梗……&lt;/p&gt;
 
-&lt;p&gt;感谢大大指点，其实这个坑开的有点晚了，很多之前有益的事情，大概只会记下一个结论而没有发展过程了。&lt;/p&gt;
-
-&lt;p&gt;我不知道Jobs是不是真的当过产品经理，不过Jobs对产品的热情应该是不亚于任何一个产品经理吧。不过幸亏Apple I是沃兹主持设计的，如果交给Jobs，大概还在车库里研究怎么给电路板走线。&lt;/p&gt;
-
-&lt;p&gt;产品经理对产品的热情，反复的修改产品细节，尤其是在看到成品后对设计的自我否定并进化，会严重干扰项目的进度。不知道Apple内部的项目经理们都是怎么过的，估计腾讯的项目经理们大概都会被产品逼疯吧。当然也可能在与项目经理的搏斗过程中，留下的都是不那么自我肯定的产品经理，而控制欲很强的产品经理都借着背景出去创业了。&lt;/p&gt;
-
-&lt;p&gt;产品经理白天画产品，晚上做测试，没有项目控制，没有进度迭代，于是工程师连睡觉的时间都没有了……&lt;/p&gt;
-
-&lt;p&gt;产品经理总是在想，如果这个细节没做好就会流失用户，如果那个流程没有封闭就吸引不到用户，如果地图偏移了10米没有显示在路上用户就会很疑惑而放弃产品，于是需求为了这些不断修改，但产品本身却一个真正的用户都没有。&lt;/p&gt;
-
-&lt;p&gt;3个月的急行军，产品规划的再好，也还是没有做出来，用户一个没有，吊在前面引领大家奔跑的萝卜就越来越暗淡。上线吧，上线吧，上线吧，所有人的心理都在喊着这句话。真的很想知道如此打磨的一个产品能在上线后获得多少用户。我有说过产品细节过多可能会引起用户不理解产品甚至产品运行速度缓慢么？&lt;/p&gt;
-
-&lt;p&gt;中国的网络确实很烂，速度慢，丢包高。但是难道产品不是应该适应这种当前的情况，然后试着基于这个现状来解决问题么？连静态图的显示效果都没法确认，就先做动态图版本，等开始要做静态图，还要考虑两个版本同时加载并互相赛跑赛赢的切换另一个，好复杂啊……&lt;/p&gt;
-
-&lt;p&gt;产品本身的进度问题，招人无法解决。10个孕妇也没法在1个月内生出孩子，何况还指定要一个浓眉大眼丰胸翘臀的美人坯子娃娃。&lt;/p&gt;
-
-&lt;p&gt;如果有哪个工程师知道怎么推广产品，丫早就不做工程师了！&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -1505,24 +197,293 @@ r.NotFound(prefix(&amp;quot;/static/&amp;quot;), http.FileServer(http.Dir(&amp;q
       <guid>http://air.googol.im/post/why-goroutine-not-library/</guid>
       <description>&lt;p&gt;老赵在最近的blog里对go有诸多批评。在我看来这些批评都没有正确的理由来支持。这篇blog先来就&lt;a href=&#34;http://blog.zhaojie.me/2013/04/why-channel-and-goroutine-in-golang-are-buildin-libraries-for-other-platforms.html&#34;&gt;《为什么我认为goroutine和channel是把别的平台上类库的功能内置在语言里》&lt;/a&gt;一文进行反驳。&lt;/p&gt;
 
-&lt;p&gt;如果想要明晰一个特性，到底应该是在语言层面提供，还是在类库层面提供，那么首先要明确一件事情：到底语言层面和类库层面提供的特性，有什么不同。在我看来，语言提供的特性，是使用这门语言的使用者不能选择，必须接受的特性，而类库层面提供的特性，是使用者可以自由选择是否使用的特性。&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>迁移到HEXO</title>
+      <link>http://air.googol.im/post/migrate-to-hexo/</link>
+      <pubDate>Wed, 24 Apr 2013 08:34:35 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/migrate-to-hexo/</guid>
+      <description>&lt;p&gt;前几天把这个blog的框架从&lt;a href=&#34;https://github.com/mojombo/jekyll&#34;&gt;jekyll&lt;/a&gt;迁移到了&lt;a href=&#34;http://zespia.tw/hexo/&#34;&gt;HEXO&lt;/a&gt;。因为会重新生成feed，uuid和原来的不一样，所以有刷屏，抱歉。&lt;/p&gt;
 
-&lt;p&gt;比如说，C++比C增加的面向对象特性，在C里也有对应的库实现（GLib），甚至模版特性，在C早期也有类似的实现（具体可以参见《C++的设计与演化》一书，对此有详述）。那么为什么C++会成为一门语言？使用C++意味着必须接受类，模版这些概念，就会遇到使用这些概念的官方库（STL/iostream），而且使用时只能用C++约定好的方式实现（为什么有那么多人纠结模版偏特化的问题而不是像C一样用不同的函数？）而不像C里，可以有使用GLib的权利，也可以自己实现一套和C++的实现方式不一样的面向对象实现（比如多态通过名字查找而不是虚表跳转）。&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Go语言奇怪的特性</title>
+      <link>http://air.googol.im/post/wired-golang/</link>
+      <pubDate>Wed, 03 Apr 2013 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/wired-golang/</guid>
+      <description>&lt;p&gt;记录了一些使用Go时遇到的违反直觉的特性。&lt;/p&gt;
 
-&lt;p&gt;对于老赵非常喜欢的C#来说，为什么能单独成为一种语言？C++也不是不能用类库的方式实现GC和VM，随手google一下就会有大把的实现：&lt;a href=&#34;http://www.hpl.hp.com/personal/Hans_Boehm/gc/&#34;&gt;A garbage collector for C and C++&lt;/a&gt;，&lt;a href=&#34;http://sourceforge.net/projects/ivm/&#34;&gt;Internet C++/Internet Virtual Machine&lt;/a&gt;。但是C#的实现为使用者约定了GC和VM的实现方式，使用者可以放心的依赖语言的实现细节来构造自己的程序。&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>我为什么喜欢Go</title>
+      <link>http://air.googol.im/post/why-i-like-go/</link>
+      <pubDate>Mon, 09 Jul 2012 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/why-i-like-go/</guid>
+      <description>&lt;p&gt;这半年来工作上一直在用Go，总共统计下来也写了1w多行代码，算上删删改改的，大概能有1w5吧。而且还写了不少go的库，比如android push库&lt;a href=&#34;https://github.com/googollee/go_c2dm&#34;&gt;go_c2dm&lt;/a&gt;，一个简单的IMAP客户端&lt;a href=&#34;https://github.com/googollee/goimap&#34;&gt;goimap&lt;/a&gt;，想继续完善的编码库&lt;a href=&#34;https://github.com/googollee/go-encoding-ex&#34;&gt;go-encoding-ex&lt;/a&gt;。似乎赶着最近Google IO，国外很时兴写对Go的总结，于是我也赶热闹写一篇blog。&lt;/p&gt;
 
-&lt;p&gt;其实上面C++和C#两个例子都不是很好，因为这两门语言都是不断向语言内塞入其他语言用库来实现的特性，试图让使用者想用什么都可以，但语言本身并没有体现出语言层面的设计原则——如果“什么特性都能用”不算做一个恰当的原则的话。&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>关于gotour最后一题的一些想法</title>
+      <link>http://air.googol.im/post/gotour-exercise-web-crawl/</link>
+      <pubDate>Sat, 04 Feb 2012 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/gotour-exercise-web-crawl/</guid>
+      <description>&lt;p&gt;过年几天，把&lt;a href=&#34;http://tour.golang.org/&#34;&gt;A Tour of Go&lt;/a&gt;看了一遍，算是复习了一遍go语言。其中最后一题&lt;a href=&#34;http://tour.golang.org/#70&#34;&gt;Exercise: Web Crawler&lt;/a&gt;有些复杂，是串行程序转换到并行时常见的问题。这里记录一些当时思考的结果。&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://en.wikipedia.org/wiki/Prolog&#34;&gt;Prolog&lt;/a&gt;是一门用C实现的逻辑型语言，其语法和语言的设计哲学都和C完全不一样：通过直接声明条件，语言自己会给出符合条件的结果（还记得爱因斯坦隔壁几家有的养金鱼，有的拉提琴，有的房子是红色，最后要求出绿色家养的啥宠物的那类题么？）。如果按照老赵的说法，逻辑型编程完全可以用C来实现，所以Prolog根本不是一种语言，只是一个C的库而已。但是由于Prolog限制了语言的特性，所有操作只能通过逻辑表达式来完成，对于一个实现来说，Prolog用到的思维模型和C完全不一样，如果说Prolog只是C的一个库，不知道会有多少人同意这种说法。&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>到底应该怎么存密码</title>
+      <link>http://air.googol.im/post/how-to-save-password/</link>
+      <pubDate>Thu, 22 Dec 2011 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/how-to-save-password/</guid>
+      <description>&lt;p&gt;最近各大网站频频爆出密码泄露的事情，搞得用户“改密码改到手软”。先姑且不说一些政治上的因素导致网站必须保存明文的情况，到底应该如何保存密码，才能保证即便数据库内容被盗，用户的密码本身也是安全的呢？&lt;/p&gt;
 
-&lt;p&gt;说回go。go选择了CSP的内核实现，并在此上实现了goroutine和channel。这个选择最明显的一个结果，就是go的os库里没有其他语言os库的select/poll/kqueue的api。为什么？因为完全不需要。go里类似的功能可以通过对channel的select来实现，不需要暴露os的功能给使用者，而且也不需要让用户选择到底是用select还是poll。基于此，所有go的库在处理io时都是异步非阻塞的（除非同步等待channel或者用sync实现同步）。而C#又有多少库实现了异步？说到底还是要借助语言层面，实现一个async/await的怪异特性，用一种封装的回调机制来实现异步操作。&lt;/p&gt;
+&lt;p&gt;说到这个问题，先要明确一些原则的问题，然后才能讨论具体的解决方法。&lt;/p&gt;
 
-&lt;p&gt;利用编译器实现CSP还有另外的优势：动态栈。传统的编译语言，由于没有考虑并发的机制，整个程序是运行在同一个栈上；使用os的线程/进程库，会依赖os对线程/进程的栈的分配，这种分配和程序本身无关，是os根据经验设置的数值，对程序来说经常会出现要么栈效率不高，要么栈不够用溢出；使用库实现的纤程/线程/异步，都是在使用当前进程的栈，每个纤程/线程/异步模块没有自己的独立栈，导致很多纤程实现都是不依赖栈，而全靠堆来解决每个纤程内的分配问题，对内存造成了很大的压力。而go通过编译器实现的goroutine，可以在编译期知晓更多的goroutine信息，并在运行时动态分配每个goroutine的栈大小，做到既不浪费，也不溢出。&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Christian Neukirchen 的 Ruby 编程风格指南</title>
+      <link>http://air.googol.im/post/ruby-style/</link>
+      <pubDate>Sun, 20 Feb 2011 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/ruby-style/</guid>
+      <description>&lt;p&gt;也许你不会同意本文提到的所有规则，但是这些规则确实帮助我产生了高质量的代码，对我来说很有用。任何人都可以随其所想，根据其自己的编码风格去写代码，但是，当你提代码到我的项目里时，请遵守这些规则：&lt;/p&gt;
 
-&lt;p&gt;go通过语言来实现了异步的特性，适应网络/IO请求多的高性能开发要求，这在选择库和最终开发时都为开发者提供了优良的异步特性，从而节省了开发者的时间，提高了开发效率。这是仅仅用库实现特性做不到的。&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Golang里调用C</title>
+      <link>http://air.googol.im/post/call-c-in-golang/</link>
+      <pubDate>Sun, 18 Apr 2010 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/call-c-in-golang/</guid>
+      <description>&lt;p&gt;Golang调用C分两个步骤：1 写一个C的wrapper，这个很简单；2 对wrapper做编译，这个步骤有点复杂，而且涉及众多中间文件。应该是有办法用自动化的工具简化这个过程的。&lt;/p&gt;
 
-&lt;p&gt;至于老赵把channel的特性和数据流做对比就更显得奇怪了。channel的类型限制是由go选择静态强类型语言这件事情决定的，输入和输出的数据类型要在编译时确定，这和一个数据流处理同一类型的数据是两个设计原则，虽然结果类似，但并不是说两者适合拿来做比较。goroutine和channel可以拿来实现数据流，但是其并不是为了实现数据流而设计的（比如channel还有传递消息同步线程的作用）。&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>ssh退出失败，报错EPIPE</title>
+      <link>http://air.googol.im/post/ssh-quit-with-epipe/</link>
+      <pubDate>Sat, 13 Mar 2010 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/ssh-quit-with-epipe/</guid>
+      <description>&lt;p&gt;这两天帮同事看一个sshd退出时报错的问题。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Golang初探</title>
+      <link>http://air.googol.im/post/guide-to-golang/</link>
+      <pubDate>Sun, 17 Jan 2010 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/guide-to-golang/</guid>
+      <description>&lt;p&gt;Go语言是Google于2009年11月公布的一个新语言项目，其目标是创造一门既简单又有效率的开源编程语言。由于有C语言创始人Ken Thompson的参与，Go一面世，就被看成是C语言的继任者，受到很大关注。Go一方面吸收了C简单清晰、执行效率高的优点，另一方面融合了动态语言的闭包、动态绑定等特性，更加适应目前多核与多机高并发的开发环境和快速敏捷的开发效率。此外，Go并没有跟随主流的以“类和继承”为基础的面向对象实现方式，而是以接口和动态绑定的方式，将封装的粒度做得更细、更灵活，实现了另一种面向对象的代码组织形式。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>简单的UnitTest框架实现</title>
+      <link>http://air.googol.im/post/simple-unittest-framework/</link>
+      <pubDate>Sat, 28 Nov 2009 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/simple-unittest-framework/</guid>
+      <description>&lt;p&gt;这几天试了下TDD，需要一个UnitTest框架。以前用过Google Test和JUnit，不过想了一下，印象里Google Test经过几次升级后，似乎只能单独编译，而JUnit只能用在Java里，都不适合嵌入式运行的场合。所以花了半天左右自己写了个框架。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>关于C&#43;&#43;智能指针的思考</title>
+      <link>http://air.googol.im/post/thinking-of-cpp-ptr/</link>
+      <pubDate>Sat, 07 Nov 2009 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/thinking-of-cpp-ptr/</guid>
+      <description>&lt;p&gt;最近在公司的项目里开始实践用C++的析构来自动释放已申请的指针，同时保证程序的效率不变。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>为连续读取优化的一种缓存策略</title>
+      <link>http://air.googol.im/post/optimize-for-continous-reading/</link>
+      <pubDate>Mon, 19 Oct 2009 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/optimize-for-continous-reading/</guid>
+      <description>&lt;p&gt;事情的起因是boss要把对samba的支持从kernel转移到user模式的gio。这个迁移到还不是很复杂，改一些接口就可以。迁移过来后发现通过samba播放视频的性能下降的很厉害，在arm平台上，以前能流畅播放的视频现在完全不可看。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>栈和队的统一</title>
+      <link>http://air.googol.im/post/unified-stack-and-queue/</link>
+      <pubDate>Thu, 28 May 2009 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/unified-stack-and-queue/</guid>
+      <description>&lt;p&gt;这是上周软设考试时遇到的一道题，判断对错：可以用两个栈模拟一个队列，也可以用一个队列模拟两个栈。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>尝试用C&#43;&#43;实现Y Combinator（之三）</title>
+      <link>http://air.googol.im/post/implement-y-combinator-in-cpp-3/</link>
+      <pubDate>Sat, 22 Sep 2007 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/implement-y-combinator-in-cpp-3/</guid>
+      <description>&lt;p&gt;基本上，又进行了几次失败的尝试，具体过程不写了，反正写了也没人看。（其实是我没有存……）&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>尝试用C&#43;&#43;实现Y Combinator（之二）</title>
+      <link>http://air.googol.im/post/implement-y-combinator-in-cpp-2/</link>
+      <pubDate>Thu, 06 Sep 2007 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/implement-y-combinator-in-cpp-2/</guid>
+      <description>&lt;p&gt;恩……上篇没写完……&lt;/p&gt;
+
+&lt;p&gt;其实，上篇还写错了……&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>尝试用C&#43;&#43;实现Y Combinator（之一）</title>
+      <link>http://air.googol.im/post/implement-y-combinator-in-cpp-1/</link>
+      <pubDate>Sat, 01 Sep 2007 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/implement-y-combinator-in-cpp-1/</guid>
+      <description>&lt;p&gt;恩……程序员的一大特点：看到别人有个轮子，就想自己动手造个出来……（这样不好，不好……）&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Y Combinator in Python</title>
+      <link>http://air.googol.im/post/y-combinator-in-python/</link>
+      <pubDate>Fri, 31 Aug 2007 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/y-combinator-in-python/</guid>
+      <description>&lt;p&gt;译自（由于某种原因，请用代理访问）：&lt;a href=&#34;http://siddhi.blogspot.com/2007/08/y-combinator-in-python.html&#34;&gt;Y Combinator in Python&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>共享信息</title>
+      <link>http://air.googol.im/post/sharing-information/</link>
+      <pubDate>Tue, 03 Jul 2007 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/sharing-information/</guid>
+      <description>&lt;p&gt;题目是这样的：三个学生去教授家里帮忙收拾花园，比较辛苦，三个人的脸上都沾上了泥，但自己并不知道。休息的时候，教授对他们说：不要摸，你们三个中至少有一个人脸上有泥，有泥的人去洗掉。假设三个学生足够聪明，结果谁会去洗呢？&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>C&#43;&#43;中的重载问题</title>
+      <link>http://air.googol.im/post/overload-in-cpp/</link>
+      <pubDate>Wed, 13 Jun 2007 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/overload-in-cpp/</guid>
+      <description>&lt;p&gt;话说有这样的一族函数：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;void insert(BaseWidget* w,  int i = -1);
+void insert(ThinWidget* w,  int i = -1);
+void insert(ThickWidget* w, int i = -1);
+void insert(BigWidget* w,   int i = -1);
+void insert(SmallWidget* w, int i = -1);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>关于C&#43;&#43;中的new的一些处理</title>
+      <link>http://air.googol.im/post/about-new-in-cpp/</link>
+      <pubDate>Sat, 20 Jan 2007 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/about-new-in-cpp/</guid>
+      <description>&lt;p&gt;首先的一点是，C++中new失败后，默认抛异常bad_alloc()，也就是说，判断返回值是否为NULL的方法在现代编译器面前毫无用处——判断执行之前，程序就随着异常的栈展开而销毁了！&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>终于知道当初微软的面试题，我错在哪里了……</title>
+      <link>http://air.googol.im/post/question-in-face-interview-of-microsoft/</link>
+      <pubDate>Thu, 26 Oct 2006 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/question-in-face-interview-of-microsoft/</guid>
+      <description>&lt;p&gt;有两杯液体，一杯蓝色一杯红色，两杯液体的体积一样。从红色液体中取出一试管液体，倒入蓝色液体中，搅匀。再从原来蓝色（现在是混合的）液体中取出同样一试管的液体，倒入红色中，搅匀。问最后两个杯子中，哪个杯子里的杂质更多。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>求3的余数</title>
+      <link>http://air.googol.im/post/mod-3/</link>
+      <pubDate>Fri, 04 Feb 2005 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/mod-3/</guid>
+      <description>&lt;p&gt;北京华为的一道面试题。要求是只使用+-*和移位运算，且不能递减3求得余数。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>内核printf源代码分析</title>
+      <link>http://air.googol.im/post/analysis-of-source-code-printf/</link>
+      <pubDate>Mon, 18 Oct 2004 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/analysis-of-source-code-printf/</guid>
+      <description>&lt;p&gt;对VC里printf的实现的分析。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>一段有趣的C程序（续）</title>
+      <link>http://air.googol.im/post/analysis-of-occ-circle/</link>
+      <pubDate>Thu, 23 Sep 2004 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/analysis-of-occ-circle/</guid>
+      <description>&lt;p&gt;同学看完我的一段有趣的程序后，给了我一段bt的程序：&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>一段有趣的C程序</title>
+      <link>http://air.googol.im/post/analysis-of-occ-knocker/</link>
+      <pubDate>Wed, 22 Sep 2004 20:00:00 +0800</pubDate>
+      
+      <guid>http://air.googol.im/post/analysis-of-occ-knocker/</guid>
+      <description>&lt;p&gt;最近在一个论坛发现了一段简单的C程序很有意思，其中蕴含着不少技巧，在此与大家分享一下。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>

@@ -67,12 +67,62 @@
       
       
     
-    <meta name="generator" content="Hugo 0.16-DEV" />
+    <meta name="generator" content="Hugo 0.42.2" />
 
     <link rel="canonical" href="http://air.googol.im/post/analysis-of-source-code-printf/" />
 
     
       
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": 
+    },
+    "author": {
+        "@type": "Person",
+        "name": ,
+        
+        "url": http://air.googol.im,
+        "sameAs": [
+            
+            
+             
+             
+             
+             
+             
+            
+        ],
+        "description": 多年生软件工程师，信仰开源
+        
+    },
+    "headline": 内核printf源代码分析,
+    "name": 内核printf源代码分析,
+    "wordCount": 419,
+    "timeRequired": "PT2M",
+    "inLanguage": {
+      "@type": "Language",
+      "alternateName": en
+    },
+    "url": http://air.googol.im/post/analysis-of-source-code-printf/,
+    "datePublished": 2004-10-18T20:00Z,
+    "dateModified": 2004-10-18T20:00Z,
+    
+    "keywords": c, printf,
+    "description": ,
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": http://air.googol.im/post/analysis-of-source-code-printf/
+    }
+}
+    </script>
+    
+
+
     
 
     
@@ -90,11 +140,6 @@
         
         
         
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
-            </li>
-        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -103,6 +148,11 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -159,6 +209,8 @@
 
     <section class="post-content">
       <p>对VC里printf的实现的分析。</p>
+
+<p></p>
 
 <p>在stdio.c里找到了printf的实现代码.首先看看对printf的定义:</p>
 
@@ -370,7 +422,6 @@
 <p>这里VIDEO表示显存地址也就是0xB8000.通过<code>y * 160 + x</code>屏幕<code>(x,y)</code>坐标在显存中的位置.这里需要知道,一个字符显示需要两个字节,一个是ASCII码,第二个是字符属性代码也就是颜色代码.因此才必须<code>y * 80 * 2 + x = y * 160 + x</code>.那么<code>ch | (fill_color &lt;&lt; 8)</code>也自然就是写入字符及属性代码用的了.每写一个字符光标位置加1,如果大于屏幕宽度WIDTH就换行.最后通过setVideoCursor设置新的光标位置.完成了整个printChar过程.</p>
 
 <p>到此,把printf从上到下说了一遍.不知道各位大家感觉如何,如果说得不清楚还大家多提意见.有说得不对的地方请大家多多指教.</p>
-
     </section>
 
 

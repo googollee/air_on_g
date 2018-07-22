@@ -67,12 +67,62 @@
       
       
     
-    <meta name="generator" content="Hugo 0.16-DEV" />
+    <meta name="generator" content="Hugo 0.42.2" />
 
     <link rel="canonical" href="http://air.googol.im/post/analysis-of-occ-circle/" />
 
     
       
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": 
+    },
+    "author": {
+        "@type": "Person",
+        "name": ,
+        
+        "url": http://air.googol.im,
+        "sameAs": [
+            
+            
+             
+             
+             
+             
+             
+            
+        ],
+        "description": 多年生软件工程师，信仰开源
+        
+    },
+    "headline": 一段有趣的C程序（续）,
+    "name": 一段有趣的C程序（续）,
+    "wordCount": 88,
+    "timeRequired": "PT1M",
+    "inLanguage": {
+      "@type": "Language",
+      "alternateName": en
+    },
+    "url": http://air.googol.im/post/analysis-of-occ-circle/,
+    "datePublished": 2004-09-23T20:00Z,
+    "dateModified": 2004-09-23T20:00Z,
+    
+    "keywords": c, occ,
+    "description": ,
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": http://air.googol.im/post/analysis-of-occ-circle/
+    }
+}
+    </script>
+    
+
+
     
 
     
@@ -90,11 +140,6 @@
         
         
         
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
-            </li>
-        
             <h3>Follow me</h3>
             <li class="nav-opened" role="presentation">
             	<a href="https://github.com/googollee">Github repos</a>
@@ -103,6 +148,11 @@
             
             <li class="nav-opened" role="presentation">
             	<a href="https://twitter.com/googollee">Twitter timeline</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">Blog</a>
             </li>
         
     </ul>
@@ -159,6 +209,8 @@
 
     <section class="post-content">
       <p>同学看完我的一段有趣的程序后，给了我一段bt的程序：</p>
+
+<p></p>
 
 <pre><code class="language-c">#define _ -F&lt;00||--F-OO--;
 int F=00,OO=00;main(){F_OO();printf(&quot;%1.3f\n&quot;,4.*-F/OO/OO);}F_OO()
@@ -248,7 +300,6 @@ void main(void){
 </code></pre>
 
 <p>实际程序运行通过，证明“<code>a=a+++A</code>”被解释为“<code>a=a+++ ++a</code>”即“<code>a=(a++)+(++a)</code>”，而不是“<code>a=a+++++a</code>”。其中后一种译法会因为大嘴原则译为“<code>a=((a++) ++)+a</code>”第二层的“<code>++</code>”会因为左边不是一个有效变量，而引起编译错误：<code>error C2105: '++' needs l-value</code>。</p>
-
     </section>
 
 
