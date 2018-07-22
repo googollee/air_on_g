@@ -325,9 +325,9 @@ ok  	github.com/googollee/rtnx/rtmp/amf	3.189s
 }
 </code></pre>
 
-<p>其中<code>data</code>就是临时分配的内存。理论上，这段内存如果只在<code>Handle</code>中使用，只在栈上就可以，随着<code>Handle</code>退出自动释放。但是由于逃逸分析无法获知是否在<code>r.Read()</code>时持有了<code>data[:]</code>这个引用，这里会认为<code>data</code>有逃逸，所以会将其分配在栈上，并导致后面gc的参与。</p>
+<p>其中<code>data</code>就是临时分配的内存。理论上，这段内存如果只在<code>Handle</code>中使用，只在栈上就可以，随着<code>Handle</code>退出自动释放。但是由于逃逸分析无法获知是否在<code>r.Read()</code>时持有了<code>data[:]</code>这个引用，这里会认为<code>data</code>有逃逸，所以会将其分配在堆上，并导致后面gc的参与。</p>
 
-<p>回到Rust，最终，<code>heap</code>被定义为<code>Option&lt;Box&lt;[u8]&gt;&gt;</code>，表示一个可以为<code>None</code>，也可以是一个分配在堆上的<code>[u8]</code>。<code>[u8]</code>这个类型与Go的slice从概念到实现都很类似，是对数组的一种引用。值得注意的是，<code>[u8]</code>由于无法在编译时预知引用的长度，所以无法直接在堆上创建一个<code>[u8]</code>的变量。</p>
+<p>回到Rust，最终，<code>heap</code>被定义为<code>Option&lt;Box&lt;[u8]&gt;&gt;</code>，表示一个可以为<code>None</code>，也可以是一个分配在堆上的<code>[u8]</code>。<code>[u8]</code>这个类型与Go的slice从概念到实现都很类似，是对数组的一种引用。值得注意的是，<code>[u8]</code>由于无法在编译时预知引用的长度，所以无法直接在栈上创建一个<code>[u8]</code>的变量。</p>
 
 <p>接下来是<code>fill()</code>方法：</p>
 
