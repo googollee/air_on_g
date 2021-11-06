@@ -1,17 +1,13 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Go on Air on G</title>
+    <title>go on Air on G</title>
     <link>http://air.googol.im/tags/go/</link>
-    <description>Recent content in Go on Air on G</description>
+    <description>Recent content in go on Air on G</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>除非另有声明，本网站采用&lt;a href=&#39;https://creativecommons.org/licenses/by-nd/3.0/cn/&#39;&gt;知识共享“署名-禁止演绎 3.0 中国大陆”许可协议&lt;/a&gt;授权。</copyright>
-    <lastBuildDate>Sat, 21 Jul 2018 11:10:00 +0200</lastBuildDate>
-    
-	<atom:link href="http://air.googol.im/tags/go/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sat, 21 Jul 2018 11:10:00 +0200</lastBuildDate><atom:link href="http://air.googol.im/tags/go/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>一个Go开发者的Rust体验</title>
       <link>http://air.googol.im/post/rust-view-from-a-gopher/</link>
@@ -19,10 +15,7 @@
       
       <guid>http://air.googol.im/post/rust-view-from-a-gopher/</guid>
       <description>&lt;p&gt;一直很关注Rust这门语言的发展，不过没有实际使用过。最近Rust准备以2018 Rust的名义发布可以用作生产环境的稳定版本，又赶上有兴趣写点东西，所以把一个基础模块同时用Rust和Go实现了一下。本文就是这次实现的一些结果。&lt;/p&gt;
-
-&lt;p&gt;我自己有很长的Go使用经历，所以本文对Go的看法会相对比较准确。Rust虽然关注了很长时间，但代码基本上是最近一个星期左右的成果，可能看法有偏颇。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;我自己有很长的Go使用经历，所以本文对Go的看法会相对比较准确。Rust虽然关注了很长时间，但代码基本上是最近一个星期左右的成果，可能看法有偏颇。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -31,9 +24,7 @@
       <pubDate>Wed, 10 Jan 2018 15:24:03 +0800</pubDate>
       
       <guid>http://air.googol.im/post/what-i-want-in-go2-type-system/</guid>
-      <description>&lt;p&gt;我应该算是第一批使用Go做实际开发的程序员，也写过一些比较深入的项目（比如go-socket.io)。我想总结一下Go里关于类型系统好用的部分以及不好用的部分。这些特性会集中在语言层面，而且基本上是Go 1基本不可能有改动的特性。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;p&gt;我应该算是第一批使用Go做实际开发的程序员，也写过一些比较深入的项目（比如go-socket.io)。我想总结一下Go里关于类型系统好用的部分以及不好用的部分。这些特性会集中在语言层面，而且基本上是Go 1基本不可能有改动的特性。&lt;/p&gt;</description>
     </item>
     
   </channel>

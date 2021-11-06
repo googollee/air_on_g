@@ -65,7 +65,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.42.2" />
+    <meta name="generator" content="Hugo 0.89.1" />
 
     <link rel="canonical" href="http://air.googol.im/post/why-goroutine-not-library/" />
 
@@ -78,13 +78,13 @@
     "@type": "Article",
     "publisher": {
         "@type": "Organization",
-        "name": 
+        "name":  null 
     },
     "author": {
         "@type": "Person",
-        "name": ,
+        "name":  null ,
         
-        "url": http://air.googol.im,
+        "url": "http://air.googol.im",
         "sameAs": [
             
             
@@ -95,26 +95,26 @@
              
             
         ],
-        "description": 多年生软件工程师，信仰开源
+        "description": "多年生软件工程师，信仰开源"
         
     },
-    "headline": 为什么goroutine和channel不是以类库的形式存在——驳老赵《为什么我认为goroutine和channel是把别的平台上类库的功能内置在语言里》,
-    "name": 为什么goroutine和channel不是以类库的形式存在——驳老赵《为什么我认为goroutine和channel是把别的平台上类库的功能内置在语言里》,
-    "wordCount": 19,
+    "headline": "为什么goroutine和channel不是以类库的形式存在——驳老赵《为什么我认为goroutine和channel是把别的平台上类库的功能内置在语言里》",
+    "name": "为什么goroutine和channel不是以类库的形式存在——驳老赵《为什么我认为goroutine和channel是把别的平台上类库的功能内置在语言里》",
+    "wordCount":  19 ,
     "timeRequired": "PT1M",
     "inLanguage": {
       "@type": "Language",
-      "alternateName": en
+      "alternateName": "en"
     },
-    "url": http://air.googol.im/post/why-goroutine-not-library/,
-    "datePublished": 2013-04-28T22:23Z,
-    "dateModified": 2013-04-28T22:23Z,
+    "url": "http://air.googol.im/post/why-goroutine-not-library/",
+    "datePublished": "2013-04-28T22:23Z",
+    "dateModified": "2013-04-28T22:23Z",
     
-    "keywords": golang,
-    "description": ,
+    "keywords": "golang",
+    "description": "",
     "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": http://air.googol.im/post/why-goroutine-not-library/
+        "@id": "http://air.googol.im/post/why-goroutine-not-library/"
     }
 }
     </script>
@@ -205,25 +205,14 @@
 
     <section class="post-content">
       <p>老赵在最近的blog里对go有诸多批评。在我看来这些批评都没有正确的理由来支持。这篇blog先来就<a href="http://blog.zhaojie.me/2013/04/why-channel-and-goroutine-in-golang-are-buildin-libraries-for-other-platforms.html">《为什么我认为goroutine和channel是把别的平台上类库的功能内置在语言里》</a>一文进行反驳。</p>
-
-<p></p>
-
 <p>如果想要明晰一个特性，到底应该是在语言层面提供，还是在类库层面提供，那么首先要明确一件事情：到底语言层面和类库层面提供的特性，有什么不同。在我看来，语言提供的特性，是使用这门语言的使用者不能选择，必须接受的特性，而类库层面提供的特性，是使用者可以自由选择是否使用的特性。</p>
-
 <p>比如说，C++比C增加的面向对象特性，在C里也有对应的库实现（GLib），甚至模版特性，在C早期也有类似的实现（具体可以参见《C++的设计与演化》一书，对此有详述）。那么为什么C++会成为一门语言？使用C++意味着必须接受类，模版这些概念，就会遇到使用这些概念的官方库（STL/iostream），而且使用时只能用C++约定好的方式实现（为什么有那么多人纠结模版偏特化的问题而不是像C一样用不同的函数？）而不像C里，可以有使用GLib的权利，也可以自己实现一套和C++的实现方式不一样的面向对象实现（比如多态通过名字查找而不是虚表跳转）。</p>
-
 <p>对于老赵非常喜欢的C#来说，为什么能单独成为一种语言？C++也不是不能用类库的方式实现GC和VM，随手google一下就会有大把的实现：<a href="http://www.hpl.hp.com/personal/Hans_Boehm/gc/">A garbage collector for C and C++</a>，<a href="http://sourceforge.net/projects/ivm/">Internet C++/Internet Virtual Machine</a>。但是C#的实现为使用者约定了GC和VM的实现方式，使用者可以放心的依赖语言的实现细节来构造自己的程序。</p>
-
 <p>其实上面C++和C#两个例子都不是很好，因为这两门语言都是不断向语言内塞入其他语言用库来实现的特性，试图让使用者想用什么都可以，但语言本身并没有体现出语言层面的设计原则——如果“什么特性都能用”不算做一个恰当的原则的话。</p>
-
 <p><a href="http://en.wikipedia.org/wiki/Prolog">Prolog</a>是一门用C实现的逻辑型语言，其语法和语言的设计哲学都和C完全不一样：通过直接声明条件，语言自己会给出符合条件的结果（还记得爱因斯坦隔壁几家有的养金鱼，有的拉提琴，有的房子是红色，最后要求出绿色家养的啥宠物的那类题么？）。如果按照老赵的说法，逻辑型编程完全可以用C来实现，所以Prolog根本不是一种语言，只是一个C的库而已。但是由于Prolog限制了语言的特性，所有操作只能通过逻辑表达式来完成，对于一个实现来说，Prolog用到的思维模型和C完全不一样，如果说Prolog只是C的一个库，不知道会有多少人同意这种说法。</p>
-
 <p>说回go。go选择了CSP的内核实现，并在此上实现了goroutine和channel。这个选择最明显的一个结果，就是go的os库里没有其他语言os库的select/poll/kqueue的api。为什么？因为完全不需要。go里类似的功能可以通过对channel的select来实现，不需要暴露os的功能给使用者，而且也不需要让用户选择到底是用select还是poll。基于此，所有go的库在处理io时都是异步非阻塞的（除非同步等待channel或者用sync实现同步）。而C#又有多少库实现了异步？说到底还是要借助语言层面，实现一个async/await的怪异特性，用一种封装的回调机制来实现异步操作。</p>
-
 <p>利用编译器实现CSP还有另外的优势：动态栈。传统的编译语言，由于没有考虑并发的机制，整个程序是运行在同一个栈上；使用os的线程/进程库，会依赖os对线程/进程的栈的分配，这种分配和程序本身无关，是os根据经验设置的数值，对程序来说经常会出现要么栈效率不高，要么栈不够用溢出；使用库实现的纤程/线程/异步，都是在使用当前进程的栈，每个纤程/线程/异步模块没有自己的独立栈，导致很多纤程实现都是不依赖栈，而全靠堆来解决每个纤程内的分配问题，对内存造成了很大的压力。而go通过编译器实现的goroutine，可以在编译期知晓更多的goroutine信息，并在运行时动态分配每个goroutine的栈大小，做到既不浪费，也不溢出。</p>
-
 <p>go通过语言来实现了异步的特性，适应网络/IO请求多的高性能开发要求，这在选择库和最终开发时都为开发者提供了优良的异步特性，从而节省了开发者的时间，提高了开发效率。这是仅仅用库实现特性做不到的。</p>
-
 <p>至于老赵把channel的特性和数据流做对比就更显得奇怪了。channel的类型限制是由go选择静态强类型语言这件事情决定的，输入和输出的数据类型要在编译时确定，这和一个数据流处理同一类型的数据是两个设计原则，虽然结果类似，但并不是说两者适合拿来做比较。goroutine和channel可以拿来实现数据流，但是其并不是为了实现数据流而设计的（比如channel还有传递消息同步线程的作用）。</p>
     </section>
 

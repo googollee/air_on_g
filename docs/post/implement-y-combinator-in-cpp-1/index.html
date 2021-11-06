@@ -69,7 +69,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.42.2" />
+    <meta name="generator" content="Hugo 0.89.1" />
 
     <link rel="canonical" href="http://air.googol.im/post/implement-y-combinator-in-cpp-1/" />
 
@@ -82,13 +82,13 @@
     "@type": "Article",
     "publisher": {
         "@type": "Organization",
-        "name": 
+        "name":  null 
     },
     "author": {
         "@type": "Person",
-        "name": ,
+        "name":  null ,
         
-        "url": http://air.googol.im,
+        "url": "http://air.googol.im",
         "sameAs": [
             
             
@@ -99,26 +99,26 @@
              
             
         ],
-        "description": 多年生软件工程师，信仰开源
+        "description": "多年生软件工程师，信仰开源"
         
     },
-    "headline": 尝试用C&#43;&#43;实现Y Combinator（之一）,
-    "name": 尝试用C&#43;&#43;实现Y Combinator（之一）,
-    "wordCount": 310,
+    "headline": "尝试用C++实现Y Combinator（之一）",
+    "name": "尝试用C++实现Y Combinator（之一）",
+    "wordCount":  310 ,
     "timeRequired": "PT2M",
     "inLanguage": {
       "@type": "Language",
-      "alternateName": en
+      "alternateName": "en"
     },
-    "url": http://air.googol.im/post/implement-y-combinator-in-cpp-1/,
-    "datePublished": 2007-09-01T20:00Z,
-    "dateModified": 2007-09-01T20:00Z,
+    "url": "http://air.googol.im/post/implement-y-combinator-in-cpp-1/",
+    "datePublished": "2007-09-01T20:00Z",
+    "dateModified": "2007-09-01T20:00Z",
     
-    "keywords": cpp, y combinator, python,
-    "description": ,
+    "keywords": "cpp, y combinator, python",
+    "description": "",
     "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": http://air.googol.im/post/implement-y-combinator-in-cpp-1/
+        "@id": "http://air.googol.im/post/implement-y-combinator-in-cpp-1/"
     }
 }
     </script>
@@ -213,143 +213,126 @@
 
     <section class="post-content">
       <p>恩……程序员的一大特点：看到别人有个轮子，就想自己动手造个出来……（这样不好，不好……）</p>
-
-<p></p>
-
 <p>上篇文章翻译了用Python实现Y Combinator。托作者之福，写的清晰易懂，算是让我大概理解了Y Combinator是个什么东西。其实就是把单递归抽象出来嘛，把递归的概念和递归体分离开，这个Y Combinator就是实现了递归概念的函数而已。（真是站着说话不腰疼啊……）</p>
-
 <p>然后，想试试用C++能不能实现这个玩意儿。</p>
-
 <p>基本上，这真是个让我吐血的想法……</p>
-
 <p>最早想一步实现Y Combinator。琢磨着怎么有模板有运算符重载有类的C++，还模拟不出来个函数编程么？结果……唉，具体实现先不提。后来尝试按照文章里讲解Y Combinator的过程，实现某个非递归版本的函，比如那个阶乘：</p>
-
-<pre><code class="language-c++">class combinator
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">combinator</span>
 {
-public:
-    typedef int (*func_type)(int);
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    <span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">int</span> (<span style="color:#f92672">*</span>func_type)(<span style="color:#66d9ef">int</span>);
 
-    combinator(func_type arg) : factorial_(arg)
+    combinator(func_type arg) <span style="color:#f92672">:</span> factorial_(arg)
     {}
 
-    int _fn(int n)
+    <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">_fn</span>(<span style="color:#66d9ef">int</span> n)
     {
-        if (n == 0)
-            return 1;
-        else
-            return n * factorial_(n-1);
+        <span style="color:#66d9ef">if</span> (n <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
+            <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>;
+        <span style="color:#66d9ef">else</span>
+            <span style="color:#66d9ef">return</span> n <span style="color:#f92672">*</span> factorial_(n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>);
     }
 
-    int operator()(int arg)
+    <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">operator</span>()(<span style="color:#66d9ef">int</span> arg)
     {
-        return _fn(arg);
+        <span style="color:#66d9ef">return</span> _fn(arg);
     }
-private:
+<span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
     func_type factorial_;
 };
 
-int error(int n)
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">error</span>(<span style="color:#66d9ef">int</span> n)
 {
-    throw;
+    <span style="color:#66d9ef">throw</span>;
 }
 
-int main(int argc, char** argv)
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span><span style="color:#f92672">**</span> argv)
 {
     combinator _1(error);
 
-    cout &lt;&lt; _1(0) &lt;&lt; endl; // print 1
-    //cout &lt;&lt; _1(1) &lt;&lt; endl; // throw exception
-    return 0;
+    cout <span style="color:#f92672">&lt;&lt;</span> _1(<span style="color:#ae81ff">0</span>) <span style="color:#f92672">&lt;&lt;</span> endl; <span style="color:#75715e">// print 1
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//cout &lt;&lt; _1(1) &lt;&lt; endl; // throw exception
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
 }
-</code></pre>
-
-<p>看吧，看吧，果然实现了！</p>
-
+</code></pre></div><p>看吧，看吧，果然实现了！</p>
 <p>但是，当我想进一步递归的时候，问题出现了……因为对combinator的调用，是通过仿函数实现的，这个没法再次用函数的形式，去构造另一个combinator实例，比如：</p>
-
-<pre><code class="language-c++">combinator _2(_1); // 这个不会通过编译的……
-</code></pre>
-
-<p>真是死人。没关系，我们有重载……这样：</p>
-
-<pre><code class="language-c++">class combinator
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">combinator <span style="color:#a6e22e">_2</span>(_1); <span style="color:#75715e">// 这个不会通过编译的……
+</span></code></pre></div><p>真是死人。没关系，我们有重载……这样：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">combinator</span>
 {
-public:
-    typedef int (*func_type)(int);
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    <span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">int</span> (<span style="color:#f92672">*</span>func_type)(<span style="color:#66d9ef">int</span>);
 
-    combinator(func_type arg) : factorial_(arg), type_(Function)
+    combinator(func_type arg) <span style="color:#f92672">:</span> factorial_(arg), type_(Function)
     {}
 
-    combinator(combinator *instance/* really want to use ref here, but that can't differ from copy ctor */) : combinator_(instance), type_(Functor)
+    combinator(combinator <span style="color:#f92672">*</span>instance<span style="color:#75715e">/* really want to use ref here, but that can&#39;t differ from copy ctor */</span>) <span style="color:#f92672">:</span> combinator_(instance), type_(Functor)
     {}
 
-    int _fn(int n)
+    <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">_fn</span>(<span style="color:#66d9ef">int</span> n)
     {
-        if (n == 0)
-            return 1;
-        else
+        <span style="color:#66d9ef">if</span> (n <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
+            <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>;
+        <span style="color:#66d9ef">else</span>
         {
-            switch (type_)
+            <span style="color:#66d9ef">switch</span> (type_)
             {
-            case Function:
-                return n * factorial_(n-1);
-            case Functor:
-                return n * (*combinator_)(n-1);
+            <span style="color:#66d9ef">case</span> Function:
+                <span style="color:#66d9ef">return</span> n <span style="color:#f92672">*</span> factorial_(n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>);
+            <span style="color:#66d9ef">case</span> Functor:
+                <span style="color:#66d9ef">return</span> n <span style="color:#f92672">*</span> (<span style="color:#f92672">*</span>combinator_)(n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>);
             }
-            throw;
+            <span style="color:#66d9ef">throw</span>;
         }
     }
 
-    int operator()(int arg)
+    <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">operator</span>()(<span style="color:#66d9ef">int</span> arg)
     {
-        return _fn(arg);
+        <span style="color:#66d9ef">return</span> _fn(arg);
     }
 
-protected:
-    combinator(const combinator&amp; arg) // copy ctor be protected can avoid miss usage.
-    {}
+<span style="color:#66d9ef">protected</span><span style="color:#f92672">:</span>
+    combinator(<span style="color:#66d9ef">const</span> combinator<span style="color:#f92672">&amp;</span> arg) <span style="color:#75715e">// copy ctor be protected can avoid miss usage.
+</span><span style="color:#75715e"></span>    {}
 
-private:
-    enum
+<span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+    <span style="color:#66d9ef">enum</span>
     {
         Function,
         Functor,
     } type_;
     func_type factorial_;
-    combinator *combinator_; // instance is better than pointer here, for pointer may be deleted. But, how...
-};
+    combinator <span style="color:#f92672">*</span>combinator_; <span style="color:#75715e">// instance is better than pointer here, for pointer may be deleted. But, how...
+</span><span style="color:#75715e"></span>};
 
-int error(int n)
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">error</span>(<span style="color:#66d9ef">int</span> n)
 {
-    throw;
+    <span style="color:#66d9ef">throw</span>;
 }
 
-int main(int argc, char* argv[])
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> argv[])
 {
-    combinator _1(error); // can be writen like _1(&amp;error) :)
+    combinator _1(error); <span style="color:#75715e">// can be writen like _1(&amp;error) :)
+</span><span style="color:#75715e"></span>
+    cout <span style="color:#f92672">&lt;&lt;</span> _1(<span style="color:#ae81ff">0</span>) <span style="color:#f92672">&lt;&lt;</span> endl; <span style="color:#75715e">// print 1
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//cout &lt;&lt; _1(1) &lt;&lt; endl; // throw exception
+</span><span style="color:#75715e"></span>
+    combinator _2(<span style="color:#f92672">&amp;</span>_1); <span style="color:#75715e">// well, a little different with python
+</span><span style="color:#75715e"></span>
+    cout <span style="color:#f92672">&lt;&lt;</span> _2(<span style="color:#ae81ff">0</span>) <span style="color:#f92672">&lt;&lt;</span> endl; <span style="color:#75715e">// print 1
+</span><span style="color:#75715e"></span>    cout <span style="color:#f92672">&lt;&lt;</span> _2(<span style="color:#ae81ff">1</span>) <span style="color:#f92672">&lt;&lt;</span> endl; <span style="color:#75715e">// print 1
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//cout &lt;&lt; _2(2) &lt;&lt; endl; // throw exception
+</span><span style="color:#75715e"></span>
+    combinator _3(<span style="color:#f92672">&amp;</span>_2);
 
-    cout &lt;&lt; _1(0) &lt;&lt; endl; // print 1
-    //cout &lt;&lt; _1(1) &lt;&lt; endl; // throw exception
-
-    combinator _2(&amp;_1); // well, a little different with python
-
-    cout &lt;&lt; _2(0) &lt;&lt; endl; // print 1
-    cout &lt;&lt; _2(1) &lt;&lt; endl; // print 1
-    //cout &lt;&lt; _2(2) &lt;&lt; endl; // throw exception
-
-    combinator _3(&amp;_2);
-
-    cout &lt;&lt; _3(0) &lt;&lt; endl; // print 1
-    cout &lt;&lt; _3(1) &lt;&lt; endl; // print 1
-    cout &lt;&lt; _3(2) &lt;&lt; endl; // print 2
-    //cout &lt;&lt; _3(3) &lt;&lt; endl; // throw exception
-
-    return 0;
+    cout <span style="color:#f92672">&lt;&lt;</span> _3(<span style="color:#ae81ff">0</span>) <span style="color:#f92672">&lt;&lt;</span> endl; <span style="color:#75715e">// print 1
+</span><span style="color:#75715e"></span>    cout <span style="color:#f92672">&lt;&lt;</span> _3(<span style="color:#ae81ff">1</span>) <span style="color:#f92672">&lt;&lt;</span> endl; <span style="color:#75715e">// print 1
+</span><span style="color:#75715e"></span>    cout <span style="color:#f92672">&lt;&lt;</span> _3(<span style="color:#ae81ff">2</span>) <span style="color:#f92672">&lt;&lt;</span> endl; <span style="color:#75715e">// print 2
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//cout &lt;&lt; _3(3) &lt;&lt; endl; // throw exception
+</span><span style="color:#75715e"></span>
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
 }
-</code></pre>
-
-<p>怎么样？很厉害吧？不过，本来在Python里挺短的程序，居然写了这么长，真是Orz！另外，类不能重载么？在类里面存在个type_来判断到底存的是函数还是仿函数，真是不优雅。不过，莫非要我再用类继承来消掉这个type_？那就不仅仅是这么长的代码了！算了，有兴趣追求优雅的，自己去写吧，我忍了……</p>
-
+</code></pre></div><p>怎么样？很厉害吧？不过，本来在Python里挺短的程序，居然写了这么长，真是Orz！另外，类不能重载么？在类里面存在个type_来判断到底存的是函数还是仿函数，真是不优雅。不过，莫非要我再用类继承来消掉这个type_？那就不仅仅是这么长的代码了！算了，有兴趣追求优雅的，自己去写吧，我忍了……</p>
 <p>居然写这个东西要写这么半天，郁闷！而且貌似再往后也不是那么好写的。最终的Y Combinator实现，留到下次吧……</p>
     </section>
 

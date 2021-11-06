@@ -1,26 +1,20 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Interview on Air on G</title>
+    <title>interview on Air on G</title>
     <link>http://air.googol.im/tags/interview/</link>
-    <description>Recent content in Interview on Air on G</description>
+    <description>Recent content in interview on Air on G</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>除非另有声明，本网站采用&lt;a href=&#39;https://creativecommons.org/licenses/by-nd/3.0/cn/&#39;&gt;知识共享“署名-禁止演绎 3.0 中国大陆”许可协议&lt;/a&gt;授权。</copyright>
-    <lastBuildDate>Thu, 26 Oct 2006 20:00:00 +0800</lastBuildDate>
-    
-	<atom:link href="http://air.googol.im/tags/interview/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Thu, 26 Oct 2006 20:00:00 +0800</lastBuildDate><atom:link href="http://air.googol.im/tags/interview/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>终于知道当初微软的面试题，我错在哪里了……</title>
       <link>http://air.googol.im/post/question-in-face-interview-of-microsoft/</link>
       <pubDate>Thu, 26 Oct 2006 20:00:00 +0800</pubDate>
       
       <guid>http://air.googol.im/post/question-in-face-interview-of-microsoft/</guid>
-      <description>&lt;p&gt;有两杯液体，一杯蓝色一杯红色，两杯液体的体积一样。从红色液体中取出一试管液体，倒入蓝色液体中，搅匀。再从原来蓝色（现在是混合的）液体中取出同样一试管的液体，倒入红色中，搅匀。问最后两个杯子中，哪个杯子里的杂质更多。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;p&gt;有两杯液体，一杯蓝色一杯红色，两杯液体的体积一样。从红色液体中取出一试管液体，倒入蓝色液体中，搅匀。再从原来蓝色（现在是混合的）液体中取出同样一试管的液体，倒入红色中，搅匀。问最后两个杯子中，哪个杯子里的杂质更多。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -29,9 +23,7 @@
       <pubDate>Fri, 04 Feb 2005 20:00:00 +0800</pubDate>
       
       <guid>http://air.googol.im/post/mod-3/</guid>
-      <description>&lt;p&gt;北京华为的一道面试题。要求是只使用+-*和移位运算，且不能递减3求得余数。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;p&gt;北京华为的一道面试题。要求是只使用+-*和移位运算，且不能递减3求得余数。&lt;/p&gt;</description>
     </item>
     
   </channel>

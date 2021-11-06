@@ -1,26 +1,20 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Restful on Air on G</title>
+    <title>restful on Air on G</title>
     <link>http://air.googol.im/tags/restful/</link>
-    <description>Recent content in Restful on Air on G</description>
+    <description>Recent content in restful on Air on G</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>除非另有声明，本网站采用&lt;a href=&#39;https://creativecommons.org/licenses/by-nd/3.0/cn/&#39;&gt;知识共享“署名-禁止演绎 3.0 中国大陆”许可协议&lt;/a&gt;授权。</copyright>
-    <lastBuildDate>Tue, 31 Dec 2013 10:48:24 +0800</lastBuildDate>
-    
-	<atom:link href="http://air.googol.im/tags/restful/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Tue, 31 Dec 2013 10:48:24 +0800</lastBuildDate><atom:link href="http://air.googol.im/tags/restful/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>go-rest演化</title>
       <link>http://air.googol.im/post/go-rest-revolution/</link>
       <pubDate>Tue, 31 Dec 2013 10:48:24 +0800</pubDate>
       
       <guid>http://air.googol.im/post/go-rest-revolution/</guid>
-      <description>&lt;p&gt;在EXFE创业的两年，虽然项目最终失败了（很可惜），不过自己从头开始写了一个简化RESTful Service实现的Framework——&lt;a href=&#34;https://github.com/googollee/go-rest&#34;&gt;go-rest&lt;/a&gt;，还算有不少收获。这里记录一下go-rest实现过程中一些重要的演变，以及这些演变背后的原因。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;p&gt;在EXFE创业的两年，虽然项目最终失败了（很可惜），不过自己从头开始写了一个简化RESTful Service实现的Framework——&lt;a href=&#34;https://github.com/googollee/go-rest&#34;&gt;go-rest&lt;/a&gt;，还算有不少收获。这里记录一下go-rest实现过程中一些重要的演变，以及这些演变背后的原因。&lt;/p&gt;</description>
     </item>
     
   </channel>

@@ -67,7 +67,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.42.2" />
+    <meta name="generator" content="Hugo 0.89.1" />
 
     <link rel="canonical" href="http://air.googol.im/post/call-c-in-golang/" />
 
@@ -80,13 +80,13 @@
     "@type": "Article",
     "publisher": {
         "@type": "Organization",
-        "name": 
+        "name":  null 
     },
     "author": {
         "@type": "Person",
-        "name": ,
+        "name":  null ,
         
-        "url": http://air.googol.im,
+        "url": "http://air.googol.im",
         "sameAs": [
             
             
@@ -97,26 +97,26 @@
              
             
         ],
-        "description": 多年生软件工程师，信仰开源
+        "description": "多年生软件工程师，信仰开源"
         
     },
-    "headline": Golang里调用C,
-    "name": Golang里调用C,
-    "wordCount": 145,
+    "headline": "Golang里调用C",
+    "name": "Golang里调用C",
+    "wordCount":  144 ,
     "timeRequired": "PT1M",
     "inLanguage": {
       "@type": "Language",
-      "alternateName": en
+      "alternateName": "en"
     },
-    "url": http://air.googol.im/post/call-c-in-golang/,
-    "datePublished": 2010-04-18T20:00Z,
-    "dateModified": 2010-04-18T20:00Z,
+    "url": "http://air.googol.im/post/call-c-in-golang/",
+    "datePublished": "2010-04-18T20:00Z",
+    "dateModified": "2010-04-18T20:00Z",
     
-    "keywords": c, golang,
-    "description": ,
+    "keywords": "c, golang",
+    "description": "",
     "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": http://air.googol.im/post/call-c-in-golang/
+        "@id": "http://air.googol.im/post/call-c-in-golang/"
     }
 }
     </script>
@@ -209,55 +209,39 @@
 
     <section class="post-content">
       <p>Golang调用C分两个步骤：1 写一个C的wrapper，这个很简单；2 对wrapper做编译，这个步骤有点复杂，而且涉及众多中间文件。应该是有办法用自动化的工具简化这个过程的。</p>
-
-<p></p>
-
 <p>先来展示一下C程序。为了将描述集中在如何调用上，C的程序很简单：</p>
-
-<pre><code class="language-c"># file: prints.h
-#ifndef PRINTS_HEAD
-void prints(char* str);
-#endif
-</code></pre>
-
-<pre><code class="language-c"># file: prints.c
-#include &quot;prints.h&quot;
-#include &lt;stdio.h&gt;
-
-void prints(char* str)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e"># file: prints.h
+</span><span style="color:#75715e">#ifndef PRINTS_HEAD
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">prints</span>(<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> str);
+<span style="color:#75715e">#endif
+</span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e"># file: prints.c
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;prints.h&#34;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">prints</span>(<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> str)
 {
-  printf(&quot;%s\n&quot;, str);
+  printf(<span style="color:#e6db74">&#34;%s</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, str);
 }
-</code></pre>
+</code></pre></div><p>之后是Golang对C的一个wrapper：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// file: prints.go
+</span><span style="color:#75715e"></span><span style="color:#f92672">package</span> <span style="color:#a6e22e">prints</span>
 
-<p>之后是Golang对C的一个wrapper：</p>
+<span style="color:#75715e">// NOTICE BELOW
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">//#include &#34;prints.h&#34;
+</span><span style="color:#75715e">// // some comment
+</span><span style="color:#75715e"></span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;C&#34;</span>
 
-<pre><code class="language-go">// file: prints.go
-package prints
-
-// NOTICE BELOW
-
-//#include &quot;prints.h&quot;
-// // some comment
-import &quot;C&quot;
-
-func Prints(s string) {
-  p := C.CString(s);
-  C.prints(p);
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Prints</span>(<span style="color:#a6e22e">s</span> <span style="color:#66d9ef">string</span>) {
+  <span style="color:#a6e22e">p</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">CString</span>(<span style="color:#a6e22e">s</span>);
+  <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">prints</span>(<span style="color:#a6e22e">p</span>);
 }
-</code></pre>
-
-<p>需要注意的是import &ldquo;C&rdquo;及其上面的几行注释。在编译过程中，go会根据import &ldquo;C&rdquo;之前的几行注释生成一个c程序，并将这个c程序里的符号导入到模块C里，最后由import &ldquo;C&rdquo;再导入到go程序里。如果需要在其他go程序里调用api，需要参照prints.go里的Prints函数（要导出的go模块需要首字母大写）写一个wrapper func。其中对c程序里符号的引用都需要通过C来引用，包括一些c的类型定义，比如传给c api的int需要通过C.int来定义，而字符串则是C.CString。</p>
-
+</code></pre></div><p>需要注意的是import &ldquo;C&quot;及其上面的几行注释。在编译过程中，go会根据import &ldquo;C&quot;之前的几行注释生成一个c程序，并将这个c程序里的符号导入到模块C里，最后由import &ldquo;C&quot;再导入到go程序里。如果需要在其他go程序里调用api，需要参照prints.go里的Prints函数（要导出的go模块需要首字母大写）写一个wrapper func。其中对c程序里符号的引用都需要通过C来引用，包括一些c的类型定义，比如传给c api的int需要通过C.int来定义，而字符串则是C.CString。</p>
 <p>有了这几个文件，就可以编译一个可以在go里加载的库了。以下都是在x86 linux下操作过程，如果是其他环境，请替换相应的编译命令。</p>
-
 <p>编译wrapper：</p>
-
 <pre><code>cgo prints.go
 </code></pre>
-
 <p>生成文件：</p>
-
 <ul>
 <li>_cgo_defun.c：根据prints.go里标红的注释，生成用于在go里调用的c符号和函数</li>
 <li>_cgo_gotypes.go：_cgo_defun.c里的符号在go里对应的定义</li>
@@ -265,59 +249,41 @@ func Prints(s string) {
 <li>prints.cgo1.go：根据prints.go生成的go wrapper func</li>
 <li>prints.cgo2.c：根据prints.go生成的c wrapper func</li>
 </ul>
-
-<p>编译go wrapper相关的文件，生成<em>go</em>.8</p>
-
+<p>编译go wrapper相关的文件，生成_go_.8</p>
 <pre><code>8g -o _go_.8 prints.cgo1.go _cgo_gotypes.go
 </code></pre>
-
 <p>编译c wrapper的通用部分，生成_cgo_defun.8</p>
-
 <pre><code>8c -FVw -I&quot;/home/lizh/go/src/pkg/runtime/&quot; _cgo_defun.c
 </code></pre>
-
 <p>对上面两个编译好的wrapper打包，生成prints.a</p>
-
 <pre><code>gopack grc prints.a _go_.8 _cgo_defun.8
 </code></pre>
-
 <p>将生成的prints.a放到go的包目录下</p>
-
 <pre><code>cp prints.a $GOROOT/pkg/linux_386/
 </code></pre>
-
 <p>之后是对c部分的编译：</p>
-
 <pre><code>gcc -m32 -fPIC -O2 -o prints.cgo2.o -c prints.cgo2.c
 gcc -m32 -fPIC -O2 -o prints.o -c prints.c
 gcc -m32 -o prints.so prints.o prints.cgo2.o -shared
 </code></pre>
-
 <p>根据prints.c和prints.cgo2.c生成prints.so，是一个可供go程序引入的动态库。通过objdump查看prints.so的符号，可以发现：</p>
-
 <ul>
 <li>prints：需要引入的c api符号</li>
 <li>_cgo_prints：由go生成的对c api的wrapper，具体可以查看prints.cgo2.c</li>
 </ul>
-
 <p>将编译好的动态库放入go的包目录下</p>
-
 <pre><code>cp prints.so /home/lizh/go/pkg/linux_386/
 </code></pre>
-
 <p>之后就可以在go里调用prints这个c函数了：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 
-<pre><code class="language-go">package main
+<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;prints&#34;</span>
 
-import &quot;prints&quot;
-
-func main() {
-  s := &quot;Hello world!&quot;;
-  prints.Prints(s);
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+  <span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;Hello world!&#34;</span>;
+  <span style="color:#a6e22e">prints</span>.<span style="color:#a6e22e">Prints</span>(<span style="color:#a6e22e">s</span>);
 }
-</code></pre>
-
-<p>查看生成的调用程序，可以看到对$GOROOT/pkg/linux_386/libcgo.so和$GOROOT/pkg/linux_386/prints.so两个动态库的引用。发布时需要将这两个库放到发布环境里。</p>
+</code></pre></div><p>查看生成的调用程序，可以看到对$GOROOT/pkg/linux_386/libcgo.so和$GOROOT/pkg/linux_386/prints.so两个动态库的引用。发布时需要将这两个库放到发布环境里。</p>
     </section>
 
 

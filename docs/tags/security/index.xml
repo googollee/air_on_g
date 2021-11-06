@@ -1,17 +1,13 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Security on Air on G</title>
+    <title>security on Air on G</title>
     <link>http://air.googol.im/tags/security/</link>
-    <description>Recent content in Security on Air on G</description>
+    <description>Recent content in security on Air on G</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>除非另有声明，本网站采用&lt;a href=&#39;https://creativecommons.org/licenses/by-nd/3.0/cn/&#39;&gt;知识共享“署名-禁止演绎 3.0 中国大陆”许可协议&lt;/a&gt;授权。</copyright>
-    <lastBuildDate>Thu, 22 Dec 2011 20:00:00 +0800</lastBuildDate>
-    
-	<atom:link href="http://air.googol.im/tags/security/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Thu, 22 Dec 2011 20:00:00 +0800</lastBuildDate><atom:link href="http://air.googol.im/tags/security/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>到底应该怎么存密码</title>
       <link>http://air.googol.im/post/how-to-save-password/</link>
@@ -19,10 +15,7 @@
       
       <guid>http://air.googol.im/post/how-to-save-password/</guid>
       <description>&lt;p&gt;最近各大网站频频爆出密码泄露的事情，搞得用户“改密码改到手软”。先姑且不说一些政治上的因素导致网站必须保存明文的情况，到底应该如何保存密码，才能保证即便数据库内容被盗，用户的密码本身也是安全的呢？&lt;/p&gt;
-
-&lt;p&gt;说到这个问题，先要明确一些原则的问题，然后才能讨论具体的解决方法。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;说到这个问题，先要明确一些原则的问题，然后才能讨论具体的解决方法。&lt;/p&gt;</description>
     </item>
     
   </channel>

@@ -1,26 +1,20 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Design on Air on G</title>
+    <title>design on Air on G</title>
     <link>http://air.googol.im/tags/design/</link>
-    <description>Recent content in Design on Air on G</description>
+    <description>Recent content in design on Air on G</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>除非另有声明，本网站采用&lt;a href=&#39;https://creativecommons.org/licenses/by-nd/3.0/cn/&#39;&gt;知识共享“署名-禁止演绎 3.0 中国大陆”许可协议&lt;/a&gt;授权。</copyright>
-    <lastBuildDate>Tue, 17 Sep 2013 22:51:28 +0800</lastBuildDate>
-    
-	<atom:link href="http://air.googol.im/tags/design/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Tue, 17 Sep 2013 22:51:28 +0800</lastBuildDate><atom:link href="http://air.googol.im/tags/design/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>S会议开发手札：过渡设计</title>
       <link>http://air.googol.im/post/shy-note-over-design/</link>
       <pubDate>Tue, 17 Sep 2013 22:51:28 +0800</pubDate>
       
       <guid>http://air.googol.im/post/shy-note-over-design/</guid>
-      <description>&lt;p&gt;今天打算来专门聊一聊过渡设计的事情。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;p&gt;今天打算来专门聊一聊过渡设计的事情。&lt;/p&gt;</description>
     </item>
     
   </channel>

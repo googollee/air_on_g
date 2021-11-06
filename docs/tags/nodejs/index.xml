@@ -1,26 +1,20 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Nodejs on Air on G</title>
+    <title>nodejs on Air on G</title>
     <link>http://air.googol.im/tags/nodejs/</link>
-    <description>Recent content in Nodejs on Air on G</description>
+    <description>Recent content in nodejs on Air on G</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>除非另有声明，本网站采用&lt;a href=&#39;https://creativecommons.org/licenses/by-nd/3.0/cn/&#39;&gt;知识共享“署名-禁止演绎 3.0 中国大陆”许可协议&lt;/a&gt;授权。</copyright>
-    <lastBuildDate>Wed, 24 Apr 2013 08:34:35 +0800</lastBuildDate>
-    
-	<atom:link href="http://air.googol.im/tags/nodejs/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Wed, 24 Apr 2013 08:34:35 +0800</lastBuildDate><atom:link href="http://air.googol.im/tags/nodejs/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>迁移到HEXO</title>
       <link>http://air.googol.im/post/migrate-to-hexo/</link>
       <pubDate>Wed, 24 Apr 2013 08:34:35 +0800</pubDate>
       
       <guid>http://air.googol.im/post/migrate-to-hexo/</guid>
-      <description>&lt;p&gt;前几天把这个blog的框架从&lt;a href=&#34;https://github.com/mojombo/jekyll&#34;&gt;jekyll&lt;/a&gt;迁移到了&lt;a href=&#34;http://zespia.tw/hexo/&#34;&gt;HEXO&lt;/a&gt;。因为会重新生成feed，uuid和原来的不一样，所以有刷屏，抱歉。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;p&gt;前几天把这个blog的框架从&lt;a href=&#34;https://github.com/mojombo/jekyll&#34;&gt;jekyll&lt;/a&gt;迁移到了&lt;a href=&#34;http://zespia.tw/hexo/&#34;&gt;HEXO&lt;/a&gt;。因为会重新生成feed，uuid和原来的不一样，所以有刷屏，抱歉。&lt;/p&gt;</description>
     </item>
     
   </channel>

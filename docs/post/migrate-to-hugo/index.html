@@ -67,7 +67,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.42.2" />
+    <meta name="generator" content="Hugo 0.89.1" />
 
     <link rel="canonical" href="http://air.googol.im/post/migrate-to-hugo/" />
 
@@ -80,13 +80,13 @@
     "@type": "Article",
     "publisher": {
         "@type": "Organization",
-        "name": 
+        "name":  null 
     },
     "author": {
         "@type": "Person",
-        "name": ,
+        "name":  null ,
         
-        "url": http://air.googol.im,
+        "url": "http://air.googol.im",
         "sameAs": [
             
             
@@ -97,26 +97,26 @@
              
             
         ],
-        "description": 多年生软件工程师，信仰开源
+        "description": "多年生软件工程师，信仰开源"
         
     },
-    "headline": 这个Blog又复活了,
-    "name": 这个Blog又复活了,
-    "wordCount": 15,
+    "headline": "这个Blog又复活了",
+    "name": "这个Blog又复活了",
+    "wordCount":  15 ,
     "timeRequired": "PT1M",
     "inLanguage": {
       "@type": "Language",
-      "alternateName": en
+      "alternateName": "en"
     },
-    "url": http://air.googol.im/post/migrate-to-hugo/,
-    "datePublished": 2017-02-19T10:54Z,
-    "dateModified": 2017-02-19T10:54Z,
+    "url": "http://air.googol.im/post/migrate-to-hugo/",
+    "datePublished": "2017-02-19T10:54Z",
+    "dateModified": "2017-02-19T10:54Z",
     
-    "keywords": hugo, blog,
-    "description": ,
+    "keywords": "hugo, blog",
+    "description": "",
     "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": http://air.googol.im/post/migrate-to-hugo/
+        "@id": "http://air.googol.im/post/migrate-to-hugo/"
     }
 }
     </script>
@@ -209,33 +209,25 @@
 
     <section class="post-content">
       <p>嗯，这个Blog过了几年，又复活了。</p>
-
-<p></p>
-
 <p>有时候觉得还是想想要写些东西会比较好，不一定很长，但是多年后回顾一下还是很有用的。</p>
-
 <p>比如这次迁移Blog的过程，发现居然以前还试图用C++实现y combinator。复习了一下当时的想法，也略有收获。</p>
-
 <p>这次Blog使用<a href="https://gohugo.io/">Hugo</a>搭建。选择这个服务有以下几个考虑：</p>
-
 <ol>
-<li><p>静态页面</p>
-
-<p>我依旧觉得Blog使用静态页面是坠吼的。一来服务端很轻量，不需要搭建一堆复杂的软件。另外所有文本以文件方式保存，方便查找和管理，尤其是配合Git的版本管理。如果使用数据库，总会遇到版本升级（比如Php7就抛弃了对MySQL的支持）时各种各样的问题。如果要多人协作，也可以利用GitHub这种非常成熟的方式来简化流程。另外，现在Markdown已经非常成熟，而且很多效果可以通过Javascript直接显示。这些都让静态页面成为非常好的选择。</p></li>
-
-<li><p>静态编译二进制</p>
-
-<p>Hugo是以Go编写的静态页面建站工具。使用Go的好处是，执行文件是一个单一无依赖的二进制文件，使用时不需要配置各种依赖环境。之前最早从Jekyll迁移到Hexo的最大原因，就是一段时间没有更新Jekyll的依赖，导致重新安装时一些插件已经无法支持最新版本的主程序，最后放弃使用。我相信Node.js的版本管理要比Ruby好很多，但是如果能抛弃掉这一坨东西不是更好么？</p></li>
-
-<li><p>支持的功能</p>
-
-<p>我需要的功能都有了，而且选了一个主题还不错。Hugo这么多年也算养肥了，执行效率也很高，写Blog的时候也很方便。</p></li>
+<li>
+<p>静态页面</p>
+<p>我依旧觉得Blog使用静态页面是坠吼的。一来服务端很轻量，不需要搭建一堆复杂的软件。另外所有文本以文件方式保存，方便查找和管理，尤其是配合Git的版本管理。如果使用数据库，总会遇到版本升级（比如Php7就抛弃了对MySQL的支持）时各种各样的问题。如果要多人协作，也可以利用GitHub这种非常成熟的方式来简化流程。另外，现在Markdown已经非常成熟，而且很多效果可以通过Javascript直接显示。这些都让静态页面成为非常好的选择。</p>
+</li>
+<li>
+<p>静态编译二进制</p>
+<p>Hugo是以Go编写的静态页面建站工具。使用Go的好处是，执行文件是一个单一无依赖的二进制文件，使用时不需要配置各种依赖环境。之前最早从Jekyll迁移到Hexo的最大原因，就是一段时间没有更新Jekyll的依赖，导致重新安装时一些插件已经无法支持最新版本的主程序，最后放弃使用。我相信Node.js的版本管理要比Ruby好很多，但是如果能抛弃掉这一坨东西不是更好么？</p>
+</li>
+<li>
+<p>支持的功能</p>
+<p>我需要的功能都有了，而且选了一个主题还不错。Hugo这么多年也算养肥了，执行效率也很高，写Blog的时候也很方便。</p>
+</li>
 </ol>
-
 <p>这次迁移，还把Blog从自己租的VPS上换到了GitHub Page。主要想法是，自己折腾VPS挂掉的时候可以不会影响Blog。不过这样有可能会导致撞墙。如果哪天发现有问题的话，我还会迁回到VPS上。反正静态页面迁移太简单了。</p>
-
 <p>这次迁移如果说可惜的地方，就是Hugo没办法完全支持Hexo的url格式，导致之前所有Disqus上的留言都无法正常显示。略可惜。不过我不想折腾了。</p>
-
 <p>以上。</p>
     </section>
 
