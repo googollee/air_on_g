@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>os on Air on G</title>
-    <link>http://air.googol.im/tags/os/</link>
+    <link>https://air.googol.im/tags/os/</link>
     <description>Recent content in os on Air on G</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>除非另有声明，本网站采用&lt;a href=&#39;https://creativecommons.org/licenses/by-nd/3.0/cn/&#39;&gt;知识共享“署名-禁止演绎 3.0 中国大陆”许可协议&lt;/a&gt;授权。</copyright>
-    <lastBuildDate>Sat, 13 Mar 2010 20:00:00 +0800</lastBuildDate><atom:link href="http://air.googol.im/tags/os/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 13 Mar 2010 20:00:00 +0800</lastBuildDate><atom:link href="https://air.googol.im/tags/os/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>ssh退出失败，报错EPIPE</title>
-      <link>http://air.googol.im/post/ssh-quit-with-epipe/</link>
+      <link>https://air.googol.im/post/ssh-quit-with-epipe/</link>
       <pubDate>Sat, 13 Mar 2010 20:00:00 +0800</pubDate>
       
-      <guid>http://air.googol.im/post/ssh-quit-with-epipe/</guid>
+      <guid>https://air.googol.im/post/ssh-quit-with-epipe/</guid>
       <description>&lt;p&gt;这两天帮同事看一个sshd退出时报错的问题。&lt;/p&gt;</description>
     </item>
     

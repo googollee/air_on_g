@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>code style on Air on G</title>
-    <link>http://air.googol.im/tags/code-style/</link>
+    <link>https://air.googol.im/tags/code-style/</link>
     <description>Recent content in code style on Air on G</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>除非另有声明，本网站采用&lt;a href=&#39;https://creativecommons.org/licenses/by-nd/3.0/cn/&#39;&gt;知识共享“署名-禁止演绎 3.0 中国大陆”许可协议&lt;/a&gt;授权。</copyright>
-    <lastBuildDate>Sun, 20 Feb 2011 20:00:00 +0800</lastBuildDate><atom:link href="http://air.googol.im/tags/code-style/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 20 Feb 2011 20:00:00 +0800</lastBuildDate><atom:link href="https://air.googol.im/tags/code-style/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Christian Neukirchen 的 Ruby 编程风格指南</title>
-      <link>http://air.googol.im/post/ruby-style/</link>
+      <link>https://air.googol.im/post/ruby-style/</link>
       <pubDate>Sun, 20 Feb 2011 20:00:00 +0800</pubDate>
       
-      <guid>http://air.googol.im/post/ruby-style/</guid>
+      <guid>https://air.googol.im/post/ruby-style/</guid>
       <description>&lt;p&gt;也许你不会同意本文提到的所有规则，但是这些规则确实帮助我产生了高质量的代码，对我来说很有用。任何人都可以随其所想，根据其自己的编码风格去写代码，但是，当你提代码到我的项目里时，请遵守这些规则：&lt;/p&gt;</description>
     </item>
     

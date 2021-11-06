@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>overload on Air on G</title>
-    <link>http://air.googol.im/tags/overload/</link>
+    <link>https://air.googol.im/tags/overload/</link>
     <description>Recent content in overload on Air on G</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>除非另有声明，本网站采用&lt;a href=&#39;https://creativecommons.org/licenses/by-nd/3.0/cn/&#39;&gt;知识共享“署名-禁止演绎 3.0 中国大陆”许可协议&lt;/a&gt;授权。</copyright>
-    <lastBuildDate>Wed, 13 Jun 2007 20:00:00 +0800</lastBuildDate><atom:link href="http://air.googol.im/tags/overload/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 13 Jun 2007 20:00:00 +0800</lastBuildDate><atom:link href="https://air.googol.im/tags/overload/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>C&#43;&#43;中的重载问题</title>
-      <link>http://air.googol.im/post/overload-in-cpp/</link>
+      <link>https://air.googol.im/post/overload-in-cpp/</link>
       <pubDate>Wed, 13 Jun 2007 20:00:00 +0800</pubDate>
       
-      <guid>http://air.googol.im/post/overload-in-cpp/</guid>
+      <guid>https://air.googol.im/post/overload-in-cpp/</guid>
       <description>&lt;p&gt;话说有这样的一族函数：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;insert&lt;/span&gt;(BaseWidget&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; w,  &lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;);
 &lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;insert&lt;/span&gt;(ThinWidget&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; w,  &lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;);

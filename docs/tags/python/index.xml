@@ -2,46 +2,46 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>python on Air on G</title>
-    <link>http://air.googol.im/tags/python/</link>
+    <link>https://air.googol.im/tags/python/</link>
     <description>Recent content in python on Air on G</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>除非另有声明，本网站采用&lt;a href=&#39;https://creativecommons.org/licenses/by-nd/3.0/cn/&#39;&gt;知识共享“署名-禁止演绎 3.0 中国大陆”许可协议&lt;/a&gt;授权。</copyright>
-    <lastBuildDate>Sat, 22 Sep 2007 20:00:00 +0800</lastBuildDate><atom:link href="http://air.googol.im/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 22 Sep 2007 20:00:00 +0800</lastBuildDate><atom:link href="https://air.googol.im/tags/python/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>尝试用C&#43;&#43;实现Y Combinator（之三）</title>
-      <link>http://air.googol.im/post/implement-y-combinator-in-cpp-3/</link>
+      <link>https://air.googol.im/post/implement-y-combinator-in-cpp-3/</link>
       <pubDate>Sat, 22 Sep 2007 20:00:00 +0800</pubDate>
       
-      <guid>http://air.googol.im/post/implement-y-combinator-in-cpp-3/</guid>
+      <guid>https://air.googol.im/post/implement-y-combinator-in-cpp-3/</guid>
       <description>&lt;p&gt;基本上，又进行了几次失败的尝试，具体过程不写了，反正写了也没人看。（其实是我没有存……）&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>尝试用C&#43;&#43;实现Y Combinator（之二）</title>
-      <link>http://air.googol.im/post/implement-y-combinator-in-cpp-2/</link>
+      <link>https://air.googol.im/post/implement-y-combinator-in-cpp-2/</link>
       <pubDate>Thu, 06 Sep 2007 20:00:00 +0800</pubDate>
       
-      <guid>http://air.googol.im/post/implement-y-combinator-in-cpp-2/</guid>
+      <guid>https://air.googol.im/post/implement-y-combinator-in-cpp-2/</guid>
       <description>&lt;p&gt;恩……上篇没写完……&lt;/p&gt;
 &lt;p&gt;其实，上篇还写错了……&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>尝试用C&#43;&#43;实现Y Combinator（之一）</title>
-      <link>http://air.googol.im/post/implement-y-combinator-in-cpp-1/</link>
+      <link>https://air.googol.im/post/implement-y-combinator-in-cpp-1/</link>
       <pubDate>Sat, 01 Sep 2007 20:00:00 +0800</pubDate>
       
-      <guid>http://air.googol.im/post/implement-y-combinator-in-cpp-1/</guid>
+      <guid>https://air.googol.im/post/implement-y-combinator-in-cpp-1/</guid>
       <description>&lt;p&gt;恩……程序员的一大特点：看到别人有个轮子，就想自己动手造个出来……（这样不好，不好……）&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Y Combinator in Python</title>
-      <link>http://air.googol.im/post/y-combinator-in-python/</link>
+      <link>https://air.googol.im/post/y-combinator-in-python/</link>
       <pubDate>Fri, 31 Aug 2007 20:00:00 +0800</pubDate>
       
-      <guid>http://air.googol.im/post/y-combinator-in-python/</guid>
+      <guid>https://air.googol.im/post/y-combinator-in-python/</guid>
       <description>&lt;p&gt;译自（由于某种原因，请用代理访问）：&lt;a href=&#34;http://siddhi.blogspot.com/2007/08/y-combinator-in-python.html&#34;&gt;Y Combinator in Python&lt;/a&gt;&lt;/p&gt;</description>
     </item>
     

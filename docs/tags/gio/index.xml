@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>gio on Air on G</title>
-    <link>http://air.googol.im/tags/gio/</link>
+    <link>https://air.googol.im/tags/gio/</link>
     <description>Recent content in gio on Air on G</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>除非另有声明，本网站采用&lt;a href=&#39;https://creativecommons.org/licenses/by-nd/3.0/cn/&#39;&gt;知识共享“署名-禁止演绎 3.0 中国大陆”许可协议&lt;/a&gt;授权。</copyright>
-    <lastBuildDate>Mon, 19 Oct 2009 20:00:00 +0800</lastBuildDate><atom:link href="http://air.googol.im/tags/gio/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 19 Oct 2009 20:00:00 +0800</lastBuildDate><atom:link href="https://air.googol.im/tags/gio/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>为连续读取优化的一种缓存策略</title>
-      <link>http://air.googol.im/post/optimize-for-continous-reading/</link>
+      <link>https://air.googol.im/post/optimize-for-continous-reading/</link>
       <pubDate>Mon, 19 Oct 2009 20:00:00 +0800</pubDate>
       
-      <guid>http://air.googol.im/post/optimize-for-continous-reading/</guid>
+      <guid>https://air.googol.im/post/optimize-for-continous-reading/</guid>
       <description>&lt;p&gt;事情的起因是boss要把对samba的支持从kernel转移到user模式的gio。这个迁移到还不是很复杂，改一些接口就可以。迁移过来后发现通过samba播放视频的性能下降的很厉害，在arm平台上，以前能流畅播放的视频现在完全不可看。&lt;/p&gt;</description>
     </item>
     
