@@ -1,0 +1,1374 @@
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+    <url>
+      <loc>https://air.googol.im/</loc>
+      
+      <lastmod>2018-07-21T11:10:00+02:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/go/</loc>
+      
+      <lastmod>2018-07-21T11:10:00+02:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/</loc>
+      
+      <lastmod>2018-07-21T11:10:00+02:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/rust/</loc>
+      
+      <lastmod>2018-07-21T11:10:00+02:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/</loc>
+      
+      <lastmod>2018-07-21T11:10:00+02:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/rust-view-from-a-gopher/</loc>
+      
+      <lastmod>2018-07-21T11:10:00+02:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/what-i-want-in-go2-type-system/</loc>
+      
+      <lastmod>2018-01-10T15:24:03+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/programming/</loc>
+      
+      <lastmod>2017-05-01T08:38:56+02:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/vim/</loc>
+      
+      <lastmod>2017-05-01T08:38:56+02:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/wsl/</loc>
+      
+      <lastmod>2017-05-01T08:38:56+02:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/vim-config/</loc>
+      
+      <lastmod>2017-05-01T08:38:56+02:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/book/</loc>
+      
+      <lastmod>2017-03-05T21:06:19-08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/golang/</loc>
+      
+      <lastmod>2017-03-05T21:06:19-08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/go-in-action/</loc>
+      
+      <lastmod>2017-03-05T21:06:19-08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/blog/</loc>
+      
+      <lastmod>2017-02-19T10:54:24+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/hugo/</loc>
+      
+      <lastmod>2017-02-19T10:54:24+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/migrate-to-hugo/</loc>
+      
+      <lastmod>2017-02-19T10:54:24+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/contiguous-stacks-in-go/</loc>
+      
+      <lastmod>2014-03-28T21:21:24+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/performance/</loc>
+      
+      <lastmod>2014-03-28T21:21:24+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/docker/</loc>
+      
+      <lastmod>2014-03-28T19:46:44+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/operation/</loc>
+      
+      <lastmod>2014-03-28T19:46:44+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/supervisor-with-docker-to-manage-processes/</loc>
+      
+      <lastmod>2014-03-28T19:46:44+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/concurrency/</loc>
+      
+      <lastmod>2014-03-15T10:52:46+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/go-concurrency-patterns-pipelines-and-cancellation/</loc>
+      
+      <lastmod>2014-03-15T10:52:46+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/pattern/</loc>
+      
+      <lastmod>2014-03-15T10:52:46+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/bigdata/</loc>
+      
+      <lastmod>2014-03-11T21:01:03+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/business/</loc>
+      
+      <lastmod>2014-03-11T21:01:03+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/instruction/</loc>
+      
+      <lastmod>2014-03-11T21:01:03+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/explain-big-data/</loc>
+      
+      <lastmod>2014-03-11T21:01:03+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/atom/</loc>
+      
+      <lastmod>2014-03-07T01:20:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/first-glance-at-atom/</loc>
+      
+      <lastmod>2014-03-07T01:20:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/editor/</loc>
+      
+      <lastmod>2014-03-07T01:20:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/go-tip/</loc>
+      
+      <lastmod>2014-01-12T10:13:39+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/whats-happening-in-go-tip-2014-01-10/</loc>
+      
+      <lastmod>2014-01-12T10:13:39+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/go-rest-revolution/</loc>
+      
+      <lastmod>2013-12-31T10:48:24+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/restful/</loc>
+      
+      <lastmod>2013-12-31T10:48:24+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/project-management/</loc>
+      
+      <lastmod>2013-09-25T22:48:15+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/startup/</loc>
+      
+      <lastmod>2013-09-25T22:48:15+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/shy-note-project-management/</loc>
+      
+      <lastmod>2013-09-25T22:48:15+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/design/</loc>
+      
+      <lastmod>2013-09-17T22:51:28+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/project/</loc>
+      
+      <lastmod>2013-09-17T22:51:28+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/shy-note-over-design/</loc>
+      
+      <lastmod>2013-09-17T22:51:28+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/shy-notes/</loc>
+      
+      <lastmod>2013-09-16T23:14:56+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/why-goroutine-not-library/</loc>
+      
+      <lastmod>2013-04-28T22:23:30+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/hexo/</loc>
+      
+      <lastmod>2013-04-24T08:34:35+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/nodejs/</loc>
+      
+      <lastmod>2013-04-24T08:34:35+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/ruby/</loc>
+      
+      <lastmod>2013-04-24T08:34:35+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/migrate-to-hexo/</loc>
+      
+      <lastmod>2013-04-24T08:34:35+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/wired-golang/</loc>
+      
+      <lastmod>2013-04-03T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/why-i-like-go/</loc>
+      
+      <lastmod>2012-07-09T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/gotour-exercise-web-crawl/</loc>
+      
+      <lastmod>2012-02-04T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/security/</loc>
+      
+      <lastmod>2011-12-22T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/how-to-save-password/</loc>
+      
+      <lastmod>2011-12-22T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/ruby-style/</loc>
+      
+      <lastmod>2011-02-20T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/code-style/</loc>
+      
+      <lastmod>2011-02-20T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/c/</loc>
+      
+      <lastmod>2010-04-18T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/call-c-in-golang/</loc>
+      
+      <lastmod>2010-04-18T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/os/</loc>
+      
+      <lastmod>2010-03-13T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/pthread/</loc>
+      
+      <lastmod>2010-03-13T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/ssh/</loc>
+      
+      <lastmod>2010-03-13T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/ssh-quit-with-epipe/</loc>
+      
+      <lastmod>2010-03-13T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/guide-to-golang/</loc>
+      
+      <lastmod>2010-01-17T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/cpp/</loc>
+      
+      <lastmod>2009-11-28T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/embedding/</loc>
+      
+      <lastmod>2009-11-28T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/unittest/</loc>
+      
+      <lastmod>2009-11-28T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/simple-unittest-framework/</loc>
+      
+      <lastmod>2009-11-28T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/auto_ptr/</loc>
+      
+      <lastmod>2009-11-07T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/thinking-of-cpp-ptr/</loc>
+      
+      <lastmod>2009-11-07T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/cache/</loc>
+      
+      <lastmod>2009-10-19T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/gio/</loc>
+      
+      <lastmod>2009-10-19T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/optimize-for-continous-reading/</loc>
+      
+      <lastmod>2009-10-19T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/queue/</loc>
+      
+      <lastmod>2009-05-28T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/stack/</loc>
+      
+      <lastmod>2009-05-28T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/unified-stack-and-queue/</loc>
+      
+      <lastmod>2009-05-28T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/python/</loc>
+      
+      <lastmod>2007-09-22T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/y-combinator/</loc>
+      
+      <lastmod>2007-09-22T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/implement-y-combinator-in-cpp-3/</loc>
+      
+      <lastmod>2007-09-22T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/implement-y-combinator-in-cpp-2/</loc>
+      
+      <lastmod>2007-09-06T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/implement-y-combinator-in-cpp-1/</loc>
+      
+      <lastmod>2007-09-01T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/y-combinator-in-python/</loc>
+      
+      <lastmod>2007-08-31T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/recurring/</loc>
+      
+      <lastmod>2007-07-03T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/sharing/</loc>
+      
+      <lastmod>2007-07-03T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/sharing-information/</loc>
+      
+      <lastmod>2007-07-03T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/overload-in-cpp/</loc>
+      
+      <lastmod>2007-06-13T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/overload/</loc>
+      
+      <lastmod>2007-06-13T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/new/</loc>
+      
+      <lastmod>2007-01-20T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/about-new-in-cpp/</loc>
+      
+      <lastmod>2007-01-20T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/interview/</loc>
+      
+      <lastmod>2006-10-26T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/microsoft/</loc>
+      
+      <lastmod>2006-10-26T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/question-in-face-interview-of-microsoft/</loc>
+      
+      <lastmod>2006-10-26T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/mod/</loc>
+      
+      <lastmod>2005-02-04T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/mod-3/</loc>
+      
+      <lastmod>2005-02-04T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/printf/</loc>
+      
+      <lastmod>2004-10-18T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/analysis-of-source-code-printf/</loc>
+      
+      <lastmod>2004-10-18T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/occ/</loc>
+      
+      <lastmod>2004-09-23T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/analysis-of-occ-circle/</loc>
+      
+      <lastmod>2004-09-23T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/analysis-of-occ-knocker/</loc>
+      
+      <lastmod>2004-09-22T20:00:00+08:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/categories/</loc>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+</urlset>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>golang on Air on G</title>
+    <link>https://air.googol.im/tags/golang/</link>
+    <description>Recent content in golang on Air on G</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Sun, 05 Mar 2017 21:06:19 -0800</lastBuildDate><atom:link href="https://air.googol.im/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>《Go语言实战》发布了</title>
+      <link>https://air.googol.im/post/go-in-action/</link>
+      <pubDate>Sun, 05 Mar 2017 21:06:19 -0800</pubDate>
+      
+      <guid>https://air.googol.im/post/go-in-action/</guid>
+      <description>&lt;p&gt;受谢大邀请，去年在负责翻译《Go in Action》一书。上周末，这本书的中文版《Go语言实战》终于上架开卖了，可以在&lt;a href=&#34;http://www.epubit.com.cn/book/details/4291&#34;&gt;这里&lt;/a&gt;，或者去各大电商购买。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Go中的连续栈</title>
+      <link>https://air.googol.im/post/contiguous-stacks-in-go/</link>
+      <pubDate>Fri, 28 Mar 2014 21:21:24 +0800</pubDate>
+      
+      <guid>https://air.googol.im/post/contiguous-stacks-in-go/</guid>
+      <description>&lt;p&gt;本文译自&lt;a href=&#34;http://agis.io/2014/03/25/contiguous-stacks-in-go.html&#34;&gt;Contiguous stacks in Go&lt;/a&gt;。介绍了Go 1.3版本在栈管理上的变化，以及由此带来的性能改进。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Go并发模式：管道和取消</title>
+      <link>https://air.googol.im/post/go-concurrency-patterns-pipelines-and-cancellation/</link>
+      <pubDate>Sat, 15 Mar 2014 10:52:46 +0800</pubDate>
+      
+      <guid>https://air.googol.im/post/go-concurrency-patterns-pipelines-and-cancellation/</guid>
+      <description>&lt;p&gt;译自&lt;a href=&#34;http://blog.golang.org/pipelines&#34;&gt;http://blog.golang.org/pipelines&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;这是Go官方blog的一篇文章，介绍了如何使用Go来编写并发程序，并按照程序的演化顺序，介绍了不同模式遇到的问题以及解决的问题。主要解释了用管道模式链接不同的线程，以及如何在某个线程取消工作时，保证所有线程以及管道资源的正常回收。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Go tip在做什么 2014-01-10</title>
+      <link>https://air.googol.im/post/whats-happening-in-go-tip-2014-01-10/</link>
+      <pubDate>Sun, 12 Jan 2014 10:13:39 +0800</pubDate>
+      
+      <guid>https://air.googol.im/post/whats-happening-in-go-tip-2014-01-10/</guid>
+      <description>&lt;p&gt;Go tip是Go语言的实验分支，包含了很多尚在讨论，但很有可能会加入stable分支的特性。“Go tip在做什么”（原文地址：&lt;a href=&#34;http://dominik.honnef.co/go-tip/&#34;&gt;What&amp;rsquo;s happening in Go tip&lt;/a&gt;）分析总结了Go语言尚在开发中的一些重要特性。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>go-rest演化</title>
+      <link>https://air.googol.im/post/go-rest-revolution/</link>
+      <pubDate>Tue, 31 Dec 2013 10:48:24 +0800</pubDate>
+      
+      <guid>https://air.googol.im/post/go-rest-revolution/</guid>
+      <description>&lt;p&gt;在EXFE创业的两年，虽然项目最终失败了（很可惜），不过自己从头开始写了一个简化RESTful Service实现的Framework——&lt;a href=&#34;https://github.com/googollee/go-rest&#34;&gt;go-rest&lt;/a&gt;，还算有不少收获。这里记录一下go-rest实现过程中一些重要的演变，以及这些演变背后的原因。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>为什么goroutine和channel不是以类库的形式存在——驳老赵《为什么我认为goroutine和channel是把别的平台上类库的功能内置在语言里》</title>
+      <link>https://air.googol.im/post/why-goroutine-not-library/</link>
+      <pubDate>Sun, 28 Apr 2013 22:23:30 +0800</pubDate>
+      
+      <guid>https://air.googol.im/post/why-goroutine-not-library/</guid>
+      <description>&lt;p&gt;老赵在最近的blog里对go有诸多批评。在我看来这些批评都没有正确的理由来支持。这篇blog先来就&lt;a href=&#34;http://blog.zhaojie.me/2013/04/why-channel-and-goroutine-in-golang-are-buildin-libraries-for-other-platforms.html&#34;&gt;《为什么我认为goroutine和channel是把别的平台上类库的功能内置在语言里》&lt;/a&gt;一文进行反驳。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Go语言奇怪的特性</title>
+      <link>https://air.googol.im/post/wired-golang/</link>
+      <pubDate>Wed, 03 Apr 2013 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/post/wired-golang/</guid>
+      <description>&lt;p&gt;记录了一些使用Go时遇到的违反直觉的特性。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>我为什么喜欢Go</title>
+      <link>https://air.googol.im/post/why-i-like-go/</link>
+      <pubDate>Mon, 09 Jul 2012 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/post/why-i-like-go/</guid>
+      <description>&lt;p&gt;这半年来工作上一直在用Go，总共统计下来也写了1w多行代码，算上删删改改的，大概能有1w5吧。而且还写了不少go的库，比如android push库&lt;a href=&#34;https://github.com/googollee/go_c2dm&#34;&gt;go_c2dm&lt;/a&gt;，一个简单的IMAP客户端&lt;a href=&#34;https://github.com/googollee/goimap&#34;&gt;goimap&lt;/a&gt;，想继续完善的编码库&lt;a href=&#34;https://github.com/googollee/go-encoding-ex&#34;&gt;go-encoding-ex&lt;/a&gt;。似乎赶着最近Google IO，国外很时兴写对Go的总结，于是我也赶热闹写一篇blog。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>关于gotour最后一题的一些想法</title>
+      <link>https://air.googol.im/post/gotour-exercise-web-crawl/</link>
+      <pubDate>Sat, 04 Feb 2012 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/post/gotour-exercise-web-crawl/</guid>
+      <description>&lt;p&gt;过年几天，把&lt;a href=&#34;http://tour.golang.org/&#34;&gt;A Tour of Go&lt;/a&gt;看了一遍，算是复习了一遍go语言。其中最后一题&lt;a href=&#34;http://tour.golang.org/#70&#34;&gt;Exercise: Web Crawler&lt;/a&gt;有些复杂，是串行程序转换到并行时常见的问题。这里记录一些当时思考的结果。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Golang里调用C</title>
+      <link>https://air.googol.im/post/call-c-in-golang/</link>
+      <pubDate>Sun, 18 Apr 2010 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/post/call-c-in-golang/</guid>
+      <description>&lt;p&gt;Golang调用C分两个步骤：1 写一个C的wrapper，这个很简单；2 对wrapper做编译，这个步骤有点复杂，而且涉及众多中间文件。应该是有办法用自动化的工具简化这个过程的。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Golang初探</title>
+      <link>https://air.googol.im/post/guide-to-golang/</link>
+      <pubDate>Sun, 17 Jan 2010 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/post/guide-to-golang/</guid>
+      <description>&lt;p&gt;Go语言是Google于2009年11月公布的一个新语言项目，其目标是创造一门既简单又有效率的开源编程语言。由于有C语言创始人Ken Thompson的参与，Go一面世，就被看成是C语言的继任者，受到很大关注。Go一方面吸收了C简单清晰、执行效率高的优点，另一方面融合了动态语言的闭包、动态绑定等特性，更加适应目前多核与多机高并发的开发环境和快速敏捷的开发效率。此外，Go并没有跟随主流的以“类和继承”为基础的面向对象实现方式，而是以接口和动态绑定的方式，将封装的粒度做得更细、更灵活，实现了另一种面向对象的代码组织形式。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

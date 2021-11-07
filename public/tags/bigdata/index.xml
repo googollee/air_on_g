@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>bigdata on Air on G</title>
+    <link>https://air.googol.im/tags/bigdata/</link>
+    <description>Recent content in bigdata on Air on G</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Tue, 11 Mar 2014 21:01:03 +0800</lastBuildDate><atom:link href="https://air.googol.im/tags/bigdata/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>试着解释大数据</title>
+      <link>https://air.googol.im/post/explain-big-data/</link>
+      <pubDate>Tue, 11 Mar 2014 21:01:03 +0800</pubDate>
+      
+      <guid>https://air.googol.im/post/explain-big-data/</guid>
+      <description>&lt;p&gt;这篇blog本来是在ourcoders的一篇&lt;a href=&#34;http://ourcoders.com/thread/show/2671/#floor15&#34;&gt;回复&lt;/a&gt;。写完几天后，觉得还有必要总结留底，所以做了些修改，形成了这篇文章。&lt;/p&gt;
+&lt;p&gt;我做大数据其实时间并不长，对大数据的理解也还处于很粗浅的阶段，欢迎大家讨论。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

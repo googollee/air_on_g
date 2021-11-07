@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://air.googol.im/post/analysis-of-source-code-printf/" />
+  <link rel="next" href="https://air.googol.im/post/question-in-face-interview-of-microsoft/" />
+  <link rel="canonical" href="https://air.googol.im/post/mod-3/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           求3的余数 | Air on G
+       
+  </title>
+  <meta name="title" content="求3的余数 | Air on G">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="求3的余数"/>
+<meta name="twitter:description" content="北京华为的一道面试题。要求是只使用&#43;-*和移位运算，且不能递减3求得余数。"/>
+
+  <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "求3的余数",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/air.googol.im\/post\/mod-3\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/air.googol.im\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "post",
+  "keywords": "mod, c, interview",
+  "wordcount":  121 ,
+  "url": "https:\/\/air.googol.im\/post\/mod-3\/",
+  "datePublished": "2005-02-04T20:00:00\u002b08:00",
+  "dateModified": "2005-02-04T20:00:00\u002b08:00",
+  "license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Googol Lee",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/air.googol.im\/logo.png",
+      "width":  127 ,
+      "height":  40 
+    }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Googol Lee"
+  },
+  "description": ""
+}
+</script>
+</head>
+
+  
+
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://air.googol.im">Air on G</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/post/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/about" title="">About</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://air.googol.im">Air on G</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/post/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/about" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp">
+    <header class="post-header">
+        <h1 class="post-title">求3的余数</h1>
+        <div class="post-meta">
+              <a href="https://air.googol.im" rel="author">Googol Lee</a>  ♥ 
+                <span class="post-time">
+                     <time datetime=2005-02-04 >2005-02-04</time>
+                </span>
+                
+                
+                <i class="iconfont icon-timer"></i>
+                1 min
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p>北京华为的一道面试题。要求是只使用+-*和移位运算，且不能递减3求得余数。</p>
+<p>先在csdn上求，求得以下算法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> i, m, n, p, q;
+<span style="color:#66d9ef">int</span> yushu[]<span style="color:#f92672">=</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>};
+m <span style="color:#f92672">=</span> n;
+<span style="color:#66d9ef">while</span>(m<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">3</span>)
+{
+ i<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>;  q<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>;
+ <span style="color:#66d9ef">while</span>(m)
+ {
+  i<span style="color:#f92672">&amp;=</span><span style="color:#ae81ff">0x1</span>;
+  q<span style="color:#f92672">+=</span>(m<span style="color:#f92672">&amp;</span><span style="color:#ae81ff">0x1</span>)<span style="color:#f92672">*</span>yushu[i<span style="color:#f92672">++</span>];
+  m<span style="color:#f92672">&gt;&gt;=</span><span style="color:#ae81ff">1</span>;
+ }
+ m<span style="color:#f92672">=</span>q;
+}
+</code></pre></div><p>没看懂，倒是提示我可以用查表的方法，变成求4的余数。自己探求程序如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> mo[]<span style="color:#f92672">=</span>{<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">0</span>};
+<span style="color:#66d9ef">int</span> i, m;
+m <span style="color:#f92672">=</span> n;
+i <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;
+<span style="color:#66d9ef">while</span> (i<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">3</span>)
+{
+ i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+ <span style="color:#66d9ef">while</span>(m<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">0</span>)
+ {
+  i <span style="color:#f92672">+=</span> m <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">3</span>;
+  m <span style="color:#f92672">&gt;&gt;=</span> <span style="color:#ae81ff">2</span>;
+ }
+ m <span style="color:#f92672">=</span> i;
+}
+</code></pre></div><p>貌似比网上高人给的算法效率更高，可惜没去证实。</p>
+<p>晚上又想到更高效的算法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> mo[]<span style="color:#f92672">=</span>{<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">0</span>};
+<span style="color:#66d9ef">int</span> m;
+<span style="color:#66d9ef">while</span>(m<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">3</span>)
+{
+ m <span style="color:#f92672">=</span> (m<span style="color:#f92672">&gt;&gt;</span><span style="color:#ae81ff">2</span>) <span style="color:#f92672">+</span> (m<span style="color:#f92672">&amp;</span><span style="color:#ae81ff">3</span>);
+}
+</code></pre></div><p>想来不会有更高效的做法了，于是开始这种算法的数学证明，如下：</p>
+<p>因为<code>4 mod 3=1</code>，所以<code>4^k mod 3 = 1^k mod 3</code>（此原理来源于小学数学奥校五年级分册= =|||），所以对任意数n，转化成4进制数后每位为n1 n2 n3 n4&hellip;nm，有</p>
+<pre><code>(n1*4^(m-1)+n2*4^(m-2)+n3*4^(m-3)+n4*4^(m-4)+...+nm-1*4^1+nm*4^0) mod 3
+=n1*4^(m-1) mod 3+n2*4^(m-2) mod 3+n3*4^(m-3) mod 3+n4*4^(m-4) mod 3+...+nm-1*4^1 mod 3+nm*4^0 mod 3
+=n1*1^(m-1) mod 3+n2*1^(m-2) mod 3+n3*1^(m-3) mod 3+n4*1^(m-4) mod 3+...+nm-1*1^1 mod 3+nm*1^0 mod 3
+=(n1+n2+n3+n4+...+nm-1+nm) mod 3
+</code></pre>
+<p>因此对数n每次取二进制最后两位（四进制的最后一位），并加入除去二进制最后两位的余数（相当于右移2位），如此反复，直到只剩最后两位，此两位二进制数与原数n同余于3。</p>
+<p>现在研究的是，求任意数的余数的高效算法是什么呢？</p>
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>:</span>
+                <span>Googol Lee </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                    <span>:</span>
+                   <span>121</span>
+            </p>
+
+            <p class="copyright-item">
+                
+                <span>:</span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fair.googol.im%2fpost%2fmod-3%2f&amp;text=%e6%b1%823%e7%9a%84%e4%bd%99%e6%95%b0&amp;via=googollee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+
+</span>
+                
+            </p>
+
+             
+            <p class="copyright-item">
+                Released under <a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+            </p>
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>: 
+            
+            <span class="tag"><a href="https://air.googol.im/tags/mod/">
+                    #mod</a></span>
+            
+            <span class="tag"><a href="https://air.googol.im/tags/c/">
+                    #c</a></span>
+            
+            <span class="tag"><a href="https://air.googol.im/tags/interview/">
+                    #interview</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();"></a></span> · 
+                <span><a href="https://air.googol.im"></a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://air.googol.im/post/analysis-of-source-code-printf/" class="prev" rel="prev" title="内核printf源代码分析"><i class="iconfont icon-dajiantou"></i>&nbsp;内核printf源代码分析</a>
+         
+        
+        <a href="https://air.googol.im/post/question-in-face-interview-of-microsoft/" class="next" rel="next" title="终于知道当初微软的面试题，我错在哪里了……">终于知道当初微软的面试题，我错在哪里了……&nbsp;<i class="iconfont icon-xiaojiantou"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+          <div id="disqus_thread"></div>
+  <script type="text/javascript">
+      (function() {
+          
+          
+          if (window.location.hostname == "localhost")
+              return;
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          var disqus_shortname = 'air-g';
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2004 - 2021</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://air.googol.im">Googol Lee</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>

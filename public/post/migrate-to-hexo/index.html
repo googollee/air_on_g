@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://air.googol.im/post/wired-golang/" />
+  <link rel="next" href="https://air.googol.im/post/why-goroutine-not-library/" />
+  <link rel="canonical" href="https://air.googol.im/post/migrate-to-hexo/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           迁移到HEXO | Air on G
+       
+  </title>
+  <meta name="title" content="迁移到HEXO | Air on G">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="迁移到HEXO"/>
+<meta name="twitter:description" content="前几天把这个blog的框架从jekyll迁移到了HEXO。因为会重新生成feed，uuid和原来的不一样，所以有刷屏，抱歉。"/>
+
+  <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "迁移到HEXO",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/air.googol.im\/post\/migrate-to-hexo\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/air.googol.im\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "post",
+  "keywords": "hexo, nodejs, ruby",
+  "wordcount":  18 ,
+  "url": "https:\/\/air.googol.im\/post\/migrate-to-hexo\/",
+  "datePublished": "2013-04-24T08:34:35\u002b08:00",
+  "dateModified": "2013-04-24T08:34:35\u002b08:00",
+  "license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Googol Lee",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/air.googol.im\/logo.png",
+      "width":  127 ,
+      "height":  40 
+    }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Googol Lee"
+  },
+  "description": ""
+}
+</script>
+</head>
+
+  
+
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://air.googol.im">Air on G</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/post/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/about" title="">About</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://air.googol.im">Air on G</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/post/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/about" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp">
+    <header class="post-header">
+        <h1 class="post-title">迁移到HEXO</h1>
+        <div class="post-meta">
+              <a href="https://air.googol.im" rel="author">Googol Lee</a>  ♥ 
+                <span class="post-time">
+                     <time datetime=2013-04-24 >2013-04-24</time>
+                </span>
+                
+                
+                <i class="iconfont icon-timer"></i>
+                1 min
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p>前几天把这个blog的框架从<a href="https://github.com/mojombo/jekyll">jekyll</a>迁移到了<a href="http://zespia.tw/hexo/">HEXO</a>。因为会重新生成feed，uuid和原来的不一样，所以有刷屏，抱歉。</p>
+<p>总体上，HEXO的完成度要比jekyll高。不过这么比并不公平：对应HEXO的应该是<a href="http://octopress.org">Octopress</a>。不过总体使用感受比jekyll好很多。</p>
+<p>因为HEXO是node.js上模仿Octopress的作品，而Octopress又是基于jekyll的，所以整个迁移过程十分顺畅，而且迁移后所有文章的URL都不会变化，Disque和Google Analytics的数据都不需要更新就可以直接合并过来，很爽。迁移后，RVM终于没有了存在的理由，删之。</p>
+<p>迁移的原因是，因为很久不写blog，也没更新ruby gem，jekyll已经落后主线版本很多。我在用的一个插件，在新版有bug无法正常执行，折腾了很久也没搞定，于是就决定换一个框架.</p>
+<p>本来开始想用Go的一套框架<a href="http://wendal.net/2013/0111.html">Gor</a>，down下来大概跑了一下，因为是编译后的bin，速度相当快。无奈功能还有欠缺，整个迁移目测要改的东西不少，于是放弃了。等养肥了再说。</p>
+<p>后来<a href="https://twitter.com/ilrcat/status/325092691882954752">@ilrcat</a> 推荐用HEXO，正巧这两天也在用node.js弄一些东西，于是就装了一下。速度比基于Ruby的jekyll快不少，虽然感觉还是比Gor慢一些，但是也够用了，而且迁移很快，于是就花了一晚上搞定。</p>
+<p>说到js，这种能执行出 <em>3755933696 | 0xffff != 3755933696</em> 的语言实在太可怕了！向所有写js的程序员致敬： <em>你们受</em> 苦了！</p>
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>:</span>
+                <span>Googol Lee </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                    <span>:</span>
+                   <span>18</span>
+            </p>
+
+            <p class="copyright-item">
+                
+                <span>:</span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fair.googol.im%2fpost%2fmigrate-to-hexo%2f&amp;text=%e8%bf%81%e7%a7%bb%e5%88%b0HEXO&amp;via=googollee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+
+</span>
+                
+            </p>
+
+             
+            <p class="copyright-item">
+                Released under <a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+            </p>
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>: 
+            
+            <span class="tag"><a href="https://air.googol.im/tags/hexo/">
+                    #hexo</a></span>
+            
+            <span class="tag"><a href="https://air.googol.im/tags/nodejs/">
+                    #nodejs</a></span>
+            
+            <span class="tag"><a href="https://air.googol.im/tags/ruby/">
+                    #ruby</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();"></a></span> · 
+                <span><a href="https://air.googol.im"></a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://air.googol.im/post/wired-golang/" class="prev" rel="prev" title="Go语言奇怪的特性"><i class="iconfont icon-dajiantou"></i>&nbsp;Go语言奇怪的特性</a>
+         
+        
+        <a href="https://air.googol.im/post/why-goroutine-not-library/" class="next" rel="next" title="为什么goroutine和channel不是以类库的形式存在——驳老赵《为什么我认为goroutine和channel是把别的平台上类库的功能内置在语言里》">为什么goroutine和channel不是以类库的形式存在——驳老赵《为什么我认为goroutine和channel是把别的平台上类库的功能内置在语言里》&nbsp;<i class="iconfont icon-xiaojiantou"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+          <div id="disqus_thread"></div>
+  <script type="text/javascript">
+      (function() {
+          
+          
+          if (window.location.hostname == "localhost")
+              return;
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          var disqus_shortname = 'air-g';
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2004 - 2021</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://air.googol.im">Googol Lee</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>

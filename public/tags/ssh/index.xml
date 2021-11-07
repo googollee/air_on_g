@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ssh on Air on G</title>
+    <link>https://air.googol.im/tags/ssh/</link>
+    <description>Recent content in ssh on Air on G</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Sat, 13 Mar 2010 20:00:00 +0800</lastBuildDate><atom:link href="https://air.googol.im/tags/ssh/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ssh退出失败，报错EPIPE</title>
+      <link>https://air.googol.im/post/ssh-quit-with-epipe/</link>
+      <pubDate>Sat, 13 Mar 2010 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/post/ssh-quit-with-epipe/</guid>
+      <description>&lt;p&gt;这两天帮同事看一个sshd退出时报错的问题。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>printf on Air on G</title>
+    <link>https://air.googol.im/tags/printf/</link>
+    <description>Recent content in printf on Air on G</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Mon, 18 Oct 2004 20:00:00 +0800</lastBuildDate><atom:link href="https://air.googol.im/tags/printf/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>内核printf源代码分析</title>
+      <link>https://air.googol.im/post/analysis-of-source-code-printf/</link>
+      <pubDate>Mon, 18 Oct 2004 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/post/analysis-of-source-code-printf/</guid>
+      <description>&lt;p&gt;对VC里printf的实现的分析。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Air on G</title>
+    <link>https://air.googol.im/tags/</link>
+    <description>Recent content in Tags on Air on G</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Sat, 21 Jul 2018 11:10:00 +0200</lastBuildDate><atom:link href="https://air.googol.im/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>go</title>
+      <link>https://air.googol.im/tags/go/</link>
+      <pubDate>Sat, 21 Jul 2018 11:10:00 +0200</pubDate>
+      
+      <guid>https://air.googol.im/tags/go/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>rust</title>
+      <link>https://air.googol.im/tags/rust/</link>
+      <pubDate>Sat, 21 Jul 2018 11:10:00 +0200</pubDate>
+      
+      <guid>https://air.googol.im/tags/rust/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>programming</title>
+      <link>https://air.googol.im/tags/programming/</link>
+      <pubDate>Mon, 01 May 2017 08:38:56 +0200</pubDate>
+      
+      <guid>https://air.googol.im/tags/programming/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>vim</title>
+      <link>https://air.googol.im/tags/vim/</link>
+      <pubDate>Mon, 01 May 2017 08:38:56 +0200</pubDate>
+      
+      <guid>https://air.googol.im/tags/vim/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>wsl</title>
+      <link>https://air.googol.im/tags/wsl/</link>
+      <pubDate>Mon, 01 May 2017 08:38:56 +0200</pubDate>
+      
+      <guid>https://air.googol.im/tags/wsl/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>book</title>
+      <link>https://air.googol.im/tags/book/</link>
+      <pubDate>Sun, 05 Mar 2017 21:06:19 -0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/book/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>golang</title>
+      <link>https://air.googol.im/tags/golang/</link>
+      <pubDate>Sun, 05 Mar 2017 21:06:19 -0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/golang/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>blog</title>
+      <link>https://air.googol.im/tags/blog/</link>
+      <pubDate>Sun, 19 Feb 2017 10:54:24 +0100</pubDate>
+      
+      <guid>https://air.googol.im/tags/blog/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>hugo</title>
+      <link>https://air.googol.im/tags/hugo/</link>
+      <pubDate>Sun, 19 Feb 2017 10:54:24 +0100</pubDate>
+      
+      <guid>https://air.googol.im/tags/hugo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>performance</title>
+      <link>https://air.googol.im/tags/performance/</link>
+      <pubDate>Fri, 28 Mar 2014 21:21:24 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/performance/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>docker</title>
+      <link>https://air.googol.im/tags/docker/</link>
+      <pubDate>Fri, 28 Mar 2014 19:46:44 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>operation</title>
+      <link>https://air.googol.im/tags/operation/</link>
+      <pubDate>Fri, 28 Mar 2014 19:46:44 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/operation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>concurrency</title>
+      <link>https://air.googol.im/tags/concurrency/</link>
+      <pubDate>Sat, 15 Mar 2014 10:52:46 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/concurrency/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>pattern</title>
+      <link>https://air.googol.im/tags/pattern/</link>
+      <pubDate>Sat, 15 Mar 2014 10:52:46 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/pattern/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>bigdata</title>
+      <link>https://air.googol.im/tags/bigdata/</link>
+      <pubDate>Tue, 11 Mar 2014 21:01:03 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/bigdata/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>business</title>
+      <link>https://air.googol.im/tags/business/</link>
+      <pubDate>Tue, 11 Mar 2014 21:01:03 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/business/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>instruction</title>
+      <link>https://air.googol.im/tags/instruction/</link>
+      <pubDate>Tue, 11 Mar 2014 21:01:03 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/instruction/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>atom</title>
+      <link>https://air.googol.im/tags/atom/</link>
+      <pubDate>Fri, 07 Mar 2014 01:20:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/atom/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>editor</title>
+      <link>https://air.googol.im/tags/editor/</link>
+      <pubDate>Fri, 07 Mar 2014 01:20:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/editor/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>go tip</title>
+      <link>https://air.googol.im/tags/go-tip/</link>
+      <pubDate>Sun, 12 Jan 2014 10:13:39 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/go-tip/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>restful</title>
+      <link>https://air.googol.im/tags/restful/</link>
+      <pubDate>Tue, 31 Dec 2013 10:48:24 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/restful/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>project management</title>
+      <link>https://air.googol.im/tags/project-management/</link>
+      <pubDate>Wed, 25 Sep 2013 22:48:15 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/project-management/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>startup</title>
+      <link>https://air.googol.im/tags/startup/</link>
+      <pubDate>Wed, 25 Sep 2013 22:48:15 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/startup/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>design</title>
+      <link>https://air.googol.im/tags/design/</link>
+      <pubDate>Tue, 17 Sep 2013 22:51:28 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/design/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>project</title>
+      <link>https://air.googol.im/tags/project/</link>
+      <pubDate>Tue, 17 Sep 2013 22:51:28 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/project/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>hexo</title>
+      <link>https://air.googol.im/tags/hexo/</link>
+      <pubDate>Wed, 24 Apr 2013 08:34:35 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/hexo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>nodejs</title>
+      <link>https://air.googol.im/tags/nodejs/</link>
+      <pubDate>Wed, 24 Apr 2013 08:34:35 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/nodejs/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ruby</title>
+      <link>https://air.googol.im/tags/ruby/</link>
+      <pubDate>Wed, 24 Apr 2013 08:34:35 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/ruby/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>security</title>
+      <link>https://air.googol.im/tags/security/</link>
+      <pubDate>Thu, 22 Dec 2011 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/security/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>code style</title>
+      <link>https://air.googol.im/tags/code-style/</link>
+      <pubDate>Sun, 20 Feb 2011 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/code-style/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>c</title>
+      <link>https://air.googol.im/tags/c/</link>
+      <pubDate>Sun, 18 Apr 2010 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/c/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>os</title>
+      <link>https://air.googol.im/tags/os/</link>
+      <pubDate>Sat, 13 Mar 2010 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/os/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>pthread</title>
+      <link>https://air.googol.im/tags/pthread/</link>
+      <pubDate>Sat, 13 Mar 2010 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/pthread/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ssh</title>
+      <link>https://air.googol.im/tags/ssh/</link>
+      <pubDate>Sat, 13 Mar 2010 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/ssh/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>cpp</title>
+      <link>https://air.googol.im/tags/cpp/</link>
+      <pubDate>Sat, 28 Nov 2009 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/cpp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>embedding</title>
+      <link>https://air.googol.im/tags/embedding/</link>
+      <pubDate>Sat, 28 Nov 2009 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/embedding/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>unittest</title>
+      <link>https://air.googol.im/tags/unittest/</link>
+      <pubDate>Sat, 28 Nov 2009 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/unittest/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>auto_ptr</title>
+      <link>https://air.googol.im/tags/auto_ptr/</link>
+      <pubDate>Sat, 07 Nov 2009 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/auto_ptr/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>cache</title>
+      <link>https://air.googol.im/tags/cache/</link>
+      <pubDate>Mon, 19 Oct 2009 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/cache/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>gio</title>
+      <link>https://air.googol.im/tags/gio/</link>
+      <pubDate>Mon, 19 Oct 2009 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/gio/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>queue</title>
+      <link>https://air.googol.im/tags/queue/</link>
+      <pubDate>Thu, 28 May 2009 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/queue/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>stack</title>
+      <link>https://air.googol.im/tags/stack/</link>
+      <pubDate>Thu, 28 May 2009 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/stack/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>python</title>
+      <link>https://air.googol.im/tags/python/</link>
+      <pubDate>Sat, 22 Sep 2007 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>y combinator</title>
+      <link>https://air.googol.im/tags/y-combinator/</link>
+      <pubDate>Sat, 22 Sep 2007 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/y-combinator/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>recurring</title>
+      <link>https://air.googol.im/tags/recurring/</link>
+      <pubDate>Tue, 03 Jul 2007 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/recurring/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>sharing</title>
+      <link>https://air.googol.im/tags/sharing/</link>
+      <pubDate>Tue, 03 Jul 2007 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/sharing/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>overload</title>
+      <link>https://air.googol.im/tags/overload/</link>
+      <pubDate>Wed, 13 Jun 2007 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/overload/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>new</title>
+      <link>https://air.googol.im/tags/new/</link>
+      <pubDate>Sat, 20 Jan 2007 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/new/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>interview</title>
+      <link>https://air.googol.im/tags/interview/</link>
+      <pubDate>Thu, 26 Oct 2006 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/interview/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>microsoft</title>
+      <link>https://air.googol.im/tags/microsoft/</link>
+      <pubDate>Thu, 26 Oct 2006 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/microsoft/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>mod</title>
+      <link>https://air.googol.im/tags/mod/</link>
+      <pubDate>Fri, 04 Feb 2005 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/mod/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>printf</title>
+      <link>https://air.googol.im/tags/printf/</link>
+      <pubDate>Mon, 18 Oct 2004 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/printf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>occ</title>
+      <link>https://air.googol.im/tags/occ/</link>
+      <pubDate>Thu, 23 Sep 2004 20:00:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/occ/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
