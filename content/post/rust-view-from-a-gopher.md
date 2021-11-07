@@ -84,7 +84,7 @@ func BenchmarkLongString(b *testing.B) {
 
 测试结果如下：
 
-```
+```sh
 $ go test -bench . -benchmem
 goos: darwin
 goarch: amd64
@@ -180,9 +180,7 @@ func ReadFull(r io.Reader, n int) (int, error)
 
 显然，Go的类型无法在语法上保证`ReadFull()`同时返回`int`和`error`。而同时返回两个值会造成调用者困惑：到底这是个正常返回，还是个错误？不要以为Go里常用`error`后置的约定，就不会出现这种情况。实际上Go标准库都无法防止这种情况[出现](https://godoc.org/io#Reader)：
 
-```
-When Read encounters an error or end-of-file condition after successfully reading n > 0 bytes, it returns the number of bytes read. It may return the (non-nil) error from the same call or return the error (and n == 0) from a subsequent call. An instance of this general case is that a Reader returning a non-zero number of bytes at the end of the input stream may return either err == EOF or err == nil. The next Read should return 0, EOF.
-```
+> When Read encounters an error or end-of-file condition after successfully reading n > 0 bytes, it returns the number of bytes read. It may return the (non-nil) error from the same call or return the error (and n == 0) from a subsequent call. An instance of this general case is that a Reader returning a non-zero number of bytes at the end of the input stream may return either err == EOF or err == nil. The next Read should return 0, EOF.
 
 而对这种类型错误的处理，简单处理可以直接`unwrap()`（后面会有展示），这里使用`match`是更精细的处理。由于`match`是个表达式而不是语句，所以可以使用下面的方法处理错误：
 
@@ -253,7 +251,7 @@ Rust本身为`&[u8]`类型实现了`Read`，所以可以直接将`data.as_bytes(
 
 测试结果：
 
-```bash
+```sh
 $ cargo bench
     Finished release [optimized] target(s) in 0.27s
      Running target/release/deps/rtnx-b3fb2c92c52ff0ff
