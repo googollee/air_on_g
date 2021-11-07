@@ -1,214 +1,164 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
+<html lang="zh">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://air.googol.im/post/question-in-face-interview-of-microsoft/" />
+  <link rel="next" href="https://air.googol.im/post/overload-in-cpp/" />
+  <link rel="canonical" href="https://air.googol.im/post/about-new-in-cpp/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           关于C&#43;&#43;中的new的一些处理 | Air on G
+       
+  </title>
+  <meta name="title" content="关于C&#43;&#43;中的new的一些处理 | Air on G">
     
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
 
 
-    
-        <meta name="twitter:card" content="summary"/>
-    
-
-
-
+  <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="关于C&#43;&#43;中的new的一些处理"/>
-<meta name="twitter:description" content=""/>
-<meta name="twitter:site" content="@googollee"/>
+<meta name="twitter:description" content="首先的一点是，C&#43;&#43;中new失败后，默认抛异常bad_alloc()，也就是说，判断返回值是否为NULL的方法在现代编译器面前毫无用处——判断执行之前，程序就随着异常的栈展开而销毁了！"/>
 
-
-
-  	<meta property="og:title" content="关于C&#43;&#43;中的new的一些处理 &middot; Air on G" />
-  	<meta property="og:site_name" content="Air on G" />
-  	<meta property="og:url" content="https://air.googol.im/post/about-new-in-cpp/" />
-    
-    
-        
-            <meta property="og:image" content="https://air.googol.im/images/cover.jpg"/>
-        
-    
-
-    
-    <meta property="og:description" content="" />
-  	<meta property="og:type" content="article" />
-    <meta property="og:image" content="https://air.googol.im/" />
-    <meta property="article:published_time" content="2007-01-20T20:00:00&#43;08:00" />
-
-    
-    <meta property="article:tag" content="cpp" />
-    
-    <meta property="article:tag" content="new" />
-    
-    
-
-    <title>关于C&#43;&#43;中的new的一些处理 &middot; Air on G</title>
-
-    
-    <meta name="description" content="" />
-    
-
-    <meta name="HandheldFriendly" content="True" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <link rel="shortcut icon" href="https://air.googol.im/images/favicon.ico">
-	  <link rel="apple-touch-icon" href="https://air.googol.im/images/apple-touch-icon.png" />
-
-    <link rel="stylesheet" type="text/css" href="https://air.googol.im/css/screen.css" />
-    <link rel="stylesheet" type="text/css" href="https://air.googol.im/css/nav.css" />
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Inconsolata" />
-
-    
-
-    
-      
-          <link href="https://air.googol.im/index.xml" rel="alternate" type="application/rss+xml" title="Air on G" />
-      
-      
-    
-    <meta name="generator" content="Hugo 0.89.1" />
-
-    <link rel="canonical" href="https://air.googol.im/post/about-new-in-cpp/" />
-
-    
-      
-    
-    <script type="application/ld+json">
+  <script type="application/ld+json">
 {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "publisher": {
-        "@type": "Organization",
-        "name":  null 
-    },
-    "author": {
-        "@type": "Person",
-        "name":  null ,
-        
-        "url": "https://air.googol.im",
-        "sameAs": [
-            
-            
-             
-             
-             
-             
-             
-            
-        ],
-        "description": "多年生软件工程师，信仰开源"
-        
-    },
-    "headline": "关于C++中的new的一些处理",
-    "name": "关于C++中的new的一些处理",
-    "wordCount":  90 ,
-    "timeRequired": "PT1M",
-    "inLanguage": {
-      "@type": "Language",
-      "alternateName": "en"
-    },
-    "url": "https://air.googol.im/post/about-new-in-cpp/",
-    "datePublished": "2007-01-20T20:00Z",
-    "dateModified": "2007-01-20T20:00Z",
-    
-    "keywords": "cpp, new",
-    "description": "",
-    "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://air.googol.im/post/about-new-in-cpp/"
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "关于C\u002b\u002b中的new的一些处理",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/air.googol.im\/post\/about-new-in-cpp\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/air.googol.im\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "post",
+  "keywords": "cpp, new",
+  "wordcount":  867 ,
+  "url": "https:\/\/air.googol.im\/post\/about-new-in-cpp\/",
+  "datePublished": "2007-01-20T20:00:00\u002b08:00",
+  "dateModified": "2007-01-20T20:00:00\u002b08:00",
+  "license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Googol Lee",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/air.googol.im\/logo.png",
+      "width":  127 ,
+      "height":  40 
     }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Googol Lee"
+  },
+  "description": ""
 }
-    </script>
-    
-
-
-    
-
-    
-
-    
+</script>
 </head>
-<body class="nav-closed">
-
-  <div class="nav">
-    <h3 class="nav-title">Menu</h3>
-    <a href="#" class="nav-close">
-        <span class="hidden">Close</span>
-    </a>
-    <ul>
-        
-        
-        
-            <h3>Follow me</h3>
-            <li class="nav-opened" role="presentation">
-            	<a href="https://github.com/googollee">Github repos</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://twitter.com/googollee">Twitter timeline</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
-            </li>
-        
-    </ul>
-    
-    
-    <a class="subscribe-button icon-feed" href="https://air.googol.im/index.xml">Subscribe</a>
-    
-</div>
-<span class="nav-cover"></span>
-
-
- <div class="site-wrapper">
-
-
-
-
-<header class="main-header post-head no-cover">
-  <nav class="main-nav clearfix">
-
 
   
-  
-      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
-  
-  </nav>
-</header>
 
 
 
-<main class="content" role="main">
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://air.googol.im">Air on G</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/post/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/about" title="">About</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://air.googol.im">Air on G</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/post/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/about" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
 
-
-
-
-  <article class="post post">
-
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp">
     <header class="post-header">
         <h1 class="post-title">关于C&#43;&#43;中的new的一些处理</h1>
-        <small></small>
-
-        <section class="post-meta">
-        
-          <time class="post-date" datetime="2007-01-20T20:00:00&#43;08:00">
-            Jan 20, 2007
-          </time>
-        
-         
-          <span class="post-tag small"><a href="https://air.googol.im/tags/cpp/">#cpp</a></span>
-         
-          <span class="post-tag small"><a href="https://air.googol.im/tags/new/">#new</a></span>
-         
-        </section>
+        <div class="post-meta">
+              <a href="https://air.googol.im" rel="author">Googol Lee</a>  ♥ 
+                <span class="post-time">
+                     <time datetime=2007-01-20 >2007-01-20</time>
+                </span>
+                
+                
+                <i class="iconfont icon-timer"></i>
+                2 min
+        </div>
     </header>
+    <div class="post-content">
+        
 
-    <section class="post-content">
-      <p>首先的一点是，C++中new失败后，默认抛异常bad_alloc()，也就是说，判断返回值是否为NULL的方法在现代编译器面前毫无用处——判断执行之前，程序就随着异常的栈展开而销毁了！</p>
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p>首先的一点是，C++中new失败后，默认抛异常bad_alloc()，也就是说，判断返回值是否为NULL的方法在现代编译器面前毫无用处——判断执行之前，程序就随着异常的栈展开而销毁了！</p>
 <p>用异常的好处，不用再反反复复的写对new失败的判断了，只用在一个地方捕获异常，即可判断程序中所有的这类情况。</p>
 <p>但是，另一方面，我们又很想知道是哪个地方，或者哪个类new失败了。这两个信息中，类new失败对程序的维护更加重要。因为如果一个类重载了new方法，那么new失败的情况很有可能是自己操作不当造成的。而普通的new失败信息，一般是内存用尽，这种情况与程序本身的逻辑没有关系（除非有不可饶恕的内存泄漏），因此知道具体的类，对程序的维护并无太大帮助。那好，这里就谈谈如何在new抛bad_alloc时，记录下一些特定的信息。</p>
 <p>new在失败后，并不是直接抛异常，而是会调用一个new_handler的回调函数，期待能让程序通过这个函数获得更多的可用内存。如果没有注册这个回调函数，或者这个函数调用后内存依旧不够用，才会抛异常。这个回调函数可以用set_new_handler来注册。大体流程如下：</p>
@@ -267,88 +217,154 @@
   badAllocClassName <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;MyClass&#34;</span>;
 }
 </code></pre></div><p>这样，当捕获到bad_alloc异常时，输出badAllocClassName的内容，就可以得到抛异常的类的名字了。</p>
-    </section>
-
-
-  <footer class="post-footer">
-
-
-    
-
-    
-
-
-
-
-
-<section class="author">
-  <h4><a href="https://air.googol.im/">Googol Lee</a></h4>
-  
-  <p>多年生软件工程师，信仰开源</p>
-  
-  <div class="author-meta">
-    <span class="author-location icon-location">Munich, Germany</span>
-    <span class="author-link icon-link"><a href="https://air.googol.im">https://air.googol.im</a></span>
-  </div>
-</section>
-
-
-
-    
-<section class="share">
-  <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=%e5%85%b3%e4%ba%8eC%2b%2b%e4%b8%ad%e7%9a%84new%e7%9a%84%e4%b8%80%e4%ba%9b%e5%a4%84%e7%90%86&nbsp;-&nbsp;Air%20on%20G&amp;url=https%3a%2f%2fair.googol.im%2fpost%2fabout-new-in-cpp%2f"
-      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-      <span class="hidden">Twitter</span>
-  </a>
-  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fair.googol.im%2fpost%2fabout-new-in-cpp%2f"
-      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-      <span class="hidden">Facebook</span>
-  </a>
-  <a class="icon-pinterest" style="font-size: 1.4em" href="http://pinterest.com/pin/create/button/?url=https%3a%2f%2fair.googol.im%2fpost%2fabout-new-in-cpp%2f&amp;description=%e5%85%b3%e4%ba%8eC%2b%2b%e4%b8%ad%e7%9a%84new%e7%9a%84%e4%b8%80%e4%ba%9b%e5%a4%84%e7%90%86"
-      onclick="window.open(this.href, 'pinterest-share','width=580,height=296');return false;">
-      <span class="hidden">Pinterest</span>
-  </a>
-  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=https%3a%2f%2fair.googol.im%2fpost%2fabout-new-in-cpp%2f"
-     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-      <span class="hidden">Google+</span>
-  </a>
-</section>
-
-
-
-    
-
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'air-g';
-  var disqus_url = 'https:\/\/air.googol.im\/post\/about-new-in-cpp\/';
-  (function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
-
-
-
-  </footer>
-</article>
-
-</main>
-    <footer class="site-footer clearfix">
-        <section class="copyright"><a href="">Air on G</a> 除非另有声明，本网站采用<a href='https://creativecommons.org/licenses/by-nd/3.0/cn/'>知识共享“署名-禁止演绎 3.0 中国大陆”许可协议</a>授权。</section>
-        
-        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
-        
-    </footer>
     </div>
-    <script type="text/javascript" src="https://air.googol.im/js/jquery.js"></script>
-    <script type="text/javascript" src="https://air.googol.im/js/jquery.fitvids.js"></script>
-    <script type="text/javascript" src="https://air.googol.im/js/index.js"></script>
-    
-</body>
-</html>
 
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>:</span>
+                <span>Googol Lee </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                    <span>:</span>
+                   <span>867</span>
+            </p>
+
+            <p class="copyright-item">
+                
+                <span>:</span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fair.googol.im%2fpost%2fabout-new-in-cpp%2f&amp;text=%e5%85%b3%e4%ba%8eC%2b%2b%e4%b8%ad%e7%9a%84new%e7%9a%84%e4%b8%80%e4%ba%9b%e5%a4%84%e7%90%86&amp;via=googollee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+
+</span>
+                
+            </p>
+
+             
+            <p class="copyright-item">
+                Released under <a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+            </p>
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>: 
+            
+            <span class="tag"><a href="https://air.googol.im/tags/cpp/">
+                    #cpp</a></span>
+            
+            <span class="tag"><a href="https://air.googol.im/tags/new/">
+                    #new</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();"></a></span> · 
+                <span><a href="https://air.googol.im"></a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://air.googol.im/post/question-in-face-interview-of-microsoft/" class="prev" rel="prev" title="终于知道当初微软的面试题，我错在哪里了……"><i class="iconfont icon-dajiantou"></i>&nbsp;终于知道当初微软的面试题，我错在哪里了……</a>
+         
+        
+        <a href="https://air.googol.im/post/overload-in-cpp/" class="next" rel="next" title="C&#43;&#43;中的重载问题">C&#43;&#43;中的重载问题&nbsp;<i class="iconfont icon-xiaojiantou"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+          <div id="disqus_thread"></div>
+  <script type="text/javascript">
+      (function() {
+          
+          
+          if (window.location.hostname == "localhost")
+              return;
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          var disqus_shortname = 'air-g';
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2004 - 2021</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://air.googol.im">Googol Lee</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>

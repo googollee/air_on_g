@@ -1,306 +1,321 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
+<html lang="zh">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://air.googol.im/post/guide-to-golang/" />
+  <link rel="next" href="https://air.googol.im/post/call-c-in-golang/" />
+  <link rel="canonical" href="https://air.googol.im/post/ssh-quit-with-epipe/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           ssh退出失败，报错EPIPE | Air on G
+       
+  </title>
+  <meta name="title" content="ssh退出失败，报错EPIPE | Air on G">
     
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
 
 
-    
-        <meta name="twitter:card" content="summary"/>
-    
-
-
-
+  <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="ssh退出失败，报错EPIPE"/>
-<meta name="twitter:description" content=""/>
-<meta name="twitter:site" content="@googollee"/>
+<meta name="twitter:description" content="这两天帮同事看一个sshd退出时报错的问题。"/>
 
-
-
-  	<meta property="og:title" content="ssh退出失败，报错EPIPE &middot; Air on G" />
-  	<meta property="og:site_name" content="Air on G" />
-  	<meta property="og:url" content="https://air.googol.im/post/ssh-quit-with-epipe/" />
-    
-    
-        
-            <meta property="og:image" content="https://air.googol.im/images/cover.jpg"/>
-        
-    
-
-    
-    <meta property="og:description" content="" />
-  	<meta property="og:type" content="article" />
-    <meta property="og:image" content="https://air.googol.im/" />
-    <meta property="article:published_time" content="2010-03-13T20:00:00&#43;08:00" />
-
-    
-    <meta property="article:tag" content="ssh" />
-    
-    <meta property="article:tag" content="os" />
-    
-    <meta property="article:tag" content="pthread" />
-    
-    
-
-    <title>ssh退出失败，报错EPIPE &middot; Air on G</title>
-
-    
-    <meta name="description" content="" />
-    
-
-    <meta name="HandheldFriendly" content="True" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <link rel="shortcut icon" href="https://air.googol.im/images/favicon.ico">
-	  <link rel="apple-touch-icon" href="https://air.googol.im/images/apple-touch-icon.png" />
-
-    <link rel="stylesheet" type="text/css" href="https://air.googol.im/css/screen.css" />
-    <link rel="stylesheet" type="text/css" href="https://air.googol.im/css/nav.css" />
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Inconsolata" />
-
-    
-
-    
-      
-          <link href="https://air.googol.im/index.xml" rel="alternate" type="application/rss+xml" title="Air on G" />
-      
-      
-    
-    <meta name="generator" content="Hugo 0.89.1" />
-
-    <link rel="canonical" href="https://air.googol.im/post/ssh-quit-with-epipe/" />
-
-    
-      
-    
-    <script type="application/ld+json">
+  <script type="application/ld+json">
 {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "publisher": {
-        "@type": "Organization",
-        "name":  null 
-    },
-    "author": {
-        "@type": "Person",
-        "name":  null ,
-        
-        "url": "https://air.googol.im",
-        "sameAs": [
-            
-            
-             
-             
-             
-             
-             
-            
-        ],
-        "description": "多年生软件工程师，信仰开源"
-        
-    },
-    "headline": "ssh退出失败，报错EPIPE",
-    "name": "ssh退出失败，报错EPIPE",
-    "wordCount":  20 ,
-    "timeRequired": "PT1M",
-    "inLanguage": {
-      "@type": "Language",
-      "alternateName": "en"
-    },
-    "url": "https://air.googol.im/post/ssh-quit-with-epipe/",
-    "datePublished": "2010-03-13T20:00Z",
-    "dateModified": "2010-03-13T20:00Z",
-    
-    "keywords": "ssh, os, pthread",
-    "description": "",
-    "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://air.googol.im/post/ssh-quit-with-epipe/"
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "ssh退出失败，报错EPIPE",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/air.googol.im\/post\/ssh-quit-with-epipe\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/air.googol.im\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "post",
+  "keywords": "ssh, os, pthread",
+  "wordcount":  1073 ,
+  "url": "https:\/\/air.googol.im\/post\/ssh-quit-with-epipe\/",
+  "datePublished": "2010-03-13T20:00:00\u002b08:00",
+  "dateModified": "2010-03-13T20:00:00\u002b08:00",
+  "license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Googol Lee",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/air.googol.im\/logo.png",
+      "width":  127 ,
+      "height":  40 
     }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Googol Lee"
+  },
+  "description": ""
 }
-    </script>
-    
-
-
-    
-
-    
-
-    
+</script>
 </head>
-<body class="nav-closed">
-
-  <div class="nav">
-    <h3 class="nav-title">Menu</h3>
-    <a href="#" class="nav-close">
-        <span class="hidden">Close</span>
-    </a>
-    <ul>
-        
-        
-        
-            <h3>Follow me</h3>
-            <li class="nav-opened" role="presentation">
-            	<a href="https://github.com/googollee">Github repos</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://twitter.com/googollee">Twitter timeline</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
-            </li>
-        
-    </ul>
-    
-    
-    <a class="subscribe-button icon-feed" href="https://air.googol.im/index.xml">Subscribe</a>
-    
-</div>
-<span class="nav-cover"></span>
-
-
- <div class="site-wrapper">
-
-
-
-
-<header class="main-header post-head no-cover">
-  <nav class="main-nav clearfix">
-
 
   
-  
-      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
-  
-  </nav>
-</header>
 
 
 
-<main class="content" role="main">
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://air.googol.im">Air on G</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/post/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/about" title="">About</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://air.googol.im">Air on G</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/post/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/about" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
 
-
-
-
-  <article class="post post">
-
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp">
     <header class="post-header">
         <h1 class="post-title">ssh退出失败，报错EPIPE</h1>
-        <small></small>
-
-        <section class="post-meta">
-        
-          <time class="post-date" datetime="2010-03-13T20:00:00&#43;08:00">
-            Mar 13, 2010
-          </time>
-        
-         
-          <span class="post-tag small"><a href="https://air.googol.im/tags/ssh/">#ssh</a></span>
-         
-          <span class="post-tag small"><a href="https://air.googol.im/tags/os/">#os</a></span>
-         
-          <span class="post-tag small"><a href="https://air.googol.im/tags/pthread/">#pthread</a></span>
-         
-        </section>
+        <div class="post-meta">
+              <a href="https://air.googol.im" rel="author">Googol Lee</a>  ♥ 
+                <span class="post-time">
+                     <time datetime=2010-03-13 >2010-03-13</time>
+                </span>
+                
+                
+                <i class="iconfont icon-timer"></i>
+                3 min
+        </div>
     </header>
+    <div class="post-content">
+        
 
-    <section class="post-content">
-      <p>这两天帮同事看一个sshd退出时报错的问题。</p>
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p>这两天帮同事看一个sshd退出时报错的问题。</p>
 <p>问题的产生比较复杂。sshd出于安全的目的，当有ssh连入的时候，会先fork出一个root sshd来接收请求，并通过nss来鉴别用户权限。之后会再fork出一个sshd并把uid改为用户的uid，之后这个uid的sshd会fork出csh或者其他的sh等待用户输入。用户的每次动作都会到nss上请求权限。退出的时候，这几个进程其实是互相独立着退出的。问题出现在退出时，root sshd试图访问nss，但是收到EPIPE信号，且retry也失败。</p>
 <p>原因是，申请对nss的链接的是root sshd，申请到nss链接后，会用atexit注册一个destory_fn的函数，并在这个函数里释放并销毁nss链接。而root sshd在fork uid sshd之后，两个进程同时持有同一个对nss的链接。这样在两个进程退出时，会对同一个链接释放两次。由于uid sshd动作比root sshd快一些，所以uid sshd对nss的释放是成功的，而root sshd由于还需要写一些和用户相关的logout信息，还需要查nss，导致了错误。</p>
 <p>仔细研究发现，通过fork创建的进程，会复制一份父进程的fd数组。不同进程的fd在内核里会指向同一个socket链接（内核对链接应该维护了一个类似引用技术的东西）。如果其中某个进程退出了，内核会再创建一个新的fd供未退出的进程使用。再细节的就要去看kernel源码了。</p>
 <p>但是由于uid sshd在退出时调用的destory_fn会通知nss服务器close链接，导致root sshd在对nss发送消息时会收到RST信号。这时虽然在root sshd里，nss的fd还存在，但已经处于关闭状态，自然再试图写的时候，就会得到EPIPE，而且由于retry只是对发送内容做retry，并没有重建链路的动作，因此也总是失败的。</p>
 <p>目前的解决方法是使用pthread_atfork，在fork后对子进程做操作，把注册到atexit的destory_fn函数替换成只释放本地fd，不要求对端close的版本。话说pthread_atfork都能勾系统的fork函数了，这应该不仅仅是个线程库了吧？</p>
 <p>后来发现，pthread_atfork在bsd的服务器上不起作用（不知道是bsd的原因还是api本身的原因）。解决的办法是，在申请链接的时候保存申请进程的pid，释放的时候检查本进程的pid与保存的pid是否一致。如果不一致就仅仅释放fd而不释放链接。只有pid一致的情况下才会释放链接，保证“谁申请谁释放”的原则。</p>
-    </section>
-
-
-  <footer class="post-footer">
-
-
-    
-
-    
-
-
-
-
-
-<section class="author">
-  <h4><a href="https://air.googol.im/">Googol Lee</a></h4>
-  
-  <p>多年生软件工程师，信仰开源</p>
-  
-  <div class="author-meta">
-    <span class="author-location icon-location">Munich, Germany</span>
-    <span class="author-link icon-link"><a href="https://air.googol.im">https://air.googol.im</a></span>
-  </div>
-</section>
-
-
-
-    
-<section class="share">
-  <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=ssh%e9%80%80%e5%87%ba%e5%a4%b1%e8%b4%a5%ef%bc%8c%e6%8a%a5%e9%94%99EPIPE&nbsp;-&nbsp;Air%20on%20G&amp;url=https%3a%2f%2fair.googol.im%2fpost%2fssh-quit-with-epipe%2f"
-      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-      <span class="hidden">Twitter</span>
-  </a>
-  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fair.googol.im%2fpost%2fssh-quit-with-epipe%2f"
-      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-      <span class="hidden">Facebook</span>
-  </a>
-  <a class="icon-pinterest" style="font-size: 1.4em" href="http://pinterest.com/pin/create/button/?url=https%3a%2f%2fair.googol.im%2fpost%2fssh-quit-with-epipe%2f&amp;description=ssh%e9%80%80%e5%87%ba%e5%a4%b1%e8%b4%a5%ef%bc%8c%e6%8a%a5%e9%94%99EPIPE"
-      onclick="window.open(this.href, 'pinterest-share','width=580,height=296');return false;">
-      <span class="hidden">Pinterest</span>
-  </a>
-  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=https%3a%2f%2fair.googol.im%2fpost%2fssh-quit-with-epipe%2f"
-     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-      <span class="hidden">Google+</span>
-  </a>
-</section>
-
-
-
-    
-
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'air-g';
-  var disqus_url = 'https:\/\/air.googol.im\/post\/ssh-quit-with-epipe\/';
-  (function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
-
-
-
-  </footer>
-</article>
-
-</main>
-    <footer class="site-footer clearfix">
-        <section class="copyright"><a href="">Air on G</a> 除非另有声明，本网站采用<a href='https://creativecommons.org/licenses/by-nd/3.0/cn/'>知识共享“署名-禁止演绎 3.0 中国大陆”许可协议</a>授权。</section>
-        
-        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
-        
-    </footer>
     </div>
-    <script type="text/javascript" src="https://air.googol.im/js/jquery.js"></script>
-    <script type="text/javascript" src="https://air.googol.im/js/jquery.fitvids.js"></script>
-    <script type="text/javascript" src="https://air.googol.im/js/index.js"></script>
-    
-</body>
-</html>
 
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>:</span>
+                <span>Googol Lee </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                    <span>:</span>
+                   <span>1073</span>
+            </p>
+
+            <p class="copyright-item">
+                
+                <span>:</span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fair.googol.im%2fpost%2fssh-quit-with-epipe%2f&amp;text=ssh%e9%80%80%e5%87%ba%e5%a4%b1%e8%b4%a5%ef%bc%8c%e6%8a%a5%e9%94%99EPIPE&amp;via=googollee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+
+</span>
+                
+            </p>
+
+             
+            <p class="copyright-item">
+                Released under <a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+            </p>
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>: 
+            
+            <span class="tag"><a href="https://air.googol.im/tags/ssh/">
+                    #ssh</a></span>
+            
+            <span class="tag"><a href="https://air.googol.im/tags/os/">
+                    #os</a></span>
+            
+            <span class="tag"><a href="https://air.googol.im/tags/pthread/">
+                    #pthread</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();"></a></span> · 
+                <span><a href="https://air.googol.im"></a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://air.googol.im/post/guide-to-golang/" class="prev" rel="prev" title="Golang初探"><i class="iconfont icon-dajiantou"></i>&nbsp;Golang初探</a>
+         
+        
+        <a href="https://air.googol.im/post/call-c-in-golang/" class="next" rel="next" title="Golang里调用C">Golang里调用C&nbsp;<i class="iconfont icon-xiaojiantou"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+          <div id="disqus_thread"></div>
+  <script type="text/javascript">
+      (function() {
+          
+          
+          if (window.location.hostname == "localhost")
+              return;
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          var disqus_shortname = 'air-g';
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2004 - 2021</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://air.googol.im">Googol Lee</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>

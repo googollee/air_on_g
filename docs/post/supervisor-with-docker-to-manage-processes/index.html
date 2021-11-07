@@ -1,216 +1,168 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
+<html lang="zh">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://air.googol.im/post/go-concurrency-patterns-pipelines-and-cancellation/" />
+  <link rel="next" href="https://air.googol.im/post/contiguous-stacks-in-go/" />
+  <link rel="canonical" href="https://air.googol.im/post/supervisor-with-docker-to-manage-processes/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           在Docker里使用（支持镜像继承的）supervisor管理进程 | Air on G
+       
+  </title>
+  <meta name="title" content="在Docker里使用（支持镜像继承的）supervisor管理进程 | Air on G">
     
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
 
 
-    
-        <meta name="twitter:card" content="summary"/>
-    
-
-
-
+  <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="在Docker里使用（支持镜像继承的）supervisor管理进程"/>
-<meta name="twitter:description" content=""/>
-<meta name="twitter:site" content="@googollee"/>
+<meta name="twitter:description" content="这篇文章是受Dockboard之托帮忙翻译的与docker有关的技术文章。Dockboard致力于在中国建立一个Docker技术的开放社区。"/>
 
-
-
-  	<meta property="og:title" content="在Docker里使用（支持镜像继承的）supervisor管理进程 &middot; Air on G" />
-  	<meta property="og:site_name" content="Air on G" />
-  	<meta property="og:url" content="https://air.googol.im/post/supervisor-with-docker-to-manage-processes/" />
-    
-    
-        
-            <meta property="og:image" content="https://air.googol.im/images/cover.jpg"/>
-        
-    
-
-    
-    <meta property="og:description" content="" />
-  	<meta property="og:type" content="article" />
-    <meta property="og:image" content="https://air.googol.im/" />
-    <meta property="article:published_time" content="2014-03-28T19:46:44&#43;08:00" />
-
-    
-    <meta property="article:tag" content="docker" />
-    
-    <meta property="article:tag" content="operation" />
-    
-    
-
-    <title>在Docker里使用（支持镜像继承的）supervisor管理进程 &middot; Air on G</title>
-
-    
-    <meta name="description" content="" />
-    
-
-    <meta name="HandheldFriendly" content="True" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <link rel="shortcut icon" href="https://air.googol.im/images/favicon.ico">
-	  <link rel="apple-touch-icon" href="https://air.googol.im/images/apple-touch-icon.png" />
-
-    <link rel="stylesheet" type="text/css" href="https://air.googol.im/css/screen.css" />
-    <link rel="stylesheet" type="text/css" href="https://air.googol.im/css/nav.css" />
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Inconsolata" />
-
-    
-
-    
-      
-          <link href="https://air.googol.im/index.xml" rel="alternate" type="application/rss+xml" title="Air on G" />
-      
-      
-    
-    <meta name="generator" content="Hugo 0.89.1" />
-
-    <link rel="canonical" href="https://air.googol.im/post/supervisor-with-docker-to-manage-processes/" />
-
-    
-      
-    
-    <script type="application/ld+json">
+  <script type="application/ld+json">
 {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "publisher": {
-        "@type": "Organization",
-        "name":  null 
-    },
-    "author": {
-        "@type": "Person",
-        "name":  null ,
-        
-        "url": "https://air.googol.im",
-        "sameAs": [
-            
-            
-             
-             
-             
-             
-             
-            
-        ],
-        "description": "多年生软件工程师，信仰开源"
-        
-    },
-    "headline": "在Docker里使用（支持镜像继承的）supervisor管理进程",
-    "name": "在Docker里使用（支持镜像继承的）supervisor管理进程",
-    "wordCount":  163 ,
-    "timeRequired": "PT1M",
-    "inLanguage": {
-      "@type": "Language",
-      "alternateName": "en"
-    },
-    "url": "https://air.googol.im/post/supervisor-with-docker-to-manage-processes/",
-    "datePublished": "2014-03-28T19:46Z",
-    "dateModified": "2014-03-28T19:46Z",
-    
-    "keywords": "docker, operation",
-    "description": "",
-    "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://air.googol.im/post/supervisor-with-docker-to-manage-processes/"
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "在Docker里使用（支持镜像继承的）supervisor管理进程",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/air.googol.im\/post\/supervisor-with-docker-to-manage-processes\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/air.googol.im\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "post",
+  "keywords": "docker, operation",
+  "wordcount":  3062 ,
+  "url": "https:\/\/air.googol.im\/post\/supervisor-with-docker-to-manage-processes\/",
+  "datePublished": "2014-03-28T19:46:44\u002b08:00",
+  "dateModified": "2014-03-28T19:46:44\u002b08:00",
+  "license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Googol Lee",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/air.googol.im\/logo.png",
+      "width":  127 ,
+      "height":  40 
     }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Googol Lee"
+  },
+  "description": ""
 }
-    </script>
-    
-
-
-    
-
-    
-
-    
+</script>
 </head>
-<body class="nav-closed">
-
-  <div class="nav">
-    <h3 class="nav-title">Menu</h3>
-    <a href="#" class="nav-close">
-        <span class="hidden">Close</span>
-    </a>
-    <ul>
-        
-        
-        
-            <h3>Follow me</h3>
-            <li class="nav-opened" role="presentation">
-            	<a href="https://github.com/googollee">Github repos</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://twitter.com/googollee">Twitter timeline</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
-            </li>
-        
-    </ul>
-    
-    
-    <a class="subscribe-button icon-feed" href="https://air.googol.im/index.xml">Subscribe</a>
-    
-</div>
-<span class="nav-cover"></span>
-
-
- <div class="site-wrapper">
-
-
-
-
-<header class="main-header post-head no-cover">
-  <nav class="main-nav clearfix">
-
 
   
-  
-      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
-  
-  </nav>
-</header>
 
 
 
-<main class="content" role="main">
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://air.googol.im">Air on G</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/post/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/about" title="">About</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://air.googol.im">Air on G</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/post/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/about" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
 
-
-
-
-  <article class="post post">
-
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp">
     <header class="post-header">
         <h1 class="post-title">在Docker里使用（支持镜像继承的）supervisor管理进程</h1>
-        <small></small>
-
-        <section class="post-meta">
-        
-          <time class="post-date" datetime="2014-03-28T19:46:44&#43;08:00">
-            Mar 28, 2014
-          </time>
-        
-         
-          <span class="post-tag small"><a href="https://air.googol.im/tags/docker/">#docker</a></span>
-         
-          <span class="post-tag small"><a href="https://air.googol.im/tags/operation/">#operation</a></span>
-         
-        </section>
+        <div class="post-meta">
+              <a href="https://air.googol.im" rel="author">Googol Lee</a>  ♥ 
+                <span class="post-time">
+                     <time datetime=2014-03-28 >2014-03-28</time>
+                </span>
+                
+                
+                <i class="iconfont icon-timer"></i>
+                7 min
+        </div>
     </header>
+    <div class="post-content">
+        
 
-    <section class="post-content">
-      <p>这篇文章是受<a href="http://dockboard.org">Dockboard</a>之托帮忙翻译的与docker有关的技术文章。<a href="http://dockboard.org">Dockboard</a>致力于在中国建立一个Docker技术的开放社区。</p>
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p>这篇文章是受<a href="http://dockboard.org">Dockboard</a>之托帮忙翻译的与docker有关的技术文章。<a href="http://dockboard.org">Dockboard</a>致力于在中国建立一个Docker技术的开放社区。</p>
 <p>本文译自<a href="http://blog.trifork.com/2014/03/11/using-supervisor-with-docker-to-manage-processes-supporting-image-inheritance">Using Supervisor with Docker to manage processes (supporting image inheritance)</a>，作者Quinten Krijger。</p>
-<p><img src="http://blog.trifork.com/wp-content/uploads/2013/08/Docker-logo.png" alt="Docker-logo"></p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="http://blog.trifork.com/wp-content/uploads/2013/08/Docker-logo.png" alt="Docker-logo" class="lazyload"><figcaption class="image-caption">Docker-logo</figcaption></figure></p>
 <p>在八月份，我写了一篇关于如何创建tomcat镜像的<a href="http://blog.trifork.com/2013/08/15/using-docker-to-efficiently-create-multiple-tomcat-instances/">blog</a>。从那以后，docker又改进了很多，我对docker的了解也增加了很多。我很高兴和你分们享我找到的关于管理container进程的好办法。在读完这篇文章后，我希望你能善加利用我<a href="https://github.com/Krijger/docker-cookbooks">github仓库</a>里的supervisor镜像。</p>
 <h2 id="docker命令">Docker命令</h2>
 <p>在之前的文章里，我提到Docker（只能）支持运行一个前台进程。我们通常习惯使用类似upstart这种管理服务来初始化启动流程，但是Docker默认没有这些服务的支持。刚开始使用Docker时会很不习惯，你必须指定你想要运行的进程。这种行为和虚拟机相比有个优点，会尽可能的保持轻量的container。你可以通过run命令最后的参数，在启动container时指定进程命令，比如：</p>
@@ -246,7 +198,7 @@ files = /etc/supervisor/conf.d/*.conf
 </code></pre>
 <p>这个配置让supervisor本身以前台进程运行，这样可以让我们的container启动后持续运行。第二，这个配置将包含所有在<code>/etc/supervisor/conf.d/</code>目录下的配置文件，启动任何在这里定义的程序。</p>
 <h2 id="扩展基础镜像">扩展基础镜像</h2>
-<p><img src="http://blog.trifork.com/wp-content/uploads/2014/02/tomcat-stack-164x300.png" alt="tomcat-stack"></p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="http://blog.trifork.com/wp-content/uploads/2014/02/tomcat-stack-164x300.png" alt="tomcat-stack" class="lazyload"><figcaption class="image-caption">tomcat-stack</figcaption></figure></p>
 <p>是的，想法很简单。所有的子container通过将特定的service.sv.conf放到特定的目录的方式，将其自己的服务加入到supervisor的管理里。之后，使用如下命令启动container：</p>
 <pre><code>docker run child_image_name &quot;supervisor -c /etc/supervisor.conf&quot;
 </code></pre>
@@ -302,88 +254,155 @@ CMD supervisord -c /etc/supervisor.conf
 <pre><code>elastic.unicast.hosts=${ELASTICSEARCH_SERVER_URL}
 </code></pre>
 <p>这样就可以将配置暴露给你的应用程序。如果你是个Java开发者，并且也阅读了前一篇文章，希望这让你能开始一段愉快的代码之旅。</p>
-    </section>
-
-
-  <footer class="post-footer">
-
-
-    
-
-    
-
-
-
-
-
-<section class="author">
-  <h4><a href="https://air.googol.im/">Googol Lee</a></h4>
-  
-  <p>多年生软件工程师，信仰开源</p>
-  
-  <div class="author-meta">
-    <span class="author-location icon-location">Munich, Germany</span>
-    <span class="author-link icon-link"><a href="https://air.googol.im">https://air.googol.im</a></span>
-  </div>
-</section>
-
-
-
-    
-<section class="share">
-  <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=%e5%9c%a8Docker%e9%87%8c%e4%bd%bf%e7%94%a8%ef%bc%88%e6%94%af%e6%8c%81%e9%95%9c%e5%83%8f%e7%bb%a7%e6%89%bf%e7%9a%84%ef%bc%89supervisor%e7%ae%a1%e7%90%86%e8%bf%9b%e7%a8%8b&nbsp;-&nbsp;Air%20on%20G&amp;url=https%3a%2f%2fair.googol.im%2fpost%2fsupervisor-with-docker-to-manage-processes%2f"
-      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-      <span class="hidden">Twitter</span>
-  </a>
-  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fair.googol.im%2fpost%2fsupervisor-with-docker-to-manage-processes%2f"
-      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-      <span class="hidden">Facebook</span>
-  </a>
-  <a class="icon-pinterest" style="font-size: 1.4em" href="http://pinterest.com/pin/create/button/?url=https%3a%2f%2fair.googol.im%2fpost%2fsupervisor-with-docker-to-manage-processes%2f&amp;description=%e5%9c%a8Docker%e9%87%8c%e4%bd%bf%e7%94%a8%ef%bc%88%e6%94%af%e6%8c%81%e9%95%9c%e5%83%8f%e7%bb%a7%e6%89%bf%e7%9a%84%ef%bc%89supervisor%e7%ae%a1%e7%90%86%e8%bf%9b%e7%a8%8b"
-      onclick="window.open(this.href, 'pinterest-share','width=580,height=296');return false;">
-      <span class="hidden">Pinterest</span>
-  </a>
-  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=https%3a%2f%2fair.googol.im%2fpost%2fsupervisor-with-docker-to-manage-processes%2f"
-     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-      <span class="hidden">Google+</span>
-  </a>
-</section>
-
-
-
-    
-
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'air-g';
-  var disqus_url = 'https:\/\/air.googol.im\/post\/supervisor-with-docker-to-manage-processes\/';
-  (function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
-
-
-
-  </footer>
-</article>
-
-</main>
-    <footer class="site-footer clearfix">
-        <section class="copyright"><a href="">Air on G</a> 除非另有声明，本网站采用<a href='https://creativecommons.org/licenses/by-nd/3.0/cn/'>知识共享“署名-禁止演绎 3.0 中国大陆”许可协议</a>授权。</section>
-        
-        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
-        
-    </footer>
     </div>
-    <script type="text/javascript" src="https://air.googol.im/js/jquery.js"></script>
-    <script type="text/javascript" src="https://air.googol.im/js/jquery.fitvids.js"></script>
-    <script type="text/javascript" src="https://air.googol.im/js/index.js"></script>
-    
-</body>
-</html>
 
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>:</span>
+                <span>Googol Lee </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                    <span>:</span>
+                   <span>3062</span>
+            </p>
+
+            <p class="copyright-item">
+                
+                <span>:</span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fair.googol.im%2fpost%2fsupervisor-with-docker-to-manage-processes%2f&amp;text=%e5%9c%a8Docker%e9%87%8c%e4%bd%bf%e7%94%a8%ef%bc%88%e6%94%af%e6%8c%81%e9%95%9c%e5%83%8f%e7%bb%a7%e6%89%bf%e7%9a%84%ef%bc%89supervisor%e7%ae%a1%e7%90%86%e8%bf%9b%e7%a8%8b&amp;via=googollee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+
+</span>
+                
+            </p>
+
+             
+            <p class="copyright-item">
+                Released under <a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+            </p>
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>: 
+            
+            <span class="tag"><a href="https://air.googol.im/tags/docker/">
+                    #docker</a></span>
+            
+            <span class="tag"><a href="https://air.googol.im/tags/operation/">
+                    #operation</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();"></a></span> · 
+                <span><a href="https://air.googol.im"></a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://air.googol.im/post/go-concurrency-patterns-pipelines-and-cancellation/" class="prev" rel="prev" title="Go并发模式：管道和取消"><i class="iconfont icon-dajiantou"></i>&nbsp;Go并发模式：管道和取消</a>
+         
+        
+        <a href="https://air.googol.im/post/contiguous-stacks-in-go/" class="next" rel="next" title="Go中的连续栈">Go中的连续栈&nbsp;<i class="iconfont icon-xiaojiantou"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+          <div id="disqus_thread"></div>
+  <script type="text/javascript">
+      (function() {
+          
+          
+          if (window.location.hostname == "localhost")
+              return;
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          var disqus_shortname = 'air-g';
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2004 - 2021</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://air.googol.im">Googol Lee</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    <link crossorigin="anonymous" integrity="sha384-yziQACfvCVwLqVFLqkWBYRO3XeA4EqzfXKGwaWnenYn5XzqfJFlFdKEmvutIQdKb" href="https://lib.baomitu.com/lightgallery/1.10.0/css/lightgallery.min.css" rel="stylesheet">
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>

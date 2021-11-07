@@ -1,3 +1,5 @@
+publishDir = "docs"
+
 baseURL = "https://air.googol.im"
 languageCode = "zh"
 defaultContentLanguage = "zh"
@@ -9,6 +11,7 @@ enableEmoji = true
 enableRobotsTXT = true
 googleAnalytics = ""
 disqusShortname = "air-g"
+hasCJKLanguage = true
 
 # Used only for Seo schema
 copyright = "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License."

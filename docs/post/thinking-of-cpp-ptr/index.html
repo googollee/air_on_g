@@ -1,214 +1,164 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
+<html lang="zh">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://air.googol.im/post/optimize-for-continous-reading/" />
+  <link rel="next" href="https://air.googol.im/post/simple-unittest-framework/" />
+  <link rel="canonical" href="https://air.googol.im/post/thinking-of-cpp-ptr/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           关于C&#43;&#43;智能指针的思考 | Air on G
+       
+  </title>
+  <meta name="title" content="关于C&#43;&#43;智能指针的思考 | Air on G">
     
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
 
 
-    
-        <meta name="twitter:card" content="summary"/>
-    
-
-
-
+  <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="关于C&#43;&#43;智能指针的思考"/>
-<meta name="twitter:description" content=""/>
-<meta name="twitter:site" content="@googollee"/>
+<meta name="twitter:description" content="最近在公司的项目里开始实践用C&#43;&#43;的析构来自动释放已申请的指针，同时保证程序的效率不变。"/>
 
-
-
-  	<meta property="og:title" content="关于C&#43;&#43;智能指针的思考 &middot; Air on G" />
-  	<meta property="og:site_name" content="Air on G" />
-  	<meta property="og:url" content="https://air.googol.im/post/thinking-of-cpp-ptr/" />
-    
-    
-        
-            <meta property="og:image" content="https://air.googol.im/images/cover.jpg"/>
-        
-    
-
-    
-    <meta property="og:description" content="" />
-  	<meta property="og:type" content="article" />
-    <meta property="og:image" content="https://air.googol.im/" />
-    <meta property="article:published_time" content="2009-11-07T20:00:00&#43;08:00" />
-
-    
-    <meta property="article:tag" content="cpp" />
-    
-    <meta property="article:tag" content="auto_ptr" />
-    
-    
-
-    <title>关于C&#43;&#43;智能指针的思考 &middot; Air on G</title>
-
-    
-    <meta name="description" content="" />
-    
-
-    <meta name="HandheldFriendly" content="True" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <link rel="shortcut icon" href="https://air.googol.im/images/favicon.ico">
-	  <link rel="apple-touch-icon" href="https://air.googol.im/images/apple-touch-icon.png" />
-
-    <link rel="stylesheet" type="text/css" href="https://air.googol.im/css/screen.css" />
-    <link rel="stylesheet" type="text/css" href="https://air.googol.im/css/nav.css" />
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Inconsolata" />
-
-    
-
-    
-      
-          <link href="https://air.googol.im/index.xml" rel="alternate" type="application/rss+xml" title="Air on G" />
-      
-      
-    
-    <meta name="generator" content="Hugo 0.89.1" />
-
-    <link rel="canonical" href="https://air.googol.im/post/thinking-of-cpp-ptr/" />
-
-    
-      
-    
-    <script type="application/ld+json">
+  <script type="application/ld+json">
 {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "publisher": {
-        "@type": "Organization",
-        "name":  null 
-    },
-    "author": {
-        "@type": "Person",
-        "name":  null ,
-        
-        "url": "https://air.googol.im",
-        "sameAs": [
-            
-            
-             
-             
-             
-             
-             
-            
-        ],
-        "description": "多年生软件工程师，信仰开源"
-        
-    },
-    "headline": "关于C++智能指针的思考",
-    "name": "关于C++智能指针的思考",
-    "wordCount":  64 ,
-    "timeRequired": "PT1M",
-    "inLanguage": {
-      "@type": "Language",
-      "alternateName": "en"
-    },
-    "url": "https://air.googol.im/post/thinking-of-cpp-ptr/",
-    "datePublished": "2009-11-07T20:00Z",
-    "dateModified": "2009-11-07T20:00Z",
-    
-    "keywords": "cpp, auto_ptr",
-    "description": "",
-    "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://air.googol.im/post/thinking-of-cpp-ptr/"
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "关于C\u002b\u002b智能指针的思考",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/air.googol.im\/post\/thinking-of-cpp-ptr\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/air.googol.im\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "post",
+  "keywords": "cpp, auto_ptr",
+  "wordcount":  1104 ,
+  "url": "https:\/\/air.googol.im\/post\/thinking-of-cpp-ptr\/",
+  "datePublished": "2009-11-07T20:00:00\u002b08:00",
+  "dateModified": "2009-11-07T20:00:00\u002b08:00",
+  "license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Googol Lee",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/air.googol.im\/logo.png",
+      "width":  127 ,
+      "height":  40 
     }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Googol Lee"
+  },
+  "description": ""
 }
-    </script>
-    
-
-
-    
-
-    
-
-    
+</script>
 </head>
-<body class="nav-closed">
-
-  <div class="nav">
-    <h3 class="nav-title">Menu</h3>
-    <a href="#" class="nav-close">
-        <span class="hidden">Close</span>
-    </a>
-    <ul>
-        
-        
-        
-            <h3>Follow me</h3>
-            <li class="nav-opened" role="presentation">
-            	<a href="https://github.com/googollee">Github repos</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://twitter.com/googollee">Twitter timeline</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
-            </li>
-        
-    </ul>
-    
-    
-    <a class="subscribe-button icon-feed" href="https://air.googol.im/index.xml">Subscribe</a>
-    
-</div>
-<span class="nav-cover"></span>
-
-
- <div class="site-wrapper">
-
-
-
-
-<header class="main-header post-head no-cover">
-  <nav class="main-nav clearfix">
-
 
   
-  
-      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
-  
-  </nav>
-</header>
 
 
 
-<main class="content" role="main">
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://air.googol.im">Air on G</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/post/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/about" title="">About</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://air.googol.im">Air on G</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/post/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/about" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
 
-
-
-
-  <article class="post post">
-
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp">
     <header class="post-header">
         <h1 class="post-title">关于C&#43;&#43;智能指针的思考</h1>
-        <small></small>
-
-        <section class="post-meta">
-        
-          <time class="post-date" datetime="2009-11-07T20:00:00&#43;08:00">
-            Nov 7, 2009
-          </time>
-        
-         
-          <span class="post-tag small"><a href="https://air.googol.im/tags/cpp/">#cpp</a></span>
-         
-          <span class="post-tag small"><a href="https://air.googol.im/tags/auto_ptr/">#auto_ptr</a></span>
-         
-        </section>
+        <div class="post-meta">
+              <a href="https://air.googol.im" rel="author">Googol Lee</a>  ♥ 
+                <span class="post-time">
+                     <time datetime=2009-11-07 >2009-11-07</time>
+                </span>
+                
+                
+                <i class="iconfont icon-timer"></i>
+                3 min
+        </div>
     </header>
+    <div class="post-content">
+        
 
-    <section class="post-content">
-      <p>最近在公司的项目里开始实践用C++的析构来自动释放已申请的指针，同时保证程序的效率不变。</p>
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p>最近在公司的项目里开始实践用C++的析构来自动释放已申请的指针，同时保证程序的效率不变。</p>
 <p>由于要使用C库，因此自己写了三个类：local_ptr，local_ptr_f，auto_ptr_f。其中第一个类是类似std::autor_ptr，只是没有拷贝构造函数和赋值构造函数，只能本地使用。两个带_f后缀的，在构造时分别多了一个用于释放内存的函数做参数，目的是可以自动管理C的内存分配。</p>
 <p>为什么不直接用boost::share_ptr？首先，我觉得引用计数这东西在大部分场合用不到。用到的时候，也应该作为确认实例生命周期的工具而存在（比如类似COM的应用），而不是成为指针的一部分；另一方面，虽然引用计数引入的操作不多，但是蚂蚁啃大象，直接使用share_ptr会在不知不觉中引入很多没必要的计数操作，降低效率（记得许老大的blog上有提到过这种情况）。尤其是将share_ptr直接扔到container里的行为，在我看来，这简直就是对C/C++追求效率的宗旨的肆意践踏！先不说多出来的内存占用量，由于container自身一些调整行为导致的引用计数操作，简直就是不可预测的！</p>
 <p>由于没有了share_ptr，weak_ptr自然也就没有存在的必要了。对于不释放的内存引用，直接用原生指针就行。对于不需要在函数间传递的内存引用，使用local_ptr/local_ptr_f，例如：</p>
@@ -243,88 +193,154 @@
 </code></pre></div><p>和</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">local_ptr_f<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">char</span><span style="color:#f92672">&gt;</span> str(strdup(...), free);
 </code></pre></div><p>就我自己的感觉，在一堆堆的代码里，前者因为有“=”的存在，能更轻易的被发现，而且现代编辑器可能还会用特殊的颜色标识出来。而后者会和函数调用等语句混在一起，不利于阅读。目前没有想到解决办法。另一个不好的地方是，会把变量初始化的语句写的很长。这个可以通过适当的折行来缩短，不算什么太大的问题。</p>
-    </section>
-
-
-  <footer class="post-footer">
-
-
-    
-
-    
-
-
-
-
-
-<section class="author">
-  <h4><a href="https://air.googol.im/">Googol Lee</a></h4>
-  
-  <p>多年生软件工程师，信仰开源</p>
-  
-  <div class="author-meta">
-    <span class="author-location icon-location">Munich, Germany</span>
-    <span class="author-link icon-link"><a href="https://air.googol.im">https://air.googol.im</a></span>
-  </div>
-</section>
-
-
-
-    
-<section class="share">
-  <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=%e5%85%b3%e4%ba%8eC%2b%2b%e6%99%ba%e8%83%bd%e6%8c%87%e9%92%88%e7%9a%84%e6%80%9d%e8%80%83&nbsp;-&nbsp;Air%20on%20G&amp;url=https%3a%2f%2fair.googol.im%2fpost%2fthinking-of-cpp-ptr%2f"
-      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-      <span class="hidden">Twitter</span>
-  </a>
-  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fair.googol.im%2fpost%2fthinking-of-cpp-ptr%2f"
-      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-      <span class="hidden">Facebook</span>
-  </a>
-  <a class="icon-pinterest" style="font-size: 1.4em" href="http://pinterest.com/pin/create/button/?url=https%3a%2f%2fair.googol.im%2fpost%2fthinking-of-cpp-ptr%2f&amp;description=%e5%85%b3%e4%ba%8eC%2b%2b%e6%99%ba%e8%83%bd%e6%8c%87%e9%92%88%e7%9a%84%e6%80%9d%e8%80%83"
-      onclick="window.open(this.href, 'pinterest-share','width=580,height=296');return false;">
-      <span class="hidden">Pinterest</span>
-  </a>
-  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=https%3a%2f%2fair.googol.im%2fpost%2fthinking-of-cpp-ptr%2f"
-     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-      <span class="hidden">Google+</span>
-  </a>
-</section>
-
-
-
-    
-
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'air-g';
-  var disqus_url = 'https:\/\/air.googol.im\/post\/thinking-of-cpp-ptr\/';
-  (function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
-
-
-
-  </footer>
-</article>
-
-</main>
-    <footer class="site-footer clearfix">
-        <section class="copyright"><a href="">Air on G</a> 除非另有声明，本网站采用<a href='https://creativecommons.org/licenses/by-nd/3.0/cn/'>知识共享“署名-禁止演绎 3.0 中国大陆”许可协议</a>授权。</section>
-        
-        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
-        
-    </footer>
     </div>
-    <script type="text/javascript" src="https://air.googol.im/js/jquery.js"></script>
-    <script type="text/javascript" src="https://air.googol.im/js/jquery.fitvids.js"></script>
-    <script type="text/javascript" src="https://air.googol.im/js/index.js"></script>
-    
-</body>
-</html>
 
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>:</span>
+                <span>Googol Lee </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                    <span>:</span>
+                   <span>1104</span>
+            </p>
+
+            <p class="copyright-item">
+                
+                <span>:</span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fair.googol.im%2fpost%2fthinking-of-cpp-ptr%2f&amp;text=%e5%85%b3%e4%ba%8eC%2b%2b%e6%99%ba%e8%83%bd%e6%8c%87%e9%92%88%e7%9a%84%e6%80%9d%e8%80%83&amp;via=googollee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+
+</span>
+                
+            </p>
+
+             
+            <p class="copyright-item">
+                Released under <a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+            </p>
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>: 
+            
+            <span class="tag"><a href="https://air.googol.im/tags/cpp/">
+                    #cpp</a></span>
+            
+            <span class="tag"><a href="https://air.googol.im/tags/auto_ptr/">
+                    #auto_ptr</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();"></a></span> · 
+                <span><a href="https://air.googol.im"></a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://air.googol.im/post/optimize-for-continous-reading/" class="prev" rel="prev" title="为连续读取优化的一种缓存策略"><i class="iconfont icon-dajiantou"></i>&nbsp;为连续读取优化的一种缓存策略</a>
+         
+        
+        <a href="https://air.googol.im/post/simple-unittest-framework/" class="next" rel="next" title="简单的UnitTest框架实现">简单的UnitTest框架实现&nbsp;<i class="iconfont icon-xiaojiantou"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+          <div id="disqus_thread"></div>
+  <script type="text/javascript">
+      (function() {
+          
+          
+          if (window.location.hostname == "localhost")
+              return;
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          var disqus_shortname = 'air-g';
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2004 - 2021</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://air.googol.im">Googol Lee</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>

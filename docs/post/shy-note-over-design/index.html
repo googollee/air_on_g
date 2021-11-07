@@ -1,218 +1,164 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
+<html lang="zh">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://air.googol.im/post/shy-notes/" />
+  <link rel="next" href="https://air.googol.im/post/shy-note-project-management/" />
+  <link rel="canonical" href="https://air.googol.im/post/shy-note-over-design/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           S会议开发手札：过渡设计 | Air on G
+       
+  </title>
+  <meta name="title" content="S会议开发手札：过渡设计 | Air on G">
     
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
 
 
-    
-        <meta name="twitter:card" content="summary"/>
-    
-
-
-
+  <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="S会议开发手札：过渡设计"/>
-<meta name="twitter:description" content=""/>
-<meta name="twitter:site" content="@googollee"/>
+<meta name="twitter:description" content="今天打算来专门聊一聊过渡设计的事情。"/>
 
-
-
-  	<meta property="og:title" content="S会议开发手札：过渡设计 &middot; Air on G" />
-  	<meta property="og:site_name" content="Air on G" />
-  	<meta property="og:url" content="https://air.googol.im/post/shy-note-over-design/" />
-    
-    
-        
-            <meta property="og:image" content="https://air.googol.im/images/cover.jpg"/>
-        
-    
-
-    
-    <meta property="og:description" content="" />
-  	<meta property="og:type" content="article" />
-    <meta property="og:image" content="https://air.googol.im/" />
-    <meta property="article:published_time" content="2013-09-17T22:51:28&#43;08:00" />
-
-    
-    <meta property="article:tag" content="project" />
-    
-    <meta property="article:tag" content="startup" />
-    
-    <meta property="article:tag" content="design" />
-    
-    
-
-    <title>S会议开发手札：过渡设计 &middot; Air on G</title>
-
-    
-    <meta name="description" content="" />
-    
-
-    <meta name="HandheldFriendly" content="True" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <link rel="shortcut icon" href="https://air.googol.im/images/favicon.ico">
-	  <link rel="apple-touch-icon" href="https://air.googol.im/images/apple-touch-icon.png" />
-
-    <link rel="stylesheet" type="text/css" href="https://air.googol.im/css/screen.css" />
-    <link rel="stylesheet" type="text/css" href="https://air.googol.im/css/nav.css" />
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Inconsolata" />
-
-    
-
-    
-      
-          <link href="https://air.googol.im/index.xml" rel="alternate" type="application/rss+xml" title="Air on G" />
-      
-      
-    
-    <meta name="generator" content="Hugo 0.89.1" />
-
-    <link rel="canonical" href="https://air.googol.im/post/shy-note-over-design/" />
-
-    
-      
-    
-    <script type="application/ld+json">
+  <script type="application/ld+json">
 {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "publisher": {
-        "@type": "Organization",
-        "name":  null 
-    },
-    "author": {
-        "@type": "Person",
-        "name":  null ,
-        
-        "url": "https://air.googol.im",
-        "sameAs": [
-            
-            
-             
-             
-             
-             
-             
-            
-        ],
-        "description": "多年生软件工程师，信仰开源"
-        
-    },
-    "headline": "S会议开发手札：过渡设计",
-    "name": "S会议开发手札：过渡设计",
-    "wordCount":  17 ,
-    "timeRequired": "PT1M",
-    "inLanguage": {
-      "@type": "Language",
-      "alternateName": "en"
-    },
-    "url": "https://air.googol.im/post/shy-note-over-design/",
-    "datePublished": "2013-09-17T22:51Z",
-    "dateModified": "2013-09-17T22:51Z",
-    
-    "keywords": "project, startup, design",
-    "description": "",
-    "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://air.googol.im/post/shy-note-over-design/"
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "S会议开发手札：过渡设计",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/air.googol.im\/post\/shy-note-over-design\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/air.googol.im\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "post",
+  "keywords": "project, startup, design",
+  "wordcount":  1654 ,
+  "url": "https:\/\/air.googol.im\/post\/shy-note-over-design\/",
+  "datePublished": "2013-09-17T22:51:28\u002b08:00",
+  "dateModified": "2013-09-17T22:51:28\u002b08:00",
+  "license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Googol Lee",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/air.googol.im\/logo.png",
+      "width":  127 ,
+      "height":  40 
     }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Googol Lee"
+  },
+  "description": ""
 }
-    </script>
-    
-
-
-    
-
-    
-
-    
+</script>
 </head>
-<body class="nav-closed">
-
-  <div class="nav">
-    <h3 class="nav-title">Menu</h3>
-    <a href="#" class="nav-close">
-        <span class="hidden">Close</span>
-    </a>
-    <ul>
-        
-        
-        
-            <h3>Follow me</h3>
-            <li class="nav-opened" role="presentation">
-            	<a href="https://github.com/googollee">Github repos</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://twitter.com/googollee">Twitter timeline</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="/">Blog</a>
-            </li>
-        
-    </ul>
-    
-    
-    <a class="subscribe-button icon-feed" href="https://air.googol.im/index.xml">Subscribe</a>
-    
-</div>
-<span class="nav-cover"></span>
-
-
- <div class="site-wrapper">
-
-
-
-
-<header class="main-header post-head no-cover">
-  <nav class="main-nav clearfix">
-
 
   
-  
-      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
-  
-  </nav>
-</header>
 
 
 
-<main class="content" role="main">
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://air.googol.im">Air on G</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/post/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/about" title="">About</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://air.googol.im">Air on G</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/post/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/about" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
 
-
-
-
-  <article class="post post">
-
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp">
     <header class="post-header">
         <h1 class="post-title">S会议开发手札：过渡设计</h1>
-        <small></small>
-
-        <section class="post-meta">
-        
-          <time class="post-date" datetime="2013-09-17T22:51:28&#43;08:00">
-            Sep 17, 2013
-          </time>
-        
-         
-          <span class="post-tag small"><a href="https://air.googol.im/tags/project/">#project</a></span>
-         
-          <span class="post-tag small"><a href="https://air.googol.im/tags/startup/">#startup</a></span>
-         
-          <span class="post-tag small"><a href="https://air.googol.im/tags/design/">#design</a></span>
-         
-        </section>
+        <div class="post-meta">
+              <a href="https://air.googol.im" rel="author">Googol Lee</a>  ♥ 
+                <span class="post-time">
+                     <time datetime=2013-09-17 >2013-09-17</time>
+                </span>
+                
+                
+                <i class="iconfont icon-timer"></i>
+                4 min
+        </div>
     </header>
+    <div class="post-content">
+        
 
-    <section class="post-content">
-      <p>今天打算来专门聊一聊过渡设计的事情。</p>
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p>今天打算来专门聊一聊过渡设计的事情。</p>
 <p>过渡设计可能对每个程序员来说都不陌生。基本上，凡是设计一些不知道现阶段该怎么用的东西，都属于过渡设计。</p>
 <p>过渡设计有可能会隐藏在一种听起来很合理的理由背后出现：我们应该设计成的样子。为了这个想象中的样子，最终会定下很多过于理想的需求，这些需求，就是过度设计的体现。
 大家平时讨论产品的时候，尤其是有产品经理参与的情况下，很容易就陷入“理想中的样子”的怪圈。大家说起某个功能应该有的样子的时候，都会很兴奋，不由自主把需求不断泛化扩展，觉得如果做成这样，这功能就无敌了！不过，在一个目标还不确定，真正的客户没有体现出这种需求的时候，就预先实现一些相关概念，显然是不值当的。</p>
@@ -243,88 +189,157 @@
 <p>理想中的bus，多机互联互通，服务自动发现，会自动就近存取数据，自动路由，消息交换成本低，速度快，甚至带有队列和失败机制。我觉得我要能写出这个东西，我就去发个paper，然后等别人引用我的paper，就能了此一生了。不过这个功能，最初讨论的时候我也很兴奋，觉得有了这个就能实现很多自动管理的机制。也许当初讨论的时候更加现实一些会更好。或许，等我们真的有了多台机器的时候，再考虑这些，就能找到更明确的需求了。</p>
 </li>
 </ul>
-    </section>
-
-
-  <footer class="post-footer">
-
-
-    
-
-    
-
-
-
-
-
-<section class="author">
-  <h4><a href="https://air.googol.im/">Googol Lee</a></h4>
-  
-  <p>多年生软件工程师，信仰开源</p>
-  
-  <div class="author-meta">
-    <span class="author-location icon-location">Munich, Germany</span>
-    <span class="author-link icon-link"><a href="https://air.googol.im">https://air.googol.im</a></span>
-  </div>
-</section>
-
-
-
-    
-<section class="share">
-  <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=S%e4%bc%9a%e8%ae%ae%e5%bc%80%e5%8f%91%e6%89%8b%e6%9c%ad%ef%bc%9a%e8%bf%87%e6%b8%a1%e8%ae%be%e8%ae%a1&nbsp;-&nbsp;Air%20on%20G&amp;url=https%3a%2f%2fair.googol.im%2fpost%2fshy-note-over-design%2f"
-      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-      <span class="hidden">Twitter</span>
-  </a>
-  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fair.googol.im%2fpost%2fshy-note-over-design%2f"
-      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-      <span class="hidden">Facebook</span>
-  </a>
-  <a class="icon-pinterest" style="font-size: 1.4em" href="http://pinterest.com/pin/create/button/?url=https%3a%2f%2fair.googol.im%2fpost%2fshy-note-over-design%2f&amp;description=S%e4%bc%9a%e8%ae%ae%e5%bc%80%e5%8f%91%e6%89%8b%e6%9c%ad%ef%bc%9a%e8%bf%87%e6%b8%a1%e8%ae%be%e8%ae%a1"
-      onclick="window.open(this.href, 'pinterest-share','width=580,height=296');return false;">
-      <span class="hidden">Pinterest</span>
-  </a>
-  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=https%3a%2f%2fair.googol.im%2fpost%2fshy-note-over-design%2f"
-     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-      <span class="hidden">Google+</span>
-  </a>
-</section>
-
-
-
-    
-
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'air-g';
-  var disqus_url = 'https:\/\/air.googol.im\/post\/shy-note-over-design\/';
-  (function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
-
-
-
-  </footer>
-</article>
-
-</main>
-    <footer class="site-footer clearfix">
-        <section class="copyright"><a href="">Air on G</a> 除非另有声明，本网站采用<a href='https://creativecommons.org/licenses/by-nd/3.0/cn/'>知识共享“署名-禁止演绎 3.0 中国大陆”许可协议</a>授权。</section>
-        
-        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
-        
-    </footer>
     </div>
-    <script type="text/javascript" src="https://air.googol.im/js/jquery.js"></script>
-    <script type="text/javascript" src="https://air.googol.im/js/jquery.fitvids.js"></script>
-    <script type="text/javascript" src="https://air.googol.im/js/index.js"></script>
-    
-</body>
-</html>
 
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>:</span>
+                <span>Googol Lee </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                    <span>:</span>
+                   <span>1654</span>
+            </p>
+
+            <p class="copyright-item">
+                
+                <span>:</span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fair.googol.im%2fpost%2fshy-note-over-design%2f&amp;text=S%e4%bc%9a%e8%ae%ae%e5%bc%80%e5%8f%91%e6%89%8b%e6%9c%ad%ef%bc%9a%e8%bf%87%e6%b8%a1%e8%ae%be%e8%ae%a1&amp;via=googollee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+
+</span>
+                
+            </p>
+
+             
+            <p class="copyright-item">
+                Released under <a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+            </p>
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>: 
+            
+            <span class="tag"><a href="https://air.googol.im/tags/project/">
+                    #project</a></span>
+            
+            <span class="tag"><a href="https://air.googol.im/tags/startup/">
+                    #startup</a></span>
+            
+            <span class="tag"><a href="https://air.googol.im/tags/design/">
+                    #design</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();"></a></span> · 
+                <span><a href="https://air.googol.im"></a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://air.googol.im/post/shy-notes/" class="prev" rel="prev" title="S会议开发手札"><i class="iconfont icon-dajiantou"></i>&nbsp;S会议开发手札</a>
+         
+        
+        <a href="https://air.googol.im/post/shy-note-project-management/" class="next" rel="next" title="S会议开发手札：项目管理">S会议开发手札：项目管理&nbsp;<i class="iconfont icon-xiaojiantou"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+          <div id="disqus_thread"></div>
+  <script type="text/javascript">
+      (function() {
+          
+          
+          if (window.location.hostname == "localhost")
+              return;
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          var disqus_shortname = 'air-g';
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2004 - 2021</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://air.googol.im">Googol Lee</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>
