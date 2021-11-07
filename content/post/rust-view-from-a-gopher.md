@@ -253,7 +253,7 @@ Rust本身为`&[u8]`类型实现了`Read`，所以可以直接将`data.as_bytes(
 
 测试结果：
 
-```
+```bash
 $ cargo bench
     Finished release [optimized] target(s) in 0.27s
      Running target/release/deps/rtnx-b3fb2c92c52ff0ff

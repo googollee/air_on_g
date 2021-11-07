@@ -335,40 +335,40 @@ ok  	github.com/googollee/rtnx/rtmp/amf	3.189s
 }
 </code></pre></div><p>Rust本身为<code>&amp;[u8]</code>类型实现了<code>Read</code>，所以可以直接将<code>data.as_bytes()</code>作为一个<code>Read</code>使用。由于<code>fill()</code>需求的是<code>&amp;mut Read</code>，这里会使用<code>&amp;mut data.as_bytes()</code>。而<code>'static</code>表示静态生命周期，也就是常量字符串。</p>
 <p>测试结果：</p>
-<pre tabindex="0"><code>$ cargo bench
-    Finished release [optimized] target(s) in 0.27s
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cargo bench
+    Finished release <span style="color:#f92672">[</span>optimized<span style="color:#f92672">]</span> target<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> in 0.27s
      Running target/release/deps/rtnx-b3fb2c92c52ff0ff
 
-running 1 test
+running <span style="color:#ae81ff">1</span> test
 test rtmp::amf::string_test::test_string ... ignored
 
-test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out
+test result: ok. <span style="color:#ae81ff">0</span> passed; <span style="color:#ae81ff">0</span> failed; <span style="color:#ae81ff">1</span> ignored; <span style="color:#ae81ff">0</span> measured; <span style="color:#ae81ff">0</span> filtered out
 
      Running target/release/deps/rtnx-b073d7725e43e2cb
 
-running 1 test
+running <span style="color:#ae81ff">1</span> test
 test rtmp::amf::string_test::test_string ... ignored
 
-test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out
+test result: ok. <span style="color:#ae81ff">0</span> passed; <span style="color:#ae81ff">0</span> failed; <span style="color:#ae81ff">1</span> ignored; <span style="color:#ae81ff">0</span> measured; <span style="color:#ae81ff">0</span> filtered out
 
      Running target/release/deps/string-e1abdea77166d91b
 Gnuplot not found, disabling plotting
-short str               time:   [8.8030 ns 8.8762 ns 8.9604 ns]                       
-                        change: [-2.0804% +0.0430% +1.9924%] (p = 0.96 &gt; 0.05)
+short str               time:   <span style="color:#f92672">[</span>8.8030 ns 8.8762 ns 8.9604 ns<span style="color:#f92672">]</span>                       
+                        change: <span style="color:#f92672">[</span>-2.0804% +0.0430% +1.9924%<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>p <span style="color:#f92672">=</span> 0.96 &gt; 0.05<span style="color:#f92672">)</span>
                         No change in performance detected.
-Found 12 outliers among 100 measurements (12.00%)
-  8 (8.00%) high mild
-  4 (4.00%) high severe
+Found <span style="color:#ae81ff">12</span> outliers among <span style="color:#ae81ff">100</span> measurements <span style="color:#f92672">(</span>12.00%<span style="color:#f92672">)</span>
+  <span style="color:#ae81ff">8</span> <span style="color:#f92672">(</span>8.00%<span style="color:#f92672">)</span> high mild
+  <span style="color:#ae81ff">4</span> <span style="color:#f92672">(</span>4.00%<span style="color:#f92672">)</span> high severe
 
-long str                time:   [29.893 ns 30.005 ns 30.156 ns]                      
-                        change: [-0.1391% +0.6297% +1.4001%] (p = 0.12 &gt; 0.05)
+long str                time:   <span style="color:#f92672">[</span>29.893 ns 30.005 ns 30.156 ns<span style="color:#f92672">]</span>                      
+                        change: <span style="color:#f92672">[</span>-0.1391% +0.6297% +1.4001%<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>p <span style="color:#f92672">=</span> 0.12 &gt; 0.05<span style="color:#f92672">)</span>
                         No change in performance detected.
-Found 6 outliers among 100 measurements (6.00%)
-  3 (3.00%) high mild
-  3 (3.00%) high severe
+Found <span style="color:#ae81ff">6</span> outliers among <span style="color:#ae81ff">100</span> measurements <span style="color:#f92672">(</span>6.00%<span style="color:#f92672">)</span>
+  <span style="color:#ae81ff">3</span> <span style="color:#f92672">(</span>3.00%<span style="color:#f92672">)</span> high mild
+  <span style="color:#ae81ff">3</span> <span style="color:#f92672">(</span>3.00%<span style="color:#f92672">)</span> high severe
 
 Gnuplot not found, disabling plotting
-</code></pre><p>与之前Go的测试结果对比：</p>
+</code></pre></div><p>与之前Go的测试结果对比：</p>
 <table>
 <thead>
 <tr>
