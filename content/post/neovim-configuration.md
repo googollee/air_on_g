@@ -1,6 +1,5 @@
 ---
 title: "组织Neovim配置的方法"
-draft: true
 date: 2021-11-09T22:54:04+01:00
 description: 如何使用Lua组织Neovim的配置
 categories:
