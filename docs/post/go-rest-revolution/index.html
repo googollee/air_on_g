@@ -160,10 +160,10 @@
 
           <p>在EXFE创业的两年，虽然项目最终失败了（很可惜），不过自己从头开始写了一个简化RESTful Service实现的Framework——<a href="https://github.com/googollee/go-rest">go-rest</a>，还算有不少收获。这里记录一下go-rest实现过程中一些重要的演变，以及这些演变背后的原因。</p>
 <p>最开始，我把Service定义为RPC remote式的调用方法。处理逻辑的函数，基本上是这样：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Handler</span>(<span style="color:#a6e22e">input</span> <span style="color:#a6e22e">InputType</span>) <span style="color:#a6e22e">OutputType</span> { <span style="color:#f92672">...</span> }
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Handler</span>(<span style="color:#a6e22e">input</span> <span style="color:#a6e22e">InputType</span>) <span style="color:#a6e22e">OutputType</span> { <span style="color:#f92672">...</span> }
 </code></pre></div><p>框架主要是解决HTTP协议的处理，以及将Request Post的body部分反序列化为InputType的实例，根据url调用相应的函数，并序列化函数的输出结果。</p>
 <p>因此，当时的框架使用起来类似下面的样子（因为最老的一版代码找不到了，这个是凭印象写的）：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">
 <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Handler1</span>(<span style="color:#a6e22e">input</span> <span style="color:#a6e22e">InputType</span>) <span style="color:#a6e22e">OutputType</span> { <span style="color:#f92672">...</span> }
 <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Handler2</span>(<span style="color:#a6e22e">input</span> <span style="color:#a6e22e">InputType</span>) (<span style="color:#a6e22e">OutputType</span>, <span style="color:#66d9ef">error</span>) { <span style="color:#f92672">...</span> }
 
@@ -188,7 +188,7 @@
 </ul>
 <p>为了解决缺点，最开始使用gorilla/mux库做路由，解决了不能自定义HTTP method的问题。之后为了利用起HTTP协议本身的各种参数化和配置方法，达到更加RESTful的状态，go-rest第二版引入了Context的概念。在注册处理函数时，参考<a href="https://code.google.com/p/gorest/">gorest</a>也引入了使用将struct做配置的方法。</p>
 <p>第二版里定义一个用于处理逻辑的struct如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">RestExample</span> <span style="color:#66d9ef">struct</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">RestExample</span> <span style="color:#66d9ef">struct</span> {
     <span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">Service</span> <span style="color:#e6db74">`prefix:&#34;/prefix&#34; mime:&#34;application/json&#34;`</span>
 
     <span style="color:#a6e22e">postSample</span> <span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">SimpleNode</span> <span style="color:#e6db74">`method:&#34;POST&#34; route:&#34;/post&#34;`</span>
@@ -224,7 +224,7 @@
 </ul>
 <p>因为要对HTTP的细节作处理（Header，url参数化等等），而引入的Context，最终却变成了逻辑函数里额外的部分，导致测试时需要花费很大精力准备一个合法的Context，是这次变动中最失败的部分。但是由于更加符合业务要求，实现出来的接口更容易理解且符合RSETful的要求，这个实现大概维持了1年左右没有变化。</p>
 <p>后来团队解散后空余时间比较多，也因为Node.js很火爆，就跑去看了看Node.js上最流行的框架Express.js。Express.js使用的Connect库做到的中间件很有意思。借鉴Connect的中间件思想，就有了go-rest最新的一次改版。这次改版的主要思路在于，使用中间件来处理与HTTP协议相关的逻辑，保持最终的业务逻辑是一个独立的函数，不引入任何与框架相关的约束和假设。改版后的框架使用起来像下面这个样子：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">
 <span style="color:#a6e22e">r</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">New</span>()
 
 <span style="color:#75715e">// add log midware

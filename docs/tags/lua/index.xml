@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>lua on Air on G</title>
+    <link>https://air.googol.im/tags/lua/</link>
+    <description>Recent content in lua on Air on G</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Tue, 09 Nov 2021 22:54:04 +0100</lastBuildDate><atom:link href="https://air.googol.im/tags/lua/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>组织Neovim配置的方法</title>
+      <link>https://air.googol.im/post/neovim-configuration/</link>
+      <pubDate>Tue, 09 Nov 2021 22:54:04 +0100</pubDate>
+      
+      <guid>https://air.googol.im/post/neovim-configuration/</guid>
+      <description>最近NeoVim放出了0.5.1版本，默认支持Lsp以及Lua脚本运行时。Lsp是我现在非常常用的功能。Vim只依靠插件支持Lsp，很多特性</description>
+    </item>
+    
+  </channel>
+</rss>

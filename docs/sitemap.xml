@@ -4,7 +4,119 @@
     <url>
       <loc>https://air.googol.im/</loc>
       
-      <lastmod>2018-07-21T11:10:00+02:00</lastmod>
+      <lastmod>2021-11-09T22:54:04+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/categories/</loc>
+      
+      <lastmod>2021-11-09T22:54:04+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/editor/</loc>
+      
+      <lastmod>2021-11-09T22:54:04+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/lua/</loc>
+      
+      <lastmod>2021-11-09T22:54:04+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/neovim/</loc>
+      
+      <lastmod>2021-11-09T22:54:04+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/</loc>
+      
+      <lastmod>2021-11-09T22:54:04+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/</loc>
+      
+      <lastmod>2021-11-09T22:54:04+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/categories/%E5%BC%80%E5%8F%91/</loc>
+      
+      <lastmod>2021-11-09T22:54:04+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/neovim-configuration/</loc>
+      
+      <lastmod>2021-11-09T22:54:04+01:00</lastmod>
       
       
       <changefreq>monthly</changefreq>
@@ -30,35 +142,7 @@
     </url>
   
     <url>
-      <loc>https://air.googol.im/post/</loc>
-      
-      <lastmod>2018-07-21T11:10:00+02:00</lastmod>
-      
-      
-      <changefreq>monthly</changefreq>
-      
-      
-      <priority>0.5</priority>
-      
-      
-    </url>
-  
-    <url>
       <loc>https://air.googol.im/tags/rust/</loc>
-      
-      <lastmod>2018-07-21T11:10:00+02:00</lastmod>
-      
-      
-      <changefreq>monthly</changefreq>
-      
-      
-      <priority>0.5</priority>
-      
-      
-    </url>
-  
-    <url>
-      <loc>https://air.googol.im/tags/</loc>
       
       <lastmod>2018-07-21T11:10:00+02:00</lastmod>
       
@@ -423,20 +507,6 @@
   
     <url>
       <loc>https://air.googol.im/post/first-glance-at-atom/</loc>
-      
-      <lastmod>2014-03-07T01:20:00+08:00</lastmod>
-      
-      
-      <changefreq>monthly</changefreq>
-      
-      
-      <priority>0.5</priority>
-      
-      
-    </url>
-  
-    <url>
-      <loc>https://air.googol.im/tags/editor/</loc>
       
       <lastmod>2014-03-07T01:20:00+08:00</lastmod>
       
@@ -1349,18 +1419,6 @@
       <loc>https://air.googol.im/post/analysis-of-occ-knocker/</loc>
       
       <lastmod>2004-09-22T20:00:00+08:00</lastmod>
-      
-      
-      <changefreq>monthly</changefreq>
-      
-      
-      <priority>0.5</priority>
-      
-      
-    </url>
-  
-    <url>
-      <loc>https://air.googol.im/categories/</loc>
       
       
       <changefreq>monthly</changefreq>
