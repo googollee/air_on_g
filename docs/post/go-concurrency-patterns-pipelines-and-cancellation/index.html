@@ -177,7 +177,7 @@
 <h3 id="求平方数">求平方数</h3>
 <p>考虑一个管道和三个状态。</p>
 <p>第一个状态，<code>gen</code>，是一个将一系列整数一一传入channel的函数。<code>gen</code>函数启动一个Goroutine，将整数数列发送给channel，如果所有数都发送完成，关闭这个channel：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">gen</span>(<span style="color:#a6e22e">nums</span> <span style="color:#f92672">...</span><span style="color:#66d9ef">int</span>) <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span> {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">gen</span>(<span style="color:#a6e22e">nums</span> <span style="color:#f92672">...</span><span style="color:#66d9ef">int</span>) <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span> {
     <span style="color:#a6e22e">out</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>)
     <span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
         <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">n</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">nums</span> {
@@ -188,7 +188,7 @@
     <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">out</span>
 }
 </code></pre></div><p>第二个状态，<code>sq</code>，从一个channel接收整数，并求整数的平方，发送给另一个channel。当流入channel被关闭，而且状态已经把所有数值都发送给了下游，关闭流出channel：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">sq</span>(<span style="color:#a6e22e">in</span> <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>) <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span> {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">sq</span>(<span style="color:#a6e22e">in</span> <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>) <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span> {
     <span style="color:#a6e22e">out</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>)
     <span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
         <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">n</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">in</span> {
@@ -199,7 +199,7 @@
     <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">out</span>
 }
 </code></pre></div><p>主函数建立起管道，并执行最终的状态：从第二个状态接收所有的数值并打印，直到channel被关闭：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
     <span style="color:#75715e">// 建立管道
 </span><span style="color:#75715e"></span>    <span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">gen</span>(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>)
     <span style="color:#a6e22e">out</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sq</span>(<span style="color:#a6e22e">c</span>)
@@ -209,7 +209,7 @@
 </span><span style="color:#75715e"></span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">out</span>) <span style="color:#75715e">// 9
 </span><span style="color:#75715e"></span>}
 </code></pre></div><p>因为<code>sq</code>有相同类型的流入和流出channel，我们可以将其组合任意次。我们也可以将<code>main</code>函数写成和其他状态类似的范围循环的形式：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
     <span style="color:#75715e">// 建立管道并产生输出
 </span><span style="color:#75715e"></span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">n</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">sq</span>(<span style="color:#a6e22e">sq</span>(<span style="color:#a6e22e">gen</span>(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>))) {
         <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">n</span>) <span style="color:#75715e">// 16 和 81
@@ -219,7 +219,7 @@
 <p>多个函数可以同时从一个channel接收数据，直到channel关闭，这种情况被称作_扇出_。这是一种将工作分布给一组工作者的方法，目的是并行使用CPU和I/O。</p>
 <p>一个函数同时接收并处理多个channel输入并转化为一个输出channel，直到所有的输入channel都关闭后，关闭输出channel。这种情况称作_扇入_。</p>
 <p>我们可以将我们的管道改为同时执行两个<code>sq</code>实例，每个都从同样的输入channel读取数据。我们还引入新函数，<code>merge</code>，来扇入所有的结果：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
     <span style="color:#a6e22e">in</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">gen</span>(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>)
 
     <span style="color:#75715e">// 在两个从in里读取数据的Goroutine间分配sq的工作
@@ -233,7 +233,7 @@
 }
 </code></pre></div><p><code>merge</code>对每个流入channel启动一个Goroutine，并将流入的数值复制到流出channel，由此将一组channel转换到一个channel。一旦启动了所有的<code>output</code> Goroutine，<code>merge</code>函数会多启动一个Goroutine，这个Goroutine在所有的输入channel输入完毕后，关闭流出channel。</p>
 <p>往一个已经关闭的channel输出会产生异常（panic），所以一定要保证所有数据发送完成后再执行关闭。<a href="http://golang.org/pkg/sync/#WaitGroup"><code>sync.WaitGroup</code></a>类型提供了方便的方法，来保证这种同步：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">merge</span>(<span style="color:#a6e22e">cs</span> <span style="color:#f92672">...&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>) <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span> {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">merge</span>(<span style="color:#a6e22e">cs</span> <span style="color:#f92672">...&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>) <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span> {
     <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
     <span style="color:#a6e22e">out</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>)
 
@@ -267,7 +267,7 @@
 <p>这个模式使得每个接收状态可以写为一个<code>range</code>循环，并保证所有的Goroutine在将所有的数值发送成功给下游后立刻退出。</p>
 <p>但是实际的管道，状态不能总是接收所有的流入数值。有时这是设计决定的：接收者可能只需要一部分数值做进一步处理。更常见的情况是，一个状态会由于从早先的状态流入的数值有误而退出。不管哪种情况，接收者都不应该继续等待剩下的数值，而且我们希望早先的状态可以停止生产后续状态不需要的数据。</p>
 <p>在我们的管道例子里，如果一个状态无法处理所有的流入数值，试图发送那些数值的Goroutine会被永远阻塞住：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">    <span style="color:#75715e">// 处理输出的第一个数值
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">    <span style="color:#75715e">// 处理输出的第一个数值
 </span><span style="color:#75715e"></span>    <span style="color:#a6e22e">out</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">merge</span>(<span style="color:#a6e22e">c1</span>, <span style="color:#a6e22e">c2</span>)
     <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">out</span>) <span style="color:#75715e">// 4 或者 9
 </span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span>
@@ -276,7 +276,7 @@
 </code></pre></div><p>这是资源泄漏：Goroutine会占用内存和运行时资源，而且Goroutine栈里的堆引用会一直持有数据，这些数据无法被垃圾回收。Goroutine本身也无法被垃圾回收，它们必须靠自己退出（而不是被其他人杀死）。</p>
 <p>即便下游的状态无法接收所有的流入数值，我们依然需要让管道里的上游状态正常退出。一种方法是修改流出channel，使其含有缓冲区。缓冲区可以持有固定数量的数值，当缓冲区有空间时，发送操作会立刻完成（，不会产生阻塞）。</p>
 <p>在创建channel时，如果已经知道要发送数值的数量，缓冲区可以简化代码。比如，我们可以让<code>gen</code>把整数列表里的数复制进channel缓冲区，而不需使用新的Goroutine：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">gen</span>(<span style="color:#a6e22e">nums</span> <span style="color:#f92672">...</span><span style="color:#66d9ef">int</span>) <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span> {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">gen</span>(<span style="color:#a6e22e">nums</span> <span style="color:#f92672">...</span><span style="color:#66d9ef">int</span>) <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span> {
     <span style="color:#a6e22e">out</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>, len(<span style="color:#a6e22e">nums</span>))
     <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">n</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">nums</span> {
         <span style="color:#a6e22e">out</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">n</span>
@@ -285,7 +285,7 @@
     <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">out</span>
 }
 </code></pre></div><p>回到我们管道的阻塞问题上来，我们可以考虑给<code>merge</code>的流出channel加上缓冲区：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">merge</span>(<span style="color:#a6e22e">cs</span> <span style="color:#f92672">...&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>) <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span> {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">merge</span>(<span style="color:#a6e22e">cs</span> <span style="color:#f92672">...&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>) <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span> {
     <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
     <span style="color:#a6e22e">out</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">1</span>) <span style="color:#75715e">// 1个空间足够应付未读的输入
 </span><span style="color:#75715e"></span>    <span style="color:#75715e">// ... 其余未变 ...
@@ -293,7 +293,7 @@
 <p>不使用缓冲区的话，我们需要提供一种方法，让下游状态通知发送者，下游状态将停止接收输入。</p>
 <h3 id="显式取消">显式取消</h3>
 <p>当<code>main</code>要在不接收所有来自<code>out</code>的数值前退出，就需要告诉所有上游状态的Goroutine，放弃尝试发送数值的行为。这可以通过发送数值到一个叫做<code>done</code>的channel来完成。例子里有两个潜在的会被阻塞的发送者，所以给<code>done</code>发送了两个数值：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
     <span style="color:#a6e22e">in</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">gen</span>(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>)
 
     <span style="color:#75715e">// 发布sq的工作到两个都从in里读取数据的Goroutine
@@ -310,7 +310,7 @@
     <span style="color:#a6e22e">done</span> <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">struct</span>{}{}
 }
 </code></pre></div><p>发送Goroutine将发送操作替换为一个<code>select</code>语句，要么把数据发送给<code>out</code>，要么处理来自<code>done</code>的数值。<code>done</code>的类型是个空结构，因为具体数值并不重要：接收事件本身就指明了应当放弃继续发送给out的动作。而<code>output</code> Goroutine会继续循环处理流入的channel，<code>c</code>,而不会阻塞上游状态：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">merge</span>(<span style="color:#a6e22e">done</span> <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}, <span style="color:#a6e22e">cs</span> <span style="color:#f92672">...&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>) <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span> {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">merge</span>(<span style="color:#a6e22e">done</span> <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}, <span style="color:#a6e22e">cs</span> <span style="color:#f92672">...&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>) <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span> {
     <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
     <span style="color:#a6e22e">out</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>)
 
@@ -329,7 +329,7 @@
 </span></code></pre></div><p>但是这种方法有个问题：下游的接收者需要知道潜在会被阻塞的上游发送者的数量。追踪这些数量不仅枯燥，还容易出错。</p>
 <p>我们需要一种方法，让不知道也不限制数量的Goroutine，停止往它们下游发送数据的行为。在Go里，我们可以通过关闭channel来实现这个工作，因为<a href="http://golang.org/ref/spec#Receive_operator">channel被关闭时，接收工作会立刻执行，并产生一个符合类型的0值</a>。</p>
 <p>这就是说，<code>main</code>可以容易的通过关闭<code>done</code>channel来释放所有的发送者。关闭是个高效的发送给所有发送者的广播信号。我们扩展管道里的每个函数，让其以参数方式接收<code>done</code>，并通过<code>defer</code>语句在函数退出时执行关闭操作，这样<code>main</code>里所有的退出路径都会触发管道里的所有状态退出。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
     <span style="color:#75715e">// 构建done channel，整个管道里分享done，并在管道退出时关闭这个channel
 </span><span style="color:#75715e"></span>    <span style="color:#75715e">// 以此通知所有Goroutine该推出了。
 </span><span style="color:#75715e"></span>    <span style="color:#a6e22e">done</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{})
@@ -348,7 +348,7 @@
     <span style="color:#75715e">// done会通过defer调用而关闭
 </span><span style="color:#75715e"></span>}
 </code></pre></div><p>管道里的每个状态现在都可以随意的提早退出了：<code>sq</code>可以在它的循环中退出，因为我们知道如果<code>done</code>已经被关闭了，也会关闭上游的<code>gen</code>状态。<code>sq</code>通过<code>defer</code>语句，保证不管从哪个返回路径，它的<code>out</code> channel都会被关闭。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">sq</span>(<span style="color:#a6e22e">done</span> <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}, <span style="color:#a6e22e">in</span> <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>) <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span> {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">sq</span>(<span style="color:#a6e22e">done</span> <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}, <span style="color:#a6e22e">in</span> <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>) <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span> {
     <span style="color:#a6e22e">out</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>)
     <span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
         <span style="color:#66d9ef">defer</span> close(<span style="color:#a6e22e">out</span>)
@@ -373,7 +373,7 @@
 <p>MD5是一个摘要算法，经常在对文件的校验的时候使用。命令行上使用<code>md5sum</code>来打印出一系列文件的摘要数值。</p>
 <p>我们的程序类似<code>md5sum</code>，但是参数是一个目录，之后会打印出这个目录下所有常规文件的摘要值，以文件路径名排序。</p>
 <p>我们的主函数包含一个<code>MD5All</code>的辅助函数，返回一个路径名到摘要值的映射，之后排序并打印结果：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
     <span style="color:#75715e">// 计算指定目录下所有文件的MD5值，之后按照目录名排序并打印结果
 </span><span style="color:#75715e"></span>    <span style="color:#a6e22e">m</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">MD5All</span>(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Args</span>[<span style="color:#ae81ff">1</span>])
     <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
@@ -390,7 +390,7 @@
     }
 }
 </code></pre></div><p><code>MD5All</code>函数是我们讨论的焦点。在<a href="http://blog.golang.org/pipelines/serial.go"><code>serial.go</code></a>文件里，是非并发的函数实现，再扫描目录树时简单读取并计算每个文件。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// MD5All读取文件目录root下所有文件，并返回从文件路径到文件内容MD5值的映射。如果扫描目录
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// MD5All读取文件目录root下所有文件，并返回从文件路径到文件内容MD5值的映射。如果扫描目录
 </span><span style="color:#75715e">// 出错或者任何操作失败，MD5All返回失败。
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">MD5All</span>(<span style="color:#a6e22e">root</span> <span style="color:#66d9ef">string</span>) (<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>][<span style="color:#a6e22e">md5</span>.<span style="color:#a6e22e">Size</span>]<span style="color:#66d9ef">byte</span>, <span style="color:#66d9ef">error</span>) {
     <span style="color:#a6e22e">m</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>][<span style="color:#a6e22e">md5</span>.<span style="color:#a6e22e">Size</span>]<span style="color:#66d9ef">byte</span>)
@@ -415,13 +415,13 @@
 }
 </code></pre></div><h3 id="并行摘要">并行摘要</h3>
 <p>在<a href="http://blog.golang.org/pipelines/parallel.go"><code>parallel.go</code></a>里，我们把<code>MD5All</code>分解为两个状态的管道。第一个状态，<code>sumFiles</code>，遍历目录，在一个新的Goroutine里对每个文件做摘要，并把结果发送到类型为<code>result</code>的channel：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">result</span> <span style="color:#66d9ef">struct</span> {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">result</span> <span style="color:#66d9ef">struct</span> {
     <span style="color:#a6e22e">path</span> <span style="color:#66d9ef">string</span>
     <span style="color:#a6e22e">sum</span>  [<span style="color:#a6e22e">md5</span>.<span style="color:#a6e22e">Size</span>]<span style="color:#66d9ef">byte</span>
     <span style="color:#a6e22e">err</span>  <span style="color:#66d9ef">error</span>
 }
 </code></pre></div><p><code>sumFiles</code>返回两个channel：一个用来传递<code>result</code>，另一个用来返回<code>filepath.Walk</code>的错误。遍历函数启动一个新的Goroutine来处理每个常规文件，之后检查<code>done</code>。如果<code>done</code>已经被关闭了，遍历就立刻停止：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">sumFiles</span>(<span style="color:#a6e22e">done</span> <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}, <span style="color:#a6e22e">root</span> <span style="color:#66d9ef">string</span>) (<span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#a6e22e">result</span>, <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">error</span>) {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">sumFiles</span>(<span style="color:#a6e22e">done</span> <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}, <span style="color:#a6e22e">root</span> <span style="color:#66d9ef">string</span>) (<span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#a6e22e">result</span>, <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">error</span>) {
     <span style="color:#75715e">// 对每个常规文件，启动一个Goroutine计算文件内容并发送结果到c。发送walk的结果到errc
 </span><span style="color:#75715e"></span>    <span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#a6e22e">result</span>)
     <span style="color:#a6e22e">errc</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">error</span>, <span style="color:#ae81ff">1</span>)
@@ -463,7 +463,7 @@
     <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">errc</span>
 }
 </code></pre></div><p><code>MD5All</code>从<code>c</code>接收所有的摘要值。<code>MD5All</code>返回早先的错误，通过<code>defer</code>关闭<code>done</code>：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">MD5All</span>(<span style="color:#a6e22e">root</span> <span style="color:#66d9ef">string</span>) (<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>][<span style="color:#a6e22e">md5</span>.<span style="color:#a6e22e">Size</span>]<span style="color:#66d9ef">byte</span>, <span style="color:#66d9ef">error</span>) {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">MD5All</span>(<span style="color:#a6e22e">root</span> <span style="color:#66d9ef">string</span>) (<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>][<span style="color:#a6e22e">md5</span>.<span style="color:#a6e22e">Size</span>]<span style="color:#66d9ef">byte</span>, <span style="color:#66d9ef">error</span>) {
     <span style="color:#75715e">// MD5All在返回时关闭done channel；这个可能在从c和errc收到所有的值之前被调用
 </span><span style="color:#75715e"></span>    <span style="color:#a6e22e">done</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{})
     <span style="color:#66d9ef">defer</span> close(<span style="color:#a6e22e">done</span>)
@@ -486,7 +486,7 @@
 <p>在<a href="http://blog.golang.org/pipelines/parallel.go"><code>parallel.go</code></a>里实现的<code>MD5All</code>对每个文件启动一个新的Goroutine。如果目录里含有很多大文件，这可能会导致申请大量内存，超出机器上的可用内存。</p>
 <p>我们可以通过控制并行读取的文件数量来限制内存的申请。在<a href="http://blog.golang.org/pipelines/bounded.go"><code>bounded.go</code></a>，我们创建固定数量的用于读取文件的Goroutine，来限制内存使用。现在整个管道有三个状态：遍历树，读取并对文件做摘要，收集摘要值。</p>
 <p>第一个状态，<code>walkFiles</code>，发送树里的每个常规文件的路径：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">walkFiles</span>(<span style="color:#a6e22e">done</span> <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}, <span style="color:#a6e22e">root</span> <span style="color:#66d9ef">string</span>) (<span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">string</span>, <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">error</span>) {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">walkFiles</span>(<span style="color:#a6e22e">done</span> <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}, <span style="color:#a6e22e">root</span> <span style="color:#66d9ef">string</span>) (<span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">string</span>, <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">error</span>) {
     <span style="color:#a6e22e">paths</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">string</span>)
     <span style="color:#a6e22e">errc</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">error</span>, <span style="color:#ae81ff">1</span>)
     <span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
@@ -511,7 +511,7 @@
     <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">paths</span>, <span style="color:#a6e22e">errc</span>
 }
 </code></pre></div><p>中间的状态启动固定数量的<code>digester</code> Goroutine，从<code>paths</code>接收文件名，并将结果<code>result</code>发送到channel <code>c</code>：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">digester</span>(<span style="color:#a6e22e">done</span> <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}, <span style="color:#a6e22e">paths</span> <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">c</span> <span style="color:#66d9ef">chan</span><span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">result</span>) {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">digester</span>(<span style="color:#a6e22e">done</span> <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}, <span style="color:#a6e22e">paths</span> <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">c</span> <span style="color:#66d9ef">chan</span><span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">result</span>) {
     <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">path</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">paths</span> {
         <span style="color:#a6e22e">data</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">ReadFile</span>(<span style="color:#a6e22e">path</span>)
         <span style="color:#66d9ef">select</span> {
@@ -522,7 +522,7 @@
     }
 }
 </code></pre></div><p>不象之前的例子，<code>digester</code>并不关闭输出channel，因为多个Goroutine会发送到共享的channel。另一边，<code>MD5All</code>中的代码会在所有<code>digester</code>完成后关闭channel：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">    <span style="color:#75715e">// 启动固定数量的Goroutine来读取并对文件做摘要。
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">    <span style="color:#75715e">// 启动固定数量的Goroutine来读取并对文件做摘要。
 </span><span style="color:#75715e"></span>    <span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#a6e22e">result</span>)
     <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
     <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">numDigesters</span> = <span style="color:#ae81ff">20</span>
@@ -539,7 +539,7 @@
     }()
 </code></pre></div><p>我们也可以让每个<code>digester</code>创建并返回自己的输出channel，但是这就需要一个单独的Goroutine来扇入所有结果。</p>
 <p>最终从<code>c</code>收集到所有结果<code>result</code>，并检查从<code>errc</code>传入的错误。这个错误的检查不能提早，因为在这个时间点之前，<code>walkFiles</code>可能会因为正在发送消息给下游而阻塞：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">    <span style="color:#a6e22e">m</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>][<span style="color:#a6e22e">md5</span>.<span style="color:#a6e22e">Size</span>]<span style="color:#66d9ef">byte</span>)
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">    <span style="color:#a6e22e">m</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>][<span style="color:#a6e22e">md5</span>.<span style="color:#a6e22e">Size</span>]<span style="color:#66d9ef">byte</span>)
     <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">r</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">c</span> {
         <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
             <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">err</span>

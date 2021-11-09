@@ -1,8 +1,13 @@
-+++
-tags = [""]
-comments = true	# set false to hide Disqus
-image = ""
-title = ""
-share = true	# set false to hide share buttons
-date = ""
-+++
+---
+title: "{{ replace .Name "-" " " | title }}"
+date: {{ .Date }}
+draft: true
+description:
+image:
+categories:
+ -
+tags:
+ -
+featured_image:
+author: "Googol Lee"
+---

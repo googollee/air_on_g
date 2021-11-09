@@ -162,12 +162,12 @@
 <h2 id="我喜欢的go特性">我喜欢的Go特性</h2>
 <h3 id="interface">interface</h3>
 <p>Go的interface实在是让人眼前一亮的特性，在静态编译语言里引入了动态语言常用的duck type特性，而且还没有任何运行时负担。举个栗子，如果我想给一个struct A实现io.Reader接口，在定义struct A的时，不需要和io.Reader扯上任何关系（不需要继承，不需要包含，什么都不需要），只要对struct A定义Read([]byte) (int, error)这个函数（与对象方法类似）就可以。至于如何把struct A的实例捏成一个io.Reader，全是Go编译器在背后的工作。我斗胆猜一下Go在使用io.Reader这个interface的时候，使用了类似下面的结构：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">InterfaceReader</span> <span style="color:#66d9ef">struct</span> {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">InterfaceReader</span> <span style="color:#66d9ef">struct</span> {
 	<span style="color:#a6e22e">instancePtr</span> <span style="color:#a6e22e">pointer_to_original_instance</span>
 	<span style="color:#a6e22e">readFunc</span> <span style="color:#a6e22e">pointer_to_read_function</span>
 }
 </code></pre></div><p>而将一个实现了Read成员函数的实例变成io.Reader的时候，执行了类似下面的代码：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// Pseudo code for:
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// Pseudo code for:
 </span><span style="color:#75715e">//   var i io.Reader
 </span><span style="color:#75715e">//   i = New(A)
 </span><span style="color:#75715e"></span><span style="color:#a6e22e">i</span> = <span style="color:#a6e22e">New</span>(<span style="color:#a6e22e">InterfaceReader</span>)
@@ -176,13 +176,13 @@
 </code></pre></div><p>这个伪代码的操作，在编译期就可以完成，不需要在运行时依旧保留很多类型的相关信息。</p>
 <h3 id="reflect">reflect</h3>
 <p>不过Go依旧在运行时保留了不少的类型信息，用来完成反射。不过Go的反射与Java和其他动态语言比起来，还是有限制：所有的反射操作都必须通过一个实例完成，而不能直接操作类型。比如，可以根据一个实例拿到一个类型并生成这个类型对应的新实例：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">t</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">TypeOf</span>(<span style="color:#a6e22e">a</span>)
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">t</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">TypeOf</span>(<span style="color:#a6e22e">a</span>)
 <span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">New</span>(<span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">Elem</span>())
 <span style="color:#a6e22e">newA</span> = <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">Interface</span>().(<span style="color:#f92672">*</span><span style="color:#a6e22e">A</span>)
 </code></pre></div><p>但是没法直接根据类型的名字拿到类型并生成实例，考虑到这门语言设计目的是效率优先的静态编译语言，这也似乎不是太大的问题，而且可以通过别的方法实现。</p>
 <p>不过，目前Go的reflect库不能通过reflect.Type来创建一个Array或者Slice，似乎是个挺杯具且无解的事情，限制很大。</p>
 <p>值得一体的是，Go的struct的成员可以定义Tag这种描述信息，程序里没有直接的作用，但可以通过reflect访问到：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">struct</span> {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">struct</span> {
 	<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int</span> <span style="color:#e6db74">`tag:&#34;abc&#34;`</span>
 }
 
@@ -206,7 +206,7 @@
 <p>更新：经过一段时间的使用，Go选择这种命名方式真是太好了。在看一段代码时，只要看到首字母大写的，就能知道这个变量/函数是公开的，不能轻易修改；而对于小写的变量/函数修改就像对自由很多。维护的时候再也不用去来回翻阅声明，检查一个变量/函数是不是可以变了！</p>
 <p>不过Go官方推荐都用驼峰命名。</p>
 <p>多说一句，在做json解码时，如果对应的struct没有特殊声明，会把json的域写入对应名字首字母大写的struct的成员里。而json编码时默认会以struct域的名字作为json域名，如果要对应到小写，需要声明相关域的Tag：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">struct</span> {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">struct</span> {
 	<span style="color:#a6e22e">I</span> <span style="color:#66d9ef">int</span> <span style="color:#e6db74">`json:&#34;i&#34;`</span>
 }
 </code></pre></div><h3 id="reflect还有问题">reflect还有问题</h3>
@@ -217,7 +217,7 @@
 <p>前面多次提到了。</p>
 <h3 id="struct的成员函数也能支持tag">struct的成员函数也能支持tag</h3>
 <p>目前tag只能支持成员变量，如果也能给成员函数写tag就太cool了：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">struct</span> {}
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">struct</span> {}
 
 <span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">A</span>) <span style="color:#e6db74">`tag:&#34;id&#34;`</span> <span style="color:#a6e22e">SomeFunc</span>() {}
 </code></pre></div><h3 id="完善库">完善库</h3>

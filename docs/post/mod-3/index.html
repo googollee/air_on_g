@@ -160,7 +160,7 @@
 
           <p>北京华为的一道面试题。要求是只使用+-*和移位运算，且不能递减3求得余数。</p>
 <p>先在csdn上求，求得以下算法：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> i, m, n, p, q;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> i, m, n, p, q;
 <span style="color:#66d9ef">int</span> yushu[]<span style="color:#f92672">=</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>};
 m <span style="color:#f92672">=</span> n;
 <span style="color:#66d9ef">while</span>(m<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">3</span>)
@@ -175,7 +175,7 @@ m <span style="color:#f92672">=</span> n;
  m<span style="color:#f92672">=</span>q;
 }
 </code></pre></div><p>没看懂，倒是提示我可以用查表的方法，变成求4的余数。自己探求程序如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> mo[]<span style="color:#f92672">=</span>{<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">0</span>};
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> mo[]<span style="color:#f92672">=</span>{<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">0</span>};
 <span style="color:#66d9ef">int</span> i, m;
 m <span style="color:#f92672">=</span> n;
 i <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;
@@ -191,7 +191,7 @@ i <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;
 }
 </code></pre></div><p>貌似比网上高人给的算法效率更高，可惜没去证实。</p>
 <p>晚上又想到更高效的算法：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> mo[]<span style="color:#f92672">=</span>{<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">0</span>};
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> mo[]<span style="color:#f92672">=</span>{<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">0</span>};
 <span style="color:#66d9ef">int</span> m;
 <span style="color:#66d9ef">while</span>(m<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">3</span>)
 {

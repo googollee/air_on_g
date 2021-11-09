@@ -159,7 +159,7 @@
           
 
           <p>同学看完我的一段有趣的程序后，给了我一段bt的程序：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#define _ -F&lt;00||--F-OO--;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#define _ -F&lt;00||--F-OO--;
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> F<span style="color:#f92672">=</span><span style="color:#ae81ff">00</span>,OO<span style="color:#f92672">=</span><span style="color:#ae81ff">00</span>;main(){F_OO();printf(<span style="color:#e6db74">&#34;%1.3f</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>,<span style="color:#ae81ff">4.</span><span style="color:#f92672">*-</span>F<span style="color:#f92672">/</span>OO<span style="color:#f92672">/</span>OO);}F_OO()
 {
             _<span style="color:#f92672">-</span>_<span style="color:#f92672">-</span>_<span style="color:#f92672">-</span>_
@@ -181,7 +181,7 @@ _<span style="color:#f92672">-</span>_<span style="color:#f92672">-</span>_<span
 }
 </code></pre></div><!-- raw HTML omitted -->
 <p>俺就又本着人不bt枉少年的精神，又bt的研究了一下。程序贴到vc里，编译出现三个错误，一个是printf未定义，一个是F_00未定义。改动后如下，同时将程序结构改的可读性更强：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#include</span><span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#include</span><span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
 </span><span style="color:#75715e">#define _ -F&lt;00||--F-OO--;
 </span><span style="color:#75715e"></span>F_OO();
 
@@ -222,7 +222,7 @@ _<span style="color:#f92672">-</span>_<span style="color:#f92672">-</span>_<span
 <p>前面所讲到的问题，应该涉及到c语言编译器实现的细节问题。c语言编译器指对宏进行简单替换，而不进行任何语法判断，因此可以肯定，对宏的替换工作是先于语法判断和编译过程的。c编译器在进行语法判断时，使用的是大嘴原则，也就是尽可能将更多的字符解释为运算符等关键字，而实际中并没有将“<code>-_</code>”解释为“<code>--F&lt;00||--F-OO--;</code>”，可以认为，编译器在替换前，会对宏的前后进行标识，将宏本身与前后的语句分开，这样，宏本身的运算符就不会与程序前后的运算符关联在一起，改变宏语句本身的运算符的意义。因此，这个程序中的宏最终解释为“<code>- -F&lt;00||--F-OO--;</code>”。</p>
 <p>另一个值得注意的问题是，“<code>-_</code>”在解释为“<code>- -F&lt;00||--F-OO--;</code>”之后，实际宏本身的运算顺序已经改变。这里也是为什么在《c陷阱与缺陷》里，作者特别提到，宏的定义应该加括号，格式为“#define NN (&hellip;)”，以免程序中出现很隐蔽的，改变宏本身运算顺序的逻辑错误。</p>
 <p>为了验证编译器对宏的替换过程，编写了下面的程序：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#define A ++a
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#define A ++a
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">void</span>){
  <span style="color:#66d9ef">int</span> a<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>;
  a<span style="color:#f92672">=</span>a<span style="color:#f92672">+++</span>A;

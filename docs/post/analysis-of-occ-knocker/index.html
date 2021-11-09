@@ -55,7 +55,7 @@
   },
   "genre": "post",
   "keywords": "c, occ",
-  "wordcount":  1919 ,
+  "wordcount":  1921 ,
   "url": "https:\/\/air.googol.im\/post\/analysis-of-occ-knocker\/",
   "datePublished": "2004-09-22T20:00:00\u002b08:00",
   "dateModified": "2004-09-22T20:00:00\u002b08:00",
@@ -160,11 +160,11 @@
 
           <p>最近在一个论坛发现了一段简单的C程序很有意思，其中蕴含着不少技巧，在此与大家分享一下。</p>
 <p>原程序如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
 </span><span style="color:#75715e"></span>main(_){<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span>x<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;*b#**000**I#*******2*0***#-.****5.*-#-.****54.#*******2**6#****00**0.#&#34;</span>;<span style="color:#66d9ef">while</span>(_<span style="color:#f92672">=*</span>x<span style="color:#f92672">/</span><span style="color:#ae81ff">4</span>)_<span style="color:#f92672">-=</span><span style="color:#ae81ff">8</span>,printf(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">%*s&#34;</span><span style="color:#f92672">+!!</span>_,_<span style="color:#f92672">+</span>_,<span style="color:#e6db74">&#34;_/_/_/&#34;</span><span style="color:#f92672">+*</span>x<span style="color:#f92672">++%</span><span style="color:#ae81ff">4</span><span style="color:#f92672">*</span><span style="color:#ae81ff">2</span>);}
 </code></pre></div><!-- raw HTML omitted -->
 <p>表面看起来很奇怪的代码，我把它放到VC++6下面编译，发现不能通过，提示“_”未声明，对以上代码稍加修改，如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
 </span><span style="color:#75715e"></span>
 main(<span style="color:#66d9ef">int</span> _){<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span>x<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;*b#**000**I#*******2*0***#-.****5.*-#-.****54.#*******2**6#****00**0.#&#34;</span>;<span style="color:#66d9ef">while</span>(_<span style="color:#f92672">=*</span>x<span style="color:#f92672">/</span><span style="color:#ae81ff">4</span>)_<span style="color:#f92672">-=</span><span style="color:#ae81ff">8</span>,printf(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">%*s&#34;</span><span style="color:#f92672">+!!</span>_,_<span style="color:#f92672">+</span>_,<span style="color:#e6db74">&#34;_/_/_/&#34;</span><span style="color:#f92672">+*</span>x<span style="color:#f92672">++%</span><span style="color:#ae81ff">4</span><span style="color:#f92672">*</span><span style="color:#ae81ff">2</span>);}
 </code></pre></div><p>细心的人已经看出来了，就是在main函数的参数“<code>_</code>”前面加上了变量的类型：<code>int</code>。此时，以上代码在VC6中就能够正常的编译和连接了。运行的结果如下：</p>
@@ -178,7 +178,7 @@ main(<span style="color:#66d9ef">int</span> _){<span style="color:#66d9ef">char<
 </code></pre>
 <p>是用“<code>_/</code>”组成的单词“knocker”。</p>
 <p>下面我们来分析这个小小的程序，不过为了看起来直观，我把这个程序稍加改动：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
 </span><span style="color:#75715e"></span>
 main(<span style="color:#66d9ef">int</span> _) {
   <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span>x<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;*b#**000**I#*******2*0***#-.****5.*-#-.****54.#*******2**6#****00**0.#&#34;</span>;
@@ -195,7 +195,7 @@ main(<span style="color:#66d9ef">int</span> _) {
 <blockquote>
 <p>If the width specification is an asterisk (*), an int argument from the argument list supplies the value. The width argument must precede the value being formatted in the argument list.</p>
 </blockquote>
-<p>意思是说如果宽度用星号(*)来指定，则应该在参数列表中提供一个int型参数作为宽度的值。这样就清楚了，原来这个printf语句是用表达式_+_来控制字符串”%<em>s”的宽度，也就是替换其中的（</em>）。</p>
+<p>意思是说如果宽度用星号(*)来指定，则应该在参数列表中提供一个int型参数作为宽度的值。这样就清楚了，原来这个printf语句是用表达式_+_来控制字符串”%*s”的宽度，也就是替换其中的（*）。</p>
 <p>在仔细一看，原来格式字符串还没有完！完整的应该是：<code>&quot;\n%*s&quot;+!!_</code>。这就奇怪了，字符串怎么和<code>!!_</code>相加呢？其实也不奇怪，在这里<code>!!_</code>是对变量_作了两次“非”的操作，结果应该是0或1。要明确的是，字符串作为参数传递给函数的时候，只是把字符串的首地址传递给了函数，所以字符串<code>&quot;\n%*s&quot;</code>的首地址就是字符‘<code>\n</code>’的地址，当这个地址加1的时候，传递给printf函数的格式字符串就变成了<code>&quot;%*s&quot;</code>，所以这个<code>+!!_</code>的奥妙就在于控制换行！是不是很有创意？</p>
 <p>当然了，下面的代码同样有创意，就是printf语句要打印的字符串参数：<code>&quot;_/_/_/&quot;+*x++%4*2</code>。经过刚才的分析，我们不难理解<code>&quot;_/_/_/&quot;</code>加上后面的表达式的用意了，同样是控制输出字符的个数，是一个“<code>_/</code>”，两个，还是三个。那么关键就是后面这个表达式了：<code>*x++%4*2</code>。其实慢慢的分析也不困难，先执行<code>*x%4*2</code>，然后执行<code>x++</code>。所以，当在执行while语句的时候，x会指向下一个字符！</p>
 <p>综上所述，这个小程序就是利用一个字符串来控制输出的例子，里面运用了很多技巧，对于初学者需要很好的理解，对今后的编程是很有帮助的！</p>
@@ -211,7 +211,7 @@ main(<span style="color:#66d9ef">int</span> _) {
            
             <p class="copyright-item">
                     <span>:</span>
-                   <span>1919</span>
+                   <span>1921</span>
             </p>
 
             <p class="copyright-item">
