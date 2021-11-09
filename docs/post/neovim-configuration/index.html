@@ -228,7 +228,6 @@ nd
 <span style="color:#66d9ef">return</span> M
 </code></pre></div><p>一个函数是<code>init</code>，用来在Packer的<code>startup()</code>方法里初始化插件。这个函数调用了两次<code>packer</code>，注册了两个插件。另一个函数<code>on_attach</code>用于启用Lsp的配置。因为不是所有的文件都有Lsp的支持，比如日志文件就不需要任何Lsp的功能，使用<code>on_attach</code>可以保证只在打开有Lsp支持的文件时，才执行对应的Lsp配置。</p>
 <p>我不打算介绍所有的插件，这里只介绍几个配置比较简单的插件，来展示组织方式。完整的配置文件可以看<a href="https://github.com/googollee/my_sys/tree/master/nvim/">my_sys</a>。</p>
-
     </div>
 
     <div class="post-copyright">

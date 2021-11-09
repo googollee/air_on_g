@@ -14,6 +14,8 @@ author: "Googol Lee"
 
 最近NeoVim放出了0.5.1版本，默认支持Lsp以及Lua脚本运行时。Lsp是我现在非常常用的功能。Vim只依靠插件支持Lsp，很多特性用起来并不顺畅。所以我放弃了Vim，转而使用NeoVim作为主力编辑器。
 
+<!--more-->
+
 NeoVim另一个特点是使用Lua做配置，而不是VimScript。Lua语法层面比VimScript要更像一个正常的语言，也很灵活。我花了大概两天时间，把VimScript的配置彻底改成了Lua。这里记录一下我是如何使用Lua组织NeoVim的插件和配置的。
 
 插件管理使用[Packer](https://github.com/wbthomason/packer.nvim)。这是一个Lua编写，利用了NeoVim内置模块功能的插件。主配置文件`~/.config/nvim/init.lua`很简单，就是Packer的内容。其余插件都通过`require()`，从别的文件中引用。
