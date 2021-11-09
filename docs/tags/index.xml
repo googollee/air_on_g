@@ -7,34 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 09 Nov 2021 22:54:04 +0100</lastBuildDate><atom:link href="https://air.googol.im/tags/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>editor</title>
-      <link>https://air.googol.im/tags/editor/</link>
-      <pubDate>Tue, 09 Nov 2021 22:54:04 +0100</pubDate>
-      
-      <guid>https://air.googol.im/tags/editor/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>lua</title>
-      <link>https://air.googol.im/tags/lua/</link>
-      <pubDate>Tue, 09 Nov 2021 22:54:04 +0100</pubDate>
-      
-      <guid>https://air.googol.im/tags/lua/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>neovim</title>
-      <link>https://air.googol.im/tags/neovim/</link>
-      <pubDate>Tue, 09 Nov 2021 22:54:04 +0100</pubDate>
-      
-      <guid>https://air.googol.im/tags/neovim/</guid>
-      <description></description>
-    </item>
-    
+    <lastBuildDate>Sat, 21 Jul 2018 11:10:00 +0200</lastBuildDate><atom:link href="https://air.googol.im/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>go</title>
       <link>https://air.googol.im/tags/go/</link>
@@ -194,6 +167,15 @@
       <pubDate>Fri, 07 Mar 2014 01:20:00 +0800</pubDate>
       
       <guid>https://air.googol.im/tags/atom/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>editor</title>
+      <link>https://air.googol.im/tags/editor/</link>
+      <pubDate>Fri, 07 Mar 2014 01:20:00 +0800</pubDate>
+      
+      <guid>https://air.googol.im/tags/editor/</guid>
       <description></description>
     </item>
     
