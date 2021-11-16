@@ -93,9 +93,9 @@
         <div class="menu navbar-right">
                 
                 
-                <a class="menu-item" href="/post/" title="">Blog</a>
+                <a class="menu-item" href="/post" title="">Blog</a>
                 
-                <a class="menu-item" href="/categories/" title="">Categories</a>
+                <a class="menu-item" href="/categories" title="">Categories</a>
                 
                 <a class="menu-item" href="/about" title="">About</a>
                 
@@ -115,9 +115,9 @@
           <div class="menu" id="mobile-menu">
                 
                 
-                <a class="menu-item" href="/post/" title="">Blog</a>
+                <a class="menu-item" href="/post" title="">Blog</a>
                 
-                <a class="menu-item" href="/categories/" title="">Categories</a>
+                <a class="menu-item" href="/categories" title="">Categories</a>
                 
                 <a class="menu-item" href="/about" title="">About</a>
                 
@@ -161,7 +161,7 @@
           <p>记录了一些使用Go时遇到的违反直觉的特性。</p>
 <h2 id="recover是个特殊的函数">recover是个特殊的函数</h2>
 <p>能猜到下面的程序会不会崩溃么？</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 
 <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
 	<span style="color:#66d9ef">defer</span> recover()
@@ -170,7 +170,7 @@
 </code></pre></div><p>程序依旧会崩溃。</p>
 <p>原因是recover虽然看起来是个函数，但其实是编译器有特殊处理，可以当做一个关键字看待。</p>
 <p>正确的写法是把recover放到一个函数里：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 
 <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
 	<span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() { recover() }()
@@ -178,7 +178,7 @@
 }
 </code></pre></div><h2 id="slice的引用特性">slice的引用特性</h2>
 <p>依旧是先给出程序，猜输出：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 
 <span style="color:#f92672">import</span> (
 	<span style="color:#e6db74">&#34;fmt&#34;</span>

@@ -32,12 +32,12 @@ copyright = "This work is licensed under a Creative Commons Attribution-NonComme
 [menu]
   [[menu.main]]
     name = "Blog"
-    url = "/post/"
+    url = "/post"
     weight = 1
 
   [[menu.main]]
     name = "Categories"
-    url = "/categories/"
+    url = "/categories"
     weight = 3
 
   [[menu.main]]
@@ -52,7 +52,7 @@ copyright = "This work is licensed under a Creative Commons Attribution-NonComme
     cdn_url = ""           # Base CDN URL
     home_mode = "" # post or other
     dateFormatToUse = "2006-01-02" # set date format, default "2 January 2006"
-    
+
     google_verification = ""
     bing_verification = ""
     yandex_verification = ""
@@ -66,12 +66,14 @@ copyright = "This work is licensed under a Creative Commons Attribution-NonComme
     keywords = "" # site keywords
 
     license= 'Released under <a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>'
+    defaultPage = "/post"
 
 [params.gravatar]
     email = "i@googol.im"   #uncomment and insert your email address to use gravatar
 
 
 [params.social]
+    RSS = "post"
     GitHub = "googollee"
     Twitter = "googollee"
     Instagram = "googollee"

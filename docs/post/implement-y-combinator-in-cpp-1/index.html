@@ -93,9 +93,9 @@
         <div class="menu navbar-right">
                 
                 
-                <a class="menu-item" href="/post/" title="">Blog</a>
+                <a class="menu-item" href="/post" title="">Blog</a>
                 
-                <a class="menu-item" href="/categories/" title="">Categories</a>
+                <a class="menu-item" href="/categories" title="">Categories</a>
                 
                 <a class="menu-item" href="/about" title="">About</a>
                 
@@ -115,9 +115,9 @@
           <div class="menu" id="mobile-menu">
                 
                 
-                <a class="menu-item" href="/post/" title="">Blog</a>
+                <a class="menu-item" href="/post" title="">Blog</a>
                 
-                <a class="menu-item" href="/categories/" title="">Categories</a>
+                <a class="menu-item" href="/categories" title="">Categories</a>
                 
                 <a class="menu-item" href="/about" title="">About</a>
                 
@@ -163,7 +163,7 @@
 <p>然后，想试试用C++能不能实现这个玩意儿。</p>
 <p>基本上，这真是个让我吐血的想法……</p>
 <p>最早想一步实现Y Combinator。琢磨着怎么有模板有运算符重载有类的C++，还模拟不出来个函数编程么？结果……唉，具体实现先不提。后来尝试按照文章里讲解Y Combinator的过程，实现某个非递归版本的函，比如那个阶乘：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">combinator</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">combinator</span>
 {
 <span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
     <span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">int</span> (<span style="color:#f92672">*</span>func_type)(<span style="color:#66d9ef">int</span>);
@@ -202,9 +202,9 @@
 }
 </code></pre></div><p>看吧，看吧，果然实现了！</p>
 <p>但是，当我想进一步递归的时候，问题出现了……因为对combinator的调用，是通过仿函数实现的，这个没法再次用函数的形式，去构造另一个combinator实例，比如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">combinator <span style="color:#a6e22e">_2</span>(_1); <span style="color:#75715e">// 这个不会通过编译的……
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">combinator <span style="color:#a6e22e">_2</span>(_1); <span style="color:#75715e">// 这个不会通过编译的……
 </span></code></pre></div><p>真是死人。没关系，我们有重载……这样：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">combinator</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">combinator</span>
 {
 <span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
     <span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">int</span> (<span style="color:#f92672">*</span>func_type)(<span style="color:#66d9ef">int</span>);

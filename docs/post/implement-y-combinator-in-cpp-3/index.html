@@ -93,9 +93,9 @@
         <div class="menu navbar-right">
                 
                 
-                <a class="menu-item" href="/post/" title="">Blog</a>
+                <a class="menu-item" href="/post" title="">Blog</a>
                 
-                <a class="menu-item" href="/categories/" title="">Categories</a>
+                <a class="menu-item" href="/categories" title="">Categories</a>
                 
                 <a class="menu-item" href="/about" title="">About</a>
                 
@@ -115,9 +115,9 @@
           <div class="menu" id="mobile-menu">
                 
                 
-                <a class="menu-item" href="/post/" title="">Blog</a>
+                <a class="menu-item" href="/post" title="">Blog</a>
                 
-                <a class="menu-item" href="/categories/" title="">Categories</a>
+                <a class="menu-item" href="/categories" title="">Categories</a>
                 
                 <a class="menu-item" href="/about" title="">About</a>
                 
@@ -160,7 +160,7 @@
 
           <p>基本上，又进行了几次失败的尝试，具体过程不写了，反正写了也没人看。（其实是我没有存……）</p>
 <p>难点在于C++的类型是在编译时确定的，也就是说，所有函数的返回类型和参数类型必须在编译前确定。但是，重新考察python的实现：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">Y</span>(le):
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">Y</span>(le):
   <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_anon</span>(cc):
     <span style="color:#66d9ef">return</span> le(<span style="color:#66d9ef">lambda</span> x: cc(cc)(x))
   <span style="color:#66d9ef">return</span> _anon(_anon)
@@ -169,7 +169,7 @@
 <p>但是python这里为啥就没有问题呢？原因是python的类型并不是在编译时确定，而是在运行时，也就是说，当执行到cc(cc)时，才确认cc是一个函数，以及这个函数的返回值和参数。你问为啥cc会是个函数？使用者（也就是调用_anon的地方）决定的呗，调用的时候就传入的是个函数。你还问要不是函数咋办？不是函数……抛异常崩溃呗，蓝屏的，见过吧？（还是微软六厂的呢！）</p>
 <p>所以说，想靠C++的正常手段实现Y Combinator是没有希望了。C++在编译时可写不出无穷递归的参数类型。不过，我们有void*。（这方面讲，C#和Java的反射也能达到运行时确定参数类型的目的，就是麻烦点。但C#的delegate估计就没戏了。）</p>
 <p>不过，由于boost::function的一些在我看来很奇怪的限制，导致我可能要真的重新实现一个function的东西了。比如下面这段居然就编译不过去：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">typedef</span> boost<span style="color:#f92672">::</span>function<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span>(<span style="color:#66d9ef">int</span>)<span style="color:#f92672">&gt;</span> ftype;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">typedef</span> boost<span style="color:#f92672">::</span>function<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span>(<span style="color:#66d9ef">int</span>)<span style="color:#f92672">&gt;</span> ftype;
 <span style="color:#66d9ef">typedef</span> boost<span style="color:#f92672">::</span>function<span style="color:#f92672">&lt;</span>ftypye(ftype)<span style="color:#f92672">&gt;</span> letype;
 </code></pre></div><p>而int(int)()(int(int))（天，我竟然能写出这么bt的类型签名，《C专家编程》没白读……）类型正是Y的参数le的类型，也是_1的返回类型。如此重要的类型居然没法用function定义出来……</p>
 <p>啊？你说为啥非要用function？这个_1的返回值_fn可是有enclosure在里面的，没有个functor怎么实现？既然有了functor，那普通的函数指针肯定没戏，只能找个类似function的东西。</p>

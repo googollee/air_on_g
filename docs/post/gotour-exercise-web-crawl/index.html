@@ -93,9 +93,9 @@
         <div class="menu navbar-right">
                 
                 
-                <a class="menu-item" href="/post/" title="">Blog</a>
+                <a class="menu-item" href="/post" title="">Blog</a>
                 
-                <a class="menu-item" href="/categories/" title="">Categories</a>
+                <a class="menu-item" href="/categories" title="">Categories</a>
                 
                 <a class="menu-item" href="/about" title="">About</a>
                 
@@ -115,9 +115,9 @@
           <div class="menu" id="mobile-menu">
                 
                 
-                <a class="menu-item" href="/post/" title="">Blog</a>
+                <a class="menu-item" href="/post" title="">Blog</a>
                 
-                <a class="menu-item" href="/categories/" title="">Categories</a>
+                <a class="menu-item" href="/categories" title="">Categories</a>
                 
                 <a class="menu-item" href="/about" title="">About</a>
                 
@@ -161,7 +161,7 @@
           <p>过年几天，把<a href="http://tour.golang.org/">A Tour of Go</a>看了一遍，算是复习了一遍go语言。其中最后一题<a href="http://tour.golang.org/#70">Exercise: Web Crawler</a>有些复杂，是串行程序转换到并行时常见的问题。这里记录一些当时思考的结果。</p>
 <h2 id="原题">原题</h2>
 <p>将下面的网页抓取程序，由串行改为并行。修改Crawl函数，并发抓取url指向的页面，并且保证对同一页面只做一次抓去。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 
 <span style="color:#f92672">import</span> (
 	<span style="color:#e6db74">&#34;os&#34;</span>
@@ -251,7 +251,7 @@
 </code></pre></div><p>程序有些长有些长，因为还包括一部分假数据。程序入口在<code>func main</code>里，提供<code>&quot;http://golang.org/&quot;</code>作为起始页面，抓取深度是4，使用fetcher作为抓取算法。</p>
 <h2 id="第一次并行化">第一次并行化</h2>
 <p>最初的想法是让每个Crawl单独跑一个goroutine，当Crawl里抓到新的url时，就启动一个新的goroutine。这个改动很简单，只需要修改Crawl函数就行：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Crawl</span>(<span style="color:#a6e22e">url</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">depth</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">fetcher</span> <span style="color:#a6e22e">Fetcher</span>) {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Crawl</span>(<span style="color:#a6e22e">url</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">depth</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">fetcher</span> <span style="color:#a6e22e">Fetcher</span>) {
 	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">depth</span> <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">0</span> {
 		<span style="color:#66d9ef">return</span>
 	}
@@ -270,12 +270,12 @@
 <h2 id="监视goroutine的启动和退出">监视goroutine的启动和退出</h2>
 <p>因此，程序需要有办法监控总共启动了多少个goroutine，而且还要能知道，是否所有goroutine都已经运行完毕退出了。传统的并发程序，是通过thread id或者thread handler，配合类似join的api来完成的。但是go没有任何对goroutine的控制方法，要想知道goroutine的状态，只能在其内部，通过chan将状态发送给接收者。同时，为了方便对goroutine进行计数，最好将所有goroutine的启动放在一个函数内，这就需要Crawl将新抓到的url发到一个特殊的控制函数，这个控制函数在接收到新的url后，启动新的Crawl进行抓取。程序修改如下：</p>
 <p>新建一个UrlData结构，用来传递新抓到的url，以及这个url对应的抓取深度depth：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">UrlData</span> <span style="color:#66d9ef">struct</span> {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">UrlData</span> <span style="color:#66d9ef">struct</span> {
 	<span style="color:#a6e22e">url</span>   <span style="color:#66d9ef">string</span>
 	<span style="color:#a6e22e">depth</span> <span style="color:#66d9ef">int</span>
 }
 </code></pre></div><p>修改Crawl函数，加入两个chan，quit对应函数退出的信号，urldata对应抓取到新的url时的新数据传输通道。注意defer是如何间接明了的完成发送quit信号的功能的（对比C++的析构函数概念，defer要清晰明快的多，而且有closure的加持，能做的事情也比析构多）：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Crawl</span>(<span style="color:#a6e22e">url</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">depth</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">fetcher</span> <span style="color:#a6e22e">Fetcher</span>, <span style="color:#a6e22e">urldata</span> <span style="color:#66d9ef">chan</span><span style="color:#f92672">&lt;-</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UrlData</span>, <span style="color:#a6e22e">quit</span> <span style="color:#66d9ef">chan</span><span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">int</span>) {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Crawl</span>(<span style="color:#a6e22e">url</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">depth</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">fetcher</span> <span style="color:#a6e22e">Fetcher</span>, <span style="color:#a6e22e">urldata</span> <span style="color:#66d9ef">chan</span><span style="color:#f92672">&lt;-</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UrlData</span>, <span style="color:#a6e22e">quit</span> <span style="color:#66d9ef">chan</span><span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">int</span>) {
 	<span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() { <span style="color:#a6e22e">quit</span> <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">1</span> }()
 
 	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">depth</span> <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">0</span> {
@@ -293,7 +293,7 @@
 	<span style="color:#66d9ef">return</span>
 }
 </code></pre></div><p>修改main函数，加入对goroutine的控制：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
 	<span style="color:#a6e22e">urldata</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UrlData</span>)
 	<span style="color:#a6e22e">quit</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>)
 
@@ -312,7 +312,7 @@
 </code></pre></div><p>这样，整个程序在流程上就没有问题了。</p>
 <h2 id="加入cache对同一网址只crawl一遍">加入cache，对同一网址只Crawl一遍</h2>
 <p>因为所有Crawl都是由main函数控制的，因此这个改动只在main里修改即可：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
 	<span style="color:#a6e22e">urldata</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UrlData</span>)
 	<span style="color:#a6e22e">quit</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>)
 	<span style="color:#a6e22e">url_cache</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">bool</span>)
@@ -337,7 +337,7 @@
 </code></pre></div><p>url_cache是一个key为string，value为bool的map，在有新的url传入时，先以url为key，检查其value是否为true。如果为true说明已经Crawl过，不再处理，如果为false，先将value设置为true，然后启动Crawl对这个url进行抓取。</p>
 <h2 id="重构dry">重构，DRY</h2>
 <p>你注意到了么？main函数里有两个地方对url_cache进行操作并启动Crawl。一个是在for循环外面，设置启动url，另一个是在for循环里面，处理新的url。这两个地方所做的事情，本质上都是对一个新url的处理，但为什么要写两遍呢？现在就来试试能不能将其合并：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
 	<span style="color:#a6e22e">urldata</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UrlData</span>)
 	<span style="color:#a6e22e">quit</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>)
 	<span style="color:#a6e22e">url_cache</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">bool</span>)
@@ -366,7 +366,7 @@
 <h2 id="抽象接口">抽象接口</h2>
 <p>对这道题来说，做完上面的部分，就已经完成了所有任务。不过从设计的角度，这个程序的输入和输出都混在一起（不会有真的只是打印就完事的抓取程序吧？）。能不能实现一个更好的接口呢？</p>
 <p>先来设想一下使用的情况。一个简洁好用的接口应该是什么样子的呢？下面的样子是不是足够简洁呢？</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
 	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">data</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">CrawlWeb</span>(<span style="color:#e6db74">&#34;http://golang.org/&#34;</span>, <span style="color:#a6e22e">fetcher</span>) {
 		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">data</span>.<span style="color:#a6e22e">err</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
 			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;found:&#34;</span>, <span style="color:#a6e22e">data</span>.<span style="color:#a6e22e">url</span>, <span style="color:#a6e22e">data</span>.<span style="color:#a6e22e">body</span>)
@@ -376,13 +376,13 @@
 	}
 }
 </code></pre></div><p>显然，为了实现并行，CrawlWeb应该返回一个chan，这个chan包含了抓取的相关信息：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">FetchData</span> <span style="color:#66d9ef">struct</span> {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">FetchData</span> <span style="color:#66d9ef">struct</span> {
 	<span style="color:#a6e22e">err</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Error</span>
 	<span style="color:#a6e22e">url</span> <span style="color:#66d9ef">string</span>
 	<span style="color:#a6e22e">body</span> <span style="color:#66d9ef">string</span>
 }
 </code></pre></div><p>对应修改Crawl的输出方式，使其不再直接Println结果，而是将结果打包，传入data chan作为输出：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Crawl</span>(<span style="color:#a6e22e">url</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">depth</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">fetcher</span> <span style="color:#a6e22e">Fetcher</span>, <span style="color:#a6e22e">data</span> <span style="color:#66d9ef">chan</span><span style="color:#f92672">&lt;-</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">FetchData</span>, <span style="color:#a6e22e">new_url</span> <span style="color:#66d9ef">chan</span><span style="color:#f92672">&lt;-</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UrlData</span>, <span style="color:#a6e22e">quit</span> <span style="color:#66d9ef">chan</span><span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">int</span>) {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Crawl</span>(<span style="color:#a6e22e">url</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">depth</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">fetcher</span> <span style="color:#a6e22e">Fetcher</span>, <span style="color:#a6e22e">data</span> <span style="color:#66d9ef">chan</span><span style="color:#f92672">&lt;-</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">FetchData</span>, <span style="color:#a6e22e">new_url</span> <span style="color:#66d9ef">chan</span><span style="color:#f92672">&lt;-</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UrlData</span>, <span style="color:#a6e22e">quit</span> <span style="color:#66d9ef">chan</span><span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">int</span>) {
 	<span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() { <span style="color:#a6e22e">quit</span> <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">1</span> }()
 
 	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">depth</span> <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">0</span> {
@@ -397,7 +397,7 @@
 	<span style="color:#66d9ef">return</span>
 }
 </code></pre></div><p>由于在现在的main里，调用CrawlWeb后函数需要立刻返回，因此原先的for循环需要跑在一个单独的goroutine里，不能阻塞CrawlWeb的调用。为了清晰，将循环部分单独写成一个函数：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">CrawlLoop</span>(<span style="color:#a6e22e">url</span> <span style="color:#66d9ef">chan</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UrlData</span>, <span style="color:#a6e22e">output</span> <span style="color:#66d9ef">chan</span><span style="color:#f92672">&lt;-</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">FetchData</span>, <span style="color:#a6e22e">fetcher</span> <span style="color:#a6e22e">Fetcher</span>) {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">CrawlLoop</span>(<span style="color:#a6e22e">url</span> <span style="color:#66d9ef">chan</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UrlData</span>, <span style="color:#a6e22e">output</span> <span style="color:#66d9ef">chan</span><span style="color:#f92672">&lt;-</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">FetchData</span>, <span style="color:#a6e22e">fetcher</span> <span style="color:#a6e22e">Fetcher</span>) {
 	<span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() { close(<span style="color:#a6e22e">output</span>) }()
 
 	<span style="color:#a6e22e">url_cache</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">bool</span>)
@@ -422,7 +422,7 @@
 }
 </code></pre></div><p>CrawLoop在退出时会close(output)，来结束main里的range循环。</p>
 <p>剩下的，就是如何用CrawlWeb来启动CrawlLoop，并将output chan作为返回值，返回给外面的range了：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">CrawlWeb</span>(<span style="color:#a6e22e">start_url</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">depth</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">fetcher</span> <span style="color:#a6e22e">Fetcher</span>) <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">FetchData</span> {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">CrawlWeb</span>(<span style="color:#a6e22e">start_url</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">depth</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">fetcher</span> <span style="color:#a6e22e">Fetcher</span>) <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">FetchData</span> {
 	<span style="color:#a6e22e">output</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">FetchData</span>)
 	<span style="color:#a6e22e">url</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UrlData</span>)
 
@@ -435,7 +435,7 @@
 </code></pre></div><p>对于CrawlLoop这个函数，作为goroutine启动后，可以将url chan视为输入，output chan视为输出，当给url chan传入数据时，启动CrawlLoop的真正执行，结果会在执行过程中从output中逐项输出。由于并发的因素，和传统函数调用不同，输出不是等待函数结束后一次性输出，而是在函数的执行过程中，output随时会输出结果，当函数执行完毕后关闭output。</p>
 <h2 id="收工">收工</h2>
 <p>最后，贴上修改后的所有代码。为了测试是否真正实现并行，我加入了一部分假数据。那么，如何测试是否真的实现了并发呢？有兴趣的可以自己动手实验一下。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 
 <span style="color:#f92672">import</span> (
 	<span style="color:#e6db74">&#34;os&#34;</span>

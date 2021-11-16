@@ -94,9 +94,9 @@
         <div class="menu navbar-right">
                 
                 
-                <a class="menu-item" href="/post/" title="">Blog</a>
+                <a class="menu-item" href="/post" title="">Blog</a>
                 
-                <a class="menu-item" href="/categories/" title="">Categories</a>
+                <a class="menu-item" href="/categories" title="">Categories</a>
                 
                 <a class="menu-item" href="/about" title="">About</a>
                 
@@ -116,9 +116,9 @@
           <div class="menu" id="mobile-menu">
                 
                 
-                <a class="menu-item" href="/post/" title="">Blog</a>
+                <a class="menu-item" href="/post" title="">Blog</a>
                 
-                <a class="menu-item" href="/categories/" title="">Categories</a>
+                <a class="menu-item" href="/categories" title="">Categories</a>
                 
                 <a class="menu-item" href="/about" title="">About</a>
                 
@@ -190,7 +190,7 @@
 <p>但是n次加密，对于同样的密码明文，生成的密文依旧是相同的。为了保证同样的明文生成的密文不同，也就是第4条原则，在每次加密密码时，生成一段随机字符串，称作“盐”，把这个随机“盐”拼接到密码明文上，再将拼接后的字符作为整体进行加密。保存的时候不仅要保存加密后的密文，也要保存“盐”。这个过程也可以称作“加点盐”（注意不是“加碘盐”）。</p>
 <p>“加盐”的过程，不仅能防止不同用户同样的密码明文生成同样的密文，也可以防止形成“常见密文”，同时满足第3条和第4条原则，因此只采用“加盐”，不采用n次加密也是可行的。rails3的默认密码策略就采用“加盐”后的一次blowfish加密。而wordpress的密码，在“加盐”后，依旧进行了8重MD5加密。</p>
 <p>第5条是一条隐藏的更深的原则。如果有人拿到了密码密文和程序的加密算法，理论上，只要有足够的时间，可以通过列举所有可能的密码明文，来找出密文对应的密码。但是毕竟加密算法是需要时间的，如果这个算法足够的“慢”，而且最好随着电脑速度的提升，算法的速度提升不明显（如果电脑速度提升随时间是线性O(n)关系，算法的效率只要达到O(nlogn)或者O(n<!-- raw HTML omitted -->2<!-- raw HTML omitted -->)，就能实现这种不明显的提升），那么就能大大延长列举破解的时间，也就具有更强的安全性。blowfish就是这么一个算法。对比MD5和SHA1，blowfish的加密速度足够慢，但又没有慢到单次无法忍受的地步。MD5，SHA1和blowfish对同一字符串执行1000次加密的速度对比如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#39;benchmark&#39;</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#39;benchmark&#39;</span>
 
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_rand_str</span>(size <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>)
   chars <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;abcdefghjiklmnopqrstuvwxyzABCDEFGHJIJKLMNOPQRSTUVWXYZ1234567890!@#%^&amp;*()&#39;</span>
@@ -236,14 +236,14 @@ blowfish  85.100000   0.180000  85.280000 ( 87.112666)
 <p>可见blowfish与MD5和SHA1比起来确实相当慢。正因如此，blowfish被OpenBSD采用作为其密码加密算法，而Rails3的has_secure_password也是用的blowfish。</p>
 <h2 id="密码存储算法的实现">密码存储算法的实现</h2>
 <p>算法的实现与语言本身紧密相关。不过，如果语言提供了blowfish的算法库，直接使用这个库是最好的方法。Ruby的实现如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#39;bcrypt&#39;</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#39;bcrypt&#39;</span>
 
 password_digest <span style="color:#f92672">=</span> <span style="color:#66d9ef">BCrypt</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Password</span><span style="color:#f92672">.</span>create(password) <span style="color:#75715e"># 根据明文password生成密文password_digest</span>
 
 <span style="color:#66d9ef">BCrypte</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Password</span><span style="color:#f92672">.</span>new(password_digest) <span style="color:#f92672">==</span> password  <span style="color:#75715e"># 根据密文password_digest验证明文password是否有效</span>
 </code></pre></div><p>如果使用Rails3，可以在Model上直接加入has_secure_password，即可支持blowfish算法实现的密码存储。Model需要提供名为password_digest的字符串域。</p>
 <p>对于php，可以直接使用wordpress实现的密码类<a href="http://core.trac.wordpress.org/browser/trunk/wp-includes/class-phpass.php">class-phpass.php</a>：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">$hasher <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">PasswordHash</span>(<span style="color:#ae81ff">8</span>, <span style="color:#66d9ef">TRUE</span>);
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">$hasher <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">PasswordHash</span>(<span style="color:#ae81ff">8</span>, <span style="color:#66d9ef">TRUE</span>);
 
 $password_digest <span style="color:#f92672">=</span> $hasher<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">HashPassword</span>($password);  <span style="color:#75715e">// 根据明文$password生成密文$password_digest
 </span><span style="color:#75715e"></span>
