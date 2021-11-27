@@ -164,13 +164,13 @@
 <p>这个环境依然有两个麻烦的地方，首先是模拟环境的文件系统和Windows 10的文件系统是分离的，可以把Windows 10的文件系统通过<code>/mnt/c</code>的方式挂载到模拟层里（先不吐槽所有文件挂载后0777的访问属性）。其次是Linux模拟环境下默认没有X，不能操作任何GUI，只能使用命令行交互（愿意的话可以通过SDL的方式装X，但我不愿意这么折腾）。第一次尝试的时候打算直接把工作目录通过软连接，进入<code>/mnt/c</code>下的工作目录。编辑文件在Windows 10里用Atom，编译执行在Linux环境。这样麻烦在于，我需要在Windows和Linux两个环境里同时配置一些运行环境，比如golang，lint等工具，才能在编辑的时候能够自动执行，也能在命令行下执行。这种在两个地方配置一套类似的东西，最后总会出现维护上的问题。</p>
 <p>最后决定下狠心，放弃Atom，直接在命令行里使用VIM。</p>
 <p>使用Switcher安装的Debian testing，默认的VIM不带任何脚本程序（Python，Ruby）支持，所以VIM插件会有限制（主要是YouCompleteMe这个插件）首先更新VIM：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo apt-get purge vim
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo apt-get purge vim
 $ sudo apt-get install vim-nox
 </code></pre></div><p>由于这个包使用Python 3作为Python的默认支持，为了简化配置，将环境的Python也默认设置为Python 3（反正我不用Python）：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 <span style="color:#ae81ff">1</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 <span style="color:#ae81ff">1</span>
 sudo update-alternatives --config python
 </code></pre></div><p>之后安装<a href="https://github.com/VundleVim/Vundle.vim">Vundle.vim</a>作为插件管理：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ mkdir -p ~/.vim/bundle
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ mkdir -p ~/.vim/bundle
 $ cd ~/.vim/bundle
 
 <span style="color:#75715e"># 以下两组命令2选1</span>
@@ -197,7 +197,7 @@ $ cat &gt; ~/.vimrc <span style="color:#e6db74">&lt;&lt;EOF
 </span><span style="color:#e6db74">EOF</span>
 </code></pre></div><p>最终安装并配置插件后的配置文件可以直接参考<a href="https://github.com/googollee/my_sys/blob/master/vim/vimrc">.vimrc</a>。这个配置会利用<code>Ctrl-e</code>来循环打开NERDTree和TagBar，并可以按住<code>Ctrl</code>后，使用<code>hjkl</code>来切换不同的Window，使用<code>w</code>创建新的Tab，使用<code>nm</code>来切换不同的Tab（其实我更想使用<code>Ctrl-,.</code>来切换Tab，无奈似乎不能map）。使用<code>Ctrl-p</code>可以在当前目录下根据文件名快速定位文件。</p>
 <p>修改好配制后，需要进入VIM执行<code>:PluginInstall</code>来安装所有的插件。插件安装好后，需要编译YouCompleteMe插件：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo apt-get install build-essential cmake
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo apt-get install build-essential cmake
 $ cd ~/.vim/bundle/YouCompleteMe
 $ python ./install.py --clang-completer --gocode-completer --tern-completer
 </code></pre></div><p>这个编译保证能对clang，golang和Javascript进行补全。</p>
