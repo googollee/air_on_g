@@ -9,7 +9,7 @@ tags:
  - go-swagger
  - openapi
  - swagger
-featured_image: go-swagger-spec.jpg
+featured_image: /images/go-swagger-spec.jpg
 author: "Googol Lee"
 ---
 
