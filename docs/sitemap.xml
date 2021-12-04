@@ -4,7 +4,7 @@
     <url>
       <loc>https://air.googol.im/</loc>
       
-      <lastmod>2021-11-09T22:54:04+01:00</lastmod>
+      <lastmod>2021-12-04T11:11:08+01:00</lastmod>
       
       
       <changefreq>monthly</changefreq>
@@ -18,7 +18,119 @@
     <url>
       <loc>https://air.googol.im/categories/</loc>
       
-      <lastmod>2021-11-09T22:54:04+01:00</lastmod>
+      <lastmod>2021-12-04T11:11:08+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/go/</loc>
+      
+      <lastmod>2021-12-04T11:11:08+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/go-swagger/</loc>
+      
+      <lastmod>2021-12-04T11:11:08+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/openapi/</loc>
+      
+      <lastmod>2021-12-04T11:11:08+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/</loc>
+      
+      <lastmod>2021-12-04T11:11:08+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/swagger/</loc>
+      
+      <lastmod>2021-12-04T11:11:08+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/</loc>
+      
+      <lastmod>2021-12-04T11:11:08+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/go-swagger-spec/</loc>
+      
+      <lastmod>2021-12-04T11:11:08+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/categories/%E5%BC%80%E5%8F%91/</loc>
+      
+      <lastmod>2021-12-04T11:11:08+01:00</lastmod>
       
       
       <changefreq>monthly</changefreq>
@@ -72,65 +184,9 @@
     </url>
   
     <url>
-      <loc>https://air.googol.im/post/</loc>
-      
-      <lastmod>2021-11-09T22:54:04+01:00</lastmod>
-      
-      
-      <changefreq>monthly</changefreq>
-      
-      
-      <priority>0.5</priority>
-      
-      
-    </url>
-  
-    <url>
-      <loc>https://air.googol.im/tags/</loc>
-      
-      <lastmod>2021-11-09T22:54:04+01:00</lastmod>
-      
-      
-      <changefreq>monthly</changefreq>
-      
-      
-      <priority>0.5</priority>
-      
-      
-    </url>
-  
-    <url>
-      <loc>https://air.googol.im/categories/%E5%BC%80%E5%8F%91/</loc>
-      
-      <lastmod>2021-11-09T22:54:04+01:00</lastmod>
-      
-      
-      <changefreq>monthly</changefreq>
-      
-      
-      <priority>0.5</priority>
-      
-      
-    </url>
-  
-    <url>
       <loc>https://air.googol.im/post/neovim-configuration/</loc>
       
       <lastmod>2021-11-09T22:54:04+01:00</lastmod>
-      
-      
-      <changefreq>monthly</changefreq>
-      
-      
-      <priority>0.5</priority>
-      
-      
-    </url>
-  
-    <url>
-      <loc>https://air.googol.im/tags/go/</loc>
-      
-      <lastmod>2018-07-21T11:10:00+02:00</lastmod>
       
       
       <changefreq>monthly</changefreq>
