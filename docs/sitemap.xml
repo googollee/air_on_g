@@ -4,7 +4,7 @@
     <url>
       <loc>https://air.googol.im/</loc>
       
-      <lastmod>2021-12-04T11:11:08+01:00</lastmod>
+      <lastmod>2022-01-30T16:25:52+01:00</lastmod>
       
       
       <changefreq>monthly</changefreq>
@@ -18,7 +18,105 @@
     <url>
       <loc>https://air.googol.im/categories/</loc>
       
-      <lastmod>2021-12-04T11:11:08+01:00</lastmod>
+      <lastmod>2022-01-30T16:25:52+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/coffee/</loc>
+      
+      <lastmod>2022-01-30T16:25:52+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/coffee-machine/</loc>
+      
+      <lastmod>2022-01-30T16:25:52+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/</loc>
+      
+      <lastmod>2022-01-30T16:25:52+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/repair/</loc>
+      
+      <lastmod>2022-01-30T16:25:52+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/tags/</loc>
+      
+      <lastmod>2022-01-30T16:25:52+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/post/repair-ses980/</loc>
+      
+      <lastmod>2022-01-30T16:25:52+01:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://air.googol.im/categories/%E7%94%9F%E6%B4%BB/</loc>
+      
+      <lastmod>2022-01-30T16:25:52+01:00</lastmod>
       
       
       <changefreq>monthly</changefreq>
@@ -72,35 +170,7 @@
     </url>
   
     <url>
-      <loc>https://air.googol.im/post/</loc>
-      
-      <lastmod>2021-12-04T11:11:08+01:00</lastmod>
-      
-      
-      <changefreq>monthly</changefreq>
-      
-      
-      <priority>0.5</priority>
-      
-      
-    </url>
-  
-    <url>
       <loc>https://air.googol.im/tags/swagger/</loc>
-      
-      <lastmod>2021-12-04T11:11:08+01:00</lastmod>
-      
-      
-      <changefreq>monthly</changefreq>
-      
-      
-      <priority>0.5</priority>
-      
-      
-    </url>
-  
-    <url>
-      <loc>https://air.googol.im/tags/</loc>
       
       <lastmod>2021-12-04T11:11:08+01:00</lastmod>
       
