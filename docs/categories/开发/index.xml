@@ -7,7 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Sat, 04 Dec 2021 11:11:08 +0100</lastBuildDate><atom:link href="https://air.googol.im/categories/%E5%BC%80%E5%8F%91/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 20 Feb 2022 17:37:40 +0100</lastBuildDate><atom:link href="https://air.googol.im/categories/%E5%BC%80%E5%8F%91/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Go 1.18新库netaddr里的intern.Value</title>
+      <link>https://air.googol.im/post/go-netaddr-value/</link>
+      <pubDate>Sun, 20 Feb 2022 17:37:40 +0100</pubDate>
+      
+      <guid>https://air.googol.im/post/go-netaddr-value/</guid>
+      <description>&lt;p&gt;Go 1.18引入了新库&lt;code&gt;netaddr&lt;/code&gt;来表示IP地址及相关操作。其作者Brad Fitzpatrick专门写了篇&lt;a href=&#34;https://tailscale.com/blog/netaddr-new-ip-type-for-go/&#34;&gt;blog&lt;/a&gt;说明这个库的设计原则和最终实现。&lt;/p&gt;
+&lt;p&gt;这个实现最主要的特性依赖&lt;a href=&#34;https://pkg.go.dev/go4.org/intern&#34;&gt;intern.Value&lt;/a&gt;这个库。这里记录一下我对这个库的一些研究和看法&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>使用Go Swagger生成OpenAPI定义</title>
       <link>https://air.googol.im/post/go-swagger-spec/</link>
