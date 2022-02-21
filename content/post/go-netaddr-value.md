@@ -22,8 +22,8 @@ Go 1.18引入了新库`netaddr`来表示IP地址及相关操作。其作者Brad 
 
 ```go
 type IP struct {
-    addr uint128
-    z    *intern.Value // zone and family
+  addr uint128
+  z    *intern.Value // zone and family
 }
 ```
 
@@ -60,7 +60,7 @@ var valMap  = map[key]uintptr{}
 
 type Value struct {
   s           string
-	resurrected bool
+  resurrected bool
 }
 
 func Get(s string) *Value {

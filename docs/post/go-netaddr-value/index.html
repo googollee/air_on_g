@@ -169,8 +169,8 @@
 <p><code>netaddr</code>的设计原则是希望一个类型可以同时支持IPv4，无区域IPv6以及有区域IPv6，同时希望这个类型是一个值类型，可以使用<code>==</code>进行正确的比较，且内存占用尽量小。这个要求确实很难。具体的设计过程可以去参考库作者的blog。</p>
 <p>最终的实现结果：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">IP</span> <span style="color:#66d9ef">struct</span> {
-    <span style="color:#a6e22e">addr</span> <span style="color:#a6e22e">uint128</span>
-    <span style="color:#a6e22e">z</span>    <span style="color:#f92672">*</span><span style="color:#a6e22e">intern</span>.<span style="color:#a6e22e">Value</span> <span style="color:#75715e">// zone and family
+  <span style="color:#a6e22e">addr</span> <span style="color:#a6e22e">uint128</span>
+  <span style="color:#a6e22e">z</span>    <span style="color:#f92672">*</span><span style="color:#a6e22e">intern</span>.<span style="color:#a6e22e">Value</span> <span style="color:#75715e">// zone and family
 </span><span style="color:#75715e"></span>}
 </code></pre></div><p>其中<code>addr</code>用来保存实际的IP地址（如果是IPv4，则只使用低32位），<code>z</code>即作为一个标志位，用来区分IPv4，无区域IPv6及有区域IPv6，同时也用来记录区域信息。由于区域信息可以是任意字符串，正确的实现要求<code>intern.Value</code>在具有相同内容的字符串时，指向相同的地址。</p>
 <p>这里的<code>z</code>没有使用字符串，我猜是为了尽量压缩IP结构的大小。Go一个字符串会固定占用16byte（内部一个指向[]byte的指针，一个int表是字符串长度），比指针8byte要大一倍。不过使用字符串会让实现更容易理解：</p>
@@ -193,7 +193,7 @@
 
 <span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Value</span> <span style="color:#66d9ef">struct</span> {
   <span style="color:#a6e22e">s</span>           <span style="color:#66d9ef">string</span>
-	<span style="color:#a6e22e">resurrected</span> <span style="color:#66d9ef">bool</span>
+  <span style="color:#a6e22e">resurrected</span> <span style="color:#66d9ef">bool</span>
 }
 
 <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">s</span> <span style="color:#66d9ef">string</span>) <span style="color:#f92672">*</span><span style="color:#a6e22e">Value</span> {
