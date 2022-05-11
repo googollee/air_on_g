@@ -9,7 +9,7 @@ theme = "keepit"
 paginate = 12
 enableEmoji = true
 enableRobotsTXT = true
-googleAnalytics = ""
+googleAnalytics = "UA-24255013-2"
 disqusShortname = "air-g"
 hasCJKLanguage = true
 
