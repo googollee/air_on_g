@@ -160,33 +160,33 @@
 
           <p>Golang调用C分两个步骤：1 写一个C的wrapper，这个很简单；2 对wrapper做编译，这个步骤有点复杂，而且涉及众多中间文件。应该是有办法用自动化的工具简化这个过程的。</p>
 <p>先来展示一下C程序。为了将描述集中在如何调用上，C的程序很简单：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e"># file: prints.h
-</span><span style="color:#75715e">#ifndef PRINTS_HEAD
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">prints</span>(<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> str);
-<span style="color:#75715e">#endif
-</span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e"># file: prints.c
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;prints.h&#34;</span><span style="color:#75715e">
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e"></span>
-<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">prints</span>(<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> str)
-{
-  printf(<span style="color:#e6db74">&#34;%s</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, str);
-}
-</code></pre></div><p>之后是Golang对C的一个wrapper：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// file: prints.go
-</span><span style="color:#75715e"></span><span style="color:#f92672">package</span> <span style="color:#a6e22e">prints</span>
-
-<span style="color:#75715e">// NOTICE BELOW
-</span><span style="color:#75715e"></span>
-<span style="color:#75715e">//#include &#34;prints.h&#34;
-</span><span style="color:#75715e">// // some comment
-</span><span style="color:#75715e"></span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;C&#34;</span>
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Prints</span>(<span style="color:#a6e22e">s</span> <span style="color:#66d9ef">string</span>) {
-  <span style="color:#a6e22e">p</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">CString</span>(<span style="color:#a6e22e">s</span>);
-  <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">prints</span>(<span style="color:#a6e22e">p</span>);
-}
-</code></pre></div><p>需要注意的是import &ldquo;C&quot;及其上面的几行注释。在编译过程中，go会根据import &ldquo;C&quot;之前的几行注释生成一个c程序，并将这个c程序里的符号导入到模块C里，最后由import &ldquo;C&quot;再导入到go程序里。如果需要在其他go程序里调用api，需要参照prints.go里的Prints函数（要导出的go模块需要首字母大写）写一个wrapper func。其中对c程序里符号的引用都需要通过C来引用，包括一些c的类型定义，比如传给c api的int需要通过C.int来定义，而字符串则是C.CString。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e"># file: prints.h
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#ifndef PRINTS_HEAD
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">prints</span>(<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> str);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#endif
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e"># file: prints.c
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;prints.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">prints</span>(<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> str)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  printf(<span style="color:#e6db74">&#34;%s</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, str);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>之后是Golang对C的一个wrapper：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// file: prints.go
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">package</span> <span style="color:#a6e22e">prints</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// NOTICE BELOW
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//#include &#34;prints.h&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// // some comment
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;C&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Prints</span>(<span style="color:#a6e22e">s</span> <span style="color:#66d9ef">string</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">p</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">CString</span>(<span style="color:#a6e22e">s</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">prints</span>(<span style="color:#a6e22e">p</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>需要注意的是import &ldquo;C&quot;及其上面的几行注释。在编译过程中，go会根据import &ldquo;C&quot;之前的几行注释生成一个c程序，并将这个c程序里的符号导入到模块C里，最后由import &ldquo;C&quot;再导入到go程序里。如果需要在其他go程序里调用api，需要参照prints.go里的Prints函数（要导出的go模块需要首字母大写）写一个wrapper func。其中对c程序里符号的引用都需要通过C来引用，包括一些c的类型定义，比如传给c api的int需要通过C.int来定义，而字符串则是C.CString。</p>
 <p>有了这几个文件，就可以编译一个可以在go里加载的库了。以下都是在x86 linux下操作过程，如果是其他环境，请替换相应的编译命令。</p>
 <p>编译wrapper：</p>
 <pre><code>cgo prints.go
@@ -225,15 +225,15 @@ gcc -m32 -o prints.so prints.o prints.cgo2.o -shared
 <pre><code>cp prints.so /home/lizh/go/pkg/linux_386/
 </code></pre>
 <p>之后就可以在go里调用prints这个c函数了：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
-
-<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;prints&#34;</span>
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-  <span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;Hello world!&#34;</span>;
-  <span style="color:#a6e22e">prints</span>.<span style="color:#a6e22e">Prints</span>(<span style="color:#a6e22e">s</span>);
-}
-</code></pre></div><p>查看生成的调用程序，可以看到对$GOROOT/pkg/linux_386/libcgo.so和$GOROOT/pkg/linux_386/prints.so两个动态库的引用。发布时需要将这两个库放到发布环境里。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;prints&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;Hello world!&#34;</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">prints</span>.<span style="color:#a6e22e">Prints</span>(<span style="color:#a6e22e">s</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>查看生成的调用程序，可以看到对$GOROOT/pkg/linux_386/libcgo.so和$GOROOT/pkg/linux_386/prints.so两个动态库的引用。发布时需要将这两个库放到发布环境里。</p>
     </div>
 
     <div class="post-copyright">
@@ -384,7 +384,7 @@ gcc -m32 -o prints.so prints.o prints.cgo2.o -shared
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-24255013-2', 'auto');
+	ga('create', 'G-BX4XDRKHQ9', 'auto');
 	
 	ga('send', 'pageview');
 }

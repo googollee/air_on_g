@@ -160,21 +160,21 @@
 
           <p>在EXFE创业的两年，虽然项目最终失败了（很可惜），不过自己从头开始写了一个简化RESTful Service实现的Framework——<a href="https://github.com/googollee/go-rest">go-rest</a>，还算有不少收获。这里记录一下go-rest实现过程中一些重要的演变，以及这些演变背后的原因。</p>
 <p>最开始，我把Service定义为RPC remote式的调用方法。处理逻辑的函数，基本上是这样：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Handler</span>(<span style="color:#a6e22e">input</span> <span style="color:#a6e22e">InputType</span>) <span style="color:#a6e22e">OutputType</span> { <span style="color:#f92672">...</span> }
-</code></pre></div><p>框架主要是解决HTTP协议的处理，以及将Request Post的body部分反序列化为InputType的实例，根据url调用相应的函数，并序列化函数的输出结果。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Handler</span>(<span style="color:#a6e22e">input</span> <span style="color:#a6e22e">InputType</span>) <span style="color:#a6e22e">OutputType</span> { <span style="color:#f92672">...</span> }
+</span></span></code></pre></div><p>框架主要是解决HTTP协议的处理，以及将Request Post的body部分反序列化为InputType的实例，根据url调用相应的函数，并序列化函数的输出结果。</p>
 <p>因此，当时的框架使用起来类似下面的样子（因为最老的一版代码找不到了，这个是凭印象写的）：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Handler1</span>(<span style="color:#a6e22e">input</span> <span style="color:#a6e22e">InputType</span>) <span style="color:#a6e22e">OutputType</span> { <span style="color:#f92672">...</span> }
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Handler2</span>(<span style="color:#a6e22e">input</span> <span style="color:#a6e22e">InputType</span>) (<span style="color:#a6e22e">OutputType</span>, <span style="color:#66d9ef">error</span>) { <span style="color:#f92672">...</span> }
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#a6e22e">r</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">New</span>()
-	<span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#e6db74">&#34;/handler1&#34;</span>, <span style="color:#a6e22e">Handler1</span>)
-	<span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#e6db74">&#34;/handler2&#34;</span>, <span style="color:#a6e22e">Handler2</span>)
-
-	<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ListenAndServe</span>(<span style="color:#e6db74">&#34;:8000&#34;</span>, <span style="color:#a6e22e">r</span>)
-}
-</code></pre></div><p>优点：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Handler1</span>(<span style="color:#a6e22e">input</span> <span style="color:#a6e22e">InputType</span>) <span style="color:#a6e22e">OutputType</span> { <span style="color:#f92672">...</span> }
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Handler2</span>(<span style="color:#a6e22e">input</span> <span style="color:#a6e22e">InputType</span>) (<span style="color:#a6e22e">OutputType</span>, <span style="color:#66d9ef">error</span>) { <span style="color:#f92672">...</span> }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">r</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">New</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#e6db74">&#34;/handler1&#34;</span>, <span style="color:#a6e22e">Handler1</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#e6db74">&#34;/handler2&#34;</span>, <span style="color:#a6e22e">Handler2</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ListenAndServe</span>(<span style="color:#e6db74">&#34;:8000&#34;</span>, <span style="color:#a6e22e">r</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>优点：</p>
 <ul>
 <li>自动处理HTTP协议，根据mime选择合适的序列化方法；</li>
 <li>自动将Request Body和Response Body序列化/反序列化为对应的参数结构，处理函数内不需要考虑序列化问题；</li>
@@ -188,27 +188,27 @@
 </ul>
 <p>为了解决缺点，最开始使用gorilla/mux库做路由，解决了不能自定义HTTP method的问题。之后为了利用起HTTP协议本身的各种参数化和配置方法，达到更加RESTful的状态，go-rest第二版引入了Context的概念。在注册处理函数时，参考<a href="https://code.google.com/p/gorest/">gorest</a>也引入了使用将struct做配置的方法。</p>
 <p>第二版里定义一个用于处理逻辑的struct如下所示：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">RestExample</span> <span style="color:#66d9ef">struct</span> {
-    <span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">Service</span> <span style="color:#e6db74">`prefix:&#34;/prefix&#34; mime:&#34;application/json&#34;`</span>
-
-    <span style="color:#a6e22e">postSample</span> <span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">SimpleNode</span> <span style="color:#e6db74">`method:&#34;POST&#34; route:&#34;/post&#34;`</span>
-    <span style="color:#a6e22e">getSample</span>  <span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">SimpleNode</span> <span style="color:#e6db74">`method:&#34;GET&#34; route:&#34;/get/:id&#34;`</span>
-}
-
-<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">RestExample</span>) <span style="color:#a6e22e">PostSample</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">arg</span> <span style="color:#a6e22e">InputType</span>) {
-    <span style="color:#f92672">...</span>
-}
-
-<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">RestExample</span>) <span style="color:#a6e22e">GetSample</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">Context</span>) {
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">id</span> <span style="color:#66d9ef">int</span>
-    <span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">Bind</span>(<span style="color:#e6db74">&#34;id&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">id</span>)
-    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">Error</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-        <span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">Return</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">StatusBadRequest</span>, <span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
-        <span style="color:#66d9ef">return</span>
-    }
-    <span style="color:#f92672">...</span>
-}
-</code></pre></div><p>优点：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">RestExample</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">Service</span> <span style="color:#e6db74">`prefix:&#34;/prefix&#34; mime:&#34;application/json&#34;`</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">postSample</span> <span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">SimpleNode</span> <span style="color:#e6db74">`method:&#34;POST&#34; route:&#34;/post&#34;`</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">getSample</span>  <span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">SimpleNode</span> <span style="color:#e6db74">`method:&#34;GET&#34; route:&#34;/get/:id&#34;`</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">RestExample</span>) <span style="color:#a6e22e">PostSample</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">arg</span> <span style="color:#a6e22e">InputType</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">RestExample</span>) <span style="color:#a6e22e">GetSample</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">Context</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">id</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">Bind</span>(<span style="color:#e6db74">&#34;id&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">id</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">Error</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">Return</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">StatusBadRequest</span>, <span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>优点：</p>
 <ul>
 <li>url配置更加灵活，可以为每个Service分别添加前缀；</li>
 <li>参数化url，可以写表达性更强的url，而且可以保证处理函数不需要牵涉到HTTP协议的细节；</li>
@@ -224,46 +224,46 @@
 </ul>
 <p>因为要对HTTP的细节作处理（Header，url参数化等等），而引入的Context，最终却变成了逻辑函数里额外的部分，导致测试时需要花费很大精力准备一个合法的Context，是这次变动中最失败的部分。但是由于更加符合业务要求，实现出来的接口更容易理解且符合RSETful的要求，这个实现大概维持了1年左右没有变化。</p>
 <p>后来团队解散后空余时间比较多，也因为Node.js很火爆，就跑去看了看Node.js上最流行的框架Express.js。Express.js使用的Connect库做到的中间件很有意思。借鉴Connect的中间件思想，就有了go-rest最新的一次改版。这次改版的主要思路在于，使用中间件来处理与HTTP协议相关的逻辑，保持最终的业务逻辑是一个独立的函数，不引入任何与框架相关的约束和假设。改版后的框架使用起来像下面这个样子：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">
-<span style="color:#a6e22e">r</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">New</span>()
-
-<span style="color:#75715e">// add log midware
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Use</span>(<span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">NewLog</span>(<span style="color:#66d9ef">nil</span>))
-
-<span style="color:#75715e">// add router. router must before mime parser because parser need handler&#39;s parameter inserted by router.
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Use</span>(<span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">NewRouter</span>())
-
-<span style="color:#75715e">// parse json
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Use</span>(<span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">NewJSON</span>()))
-
-<span style="color:#75715e">// get sample
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#e6db74">&#34;/get/:id&#34;</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">params</span> <span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">Params</span>) <span style="color:#66d9ef">error</span> {
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">id</span> <span style="color:#66d9ef">int</span>
-    <span style="color:#a6e22e">params</span>.<span style="color:#a6e22e">Bind</span>(<span style="color:#e6db74">&#34;id&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">id</span>)
-    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">params</span>.<span style="color:#a6e22e">Error</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Error</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">StatusBadRequest</span>, <span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
-    }
-    <span style="color:#f92672">...</span>
-})
-
-<span style="color:#75715e">// post sample
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Post</span>(<span style="color:#e6db74">&#34;/post&#34;</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">arg</span> <span style="color:#a6e22e">InputType</span>) {
-	<span style="color:#f92672">...</span>
-})
-
-<span style="color:#75715e">// custom midware
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">prefix</span>(<span style="color:#a6e22e">prefix</span> <span style="color:#66d9ef">string</span>) <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandlerFunc</span> {
-    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
-        <span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">HasPrefix</span>(<span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">URL</span>.<span style="color:#a6e22e">Path</span>, <span style="color:#a6e22e">prefix</span>) {
-            <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NotFound</span>(<span style="color:#a6e22e">w</span>, <span style="color:#a6e22e">r</span>)
-            <span style="color:#66d9ef">return</span>
-        }
-    }
-}
-
-<span style="color:#75715e">// a handler with special midware
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">NotFound</span>(<span style="color:#a6e22e">prefix</span>(<span style="color:#e6db74">&#34;/static/&#34;</span>), <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">FileServer</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Dir</span>(<span style="color:#e6db74">&#34;.&#34;</span>)))
-</code></pre></div><p>由于有了灵活的中间件机制（通过Use引入），可以将所有和HTTP解析相关的代码改写为中间件并复用。同时，可以给每个处理函数单独配置自己的中间件，这样不同处理函数也可以复用一些相似的逻辑。需要从HTTP内解析出的变量，通过rest.Params传入处理函数。而rest.Params只是map[string]interface{}的简单封装，测试时很容易构造其中的内容。Params.Bind的部分目前还没有实现，其实这部分可以通过中间件完成的，写在这里是为了展示效果。如果error返回的不是一个rest.Response或者rest.Error，HTTP就会以StatusServerInternalError作为Response Code。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">New</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// add log midware
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Use</span>(<span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">NewLog</span>(<span style="color:#66d9ef">nil</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// add router. router must before mime parser because parser need handler&#39;s parameter inserted by router.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Use</span>(<span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">NewRouter</span>())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// parse json
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Use</span>(<span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">NewJSON</span>()))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// get sample
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#e6db74">&#34;/get/:id&#34;</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">params</span> <span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">Params</span>) <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">id</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">params</span>.<span style="color:#a6e22e">Bind</span>(<span style="color:#e6db74">&#34;id&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">id</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">params</span>.<span style="color:#a6e22e">Error</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Error</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">StatusBadRequest</span>, <span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// post sample
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Post</span>(<span style="color:#e6db74">&#34;/post&#34;</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">arg</span> <span style="color:#a6e22e">InputType</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// custom midware
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">prefix</span>(<span style="color:#a6e22e">prefix</span> <span style="color:#66d9ef">string</span>) <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandlerFunc</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">HasPrefix</span>(<span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">URL</span>.<span style="color:#a6e22e">Path</span>, <span style="color:#a6e22e">prefix</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NotFound</span>(<span style="color:#a6e22e">w</span>, <span style="color:#a6e22e">r</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// a handler with special midware
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">NotFound</span>(<span style="color:#a6e22e">prefix</span>(<span style="color:#e6db74">&#34;/static/&#34;</span>), <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">FileServer</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Dir</span>(<span style="color:#e6db74">&#34;.&#34;</span>)))
+</span></span></code></pre></div><p>由于有了灵活的中间件机制（通过Use引入），可以将所有和HTTP解析相关的代码改写为中间件并复用。同时，可以给每个处理函数单独配置自己的中间件，这样不同处理函数也可以复用一些相似的逻辑。需要从HTTP内解析出的变量，通过rest.Params传入处理函数。而rest.Params只是map[string]interface{}的简单封装，测试时很容易构造其中的内容。Params.Bind的部分目前还没有实现，其实这部分可以通过中间件完成的，写在这里是为了展示效果。如果error返回的不是一个rest.Response或者rest.Error，HTTP就会以StatusServerInternalError作为Response Code。</p>
 <p>这个框架本身还可以支持多参数的处理函数，不过要自己写相应的中间件对参数顺序做布局。由于通用性不高，我就没有实现相关的内容。</p>
 <p>这个框架的优点：</p>
 <ul>
@@ -426,7 +426,7 @@
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-24255013-2', 'auto');
+	ga('create', 'G-BX4XDRKHQ9', 'auto');
 	
 	ga('send', 'pageview');
 }

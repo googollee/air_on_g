@@ -160,44 +160,44 @@
 
           <p>北京华为的一道面试题。要求是只使用+-*和移位运算，且不能递减3求得余数。</p>
 <p>先在csdn上求，求得以下算法：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> i, m, n, p, q;
-<span style="color:#66d9ef">int</span> yushu[]<span style="color:#f92672">=</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>};
-m <span style="color:#f92672">=</span> n;
-<span style="color:#66d9ef">while</span>(m<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">3</span>)
-{
- i<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>;  q<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>;
- <span style="color:#66d9ef">while</span>(m)
- {
-  i<span style="color:#f92672">&amp;=</span><span style="color:#ae81ff">0x1</span>;
-  q<span style="color:#f92672">+=</span>(m<span style="color:#f92672">&amp;</span><span style="color:#ae81ff">0x1</span>)<span style="color:#f92672">*</span>yushu[i<span style="color:#f92672">++</span>];
-  m<span style="color:#f92672">&gt;&gt;=</span><span style="color:#ae81ff">1</span>;
- }
- m<span style="color:#f92672">=</span>q;
-}
-</code></pre></div><p>没看懂，倒是提示我可以用查表的方法，变成求4的余数。自己探求程序如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> mo[]<span style="color:#f92672">=</span>{<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">0</span>};
-<span style="color:#66d9ef">int</span> i, m;
-m <span style="color:#f92672">=</span> n;
-i <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;
-<span style="color:#66d9ef">while</span> (i<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">3</span>)
-{
- i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
- <span style="color:#66d9ef">while</span>(m<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">0</span>)
- {
-  i <span style="color:#f92672">+=</span> m <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">3</span>;
-  m <span style="color:#f92672">&gt;&gt;=</span> <span style="color:#ae81ff">2</span>;
- }
- m <span style="color:#f92672">=</span> i;
-}
-</code></pre></div><p>貌似比网上高人给的算法效率更高，可惜没去证实。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> i, m, n, p, q;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> yushu[]<span style="color:#f92672">=</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>};
+</span></span><span style="display:flex;"><span>m <span style="color:#f92672">=</span> n;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span>(m<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span> i<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>;  q<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">while</span>(m)
+</span></span><span style="display:flex;"><span> {
+</span></span><span style="display:flex;"><span>  i<span style="color:#f92672">&amp;=</span><span style="color:#ae81ff">0x1</span>;
+</span></span><span style="display:flex;"><span>  q<span style="color:#f92672">+=</span>(m<span style="color:#f92672">&amp;</span><span style="color:#ae81ff">0x1</span>)<span style="color:#f92672">*</span>yushu[i<span style="color:#f92672">++</span>];
+</span></span><span style="display:flex;"><span>  m<span style="color:#f92672">&gt;&gt;=</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span> }
+</span></span><span style="display:flex;"><span> m<span style="color:#f92672">=</span>q;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>没看懂，倒是提示我可以用查表的方法，变成求4的余数。自己探求程序如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> mo[]<span style="color:#f92672">=</span>{<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">0</span>};
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> i, m;
+</span></span><span style="display:flex;"><span>m <span style="color:#f92672">=</span> n;
+</span></span><span style="display:flex;"><span>i <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span> (i<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">while</span>(m<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span> {
+</span></span><span style="display:flex;"><span>  i <span style="color:#f92672">+=</span> m <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">3</span>;
+</span></span><span style="display:flex;"><span>  m <span style="color:#f92672">&gt;&gt;=</span> <span style="color:#ae81ff">2</span>;
+</span></span><span style="display:flex;"><span> }
+</span></span><span style="display:flex;"><span> m <span style="color:#f92672">=</span> i;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>貌似比网上高人给的算法效率更高，可惜没去证实。</p>
 <p>晚上又想到更高效的算法：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> mo[]<span style="color:#f92672">=</span>{<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">0</span>};
-<span style="color:#66d9ef">int</span> m;
-<span style="color:#66d9ef">while</span>(m<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">3</span>)
-{
- m <span style="color:#f92672">=</span> (m<span style="color:#f92672">&gt;&gt;</span><span style="color:#ae81ff">2</span>) <span style="color:#f92672">+</span> (m<span style="color:#f92672">&amp;</span><span style="color:#ae81ff">3</span>);
-}
-</code></pre></div><p>想来不会有更高效的做法了，于是开始这种算法的数学证明，如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> mo[]<span style="color:#f92672">=</span>{<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">0</span>};
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> m;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span>(m<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span> m <span style="color:#f92672">=</span> (m<span style="color:#f92672">&gt;&gt;</span><span style="color:#ae81ff">2</span>) <span style="color:#f92672">+</span> (m<span style="color:#f92672">&amp;</span><span style="color:#ae81ff">3</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>想来不会有更高效的做法了，于是开始这种算法的数学证明，如下：</p>
 <p>因为<code>4 mod 3=1</code>，所以<code>4^k mod 3 = 1^k mod 3</code>（此原理来源于小学数学奥校五年级分册= =|||），所以对任意数n，转化成4进制数后每位为n1 n2 n3 n4&hellip;nm，有</p>
 <pre><code>(n1*4^(m-1)+n2*4^(m-2)+n3*4^(m-3)+n4*4^(m-4)+...+nm-1*4^1+nm*4^0) mod 3
 =n1*4^(m-1) mod 3+n2*4^(m-2) mod 3+n3*4^(m-3) mod 3+n4*4^(m-4) mod 3+...+nm-1*4^1 mod 3+nm*4^0 mod 3
@@ -359,7 +359,7 @@ i <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-24255013-2', 'auto');
+	ga('create', 'G-BX4XDRKHQ9', 'auto');
 	
 	ga('send', 'pageview');
 }

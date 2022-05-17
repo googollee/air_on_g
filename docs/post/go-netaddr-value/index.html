@@ -168,69 +168,69 @@
 <p>这个实现最主要的特性依赖<a href="https://pkg.go.dev/go4.org/intern">intern.Value</a>这个库。这里记录一下我对这个库的一些研究和看法</p>
 <p><code>netaddr</code>的设计原则是希望一个类型可以同时支持IPv4，无区域IPv6以及有区域IPv6，同时希望这个类型是一个值类型，可以使用<code>==</code>进行正确的比较，且内存占用尽量小。这个要求确实很难。具体的设计过程可以去参考库作者的blog。</p>
 <p>最终的实现结果：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">IP</span> <span style="color:#66d9ef">struct</span> {
-  <span style="color:#a6e22e">addr</span> <span style="color:#a6e22e">uint128</span>
-  <span style="color:#a6e22e">z</span>    <span style="color:#f92672">*</span><span style="color:#a6e22e">intern</span>.<span style="color:#a6e22e">Value</span> <span style="color:#75715e">// zone and family
-</span><span style="color:#75715e"></span>}
-</code></pre></div><p>其中<code>addr</code>用来保存实际的IP地址（如果是IPv4，则只使用低32位），<code>z</code>即作为一个标志位，用来区分IPv4，无区域IPv6及有区域IPv6，同时也用来记录区域信息。由于区域信息可以是任意字符串，正确的实现要求<code>intern.Value</code>在具有相同内容的字符串时，指向相同的地址。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">IP</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">addr</span> <span style="color:#a6e22e">uint128</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">z</span>    <span style="color:#f92672">*</span><span style="color:#a6e22e">intern</span>.<span style="color:#a6e22e">Value</span> <span style="color:#75715e">// zone and family
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>其中<code>addr</code>用来保存实际的IP地址（如果是IPv4，则只使用低32位），<code>z</code>即作为一个标志位，用来区分IPv4，无区域IPv6及有区域IPv6，同时也用来记录区域信息。由于区域信息可以是任意字符串，正确的实现要求<code>intern.Value</code>在具有相同内容的字符串时，指向相同的地址。</p>
 <p>这里的<code>z</code>没有使用字符串，我猜是为了尽量压缩IP结构的大小。Go一个字符串会固定占用16byte（内部一个指向[]byte的指针，一个int表是字符串长度），比指针8byte要大一倍。不过使用字符串会让实现更容易理解：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">IP</span> <span style="color:#66d9ef">struct</span> {
-    <span style="color:#a6e22e">addr</span> <span style="color:#a6e22e">uint128</span>
-    <span style="color:#a6e22e">z</span>    <span style="color:#66d9ef">string</span> <span style="color:#75715e">// &#34;4&#34; for IPv4, &#34;6&#34; for IPv6 without zone, &#34;6eth0&#34; for IPv6 with zone &#39;eth0&#39;.
-</span><span style="color:#75715e"></span>}
-</code></pre></div><p>除了比原来的结构多了8byte，也做到了其余的目标。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">IP</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">addr</span> <span style="color:#a6e22e">uint128</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">z</span>    <span style="color:#66d9ef">string</span> <span style="color:#75715e">// &#34;4&#34; for IPv4, &#34;6&#34; for IPv6 without zone, &#34;6eth0&#34; for IPv6 with zone &#39;eth0&#39;.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>除了比原来的结构多了8byte，也做到了其余的目标。</p>
 <p>下面看看<code>intern.Value</code>是如何在节省8byte情况下，实现同样的功能。根据功能<code>在具有相同内容的字符串时，指向相同的地址</code>，一个非常直白的实现是这样的：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">values</span> = <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#f92672">*</span><span style="color:#66d9ef">string</span>
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">s</span> <span style="color:#66d9ef">string</span>) <span style="color:#f92672">*</span><span style="color:#66d9ef">string</span> {
-  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">values</span>[<span style="color:#a6e22e">s</span>]; !<span style="color:#a6e22e">ok</span> {
-    <span style="color:#a6e22e">values</span>[<span style="color:#a6e22e">s</span>] = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">s</span>
-  }
-  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">values</span>[<span style="color:#a6e22e">s</span>]
-}
-</code></pre></div><p>不考虑并发，这个实现最大的问题是内存泄漏。所有Get返回的指针，都会被values持久引用。要解决内存泄漏问题，需要请出unsafe库。这就很接近<code>intern.Value</code>的实现：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">valMap</span>  = <span style="color:#66d9ef">map</span>[<span style="color:#a6e22e">key</span>]<span style="color:#66d9ef">uintptr</span>{}
-
-<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Value</span> <span style="color:#66d9ef">struct</span> {
-  <span style="color:#a6e22e">s</span>           <span style="color:#66d9ef">string</span>
-  <span style="color:#a6e22e">resurrected</span> <span style="color:#66d9ef">bool</span>
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">s</span> <span style="color:#66d9ef">string</span>) <span style="color:#f92672">*</span><span style="color:#a6e22e">Value</span> {
-  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">v</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Value</span>
-
-  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">addr</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">valMap</span>[<span style="color:#a6e22e">k</span>]; <span style="color:#a6e22e">ok</span> {
-    <span style="color:#a6e22e">v</span> = (<span style="color:#f92672">*</span><span style="color:#a6e22e">Value</span>)((<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>)(<span style="color:#a6e22e">addr</span>))
-    <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">resurrected</span> = <span style="color:#66d9ef">true</span>
-  }
-  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">v</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">v</span>
-  }
-
-  <span style="color:#a6e22e">v</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">Value</span>{
-    <span style="color:#a6e22e">s</span>: <span style="color:#a6e22e">s</span>,
-    <span style="color:#a6e22e">resurrected</span>: <span style="color:#66d9ef">true</span>,
-  }
-
-  <span style="color:#75715e">// SetFinalizer before uintptr conversion (theoretical concern;
-</span><span style="color:#75715e"></span>  <span style="color:#75715e">// see https://github.com/go4org/intern/issues/13)
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">runtime</span>.<span style="color:#a6e22e">SetFinalizer</span>(<span style="color:#a6e22e">v</span>, <span style="color:#a6e22e">finalize</span>)
-  <span style="color:#a6e22e">valMap</span>[<span style="color:#a6e22e">k</span>] = uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">v</span>))
-
-  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">v</span>
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">finalize</span>(<span style="color:#a6e22e">v</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Value</span>) {
-  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">resurrected</span> {
-    <span style="color:#75715e">// 程序在这次GC时引用过v
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">// 下轮GC再检查
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">resurrected</span> = <span style="color:#66d9ef">false</span>
-    <span style="color:#a6e22e">runtime</span>.<span style="color:#a6e22e">SetFinalizer</span>(<span style="color:#a6e22e">v</span>, <span style="color:#a6e22e">finalize</span>)
-    <span style="color:#66d9ef">return</span>
-  }
-  delete(<span style="color:#a6e22e">valMap</span>, <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">s</span>)
-}
-</code></pre></div><p><code>valMap</code>并没有引用<code>Value</code>，只是用<code>unsafe.Pointer</code>的方式记录下了<code>Value</code>的地址。当外部所有对<code>Value</code>的引用失效后，GC过程会触发<code>finalize</code>做检查。如果两轮<code>finalize</code>后<code>Value</code>还没有被引用过，则从<code>valMap</code>里删除对应的记录地址。<code>Value</code>会在再下一次的GC过程中（因为这次没有挂接<code>finalize</code>）被删除。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">values</span> = <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#f92672">*</span><span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">s</span> <span style="color:#66d9ef">string</span>) <span style="color:#f92672">*</span><span style="color:#66d9ef">string</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">values</span>[<span style="color:#a6e22e">s</span>]; !<span style="color:#a6e22e">ok</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">values</span>[<span style="color:#a6e22e">s</span>] = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">s</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">values</span>[<span style="color:#a6e22e">s</span>]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>不考虑并发，这个实现最大的问题是内存泄漏。所有Get返回的指针，都会被values持久引用。要解决内存泄漏问题，需要请出unsafe库。这就很接近<code>intern.Value</code>的实现：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">valMap</span>  = <span style="color:#66d9ef">map</span>[<span style="color:#a6e22e">key</span>]<span style="color:#66d9ef">uintptr</span>{}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Value</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">s</span>           <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">resurrected</span> <span style="color:#66d9ef">bool</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">s</span> <span style="color:#66d9ef">string</span>) <span style="color:#f92672">*</span><span style="color:#a6e22e">Value</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">v</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Value</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">addr</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">valMap</span>[<span style="color:#a6e22e">k</span>]; <span style="color:#a6e22e">ok</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">v</span> = (<span style="color:#f92672">*</span><span style="color:#a6e22e">Value</span>)((<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>)(<span style="color:#a6e22e">addr</span>))
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">resurrected</span> = <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">v</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">v</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">v</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">Value</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">s</span>: <span style="color:#a6e22e">s</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">resurrected</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// SetFinalizer before uintptr conversion (theoretical concern;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// see https://github.com/go4org/intern/issues/13)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">runtime</span>.<span style="color:#a6e22e">SetFinalizer</span>(<span style="color:#a6e22e">v</span>, <span style="color:#a6e22e">finalize</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">valMap</span>[<span style="color:#a6e22e">k</span>] = uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">v</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">v</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">finalize</span>(<span style="color:#a6e22e">v</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Value</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">resurrected</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 程序在这次GC时引用过v
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// 下轮GC再检查
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">resurrected</span> = <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">runtime</span>.<span style="color:#a6e22e">SetFinalizer</span>(<span style="color:#a6e22e">v</span>, <span style="color:#a6e22e">finalize</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  delete(<span style="color:#a6e22e">valMap</span>, <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">s</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><code>valMap</code>并没有引用<code>Value</code>，只是用<code>unsafe.Pointer</code>的方式记录下了<code>Value</code>的地址。当外部所有对<code>Value</code>的引用失效后，GC过程会触发<code>finalize</code>做检查。如果两轮<code>finalize</code>后<code>Value</code>还没有被引用过，则从<code>valMap</code>里删除对应的记录地址。<code>Value</code>会在再下一次的GC过程中（因为这次没有挂接<code>finalize</code>）被删除。</p>
 <p>如果再加上保护并发的锁，就和<code>intern.Value</code>的实现差不多了。<code>intern.Value</code>还考虑了非字符串值的情况。</p>
 <p>这里如此麻烦的原因，在于<code>==</code>只能做一层实例值比较，也不能自定义。考虑到自定义<code>==</code>带来的问题，这种unsafe的交换大概还能承受。</p>
 <p>一个漏洞，如果有外部程序也通过<code>unsafe.Pointer</code>记录了某个<code>Value</code>的地址，那么有可能过一段时间后，具有同样内容的<code>Value</code>地址会变化。</p>
@@ -383,7 +383,7 @@
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-24255013-2', 'auto');
+	ga('create', 'G-BX4XDRKHQ9', 'auto');
 	
 	ga('send', 'pageview');
 }

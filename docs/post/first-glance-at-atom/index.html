@@ -184,11 +184,11 @@
 <p>Atom默认支持github的markdown预览。编辑markdown文件时，可以在命令面板里输入<code>markdown preview</code>，或者按ctrl-shift-m，就可以打开markdown的预览。不过这个预览只能显示已经存盘的文件内容，如果能实时显示编辑的文件内容该多好。Atom还支持github定义的<code> \</code>`` `代码块，并根据代码内容做高亮：</p>
 <p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/atom-markdown-highlight.png" alt="Atom的markdown对代码高亮的支持" class="lazyload"><figcaption class="image-caption">Atom的markdown对代码高亮的支持</figcaption></figure></p>
 <p>点击<code>Atom</code>菜单下的<code>Open Your Stylesheet</code>，就可以打开编辑用户自定义的主题。比如，在打开的Stylesheet最后添加如下内容：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">editor</span> .<span style="color:#a6e22e">markup</span>.<span style="color:#a6e22e">underline</span>.<span style="color:#a6e22e">link</span>.<span style="color:#a6e22e">hyperlink</span> {
-  <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#AAA</span>;
-  <span style="color:#66d9ef">text-decoration</span>: <span style="color:#66d9ef">underline</span>;
-}
-</code></pre></div><p>就可以把程序注释里的url稍微高亮，并加上下划线。正好默认的Stylesheet第8行有个url，cmd-s存盘后就能看到效果。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-css" data-lang="css"><span style="display:flex;"><span>.<span style="color:#a6e22e">editor</span> .<span style="color:#a6e22e">markup</span>.<span style="color:#a6e22e">underline</span>.<span style="color:#a6e22e">link</span>.<span style="color:#a6e22e">hyperlink</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#AAA</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">text-decoration</span>: <span style="color:#66d9ef">underline</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>就可以把程序注释里的url稍微高亮，并加上下划线。正好默认的Stylesheet第8行有个url，cmd-s存盘后就能看到效果。</p>
 <p>Atom的配置文件倒是很有特色的选择了cson，而不是更通用的json。当然，cson完全兼容json，把所有的配置当作json来写没有任何问题，甚至还不用拿着放大镜找哪个数组的末尾多写了逗号这种恼人的情况。不过，总有人会讨厌这种混合着yaml和json的格式的。</p>
 <h2 id="感受">感受</h2>
 <p>我多想最后就写一句话：Atom就是好啊就是好！就是好啊就是好！就是好！</p>
@@ -347,7 +347,7 @@
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-24255013-2', 'auto');
+	ga('create', 'G-BX4XDRKHQ9', 'auto');
 	
 	ga('send', 'pageview');
 }

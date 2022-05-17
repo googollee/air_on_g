@@ -162,34 +162,34 @@
 <h2 id="我喜欢的go特性">我喜欢的Go特性</h2>
 <h3 id="interface">interface</h3>
 <p>Go的interface实在是让人眼前一亮的特性，在静态编译语言里引入了动态语言常用的duck type特性，而且还没有任何运行时负担。举个栗子，如果我想给一个struct A实现io.Reader接口，在定义struct A的时，不需要和io.Reader扯上任何关系（不需要继承，不需要包含，什么都不需要），只要对struct A定义Read([]byte) (int, error)这个函数（与对象方法类似）就可以。至于如何把struct A的实例捏成一个io.Reader，全是Go编译器在背后的工作。我斗胆猜一下Go在使用io.Reader这个interface的时候，使用了类似下面的结构：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">InterfaceReader</span> <span style="color:#66d9ef">struct</span> {
-	<span style="color:#a6e22e">instancePtr</span> <span style="color:#a6e22e">pointer_to_original_instance</span>
-	<span style="color:#a6e22e">readFunc</span> <span style="color:#a6e22e">pointer_to_read_function</span>
-}
-</code></pre></div><p>而将一个实现了Read成员函数的实例变成io.Reader的时候，执行了类似下面的代码：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// Pseudo code for:
-</span><span style="color:#75715e">//   var i io.Reader
-</span><span style="color:#75715e">//   i = New(A)
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">i</span> = <span style="color:#a6e22e">New</span>(<span style="color:#a6e22e">InterfaceReader</span>)
-<span style="color:#a6e22e">i</span>.<span style="color:#a6e22e">instancePtr</span> = <span style="color:#a6e22e">New</span>(<span style="color:#a6e22e">A</span>)
-<span style="color:#a6e22e">i</span>.<span style="color:#a6e22e">readFunc</span> = <span style="color:#a6e22e">i</span>.<span style="color:#a6e22e">instancePtr</span>.<span style="color:#a6e22e">Read</span>
-</code></pre></div><p>这个伪代码的操作，在编译期就可以完成，不需要在运行时依旧保留很多类型的相关信息。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">InterfaceReader</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">instancePtr</span> <span style="color:#a6e22e">pointer_to_original_instance</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">readFunc</span> <span style="color:#a6e22e">pointer_to_read_function</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>而将一个实现了Read成员函数的实例变成io.Reader的时候，执行了类似下面的代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// Pseudo code for:
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//   var i io.Reader
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//   i = New(A)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">i</span> = <span style="color:#a6e22e">New</span>(<span style="color:#a6e22e">InterfaceReader</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">i</span>.<span style="color:#a6e22e">instancePtr</span> = <span style="color:#a6e22e">New</span>(<span style="color:#a6e22e">A</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">i</span>.<span style="color:#a6e22e">readFunc</span> = <span style="color:#a6e22e">i</span>.<span style="color:#a6e22e">instancePtr</span>.<span style="color:#a6e22e">Read</span>
+</span></span></code></pre></div><p>这个伪代码的操作，在编译期就可以完成，不需要在运行时依旧保留很多类型的相关信息。</p>
 <h3 id="reflect">reflect</h3>
 <p>不过Go依旧在运行时保留了不少的类型信息，用来完成反射。不过Go的反射与Java和其他动态语言比起来，还是有限制：所有的反射操作都必须通过一个实例完成，而不能直接操作类型。比如，可以根据一个实例拿到一个类型并生成这个类型对应的新实例：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">t</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">TypeOf</span>(<span style="color:#a6e22e">a</span>)
-<span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">New</span>(<span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">Elem</span>())
-<span style="color:#a6e22e">newA</span> = <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">Interface</span>().(<span style="color:#f92672">*</span><span style="color:#a6e22e">A</span>)
-</code></pre></div><p>但是没法直接根据类型的名字拿到类型并生成实例，考虑到这门语言设计目的是效率优先的静态编译语言，这也似乎不是太大的问题，而且可以通过别的方法实现。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">t</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">TypeOf</span>(<span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">New</span>(<span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">Elem</span>())
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">newA</span> = <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">Interface</span>().(<span style="color:#f92672">*</span><span style="color:#a6e22e">A</span>)
+</span></span></code></pre></div><p>但是没法直接根据类型的名字拿到类型并生成实例，考虑到这门语言设计目的是效率优先的静态编译语言，这也似乎不是太大的问题，而且可以通过别的方法实现。</p>
 <p>不过，目前Go的reflect库不能通过reflect.Type来创建一个Array或者Slice，似乎是个挺杯具且无解的事情，限制很大。</p>
 <p>值得一体的是，Go的struct的成员可以定义Tag这种描述信息，程序里没有直接的作用，但可以通过reflect访问到：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">struct</span> {
-	<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int</span> <span style="color:#e6db74">`tag:&#34;abc&#34;`</span>
-}
-
-<span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">TypeOf</span>(new(<span style="color:#a6e22e">A</span>))
-<span style="color:#a6e22e">f</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">FieldByName</span>(<span style="color:#e6db74">&#34;i&#34;</span>)
-<span style="color:#a6e22e">f</span>.<span style="color:#a6e22e">Tag</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#e6db74">&#34;tag&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;abc&#34;</span>
-</code></pre></div><p>虽然目前Go的标准库里只用Tag来做json编码/解码时对应域的名字，不过似乎可以有更有趣的用法。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int</span> <span style="color:#e6db74">`tag:&#34;abc&#34;`</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">TypeOf</span>(new(<span style="color:#a6e22e">A</span>))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">f</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">FieldByName</span>(<span style="color:#e6db74">&#34;i&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">f</span>.<span style="color:#a6e22e">Tag</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#e6db74">&#34;tag&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;abc&#34;</span>
+</span></span></code></pre></div><p>虽然目前Go的标准库里只用Tag来做json编码/解码时对应域的名字，不过似乎可以有更有趣的用法。</p>
 <h3 id="channel">channel</h3>
 <p>在Go之前，就有不少语言以支持轻量进程的并发为特点，比如广为人知的Erlang（其语法的诡异导致没有大规模流行）。不过Go比Erlang更多了一种叫做channel的类型，用于在进程间传递消息。Erlang里，如果要和一个进程通信，只能给这个进程的pid发消息，消息里带有一个标号。这个进程收到消息后，根据标号再做不同的处理。这种做法使得Erlang里大量出现通信时根据标号做模式匹配的语句，可以类比C的大块大块switch/case，配合Erlang的另一大特点“代码热更新”，经常会写出十分难读的代码。另一方面由于pid要先创建进程后才能拿到，如果想让两个进程互相通信，就必须先创建进程A拿到pid_a，再创建进程B，把pid_a传给进程B，再把进程B的pid_b传给进程A，A拿到pid_b后会对自己的执行体做更新，去实现真正的功能。这个说起来似乎简单，真写一写的话实在头疼。</p>
 <p>Go在Erlang的基础上进一步抽象出了channel，使得进程间通信变的更加清晰。一个goroutine可以持有一个或者多个channel。可以先创建channel，把创建好的channel传给若干个需要互相通信的goroutine。这样就完美的解决了Erlang里遇到的两个很拧巴的问题。</p>
@@ -206,10 +206,10 @@
 <p>更新：经过一段时间的使用，Go选择这种命名方式真是太好了。在看一段代码时，只要看到首字母大写的，就能知道这个变量/函数是公开的，不能轻易修改；而对于小写的变量/函数修改就像对自由很多。维护的时候再也不用去来回翻阅声明，检查一个变量/函数是不是可以变了！</p>
 <p>不过Go官方推荐都用驼峰命名。</p>
 <p>多说一句，在做json解码时，如果对应的struct没有特殊声明，会把json的域写入对应名字首字母大写的struct的成员里。而json编码时默认会以struct域的名字作为json域名，如果要对应到小写，需要声明相关域的Tag：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">struct</span> {
-	<span style="color:#a6e22e">I</span> <span style="color:#66d9ef">int</span> <span style="color:#e6db74">`json:&#34;i&#34;`</span>
-}
-</code></pre></div><h3 id="reflect还有问题">reflect还有问题</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">I</span> <span style="color:#66d9ef">int</span> <span style="color:#e6db74">`json:&#34;i&#34;`</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="reflect还有问题">reflect还有问题</h3>
 <p>前面也提过，不能根据reflect.Type直接生成对应的Slice或者Array或者Map实在太讨厌了！</p>
 <h2 id="期望">期望</h2>
 <p>Go还是一门很年轻的语言，如果要对其提出展望的话，我期望以下特性：</p>
@@ -217,10 +217,10 @@
 <p>前面多次提到了。</p>
 <h3 id="struct的成员函数也能支持tag">struct的成员函数也能支持tag</h3>
 <p>目前tag只能支持成员变量，如果也能给成员函数写tag就太cool了：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">struct</span> {}
-
-<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">A</span>) <span style="color:#e6db74">`tag:&#34;id&#34;`</span> <span style="color:#a6e22e">SomeFunc</span>() {}
-</code></pre></div><h3 id="完善库">完善库</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">struct</span> {}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">A</span>) <span style="color:#e6db74">`tag:&#34;id&#34;`</span> <span style="color:#a6e22e">SomeFunc</span>() {}
+</span></span></code></pre></div><h3 id="完善库">完善库</h3>
 <p>没有IMAP好痛苦！自己实现IMAP好蛋疼！ <em>(:з」∠)</em></p>
 <p>目前我可能比较急需的库：多语言本地化（大概把ICU直接port过来），更多的编解码，能换个更好用的text模版库么（模版里写个range都没法判断是不是到了最后一个元素，想用模版输出“a, b, c and d.”简直要死人啊）。</p>
 <h3 id="heroku">heroku</h3>
@@ -375,7 +375,7 @@
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-24255013-2', 'auto');
+	ga('create', 'G-BX4XDRKHQ9', 'auto');
 	
 	ga('send', 'pageview');
 }

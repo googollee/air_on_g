@@ -55,7 +55,7 @@
   },
   "genre": "post",
   "keywords": "ruby, code style",
-  "wordcount":  1704 ,
+  "wordcount":  1710 ,
   "url": "https:\/\/air.googol.im\/post\/ruby-style\/",
   "datePublished": "2011-02-20T20:00:00\u002b08:00",
   "dateModified": "2011-02-20T20:00:00\u002b08:00",
@@ -225,9 +225,9 @@
 <p>在调用方法的时候，绝不能使用多余的括号（参数最外面不用括号），但是在调用“函数”时使用括号，比如，当你在一行里需要使用函数的返回值。</p>
 </li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">    x <span style="color:#f92672">=</span> <span style="color:#66d9ef">Math</span><span style="color:#f92672">.</span>sin(y)
-    array<span style="color:#f92672">.</span>delete e
-</code></pre></div><ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>    x <span style="color:#f92672">=</span> <span style="color:#66d9ef">Math</span><span style="color:#f92672">.</span>sin(y)
+</span></span><span style="display:flex;"><span>    array<span style="color:#f92672">.</span>delete e
+</span></span></code></pre></div><ul>
 <li>
 <p>使用 {&hellip;} 好过 do&hellip;end 。多行情况使用 {&hellip;} 也很好：可以用不同的结束符标识不同的内容（用 } 标识块，而 end 标识 if/while/&hellip; ），这样可以很容易看出到哪里结束。不过在“程序流程控制”和“定义方法”时使用 do&hellip;end（比如，在 Rakefiles 和特定的 DSL 里）。在链式调用时杜绝 do&hellip;end 。</p>
 </li>
@@ -241,13 +241,13 @@
 <p>可以直接使用 = 运算符返回的值：</p>
 </li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">    <span style="color:#66d9ef">if</span> v <span style="color:#f92672">=</span> array<span style="color:#f92672">.</span>grep(<span style="color:#e6db74">/foo/</span>) <span style="color:#f92672">...</span>
-</code></pre></div><ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> v <span style="color:#f92672">=</span> array<span style="color:#f92672">.</span>grep(<span style="color:#e6db74">/foo/</span>) <span style="color:#f92672">...</span>
+</span></span></code></pre></div><ul>
 <li>
 <p>请自由使用 ||=。</p>
 </li>
 <li>
-<p>使用非 OO 风格的正则表达式（ OO 风格不会让你的代码变得更好）。在需要的时候，自由使用 =~，$0-9，$` 和 $'。</p>
+<p>使用非 OO 风格的正则表达式（ OO 风格不会让你的代码变得更好）。在需要的时候，自由使用 =~，$0-9，$` 和 $&rsquo;。</p>
 </li>
 </ul>
 <h2 id="命名">命名：</h2>
@@ -384,7 +384,7 @@
            
             <p class="copyright-item">
                     <span>:</span>
-                   <span>1704</span>
+                   <span>1710</span>
             </p>
 
             <p class="copyright-item">
@@ -522,7 +522,7 @@
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-24255013-2', 'auto');
+	ga('create', 'G-BX4XDRKHQ9', 'auto');
 	
 	ga('send', 'pageview');
 }
