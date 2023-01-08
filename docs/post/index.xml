@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Sun, 20 Feb 2022 17:37:40 +0100</lastBuildDate><atom:link href="https://air.googol.im/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 08 Jan 2023 16:57:35 +0100</lastBuildDate><atom:link href="https://air.googol.im/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>连续7天的滑雪</title>
+      <link>https://air.googol.im/post/7-days-ski/</link>
+      <pubDate>Sun, 08 Jan 2023 16:57:35 +0100</pubDate>
+      
+      <guid>https://air.googol.im/post/7-days-ski/</guid>
+      <description>&lt;p&gt;2022年末，第一次连续7天滑雪。算是体验了一次欧洲人的滑雪季。&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>Go 1.18新库netaddr里的intern.Value</title>
       <link>https://air.googol.im/post/go-netaddr-value/</link>

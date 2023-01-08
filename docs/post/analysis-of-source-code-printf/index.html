@@ -160,14 +160,14 @@
 
           <p>对VC里printf的实现的分析。</p>
 <p>在stdio.c里找到了printf的实现代码.首先看看对printf的定义:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> printf (<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>cntrl_string, ...)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">printf</span> (<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>cntrl_string, ...)
 </span></span></code></pre></div><p>第一个参数cntrl_string是控制字符串,也就是平常我们写入%d,%f的地方.紧接着后面是一个变长参数.</p>
 <p>看看函数头部的定义:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> pos <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, cnt_printed_chars <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, i;
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> chptr;
 </span></span><span style="display:flex;"><span>  va_list ap;
 </span></span></code></pre></div><p>马上晕!除了ap我们可以马上判断出来是用来读取变长参数的,i用于循环变量.其他变量都不知道是怎么回事.不要着急,我们边看代码边分析.代码的第一行必然是</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>va_start (ap, cntrl_string);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#a6e22e">va_start</span> (ap, cntrl_string);
 </span></span></code></pre></div><p>用来初始化变长参数.</p>
 <p>接下来是一个while循环</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">while</span> (cntrl_string[pos]) {
@@ -193,17 +193,17 @@
 </span></span></code></pre></div><p>用上switch-case了. 快速浏览一下下面的代码.</p>
 <p>首先看看case &lsquo;c&rsquo;的部分</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;c&#39;</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span> putchar (va_arg (ap, <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span>));
+</span></span><span style="display:flex;"><span> <span style="color:#a6e22e">putchar</span> (<span style="color:#a6e22e">va_arg</span> (ap, <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span>));
 </span></span><span style="display:flex;"><span> cnt_printed_chars<span style="color:#f92672">++</span>;
 </span></span><span style="display:flex;"><span> <span style="color:#66d9ef">break</span>;
 </span></span></code></pre></div><p>%c表示仅仅输出一个字符.因此先通过va_arg进行参数的类型转换,之后用putchar[1]输出到屏幕上去.之后是cnt_printed_chars++,通过这句我们就可以判断出cnt_printed_chars使用来表示,已经被printf输出的字符个数的.</p>
 <p>再来看看 case &rsquo;s&rsquo;:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;s&#39;</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span> chptr <span style="color:#f92672">=</span> va_arg (ap, <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span>);
+</span></span><span style="display:flex;"><span> chptr <span style="color:#f92672">=</span> <span style="color:#a6e22e">va_arg</span> (ap, <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span>);
 </span></span><span style="display:flex;"><span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
 </span></span><span style="display:flex;"><span> <span style="color:#66d9ef">while</span> (chptr [i]) {
 </span></span><span style="display:flex;"><span>   cnt_printed_chars<span style="color:#f92672">++</span>;
-</span></span><span style="display:flex;"><span>   putchar (chptr [i<span style="color:#f92672">++</span>]);
+</span></span><span style="display:flex;"><span>   <span style="color:#a6e22e">putchar</span> (chptr [i<span style="color:#f92672">++</span>]);
 </span></span><span style="display:flex;"><span> }
 </span></span><span style="display:flex;"><span> <span style="color:#66d9ef">break</span>;
 </span></span></code></pre></div><p>和case &lsquo;c&rsquo;,同出一辙.cnt_printed_chars++放在了循环内,也证明了刚才提到的他的作用.另外我们也看到了cnptr是用来在处理字符串时的位置指针.到此为止,我们清楚的所有变量的用途,前途变得更加光明了.</p>
@@ -211,91 +211,91 @@
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">// PartI
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>      <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;i&#39;</span><span style="color:#f92672">:</span>
 </span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;d&#39;</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span> cnt_printed_chars <span style="color:#f92672">+=</span> printInt (va_arg (ap, <span style="color:#66d9ef">int</span>));
+</span></span><span style="display:flex;"><span> cnt_printed_chars <span style="color:#f92672">+=</span> <span style="color:#a6e22e">printInt</span> (<span style="color:#a6e22e">va_arg</span> (ap, <span style="color:#66d9ef">int</span>));
 </span></span><span style="display:flex;"><span> <span style="color:#66d9ef">break</span>;
 </span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;u&#39;</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span> cnt_printed_chars <span style="color:#f92672">+=</span> printUnsignedInt (va_arg (ap, <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span>));
+</span></span><span style="display:flex;"><span> cnt_printed_chars <span style="color:#f92672">+=</span> <span style="color:#a6e22e">printUnsignedInt</span> (<span style="color:#a6e22e">va_arg</span> (ap, <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span>));
 </span></span><span style="display:flex;"><span> <span style="color:#66d9ef">break</span>;
 </span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;x&#39;</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span> cnt_printed_chars <span style="color:#f92672">+=</span> printHexa (va_arg (ap, <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span>), <span style="color:#e6db74">&#39;x&#39;</span>);
+</span></span><span style="display:flex;"><span> cnt_printed_chars <span style="color:#f92672">+=</span> <span style="color:#a6e22e">printHexa</span> (<span style="color:#a6e22e">va_arg</span> (ap, <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span>), <span style="color:#e6db74">&#39;x&#39;</span>);
 </span></span><span style="display:flex;"><span> <span style="color:#66d9ef">break</span>;
 </span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;X&#39;</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span> cnt_printed_chars <span style="color:#f92672">+=</span> printHexa (va_arg (ap, <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span>), <span style="color:#e6db74">&#39;X&#39;</span>);
+</span></span><span style="display:flex;"><span> cnt_printed_chars <span style="color:#f92672">+=</span> <span style="color:#a6e22e">printHexa</span> (<span style="color:#a6e22e">va_arg</span> (ap, <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span>), <span style="color:#e6db74">&#39;X&#39;</span>);
 </span></span><span style="display:flex;"><span> <span style="color:#66d9ef">break</span>;
 </span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;o&#39;</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span> cnt_printed_chars <span style="color:#f92672">+=</span> printOctal (va_arg (ap, <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span>));
+</span></span><span style="display:flex;"><span> cnt_printed_chars <span style="color:#f92672">+=</span> <span style="color:#a6e22e">printOctal</span> (<span style="color:#a6e22e">va_arg</span> (ap, <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span>));
 </span></span><span style="display:flex;"><span> <span style="color:#66d9ef">break</span>;
 </span></span><span style="display:flex;"><span><span style="color:#75715e">// Part II
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span> <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;p&#39;</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span> putchar (<span style="color:#e6db74">&#39;0&#39;</span>);
-</span></span><span style="display:flex;"><span> putchar (<span style="color:#e6db74">&#39;x&#39;</span>);
+</span></span><span style="display:flex;"><span> <span style="color:#a6e22e">putchar</span> (<span style="color:#e6db74">&#39;0&#39;</span>);
+</span></span><span style="display:flex;"><span> <span style="color:#a6e22e">putchar</span> (<span style="color:#e6db74">&#39;x&#39;</span>);
 </span></span><span style="display:flex;"><span> cnt_printed_chars <span style="color:#f92672">+=</span> <span style="color:#ae81ff">2</span>; <span style="color:#75715e">/* of &#39;0x&#39; */</span>
-</span></span><span style="display:flex;"><span> cnt_printed_chars <span style="color:#f92672">+=</span> printHexa (va_arg (ap, <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span>), <span style="color:#e6db74">&#39;x&#39;</span>);
+</span></span><span style="display:flex;"><span> cnt_printed_chars <span style="color:#f92672">+=</span> <span style="color:#a6e22e">printHexa</span> (<span style="color:#a6e22e">va_arg</span> (ap, <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span>), <span style="color:#e6db74">&#39;x&#39;</span>);
 </span></span><span style="display:flex;"><span> <span style="color:#66d9ef">break</span>;
 </span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;#&#39;</span><span style="color:#f92672">:</span>
 </span></span><span style="display:flex;"><span> pos<span style="color:#f92672">++</span>;
 </span></span><span style="display:flex;"><span> <span style="color:#66d9ef">switch</span> (cntrl_string[pos]) {
 </span></span><span style="display:flex;"><span> <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;x&#39;</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>   putchar (<span style="color:#e6db74">&#39;0&#39;</span>);
-</span></span><span style="display:flex;"><span>   putchar (<span style="color:#e6db74">&#39;x&#39;</span>);
+</span></span><span style="display:flex;"><span>   <span style="color:#a6e22e">putchar</span> (<span style="color:#e6db74">&#39;0&#39;</span>);
+</span></span><span style="display:flex;"><span>   <span style="color:#a6e22e">putchar</span> (<span style="color:#e6db74">&#39;x&#39;</span>);
 </span></span><span style="display:flex;"><span>   cnt_printed_chars <span style="color:#f92672">+=</span> <span style="color:#ae81ff">2</span>; <span style="color:#75715e">/* of &#39;0x&#39; */</span>
-</span></span><span style="display:flex;"><span>   cnt_printed_chars <span style="color:#f92672">+=</span> printHexa (va_arg (ap, <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span>), <span style="color:#e6db74">&#39;x&#39;</span>);
+</span></span><span style="display:flex;"><span>   cnt_printed_chars <span style="color:#f92672">+=</span> <span style="color:#a6e22e">printHexa</span> (<span style="color:#a6e22e">va_arg</span> (ap, <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span>), <span style="color:#e6db74">&#39;x&#39;</span>);
 </span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">break</span>;
 </span></span><span style="display:flex;"><span> <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;X&#39;</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>   putchar (<span style="color:#e6db74">&#39;0&#39;</span>);
-</span></span><span style="display:flex;"><span>   putchar (<span style="color:#e6db74">&#39;X&#39;</span>);
+</span></span><span style="display:flex;"><span>   <span style="color:#a6e22e">putchar</span> (<span style="color:#e6db74">&#39;0&#39;</span>);
+</span></span><span style="display:flex;"><span>   <span style="color:#a6e22e">putchar</span> (<span style="color:#e6db74">&#39;X&#39;</span>);
 </span></span><span style="display:flex;"><span>   cnt_printed_chars <span style="color:#f92672">+=</span> <span style="color:#ae81ff">2</span>; <span style="color:#75715e">/* of &#39;0X&#39; */</span>
-</span></span><span style="display:flex;"><span>   cnt_printed_chars <span style="color:#f92672">+=</span> printHexa (va_arg (ap, <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span>), <span style="color:#e6db74">&#39;X&#39;</span>);
+</span></span><span style="display:flex;"><span>   cnt_printed_chars <span style="color:#f92672">+=</span> <span style="color:#a6e22e">printHexa</span> (<span style="color:#a6e22e">va_arg</span> (ap, <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span>), <span style="color:#e6db74">&#39;X&#39;</span>);
 </span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">break</span>;
 </span></span><span style="display:flex;"><span> <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;o&#39;</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>   putchar (<span style="color:#e6db74">&#39;0&#39;</span>);
+</span></span><span style="display:flex;"><span>   <span style="color:#a6e22e">putchar</span> (<span style="color:#e6db74">&#39;0&#39;</span>);
 </span></span><span style="display:flex;"><span>   cnt_printed_chars<span style="color:#f92672">++</span>;
-</span></span><span style="display:flex;"><span>   cnt_printed_chars <span style="color:#f92672">+=</span> printOctal (va_arg (ap, <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span>));
+</span></span><span style="display:flex;"><span>   cnt_printed_chars <span style="color:#f92672">+=</span> <span style="color:#a6e22e">printOctal</span> (<span style="color:#a6e22e">va_arg</span> (ap, <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span>));
 </span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">break</span>;
 </span></span></code></pre></div><p>注意观察一下,PartII的代码其实就是比PartI的代码多一个样式.在16进制数或八进制前加入0x或是o,等等.因此这里就只分析一下PartI咯.</p>
 <p>其实仔细看看PartI的个条case,也就是把参数分发到了更具体的函数用于显示,然后以返回值的形式返回输出个数.对于这些函数就不具体分析了.我们先来看看一些善后处理:</p>
 <p>先看case的default处理.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">default</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span> putchar ((<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span>) cntrl_string[pos]);
+</span></span><span style="display:flex;"><span> <span style="color:#a6e22e">putchar</span> ((<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span>) cntrl_string[pos]);
 </span></span><span style="display:flex;"><span> cnt_printed_chars<span style="color:#f92672">++</span>;
 </span></span></code></pre></div><p>就是直接输出cntrl_string里%号后面的未知字符.应该是一种容错设计处理.</p>
 <p>再看看if (cntrl_string[pos] == &lsquo;%&rsquo;)的else部分</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">else</span> {
-</span></span><span style="display:flex;"><span>      putchar ((<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span>) cntrl_string[pos]);
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">putchar</span> ((<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span>) cntrl_string[pos]);
 </span></span><span style="display:flex;"><span>      cnt_printed_chars<span style="color:#f92672">++</span>;
 </span></span><span style="display:flex;"><span>      pos<span style="color:#f92672">++</span>;
 </span></span><span style="display:flex;"><span> }
 </span></span></code></pre></div><p>如果不是%开头的,那么直接输出这个字符.</p>
 <p>最后函数返回前</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>  va_end (ap);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>  <span style="color:#a6e22e">va_end</span> (ap);
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> cnt_printed_chars;
 </span></span></code></pre></div><p>va_end处理变长参数的善后工作.并返回输出的字符个数.</p>
 <p>在最后我们有必要谈谈putChar函数以及基本输出的基础函数printChar,先来看看putChar</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">putchar</span> (<span style="color:#66d9ef">int</span> c) {
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">switch</span> ((<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span>) c) {
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;\n&#39;</span> <span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>    newLine ();
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">newLine</span> ();
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">break</span>;
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;\r&#39;</span> <span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>    carriageReturn ();
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">carriageReturn</span> ();
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">break</span>;
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;\f&#39;</span> <span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>    clearScreen ();
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">clearScreen</span> ();
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">break</span>;
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;\t&#39;</span> <span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>    printChar (<span style="color:#ae81ff">32</span>); printChar (<span style="color:#ae81ff">32</span>); <span style="color:#75715e">/* 32 = space */</span>
-</span></span><span style="display:flex;"><span>    printChar (<span style="color:#ae81ff">32</span>); printChar (<span style="color:#ae81ff">32</span>);
-</span></span><span style="display:flex;"><span>    printChar (<span style="color:#ae81ff">32</span>); printChar (<span style="color:#ae81ff">32</span>);
-</span></span><span style="display:flex;"><span>    printChar (<span style="color:#ae81ff">32</span>); printChar (<span style="color:#ae81ff">32</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printChar</span> (<span style="color:#ae81ff">32</span>); <span style="color:#a6e22e">printChar</span> (<span style="color:#ae81ff">32</span>); <span style="color:#75715e">/* 32 = space */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printChar</span> (<span style="color:#ae81ff">32</span>); <span style="color:#a6e22e">printChar</span> (<span style="color:#ae81ff">32</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printChar</span> (<span style="color:#ae81ff">32</span>); <span style="color:#a6e22e">printChar</span> (<span style="color:#ae81ff">32</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printChar</span> (<span style="color:#ae81ff">32</span>); <span style="color:#a6e22e">printChar</span> (<span style="color:#ae81ff">32</span>);
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">break</span>;
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;\b&#39;</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>    backspace ();
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">backspace</span> ();
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">break</span>;
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;\a&#39;</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>    beep ();
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">beep</span> ();
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">break</span>;
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">default</span> <span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>    printChar ((<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span>) c);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printChar</span> ((<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span>) c);
 </span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> c;
 </span></span><span style="display:flex;"><span>}
@@ -307,8 +307,8 @@
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">*</span>(word <span style="color:#f92672">*</span>)(VIDEO <span style="color:#f92672">+</span> y <span style="color:#f92672">*</span> <span style="color:#ae81ff">160</span> <span style="color:#f92672">+</span> x <span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>) <span style="color:#f92672">=</span> ch <span style="color:#f92672">|</span> (fill_color <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">8</span>);
 </span></span><span style="display:flex;"><span>  x<span style="color:#f92672">++</span>;
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (x <span style="color:#f92672">&gt;=</span> WIDTH)
-</span></span><span style="display:flex;"><span>    newLine ();
-</span></span><span style="display:flex;"><span>  setVideoCursor (y, x);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">newLine</span> ();
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">setVideoCursor</span> (y, x);
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>这里VIDEO表示显存地址也就是0xB8000.通过<code>y * 160 + x</code>屏幕<code>(x,y)</code>坐标在显存中的位置.这里需要知道,一个字符显示需要两个字节,一个是ASCII码,第二个是字符属性代码也就是颜色代码.因此才必须<code>y * 80 * 2 + x = y * 160 + x</code>.那么<code>ch | (fill_color &lt;&lt; 8)</code>也自然就是写入字符及属性代码用的了.每写一个字符光标位置加1,如果大于屏幕宽度WIDTH就换行.最后通过setVideoCursor设置新的光标位置.完成了整个printChar过程.</p>
 <p>到此,把printf从上到下说了一遍.不知道各位大家感觉如何,如果说得不清楚还大家多提意见.有说得不对的地方请大家多多指教.</p>
@@ -427,7 +427,7 @@
     <div class="copyright">
         &copy;
         
-        <span itemprop="copyrightYear">2004 - 2022</span>
+        <span itemprop="copyrightYear">2004 - 2023</span>
         
          
             <span class="author" itemprop="copyrightHolder"><a href="https://air.googol.im">Googol Lee</a> | </span>
