@@ -22,6 +22,6 @@ author: "Googol Lee"
 
 去Hochzillertal的第一天也是以练习为主。这个雪场是我最早来奥地利滑雪时练习的雪场，有一条蓝道宽又阔。我最早在这条蓝道上练习中心靠前且平行转向。第二天开始刷山头，从Kaltenbach上山后，在山腰过渡一下，直接去Wetterkreuz山顶，再滑到半山，坐Sonnenjet到Wetterkreuz的第二山峰，往西向后山滑。从山谷过渡到Marchkopf。然后是一条宽阔但是略微陡峭的红道到山底，再坐缆车到Pfaffenbühel山头。这个山头都是蓝道，很适合练习，下山有蓝红黑各一条道，都是很宽的道，我各滑了一次。之后吃饭，红道下山并原路返回。从Wetterkreuz下山时并没有坐缆车，而是直接滑黑道+红道到山脚。因为天晚，这条道被很多人滑过，所以状况非常不好，蘑菇多，没有蘑菇的地方都是冰渣，滑起来非常累，而且雪道非常长，需要留足体力应对各种情况。
 
-Zillertal Arena就比较失败。因为速度慢，导致滑到中间时就很晚了，没能完成整个雪场山头的巡回。从Zell am Ziller上山后，通过Wiesenalm过渡到Rosenalm，滑一小段，再缆车到Karspitz往下滑，回到Rosenalm坐另一辆缆车到Törljoch，然后再过渡几趟就能伤到Übergangsjoch山顶。然后向东滑到Isskogel。这条道有好几处前半段非常缓的沟，我经验不足，速度不够，几次只能在沟边爬几步上去。之后是一条大蓝道到Arena Center。这时候时间就比较晚，只能在Arena Center吃饭并原路返回。从Arena Center可以滑一条黑道继续向东，还有两个山头。这俩山头就留着下次有机会再去吧。
+Zillertal Arena就比较失败。因为速度慢，导致滑到中间时就很晚了，没能完成整个雪场山头的巡回。从Zell am Ziller上山后，通过Wiesenalm过渡到Rosenalm，滑一小段，再缆车到Karspitz往下滑，回到Rosenalm坐另一辆缆车到Törljoch，然后再过渡几趟就能伤到Übergangsjoch山顶。然后向东滑到Isskogel。这条道有好几处前半段非常缓的沟，我经验不足，速度不够，几次只能在沟边爬几步上去。之后是一条大蓝道到Arena Center。这时候时间就比较晚，只能在Arena Center吃饭并原路返回。从Arena Center可以滑一条黑道继续向东，还有两个山头。这俩山头就留着下次有机会再去吧。下山时遇到了非常壮观的火烧云，就是题图的照片。
 
 等明年有机会依旧要这么玩一周。
