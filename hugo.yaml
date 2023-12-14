@@ -15,14 +15,18 @@ minify:
 
 menu:
   main:
+    - identifier: posts
+      name: Posts
+      url: /posts/
+      weight: 10
     - identifier: categories
       name: Categories
       url: /categories/
-      weight: 10
+      weight: 20
     - identifier: tags
       name: Tags
       url: /tags/
-      weight: 20
+      weight: 30
 
 # Read: https://github.com/adityatelange/hugo-PaperMod/wiki/FAQs#using-hugos-syntax-highlighter-chroma
 pygmentsUseClasses: true
@@ -68,12 +72,10 @@ params:
     imageUrl: "/images/cover.jpg"
     imageWidth: 120
     imageHeight: 120
-    imageTitle: title-image
+    imageTitle: avatar
     buttons:
       - name: Posts
         url: posts
-      - name: Tags
-        url: tags
 
   socialIcons:
     - name: Mastodon
