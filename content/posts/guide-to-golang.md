@@ -1,0 +1,344 @@
++++
+date = "2010-01-17T20:00:00+08:00"
+title = "Golang初探"
+category = "development"
+tags = ["golang"]
++++
+
+Go语言是Google于2009年11月公布的一个新语言项目，其目标是创造一门既简单又有效率的开源编程语言。由于有C语言创始人Ken Thompson的参与，Go一面世，就被看成是C语言的继任者，受到很大关注。Go一方面吸收了C简单清晰、执行效率高的优点，另一方面融合了动态语言的闭包、动态绑定等特性，更加适应目前多核与多机高并发的开发环境和快速敏捷的开发效率。此外，Go并没有跟随主流的以“类和继承”为基础的面向对象实现方式，而是以接口和动态绑定的方式，将封装的粒度做得更细、更灵活，实现了另一种面向对象的代码组织形式。
+
+<!--more-->
+
+本文带领大家用Go来实现一个简单的程序。程序本身是对MapReduce的一个模拟，将一组数字交给一组并发的DoubleNode节点做翻倍，然后再由一个SumNode将翻倍后的数累加并输出。节点间的关系类似如图1所示。
+
+# Node的实现
+
+    SumNode
+      |
+      +--- DoubleNode
+      |
+      +--- DoubleNode
+      |
+      +--- DoubleNode
+
+图1中的每个Node都是一个独立运行的节点，节点间是并行的。值得提醒的是，Go提倡通过通信来共享数据，而不是通过共享数据来通信。因此每个节点既不访问别的节点的内部状态，也不访问全局变量，节点间通过Go语言的通道机制互相传递消息，通知工作完成并将数据传递给下一个工作节点。
+
+## 确定Node的结构
+
+首先是确定Node的结构。DoubleNode和SumNode都作为Node的一种特化，不同之处在于在Node执行时执行的功能不一样。统一起见，为Node定义如下接口：
+
+``` go
+type NodeInterface interface {
+  receive(i int)
+}
+```
+
+蓝色的部分是Go的关键字，type表示定义一个新的类型，语法上与C语言的typedef类似，只是将被定义的类型名字和类型的顺序颠倒了一下。Go里所有涉及到类型名/变量名和类型的地方，使用顺序都和C是颠倒的。NodeInterface是新类型的名字。interface表示定义的是一个接口，这个接口可以类比C++的纯虚类或者Java的接口，但是在使用的时候是动态绑定，不需要实现者必须继承自接口(后文有更详细的说明)。接口内定义了两个函数receive和run，其中receive接受一个参数i，类型是整数类型int，没有返回值，用处是处理从其他Node接收到的消息;run没有参数，返回值为int，用处是进行Node自身的运算。
+
+## 定义Node内部的状态
+
+另外定义Node内部的一些状态：
+
+``` go
+type Node struct {
+  name string
+  in_degree int
+  in_ch chan int
+  out_ch chan int
+
+  inode NodeInterface
+}
+```
+
+与前面不同，Node的类型是struct。和C语言的struct一样，Go的struct里只含有变量，不能有函数。Node类型里一共定义了以下变量：name，字符串类型，用来存储标示Node的名字in_degree表示一个节点的入度，也就是本节点需要从多少个其他节点接收数据，整数类型in_ch和out_ch是输入和输出管道，类型是传输整数的chan，chan的概念先按下不表，后面在使用的时候会讲到;最后是inode，类型是之前定义的NodeInterface接口，用来特化Node的行为。
+
+这里值得注意的是，Node使用了类似模版模式的概念，但和C++/Java不同，并没有从NodeInterface继承，而是将NodeInterface作为一个成员。由于Go无法让一个类的成员函数处于未定义的状态，因此无法像C++/Java一样藉由在子类特化父类里未定义的函数来实现模版模式。不过，这样虽然看似麻烦，但是好处在于将Node本身的状态和NodeInterface分离，两部分责任更清晰。
+
+## Node相关的方法
+
+之后是Node相关的方法。首先是Node的创建方法：
+
+``` go
+func NewNode(name string, inode NodeInterface) *Node {
+  return &Node{name, 0, make(chan int), make(chan int), inode}
+}
+```
+
+func关键字表示接下来要定义一个函数。函数的名字是NewNode，接受两个参数：字符串name和NodeInterface接口inode。初始时，节点Node的入度in_degree为0。系统函数make会创建一个chan int的实例，并返回其引用。关于make的更详细的用法和限制，可以参考Go语言的官方网站。Node{...}一句表示创建了一个Node实例，花括弧内按顺序给出Node结构内部变量的初值。然后用&运算符取新建实例的地址，作为返回值。是的，Go里依然有指针的概念，而且这个指针和C的指针概念类似，相关的语法也类似。
+
+Node间需要互相连结，以下是连结的实现：
+
+``` go
+func (from *Node) ConnectTo(to *Node) {
+  to.in_degree++
+  go func() {
+    i := <- from.out_ch
+    to.in_ch <- i
+  }()
+}
+```
+
+函数名前的(from \*Node)表示ConnectTo函数是类型Node的一个成员函数。与C++/Java不同，Go里没有类似this的关键字，在声明函数时需要明确指定指向当前实例的变量名。每个链接，都会增加被指向Node的入度数。go关键字启动一个gorountine，等待前一个Node的输出，并将输出的内容传入后续的Node。go关键字之后是一个匿名函数并执行这个函数。可以参考下面这种定义：
+
+``` go
+f := func () {...}
+f()
+```
+
+如果将中间变量f去掉，就是上面提到的定义一个函数并执行的写法：
+
+``` go
+func () {...} ()
+```
+
+Go语言里的函数地位和变量是一样的，可以任意赋值给一个变量，有自己的生命周期，并且在其他函数间相互传递。而且Go的函数支持闭包，在一个定义域里定义的函数可以直接引用外层定义域的变量并在这个函数的生命周期里一直保存。不过要注意的是，如果闭包引用的是一个指针，需要小心操作这个变量，因为函数里和函数外的指针指向的是同一个地址，任何对这个指针指向的实例操作，都会对所有指针有影响。
+
+关键字<-是对chan类型独有的操作。之前说过，chan类型类似于通道，可以把一个数据放进去，并在之后取出来。在例子里，<- from.out_ch是从from实例的out_ch通道里取出一个数，如果通道里没有数，则会阻塞等待。取出数后会把这个数赋值给i。之后将取出的值i通过to.in_ch <- i传入到to实例的in_ch通道里。这样就完成了将from和to两个节点连结起来的功能。
+
+## gorountine
+
+gorountine是Go语言里很重要的新概念，有点类似线程，但消耗的资源比线程少很多，而且gorountine只是Go内部的概念，不会在操作系统层面有对应的实现。在Go里启动的各个gorountine之间是并行的，每个gorountine可能会映射到一个系统线程，也可能多个gorountine共用一个线程，如果是多核的机器，不同的gorountine会自动分配到不同的核心。gorountine间的切换也由Go来控制，不需要程序员操心。gorountine占用的内存远小于系统线程或进程，gorountine间的切换成本也很低。程序里可以轻易创建数万个gorountine做并行，而不用担心会占用过多的系统资源。
+
+Go语言利用gorountine实现并发，用chan实现消息通信。通过这两个概念的配合，提供了对并发的支持。
+
+值得注意的是gorountine里对i的赋值操作符:=，这个操作符是指声明并创建一个变量，并赋初值。变量的类型会自动设置成初值的类型。Go继承了C语言的静态类型的特点，同时也在一定程度上借鉴了C++类型推导的特性(类似于C++ 0x的auto关键字，如果你知道C++ 0x的话)。另一种更传统的写法是：
+
+``` go
+var i int = nnn
+```
+
+传统的写法不仅多了不少字，而且还要自己注意类型是否匹配。所以Go更推荐使用:=(而且以后如果有Go语言混乱大赛，大概会用这东西来组成颜文字什么的XD)。
+
+## Node的核心函数Run()
+
+现在来看一下Node的核心函数Run()。
+
+``` go
+func (n *Node) Run() {
+  go func() {
+    defer func() {
+      if x := recover(); x != nil {
+        println(n.name, "panic with value ", x)
+        panic(x)
+      }
+      println(n.name, "finished");
+    }()
+    // Run函数的核心
+    for n.in_degree > 0 {
+      received := <- n.in_ch
+      n.inode.receive(received)
+      n.in_degree--
+    }
+    ret := n.inode.run()
+    n.out_ch <- ret
+  }()
+}
+```
+
+进入Run后就启动了一个gorountine，保证每个Node节点间都是并行的。在gorountine的内部，先略过defer不看，看Run函数的核心部分。首先等待所有前驱节点工作的完成。关键字for是Go语言里的循环语句，一般来说有四种用法：
+
+``` go
+for {}                     // 相当于C语言里的while 1 {}
+for i := 0; i < xx; i++ {} // 相当于C语言里for (int i=0; i<xx; i++) {}
+for i > 0 {}               // 相当于C语言里的while (i>0) {}
+for index, item := range array {} // 相当于Python里的foreach，index是循环序号
+```
+
+这里用的是第三种用法。由于每个节点都是通过ConnectTo来和前驱关联在一起，因此in_degree的数值就是前驱的个数，当有前驱完成，由ConnectTo启动的gorountine就会把前驱的输出放入in_ch里(见前面对ConnectTo的分析)。for循环等待所有前驱节点的输出，并把输出传入inode的receive接口做处理。
+
+之后调用inode接口的run进行节点自身的处理，并将处理后的返回值赋给ret。最后将ret的内容从out_ch里输出。
+
+## defer
+
+defer是Go另一个很有意思的特性，借鉴自C++的析构函数和Java的final。defer指定的函数不会立刻执行，而是在当前函数退出时才执行。defer主要是用来做一些清扫类的工作，比如常见的关闭文件、释放缓存。这里的defer用来处理inode.run()在执行时可能出现的异常。
+
+Go的异常机制也与其他语言不同。一般来讲，Go的错误处理类似常见的C函数，推荐使用返回值做为控制手段。但是在一些情况下，可以通过内建的panic函数来触发一个异常。如果这个异常不被捕获，就会引起程序真正panic。捕获异常使用内建的recover函数，如果这个函数执行前有panic发生，就会返回调用panic时传入的参数;如果没有panic发生，就返回一个nil──Go里的空指针。
+
+defer里if的用法也很有意思。在if执行时，分号前的部分对变量x做初始化，分号后才是这个if的判断值。x的作用域限制在if的语句块里。这里Go借鉴了C++的思想：尽可能缩小变量的生命周期。当然，也可以使用传统的写法：
+
+``` go
+x := recover()
+if x != nil { ... }
+```
+
+如果recover得到的值不为nil，就简单输出异常并重新抛出。如果一切正常，就打印一句提示并退出。
+
+# 应用Node来构造各种节点
+
+上面就是Node的实现。接下来就要展示如何应用Node来构造各种节点了。
+
+## DoubleNode
+
+首先是DoubleNode，结构如下：
+
+``` go
+type DoubleNode struct {
+  data int
+}
+```
+
+对DoubleNode来说，只需要一个data存储需要处理的数值就可以，因此结构很简单。然后是Node的处理函数：
+
+``` go
+func (n *DoubleNode) receive(i int) {
+}
+
+func (n *DoubleNode) run() int {
+  return n.data * 2
+}
+```
+
+由于DoubleNode是初始节点，不会接收数据，所以receive没有做任何事情。run里将data的值翻倍并返回。
+
+值得注意的是DoubleNode并没有从NodeInterface做继承，除了实现了NodeInterface的两个接口，甚至没有任何提到NodeInterface的地方。这是Go的interface与Java和C++侵入式的接口实现最大的不同。Go的interface并不需要实现类与interface有任何直接的关联，在编译时，编译器会自动检查一个类是否符合interface的要求，并在运行时做动态绑定。由于并不要求强制的继承，因此在设计类的时候也不会受到继承体系的限制，想让一个类符合某个interface，只要加入相应的函数实现就可以，不用改动整个继承体系。
+
+之后是如何生成DoubleNode：
+
+``` go
+func NewDoubleNode(name string, data int) *Node {
+  return NewNode(name, &DoubleNode{data})
+}
+```
+
+这里将新生成的DoubleNode实例的指针直接作为参数传入了NewNode，Go的编译器会帮你处理背后的工作。注意interface只能接收一个实例的指针，而不能直接接收实例作为参数。
+
+## SumNode
+
+之后是SumNode的实现：
+
+``` go
+type SumNode struct {
+  data int
+}
+
+func NewSumNode(name string) *Node {
+  return NewNode(name, &SumNode{0})
+}
+
+func (n *SumNode) receive(i int) {
+  n.data += i
+}
+
+func (n *SumNode) run() int {
+  return n.data
+}
+```
+
+SumNode在接收到其他Node传入的数后，会将其累加到自己的data里，最后只用简单传回data的值就完成了全部工作。其他函数很简单就不细说了。
+
+## Node组合
+
+现在是将这些Node组合在一起完成工作的时候了：
+
+``` go
+func main() {
+  sum := NewSumNode("sum")
+  sum.Run()
+  for _, num := range [5]int{1, 2, 3, 5, 6} {
+    node := NewDoubleNode("double", num)
+    node.ConnectTo(sum)
+    node.Run()
+  }
+  println(<- sum.out_ch)
+}
+```
+
+Go在编译可执行文件时，会自动调用内部定义的main函数。main函数里，[5]int{1， 2， 3， 5， 6}表示一个含有5个元素的int数组，“_”和Python里的“_”含义一样，是一个匿名变量，表示这里将接收一个值，但是程序后面会忽略这个值的具体内容，这里是忽略掉range返回的循环序数。其余的内容希望已经简单到读者能一眼看懂(看不懂的话，大概是Go语言的失败吧)。值得注意的是，sum的Run并没有阻塞主进程的运行，这正是gorountine的并发所达到的效果。
+
+写到这里，本文的内容就全部结束了。要说的是，这篇文章仅仅展示了Go语言相比C/C++/Java最大的不同，并不是Go的全部内容。比如像字符串、数组、分片、包管理、闭包等内容完全没有涉及。有兴趣的读者可以到Go语言的官方网站http://golang.org查阅相关文档。Go的官方网站也提供了一个在线的Go编译环境，可以编译执行Go的代码，体验Go的魅力。
+
+最后给出程序里例子的完整代码：
+
+``` go
+package main
+
+type NodeInterface interface {
+  receive(i int)
+  run() int
+}
+
+type Node struct {
+  name string
+  in_degree int
+  in_ch chan int
+  out_ch chan int
+
+  inode NodeInterface
+}
+
+func NewNode(name string, inode NodeInterface) *Node {
+  return &Node{name, 0, make(chan int), make(chan int), inode}
+}
+
+func (from *Node) ConnectTo(to *Node) {
+  to.in_degree++
+  go func() {
+    i := <- from.out_ch
+    to.in_ch <- i
+  }()
+}
+
+func (n *Node) Run() {
+  go func() {
+    defer func() {
+      if x := recover(); x != nil {
+        println(n.name, "panic with value ", x)
+        panic(x)
+      }
+      println(n.name, "finished");
+    }()
+
+    for n.in_degree > 0 {
+      received := <- n.in_ch
+      n.inode.receive(received)
+      n.in_degree--
+    }
+    ret := n.inode.run()
+    n.out_ch <- ret
+  }()
+}
+
+type DoubleNode struct {
+  data int
+}
+
+func NewDoubleNode(name string, data int) *Node {
+  return NewNode(name, &DoubleNode{data})
+}
+
+func (n *DoubleNode) receive(i int) {
+}
+
+func (n *DoubleNode) run() int {
+  return n.data * 2
+}
+
+type SumNode struct {
+  data int
+}
+
+func NewSumNode(name string) *Node {
+  return NewNode(name, &SumNode{0})
+}
+
+func (n *SumNode) receive(i int) {
+  n.data += i
+}
+
+func (n *SumNode) run() int {
+  return n.data
+}
+
+func main() {
+  sum := NewSumNode("sum")
+  sum.Run()
+
+  for _, num := range [5]int{1, 2, 3, 5, 6} {
+    node := NewDoubleNode("double", num)
+    node.ConnectTo(sum)
+    node.Run()
+  }
+
+  println(<- sum.out_ch)
+}
+```
