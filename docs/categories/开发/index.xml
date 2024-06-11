@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>开发 on Air on G</title>
+    <title>开发 on Air On G</title>
     <link>https://air.googol.im/categories/%E5%BC%80%E5%8F%91/</link>
-    <description>Recent content in 开发 on Air on G</description>
+    <description>Recent content in 开发 on Air On G</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh</language>
-    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <language>zh-cn</language>
     <lastBuildDate>Sun, 20 Feb 2022 17:37:40 +0100</lastBuildDate><atom:link href="https://air.googol.im/categories/%E5%BC%80%E5%8F%91/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Go 1.18新库netaddr里的intern.Value</title>
-      <link>https://air.googol.im/post/go-netaddr-value/</link>
+      <link>https://air.googol.im/posts/go-netaddr-value/</link>
       <pubDate>Sun, 20 Feb 2022 17:37:40 +0100</pubDate>
       
-      <guid>https://air.googol.im/post/go-netaddr-value/</guid>
+      <guid>https://air.googol.im/posts/go-netaddr-value/</guid>
       <description>&lt;p&gt;Go 1.18引入了新库&lt;code&gt;netaddr&lt;/code&gt;来表示IP地址及相关操作。其作者Brad Fitzpatrick专门写了篇&lt;a href=&#34;https://tailscale.com/blog/netaddr-new-ip-type-for-go/&#34;&gt;blog&lt;/a&gt;说明这个库的设计原则和最终实现。&lt;/p&gt;
 &lt;p&gt;这个实现最主要的特性依赖&lt;a href=&#34;https://pkg.go.dev/go4.org/intern&#34;&gt;intern.Value&lt;/a&gt;这个库。这里记录一下我对这个库的一些研究和看法&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>使用Go Swagger生成OpenAPI定义</title>
-      <link>https://air.googol.im/post/go-swagger-spec/</link>
+      <link>https://air.googol.im/posts/go-swagger-spec/</link>
       <pubDate>Sat, 04 Dec 2021 11:11:08 +0100</pubDate>
       
-      <guid>https://air.googol.im/post/go-swagger-spec/</guid>
+      <guid>https://air.googol.im/posts/go-swagger-spec/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://swagger.io/specification/&#34;&gt;OpenAPI&lt;/a&gt;（原名Swagger）是目前比较流行的定义HTTP API的协议。但是OpenAPI的定义文件是方便机器处理的格式，不易编写和阅读。这里介绍一种使用&lt;a href=&#34;https://goswagger.io/&#34;&gt;go-swagger&lt;/a&gt;，根据Go代码生成OpenAPI定义文件的方法。该方法只使用Go代码来定义API，不强求Server或者Client也使用Go。&lt;/p&gt;
 &lt;p&gt;目前&lt;code&gt;go-swagger&lt;/code&gt;只能生成OpenAPI 2.0格式的定义。这个也是现在广泛使用的格式。&lt;code&gt;go-swagger&lt;/code&gt;未来会支持OpenAPI 3.0。&lt;/p&gt;
 &lt;p&gt;本文假设已经熟悉Go语法，只对&lt;code&gt;go-swagger&lt;/code&gt;的扩展部分进行详细解释。&lt;/p&gt;</description>
@@ -31,11 +30,11 @@
     
     <item>
       <title>组织Neovim配置的方法</title>
-      <link>https://air.googol.im/post/neovim-configuration/</link>
+      <link>https://air.googol.im/posts/neovim-configuration/</link>
       <pubDate>Tue, 09 Nov 2021 22:54:04 +0100</pubDate>
       
-      <guid>https://air.googol.im/post/neovim-configuration/</guid>
-      <description>&lt;p&gt;最近NeoVim放出了0.5.1版本，默认支持Lsp以及Lua脚本运行时。Lsp是我现在非常常用的功能。Vim只依靠插件支持Lsp，很多特性用起来并不顺畅。所以我放弃了Vim，转而使用NeoVim作为主力编辑器。&lt;/p&gt;</description>
+      <guid>https://air.googol.im/posts/neovim-configuration/</guid>
+      <description>如何使用Lua组织Neovim的配置</description>
     </item>
     
   </channel>

@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>sports on Air on G</title>
+    <title>sports on Air On G</title>
     <link>https://air.googol.im/tags/sports/</link>
-    <description>Recent content in sports on Air on G</description>
+    <description>Recent content in sports on Air On G</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh</language>
-    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <language>zh-cn</language>
     <lastBuildDate>Sun, 08 Jan 2023 16:57:35 +0100</lastBuildDate><atom:link href="https://air.googol.im/tags/sports/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>连续7天的滑雪</title>
-      <link>https://air.googol.im/post/7-days-ski/</link>
+      <link>https://air.googol.im/posts/7-days-ski/</link>
       <pubDate>Sun, 08 Jan 2023 16:57:35 +0100</pubDate>
       
-      <guid>https://air.googol.im/post/7-days-ski/</guid>
+      <guid>https://air.googol.im/posts/7-days-ski/</guid>
       <description>&lt;p&gt;2022年末，第一次连续7天滑雪。算是体验了一次欧洲人的滑雪季。&lt;/p&gt;</description>
     </item>
     

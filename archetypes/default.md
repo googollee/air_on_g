@@ -2,12 +2,11 @@
 title: "{{ replace .Name "-" " " | title }}"
 date: {{ .Date }}
 draft: true
-description:
-image:
 categories:
  -
 tags:
  -
-featured_image:
+cover:
+  image:
 author: "Googol Lee"
 ---

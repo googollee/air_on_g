@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>recurring on Air on G</title>
+    <title>recurring on Air On G</title>
     <link>https://air.googol.im/tags/recurring/</link>
-    <description>Recent content in recurring on Air on G</description>
+    <description>Recent content in recurring on Air On G</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh</language>
-    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <language>zh-cn</language>
     <lastBuildDate>Tue, 03 Jul 2007 20:00:00 +0800</lastBuildDate><atom:link href="https://air.googol.im/tags/recurring/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>共享信息</title>
-      <link>https://air.googol.im/post/sharing-information/</link>
+      <link>https://air.googol.im/posts/sharing-information/</link>
       <pubDate>Tue, 03 Jul 2007 20:00:00 +0800</pubDate>
       
-      <guid>https://air.googol.im/post/sharing-information/</guid>
+      <guid>https://air.googol.im/posts/sharing-information/</guid>
       <description>&lt;p&gt;题目是这样的：三个学生去教授家里帮忙收拾花园，比较辛苦，三个人的脸上都沾上了泥，但自己并不知道。休息的时候，教授对他们说：不要摸，你们三个中至少有一个人脸上有泥，有泥的人去洗掉。假设三个学生足够聪明，结果谁会去洗呢？&lt;/p&gt;</description>
     </item>
     

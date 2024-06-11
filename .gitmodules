@@ -1,3 +1,3 @@
-[submodule "themes/keepit"]
-	path = themes/keepit
-	url = git@github.com:googollee/KeepIt.git
+[submodule "themes/PaperMod"]
+	path = themes/PaperMod
+	url = https://github.com/adityatelange/hugo-PaperMod.git

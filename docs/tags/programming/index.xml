@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>programming on Air on G</title>
+    <title>programming on Air On G</title>
     <link>https://air.googol.im/tags/programming/</link>
-    <description>Recent content in programming on Air on G</description>
+    <description>Recent content in programming on Air On G</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh</language>
-    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <language>zh-cn</language>
     <lastBuildDate>Mon, 01 May 2017 08:38:56 +0200</lastBuildDate><atom:link href="https://air.googol.im/tags/programming/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>在WSL上配置VIM</title>
-      <link>https://air.googol.im/post/vim-config/</link>
+      <link>https://air.googol.im/posts/vim-config/</link>
       <pubDate>Mon, 01 May 2017 08:38:56 +0200</pubDate>
       
-      <guid>https://air.googol.im/post/vim-config/</guid>
+      <guid>https://air.googol.im/posts/vim-config/</guid>
       <description>&lt;p&gt;最近在Windows 10上折腾Windows Subsystem for Linux。为了减少折腾的复杂性和不一致性，决定在这个环境里用VIM。这里记录了这次配置VIM的经历。&lt;/p&gt;</description>
     </item>
     

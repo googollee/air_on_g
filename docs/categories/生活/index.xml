@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>生活 on Air on G</title>
+    <title>生活 on Air On G</title>
     <link>https://air.googol.im/categories/%E7%94%9F%E6%B4%BB/</link>
-    <description>Recent content in 生活 on Air on G</description>
+    <description>Recent content in 生活 on Air On G</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh</language>
-    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <language>zh-cn</language>
     <lastBuildDate>Sun, 08 Jan 2023 16:57:35 +0100</lastBuildDate><atom:link href="https://air.googol.im/categories/%E7%94%9F%E6%B4%BB/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>连续7天的滑雪</title>
-      <link>https://air.googol.im/post/7-days-ski/</link>
+      <link>https://air.googol.im/posts/7-days-ski/</link>
       <pubDate>Sun, 08 Jan 2023 16:57:35 +0100</pubDate>
       
-      <guid>https://air.googol.im/post/7-days-ski/</guid>
+      <guid>https://air.googol.im/posts/7-days-ski/</guid>
       <description>&lt;p&gt;2022年末，第一次连续7天滑雪。算是体验了一次欧洲人的滑雪季。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>修理Sage SES980咖啡机</title>
-      <link>https://air.googol.im/post/repair-ses980/</link>
+      <link>https://air.googol.im/posts/repair-ses980/</link>
       <pubDate>Sun, 30 Jan 2022 16:25:52 +0100</pubDate>
       
-      <guid>https://air.googol.im/post/repair-ses980/</guid>
+      <guid>https://air.googol.im/posts/repair-ses980/</guid>
       <description>&lt;p&gt;图便宜，在eBay上买了个二手Sage SES980咖啡机，收到后发现蒸汽头不出气。因为是私人卖家，退货很麻烦，本着死马当活马医的原则，自己动手。&lt;/p&gt;</description>
     </item>
     

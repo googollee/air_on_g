@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>go-swagger on Air on G</title>
+    <title>go-swagger on Air On G</title>
     <link>https://air.googol.im/tags/go-swagger/</link>
-    <description>Recent content in go-swagger on Air on G</description>
+    <description>Recent content in go-swagger on Air On G</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh</language>
-    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <language>zh-cn</language>
     <lastBuildDate>Sat, 04 Dec 2021 11:11:08 +0100</lastBuildDate><atom:link href="https://air.googol.im/tags/go-swagger/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>使用Go Swagger生成OpenAPI定义</title>
-      <link>https://air.googol.im/post/go-swagger-spec/</link>
+      <link>https://air.googol.im/posts/go-swagger-spec/</link>
       <pubDate>Sat, 04 Dec 2021 11:11:08 +0100</pubDate>
       
-      <guid>https://air.googol.im/post/go-swagger-spec/</guid>
+      <guid>https://air.googol.im/posts/go-swagger-spec/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://swagger.io/specification/&#34;&gt;OpenAPI&lt;/a&gt;（原名Swagger）是目前比较流行的定义HTTP API的协议。但是OpenAPI的定义文件是方便机器处理的格式，不易编写和阅读。这里介绍一种使用&lt;a href=&#34;https://goswagger.io/&#34;&gt;go-swagger&lt;/a&gt;，根据Go代码生成OpenAPI定义文件的方法。该方法只使用Go代码来定义API，不强求Server或者Client也使用Go。&lt;/p&gt;
 &lt;p&gt;目前&lt;code&gt;go-swagger&lt;/code&gt;只能生成OpenAPI 2.0格式的定义。这个也是现在广泛使用的格式。&lt;code&gt;go-swagger&lt;/code&gt;未来会支持OpenAPI 3.0。&lt;/p&gt;
 &lt;p&gt;本文假设已经熟悉Go语法，只对&lt;code&gt;go-swagger&lt;/code&gt;的扩展部分进行详细解释。&lt;/p&gt;</description>

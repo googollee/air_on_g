@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>printf on Air on G</title>
+    <title>printf on Air On G</title>
     <link>https://air.googol.im/tags/printf/</link>
-    <description>Recent content in printf on Air on G</description>
+    <description>Recent content in printf on Air On G</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh</language>
-    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <language>zh-cn</language>
     <lastBuildDate>Mon, 18 Oct 2004 20:00:00 +0800</lastBuildDate><atom:link href="https://air.googol.im/tags/printf/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>内核printf源代码分析</title>
-      <link>https://air.googol.im/post/analysis-of-source-code-printf/</link>
+      <link>https://air.googol.im/posts/analysis-of-source-code-printf/</link>
       <pubDate>Mon, 18 Oct 2004 20:00:00 +0800</pubDate>
       
-      <guid>https://air.googol.im/post/analysis-of-source-code-printf/</guid>
+      <guid>https://air.googol.im/posts/analysis-of-source-code-printf/</guid>
       <description>&lt;p&gt;对VC里printf的实现的分析。&lt;/p&gt;</description>
     </item>
     

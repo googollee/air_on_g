@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>queue on Air on G</title>
+    <title>queue on Air On G</title>
     <link>https://air.googol.im/tags/queue/</link>
-    <description>Recent content in queue on Air on G</description>
+    <description>Recent content in queue on Air On G</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh</language>
-    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <language>zh-cn</language>
     <lastBuildDate>Thu, 28 May 2009 20:00:00 +0800</lastBuildDate><atom:link href="https://air.googol.im/tags/queue/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>栈和队的统一</title>
-      <link>https://air.googol.im/post/unified-stack-and-queue/</link>
+      <link>https://air.googol.im/posts/unified-stack-and-queue/</link>
       <pubDate>Thu, 28 May 2009 20:00:00 +0800</pubDate>
       
-      <guid>https://air.googol.im/post/unified-stack-and-queue/</guid>
+      <guid>https://air.googol.im/posts/unified-stack-and-queue/</guid>
       <description>&lt;p&gt;这是上周软设考试时遇到的一道题，判断对错：可以用两个栈模拟一个队列，也可以用一个队列模拟两个栈。&lt;/p&gt;</description>
     </item>
     

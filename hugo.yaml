@@ -1,0 +1,93 @@
+baseURL: https://air.googol.im/
+languageCode: zh-cn
+title: Air On G
+theme: "PaperMod"
+publishDir: docs
+
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+
+minify:
+  disableXML: true
+  minifyOutput: true
+
+menu:
+  main:
+    - identifier: categories
+      name: Categories
+      url: /categories/
+      weight: 10
+    - identifier: tags
+      name: Tags
+      url: /tags/
+      weight: 20
+
+# Read: https://github.com/adityatelange/hugo-PaperMod/wiki/FAQs#using-hugos-syntax-highlighter-chroma
+pygmentsUseClasses: true
+markup:
+  highlight:
+    noClasses: false
+    anchorLineNos: true
+    codeFences: true
+    guessSyntax: true
+    lineNos: true
+    style: monokai
+
+params:
+  env: production # to enable google analytics, opengraph, twitter-cards and schema.
+  title: Air On G
+  description: "Googol Lee's website"
+  keywords: [Blog, Portfolio]
+  author: Googol Lee
+  DateFormat: "2006-01-02"
+  defaultTheme: auto # dark, light
+  disableThemeToggle: false
+
+  ShowReadingTime: false
+  ShowShareButtons: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: false
+  ShowWordCount: false
+  ShowRssButtonInSectionTermList: true
+  UseHugoToc: true
+  disableSpecial1stPost: false
+  disableScrollToTop: false
+  comments: false
+  hidemeta: false
+  hideSummary: false
+  showtoc: false
+  tocopen: false
+
+  profileMode:
+    enabled: true # needs to be explicitly set
+    title: Air on G
+    subtitle: "Googol Lee's website"
+    imageUrl: "/images/cover.jpg"
+    imageWidth: 120
+    imageHeight: 120
+    imageTitle: title-image
+    buttons:
+      - name: Posts
+        url: posts
+      - name: Tags
+        url: tags
+
+  socialIcons:
+    - name: Mastodon
+      url: "https://mblog.zhaohai.li/@googollee"
+    - name: RSS
+      url: "https://air.googol.im/index.xml"
+    - name: EMail
+      url: "mailto:i@googol.im"
+    - name: GitHub
+      url: "https://github.com/googollee"
+    - name: Twitter
+      url: "https://twitter.com/googollee"
+
+  cover:
+    hidden: true # hide everywhere but not in structured data
+    hiddenInList: false # hide on list pages and home
+    hiddenInSingle: false # hide on single page
