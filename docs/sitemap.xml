@@ -3,21 +3,36 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://air.googol.im/</loc>
-    <lastmod>2023-01-08T16:57:35+01:00</lastmod>
+    <lastmod>2024-06-10T14:51:00+02:00</lastmod>
   </url><url>
     <loc>https://air.googol.im/categories/</loc>
-    <lastmod>2023-01-08T16:57:35+01:00</lastmod>
+    <lastmod>2024-06-10T14:51:00+02:00</lastmod>
+  </url><url>
+    <loc>https://air.googol.im/tags/home-server/</loc>
+    <lastmod>2024-06-10T14:51:00+02:00</lastmod>
+  </url><url>
+    <loc>https://air.googol.im/tags/ops/</loc>
+    <lastmod>2024-06-10T14:51:00+02:00</lastmod>
   </url><url>
     <loc>https://air.googol.im/posts/</loc>
-    <lastmod>2023-01-08T16:57:35+01:00</lastmod>
+    <lastmod>2024-06-10T14:51:00+02:00</lastmod>
+  </url><url>
+    <loc>https://air.googol.im/tags/security/</loc>
+    <lastmod>2024-06-10T14:51:00+02:00</lastmod>
+  </url><url>
+    <loc>https://air.googol.im/tags/</loc>
+    <lastmod>2024-06-10T14:51:00+02:00</lastmod>
+  </url><url>
+    <loc>https://air.googol.im/categories/%E5%BC%80%E5%8F%91/</loc>
+    <lastmod>2024-06-10T14:51:00+02:00</lastmod>
+  </url><url>
+    <loc>https://air.googol.im/posts/home-server/</loc>
+    <lastmod>2024-06-10T14:51:00+02:00</lastmod>
   </url><url>
     <loc>https://air.googol.im/tags/ski/</loc>
     <lastmod>2023-01-08T16:57:35+01:00</lastmod>
   </url><url>
     <loc>https://air.googol.im/tags/sports/</loc>
-    <lastmod>2023-01-08T16:57:35+01:00</lastmod>
-  </url><url>
-    <loc>https://air.googol.im/tags/</loc>
     <lastmod>2023-01-08T16:57:35+01:00</lastmod>
   </url><url>
     <loc>https://air.googol.im/categories/%E7%94%9F%E6%B4%BB/</loc>
@@ -33,9 +48,6 @@
     <lastmod>2022-02-20T17:37:40+01:00</lastmod>
   </url><url>
     <loc>https://air.googol.im/tags/unsafe/</loc>
-    <lastmod>2022-02-20T17:37:40+01:00</lastmod>
-  </url><url>
-    <loc>https://air.googol.im/categories/%E5%BC%80%E5%8F%91/</loc>
     <lastmod>2022-02-20T17:37:40+01:00</lastmod>
   </url><url>
     <loc>https://air.googol.im/tags/coffee/</loc>
@@ -211,9 +223,6 @@
   </url><url>
     <loc>https://air.googol.im/posts/gotour-exercise-web-crawl/</loc>
     <lastmod>2012-02-04T20:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://air.googol.im/tags/security/</loc>
-    <lastmod>2011-12-22T20:00:00+08:00</lastmod>
   </url><url>
     <loc>https://air.googol.im/posts/how-to-save-password/</loc>
     <lastmod>2011-12-22T20:00:00+08:00</lastmod>

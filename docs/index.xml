@@ -6,7 +6,16 @@
     <description>Recent content on Air On G</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sun, 08 Jan 2023 16:57:35 +0100</lastBuildDate><atom:link href="https://air.googol.im/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 10 Jun 2024 14:51:00 +0200</lastBuildDate><atom:link href="https://air.googol.im/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>我是如何配置Home Server的</title>
+      <link>https://air.googol.im/posts/home-server/</link>
+      <pubDate>Mon, 10 Jun 2024 14:51:00 +0200</pubDate>
+      
+      <guid>https://air.googol.im/posts/home-server/</guid>
+      <description>&lt;p&gt;起因是要在公司分享我自建home server的经验。反正都要写,就直接写一篇blog来记录这十多年使用nas/home server的经历。&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>连续7天的滑雪</title>
       <link>https://air.googol.im/posts/7-days-ski/</link>
