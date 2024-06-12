@@ -1,6 +1,6 @@
 ---
 title: "我是如何配置Home Server的"
-date: 2024-06-12T17:13:00+02:00
+date: 2024-06-12T17:40:00+02:00
 categories:
  - 开发
 tags:
