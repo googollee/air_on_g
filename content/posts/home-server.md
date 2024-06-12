@@ -1,6 +1,6 @@
 ---
 title: "我是如何配置Home Server的"
-date: 2024-06-12T16:24:00+02:00
+date: 2024-06-12T17:13:00+02:00
 categories:
  - 开发
 tags:
@@ -40,14 +40,17 @@ QNAP TS-251D的CPU是J4025，相对来说性能强了不少。随着使用习惯
 
 ![Home Network](/images/home-network-config.png)
 
-上图是家里网络的配置方案。NAS会暴露两个端口`443`和`8443`，其中`443`用于本地网络的访问，`8443`用于外网的访问。两者在HTTP Gateway Proxy上有区别，`8443`会对所有`*-p.zhaohai.li`的url多一次`HTTP Basic Auth`。最终效果是，访问`*-p.zhaohai.li`的网站，内网访问不需要认证，而外网访问，需要通过设置的HTTP Auth认证。
+上图是家里网络的配置方案。Cloudflare上会配置域名`*.zhaohai.li`指向家里的外网IP，并定期更新.家里的路由器上会配置NAT，将外网的`443`端口转发到NAS的`8443`端口，同时通过Dnsmasque提供内网的DNS服务，并强制将`*.zhaohai.li`的域名解析到内网的NAS地址。这样从家里访问`*.zhaohai.li`的服务，所有流量只会局限在内网访问NAS的`443`端口；而从外面访问时，会通过Cloudflare CDN访问NAS的`8443`端口。
+
+NAS会暴露两个端口`443`和`8443`，其中`443`用于本地网络的访问，`8443`用于外网的访问。两者在HTTP Gateway Proxy上有区别，`8443`会对所有`*-p.zhaohai.li`的url多一次`HTTP Basic Auth`。最终效果是，访问`*-p.zhaohai.li`的网站，内网访问不需要认证，而外网访问，需要通过设置的HTTP Auth认证。
 
 ### 服务
 
 除了cockpit/vm需要访问宿主机的状态，samba为了提高效率，以及一些常用的工具外，其余服务全部跑在k3s里。使用k3s默认的traefik作为ingress controller，增加新的8443端口，以及8443->443的转发路由和Basic Auth。其余服务分为证书管理，监控和一般服务。
+
 #### 证书管理
 
-使用[`cert-manager`](https://cert-manager.io/)，通过[Let's Encrypt](https://letsencrypt.org/)获取HTTPS证书。cert-manager会根据ingress的配置，自动把对应的证书插入到traefik里。
+使用[`cert-manager`](https://cert-manager.io/)，通过[Let's Encrypt](https://letsencrypt.org/)获取HTTPS证书。cert-manager会根据ingress的配置，自动把对应的证书插入到traefik里。需要注意的一点，因为内网劫持了证书对应的域名`*.zhaohai.li`的DNS，所以`cert-manager`启动时需要手动指定一个外网的DNS服务器作为Resolver，并强制只使用指定的Resolver，不能使用默认的本地DNS服务作为Resolver。我设置为Cloudflare提供的DNS服务器`1.1.1.1`作为Resolver。具体协议细节参见[DNS-01 Challenge](https://letsencrypt.org/docs/challenge-types/#dns-01-challenge)。
 
 #### 监控
 
