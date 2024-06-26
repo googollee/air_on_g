@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>project management on Air On G</title>
+    <title>Project Management on Air On G</title>
     <link>https://air.googol.im/tags/project-management/</link>
-    <description>Recent content in project management on Air On G</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Project Management on Air On G</description>
+    <generator>Hugo -- 0.127.0</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 25 Sep 2013 22:48:15 +0800</lastBuildDate><atom:link href="https://air.googol.im/tags/project-management/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 25 Sep 2013 22:48:15 +0800</lastBuildDate>
+    <atom:link href="https://air.googol.im/tags/project-management/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>S会议开发手札：项目管理</title>
       <link>https://air.googol.im/posts/shy-note-project-management/</link>
       <pubDate>Wed, 25 Sep 2013 22:48:15 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/shy-note-project-management/</guid>
       <description>&lt;p&gt;这周进行了一周的Scrum演练，谈谈感受。&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

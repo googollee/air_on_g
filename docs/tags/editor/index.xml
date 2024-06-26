@@ -1,32 +1,29 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>editor on Air On G</title>
+    <title>Editor on Air On G</title>
     <link>https://air.googol.im/tags/editor/</link>
-    <description>Recent content in editor on Air On G</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Editor on Air On G</description>
+    <generator>Hugo -- 0.127.0</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 09 Nov 2021 22:54:04 +0100</lastBuildDate><atom:link href="https://air.googol.im/tags/editor/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 09 Nov 2021 22:54:04 +0100</lastBuildDate>
+    <atom:link href="https://air.googol.im/tags/editor/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>组织Neovim配置的方法</title>
       <link>https://air.googol.im/posts/neovim-configuration/</link>
       <pubDate>Tue, 09 Nov 2021 22:54:04 +0100</pubDate>
-      
       <guid>https://air.googol.im/posts/neovim-configuration/</guid>
       <description>如何使用Lua组织Neovim的配置</description>
     </item>
-    
     <item>
       <title>Atom初探</title>
       <link>https://air.googol.im/posts/first-glance-at-atom/</link>
       <pubDate>Fri, 07 Mar 2014 01:20:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/first-glance-at-atom/</guid>
       <description>&lt;p&gt;传说上古之时，上帝为了防止人们齐心协力制造能够通向天堂的通天塔，给了不同人群不同的编辑器，其中最大的两群人分别拿到了叫做VI和Emacs的编辑器，其余的nano，ed，UltraEdit之类不一一详叙。自此以后，人类为了使用什么编辑器来编写通天塔的文档吵个不停，再也没有心思去修通天塔了……&lt;/p&gt;
 &lt;p&gt;后来，有不同的英雄察觉了上帝的企图，决定以个人之力重新统一人们的编辑器，并赋予其更强大的弑神之力。这些英雄的名字不仅仅限于Text Mate，Sublime……&lt;/p&gt;
 &lt;p&gt;最近，一个新的英雄自带光环的出现在了大家眼前，&lt;a href=&#34;https://atom.io&#34;&gt;Atom&lt;/a&gt;……&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;本文使用Atom编写&lt;/em&gt;&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

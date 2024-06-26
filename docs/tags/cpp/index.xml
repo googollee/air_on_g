@@ -1,63 +1,53 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>cpp on Air On G</title>
+    <title>Cpp on Air On G</title>
     <link>https://air.googol.im/tags/cpp/</link>
-    <description>Recent content in cpp on Air On G</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Cpp on Air On G</description>
+    <generator>Hugo -- 0.127.0</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sat, 28 Nov 2009 20:00:00 +0800</lastBuildDate><atom:link href="https://air.googol.im/tags/cpp/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 28 Nov 2009 20:00:00 +0800</lastBuildDate>
+    <atom:link href="https://air.googol.im/tags/cpp/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>简单的UnitTest框架实现</title>
       <link>https://air.googol.im/posts/simple-unittest-framework/</link>
       <pubDate>Sat, 28 Nov 2009 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/simple-unittest-framework/</guid>
       <description>&lt;p&gt;这几天试了下TDD，需要一个UnitTest框架。以前用过Google Test和JUnit，不过想了一下，印象里Google Test经过几次升级后，似乎只能单独编译，而JUnit只能用在Java里，都不适合嵌入式运行的场合。所以花了半天左右自己写了个框架。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>关于C&#43;&#43;智能指针的思考</title>
       <link>https://air.googol.im/posts/thinking-of-cpp-ptr/</link>
       <pubDate>Sat, 07 Nov 2009 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/thinking-of-cpp-ptr/</guid>
       <description>&lt;p&gt;最近在公司的项目里开始实践用C++的析构来自动释放已申请的指针，同时保证程序的效率不变。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>尝试用C&#43;&#43;实现Y Combinator（之三）</title>
       <link>https://air.googol.im/posts/implement-y-combinator-in-cpp-3/</link>
       <pubDate>Sat, 22 Sep 2007 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/implement-y-combinator-in-cpp-3/</guid>
       <description>&lt;p&gt;基本上，又进行了几次失败的尝试，具体过程不写了，反正写了也没人看。（其实是我没有存……）&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>尝试用C&#43;&#43;实现Y Combinator（之二）</title>
       <link>https://air.googol.im/posts/implement-y-combinator-in-cpp-2/</link>
       <pubDate>Thu, 06 Sep 2007 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/implement-y-combinator-in-cpp-2/</guid>
       <description>&lt;p&gt;恩……上篇没写完……&lt;/p&gt;
 &lt;p&gt;其实，上篇还写错了……&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>尝试用C&#43;&#43;实现Y Combinator（之一）</title>
       <link>https://air.googol.im/posts/implement-y-combinator-in-cpp-1/</link>
       <pubDate>Sat, 01 Sep 2007 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/implement-y-combinator-in-cpp-1/</guid>
       <description>&lt;p&gt;恩……程序员的一大特点：看到别人有个轮子，就想自己动手造个出来……（这样不好，不好……）&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>C&#43;&#43;中的重载问题</title>
       <link>https://air.googol.im/posts/overload-in-cpp/</link>
       <pubDate>Wed, 13 Jun 2007 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/overload-in-cpp/</guid>
       <description>&lt;p&gt;话说有这样的一族函数：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
@@ -78,15 +68,12 @@
 &lt;/div&gt;
 &lt;/div&gt;</description>
     </item>
-    
     <item>
       <title>关于C&#43;&#43;中的new的一些处理</title>
       <link>https://air.googol.im/posts/about-new-in-cpp/</link>
       <pubDate>Sat, 20 Jan 2007 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/about-new-in-cpp/</guid>
       <description>&lt;p&gt;首先的一点是，C++中new失败后，默认抛异常bad_alloc()，也就是说，判断返回值是否为NULL的方法在现代编译器面前毫无用处——判断执行之前，程序就随着异常的栈展开而销毁了！&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

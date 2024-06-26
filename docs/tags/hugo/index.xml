@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>hugo on Air On G</title>
+    <title>Hugo on Air On G</title>
     <link>https://air.googol.im/tags/hugo/</link>
-    <description>Recent content in hugo on Air On G</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Hugo on Air On G</description>
+    <generator>Hugo -- 0.127.0</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sun, 19 Feb 2017 10:54:24 +0100</lastBuildDate><atom:link href="https://air.googol.im/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 19 Feb 2017 10:54:24 +0100</lastBuildDate>
+    <atom:link href="https://air.googol.im/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>这个Blog又复活了</title>
       <link>https://air.googol.im/posts/migrate-to-hugo/</link>
       <pubDate>Sun, 19 Feb 2017 10:54:24 +0100</pubDate>
-      
       <guid>https://air.googol.im/posts/migrate-to-hugo/</guid>
       <description>&lt;p&gt;嗯，这个Blog过了几年，又复活了。&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

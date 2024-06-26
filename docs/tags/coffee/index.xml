@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>coffee on Air On G</title>
+    <title>Coffee on Air On G</title>
     <link>https://air.googol.im/tags/coffee/</link>
-    <description>Recent content in coffee on Air On G</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Coffee on Air On G</description>
+    <generator>Hugo -- 0.127.0</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sun, 30 Jan 2022 16:25:52 +0100</lastBuildDate><atom:link href="https://air.googol.im/tags/coffee/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 30 Jan 2022 16:25:52 +0100</lastBuildDate>
+    <atom:link href="https://air.googol.im/tags/coffee/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>修理Sage SES980咖啡机</title>
       <link>https://air.googol.im/posts/repair-ses980/</link>
       <pubDate>Sun, 30 Jan 2022 16:25:52 +0100</pubDate>
-      
       <guid>https://air.googol.im/posts/repair-ses980/</guid>
       <description>&lt;p&gt;图便宜，在eBay上买了个二手Sage SES980咖啡机，收到后发现蒸汽头不出气。因为是私人卖家，退货很麻烦，本着死马当活马医的原则，自己动手。&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

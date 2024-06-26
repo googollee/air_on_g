@@ -4,385 +4,305 @@
     <title>Posts on Air On G</title>
     <link>https://air.googol.im/posts/</link>
     <description>Recent content in Posts on Air On G</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.127.0</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 12 Jun 2024 17:40:00 +0200</lastBuildDate><atom:link href="https://air.googol.im/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 12 Jun 2024 17:40:00 +0200</lastBuildDate>
+    <atom:link href="https://air.googol.im/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>我是如何配置Home Server的</title>
       <link>https://air.googol.im/posts/home-server/</link>
       <pubDate>Wed, 12 Jun 2024 17:40:00 +0200</pubDate>
-      
       <guid>https://air.googol.im/posts/home-server/</guid>
       <description>&lt;p&gt;起因是要在公司分享我自建home server的经验。反正都要写，就直接写一篇blog来记录这十多年使用nas/home server的经历。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>连续7天的滑雪</title>
       <link>https://air.googol.im/posts/7-days-ski/</link>
       <pubDate>Sun, 08 Jan 2023 16:57:35 +0100</pubDate>
-      
       <guid>https://air.googol.im/posts/7-days-ski/</guid>
       <description>&lt;p&gt;2022年末，第一次连续7天滑雪。算是体验了一次欧洲人的滑雪季。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Go 1.18新库netaddr里的intern.Value</title>
       <link>https://air.googol.im/posts/go-netaddr-value/</link>
       <pubDate>Sun, 20 Feb 2022 17:37:40 +0100</pubDate>
-      
       <guid>https://air.googol.im/posts/go-netaddr-value/</guid>
       <description>&lt;p&gt;Go 1.18引入了新库&lt;code&gt;netaddr&lt;/code&gt;来表示IP地址及相关操作。其作者Brad Fitzpatrick专门写了篇&lt;a href=&#34;https://tailscale.com/blog/netaddr-new-ip-type-for-go/&#34;&gt;blog&lt;/a&gt;说明这个库的设计原则和最终实现。&lt;/p&gt;
 &lt;p&gt;这个实现最主要的特性依赖&lt;a href=&#34;https://pkg.go.dev/go4.org/intern&#34;&gt;intern.Value&lt;/a&gt;这个库。这里记录一下我对这个库的一些研究和看法&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>修理Sage SES980咖啡机</title>
       <link>https://air.googol.im/posts/repair-ses980/</link>
       <pubDate>Sun, 30 Jan 2022 16:25:52 +0100</pubDate>
-      
       <guid>https://air.googol.im/posts/repair-ses980/</guid>
       <description>&lt;p&gt;图便宜，在eBay上买了个二手Sage SES980咖啡机，收到后发现蒸汽头不出气。因为是私人卖家，退货很麻烦，本着死马当活马医的原则，自己动手。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>使用Go Swagger生成OpenAPI定义</title>
       <link>https://air.googol.im/posts/go-swagger-spec/</link>
       <pubDate>Sat, 04 Dec 2021 11:11:08 +0100</pubDate>
-      
       <guid>https://air.googol.im/posts/go-swagger-spec/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://swagger.io/specification/&#34;&gt;OpenAPI&lt;/a&gt;（原名Swagger）是目前比较流行的定义HTTP API的协议。但是OpenAPI的定义文件是方便机器处理的格式，不易编写和阅读。这里介绍一种使用&lt;a href=&#34;https://goswagger.io/&#34;&gt;go-swagger&lt;/a&gt;，根据Go代码生成OpenAPI定义文件的方法。该方法只使用Go代码来定义API，不强求Server或者Client也使用Go。&lt;/p&gt;
 &lt;p&gt;目前&lt;code&gt;go-swagger&lt;/code&gt;只能生成OpenAPI 2.0格式的定义。这个也是现在广泛使用的格式。&lt;code&gt;go-swagger&lt;/code&gt;未来会支持OpenAPI 3.0。&lt;/p&gt;
 &lt;p&gt;本文假设已经熟悉Go语法，只对&lt;code&gt;go-swagger&lt;/code&gt;的扩展部分进行详细解释。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>组织Neovim配置的方法</title>
       <link>https://air.googol.im/posts/neovim-configuration/</link>
       <pubDate>Tue, 09 Nov 2021 22:54:04 +0100</pubDate>
-      
       <guid>https://air.googol.im/posts/neovim-configuration/</guid>
       <description>如何使用Lua组织Neovim的配置</description>
     </item>
-    
     <item>
       <title>一个Go开发者的Rust体验</title>
       <link>https://air.googol.im/posts/rust-view-from-a-gopher/</link>
       <pubDate>Sat, 21 Jul 2018 11:10:00 +0200</pubDate>
-      
       <guid>https://air.googol.im/posts/rust-view-from-a-gopher/</guid>
       <description>&lt;p&gt;一直很关注Rust这门语言的发展，不过没有实际使用过。最近Rust准备以2018 Rust的名义发布可以用作生产环境的稳定版本，又赶上有兴趣写点东西，所以把一个基础模块同时用Rust和Go实现了一下。本文就是这次实现的一些结果。&lt;/p&gt;
 &lt;p&gt;我自己有很长的Go使用经历，所以本文对Go的看法会相对比较准确。Rust虽然关注了很长时间，但代码基本上是最近一个星期左右的成果，可能看法有偏颇。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>我对Go 2类型系统的期望</title>
       <link>https://air.googol.im/posts/what-i-want-in-go2-type-system/</link>
       <pubDate>Wed, 10 Jan 2018 15:24:03 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/what-i-want-in-go2-type-system/</guid>
       <description>&lt;p&gt;我应该算是第一批使用Go做实际开发的程序员，也写过一些比较深入的项目（比如go-socket.io)。我想总结一下Go里关于类型系统好用的部分以及不好用的部分。这些特性会集中在语言层面，而且基本上是Go 1基本不可能有改动的特性。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>在WSL上配置VIM</title>
       <link>https://air.googol.im/posts/vim-config/</link>
       <pubDate>Mon, 01 May 2017 08:38:56 +0200</pubDate>
-      
       <guid>https://air.googol.im/posts/vim-config/</guid>
       <description>&lt;p&gt;最近在Windows 10上折腾Windows Subsystem for Linux。为了减少折腾的复杂性和不一致性，决定在这个环境里用VIM。这里记录了这次配置VIM的经历。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>《Go语言实战》发布了</title>
       <link>https://air.googol.im/posts/go-in-action/</link>
       <pubDate>Sun, 05 Mar 2017 21:06:19 -0800</pubDate>
-      
       <guid>https://air.googol.im/posts/go-in-action/</guid>
       <description>&lt;p&gt;受谢大邀请，去年在负责翻译《Go in Action》一书。上周末，这本书的中文版《Go语言实战》终于上架开卖了，可以在&lt;a href=&#34;http://www.epubit.com.cn/book/details/4291&#34;&gt;这里&lt;/a&gt;，或者去各大电商购买。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>这个Blog又复活了</title>
       <link>https://air.googol.im/posts/migrate-to-hugo/</link>
       <pubDate>Sun, 19 Feb 2017 10:54:24 +0100</pubDate>
-      
       <guid>https://air.googol.im/posts/migrate-to-hugo/</guid>
       <description>&lt;p&gt;嗯，这个Blog过了几年，又复活了。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Go中的连续栈</title>
       <link>https://air.googol.im/posts/contiguous-stacks-in-go/</link>
       <pubDate>Fri, 28 Mar 2014 21:21:24 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/contiguous-stacks-in-go/</guid>
       <description>&lt;p&gt;本文译自&lt;a href=&#34;http://agis.io/2014/03/25/contiguous-stacks-in-go.html&#34;&gt;Contiguous stacks in Go&lt;/a&gt;。介绍了Go 1.3版本在栈管理上的变化，以及由此带来的性能改进。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>在Docker里使用（支持镜像继承的）supervisor管理进程</title>
       <link>https://air.googol.im/posts/supervisor-with-docker-to-manage-processes/</link>
       <pubDate>Fri, 28 Mar 2014 19:46:44 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/supervisor-with-docker-to-manage-processes/</guid>
       <description>&lt;p&gt;这篇文章是受&lt;a href=&#34;http://dockboard.org&#34;&gt;Dockboard&lt;/a&gt;之托帮忙翻译的与docker有关的技术文章。&lt;a href=&#34;http://dockboard.org&#34;&gt;Dockboard&lt;/a&gt;致力于在中国建立一个Docker技术的开放社区。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Go并发模式：管道和取消</title>
       <link>https://air.googol.im/posts/go-concurrency-patterns-pipelines-and-cancellation/</link>
       <pubDate>Sat, 15 Mar 2014 10:52:46 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/go-concurrency-patterns-pipelines-and-cancellation/</guid>
       <description>&lt;p&gt;译自&lt;a href=&#34;http://blog.golang.org/pipelines&#34;&gt;http://blog.golang.org/pipelines&lt;/a&gt;。&lt;/p&gt;
 &lt;p&gt;这是Go官方blog的一篇文章，介绍了如何使用Go来编写并发程序，并按照程序的演化顺序，介绍了不同模式遇到的问题以及解决的问题。主要解释了用管道模式链接不同的线程，以及如何在某个线程取消工作时，保证所有线程以及管道资源的正常回收。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>试着解释大数据</title>
       <link>https://air.googol.im/posts/explain-big-data/</link>
       <pubDate>Tue, 11 Mar 2014 21:01:03 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/explain-big-data/</guid>
       <description>&lt;p&gt;这篇blog本来是在ourcoders的一篇&lt;a href=&#34;http://ourcoders.com/thread/show/2671/#floor15&#34;&gt;回复&lt;/a&gt;。写完几天后，觉得还有必要总结留底，所以做了些修改，形成了这篇文章。&lt;/p&gt;
 &lt;p&gt;我做大数据其实时间并不长，对大数据的理解也还处于很粗浅的阶段，欢迎大家讨论。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Atom初探</title>
       <link>https://air.googol.im/posts/first-glance-at-atom/</link>
       <pubDate>Fri, 07 Mar 2014 01:20:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/first-glance-at-atom/</guid>
       <description>&lt;p&gt;传说上古之时，上帝为了防止人们齐心协力制造能够通向天堂的通天塔，给了不同人群不同的编辑器，其中最大的两群人分别拿到了叫做VI和Emacs的编辑器，其余的nano，ed，UltraEdit之类不一一详叙。自此以后，人类为了使用什么编辑器来编写通天塔的文档吵个不停，再也没有心思去修通天塔了……&lt;/p&gt;
 &lt;p&gt;后来，有不同的英雄察觉了上帝的企图，决定以个人之力重新统一人们的编辑器，并赋予其更强大的弑神之力。这些英雄的名字不仅仅限于Text Mate，Sublime……&lt;/p&gt;
 &lt;p&gt;最近，一个新的英雄自带光环的出现在了大家眼前，&lt;a href=&#34;https://atom.io&#34;&gt;Atom&lt;/a&gt;……&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;本文使用Atom编写&lt;/em&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Go tip在做什么 2014-01-10</title>
       <link>https://air.googol.im/posts/whats-happening-in-go-tip-2014-01-10/</link>
       <pubDate>Sun, 12 Jan 2014 10:13:39 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/whats-happening-in-go-tip-2014-01-10/</guid>
       <description>&lt;p&gt;Go tip是Go语言的实验分支，包含了很多尚在讨论，但很有可能会加入stable分支的特性。“Go tip在做什么”（原文地址：&lt;a href=&#34;http://dominik.honnef.co/go-tip/&#34;&gt;What&amp;rsquo;s happening in Go tip&lt;/a&gt;）分析总结了Go语言尚在开发中的一些重要特性。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>go-rest演化</title>
       <link>https://air.googol.im/posts/go-rest-revolution/</link>
       <pubDate>Tue, 31 Dec 2013 10:48:24 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/go-rest-revolution/</guid>
       <description>&lt;p&gt;在EXFE创业的两年，虽然项目最终失败了（很可惜），不过自己从头开始写了一个简化RESTful Service实现的Framework——&lt;a href=&#34;https://github.com/googollee/go-rest&#34;&gt;go-rest&lt;/a&gt;，还算有不少收获。这里记录一下go-rest实现过程中一些重要的演变，以及这些演变背后的原因。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>S会议开发手札：项目管理</title>
       <link>https://air.googol.im/posts/shy-note-project-management/</link>
       <pubDate>Wed, 25 Sep 2013 22:48:15 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/shy-note-project-management/</guid>
       <description>&lt;p&gt;这周进行了一周的Scrum演练，谈谈感受。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>S会议开发手札：过渡设计</title>
       <link>https://air.googol.im/posts/shy-note-over-design/</link>
       <pubDate>Tue, 17 Sep 2013 22:51:28 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/shy-note-over-design/</guid>
       <description>&lt;p&gt;今天打算来专门聊一聊过渡设计的事情。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>S会议开发手札</title>
       <link>https://air.googol.im/posts/shy-notes/</link>
       <pubDate>Mon, 16 Sep 2013 23:14:56 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/shy-notes/</guid>
       <description>&lt;p&gt;开发手札，嗯……我不是在捏纯爱手札的梗……&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>为什么goroutine和channel不是以类库的形式存在——驳老赵《为什么我认为goroutine和channel是把别的平台上类库的功能内置在语言里》</title>
       <link>https://air.googol.im/posts/why-goroutine-not-library/</link>
       <pubDate>Sun, 28 Apr 2013 22:23:30 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/why-goroutine-not-library/</guid>
       <description>&lt;p&gt;老赵在最近的blog里对go有诸多批评。在我看来这些批评都没有正确的理由来支持。这篇blog先来就&lt;a href=&#34;http://blog.zhaojie.me/2013/04/why-channel-and-goroutine-in-golang-are-buildin-libraries-for-other-platforms.html&#34;&gt;《为什么我认为goroutine和channel是把别的平台上类库的功能内置在语言里》&lt;/a&gt;一文进行反驳。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>迁移到HEXO</title>
       <link>https://air.googol.im/posts/migrate-to-hexo/</link>
       <pubDate>Wed, 24 Apr 2013 08:34:35 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/migrate-to-hexo/</guid>
       <description>&lt;p&gt;前几天把这个blog的框架从&lt;a href=&#34;https://github.com/mojombo/jekyll&#34;&gt;jekyll&lt;/a&gt;迁移到了&lt;a href=&#34;http://zespia.tw/hexo/&#34;&gt;HEXO&lt;/a&gt;。因为会重新生成feed，uuid和原来的不一样，所以有刷屏，抱歉。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Go语言奇怪的特性</title>
       <link>https://air.googol.im/posts/wired-golang/</link>
       <pubDate>Wed, 03 Apr 2013 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/wired-golang/</guid>
       <description>&lt;p&gt;记录了一些使用Go时遇到的违反直觉的特性。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>我为什么喜欢Go</title>
       <link>https://air.googol.im/posts/why-i-like-go/</link>
       <pubDate>Mon, 09 Jul 2012 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/why-i-like-go/</guid>
       <description>&lt;p&gt;这半年来工作上一直在用Go，总共统计下来也写了1w多行代码，算上删删改改的，大概能有1w5吧。而且还写了不少go的库，比如android push库&lt;a href=&#34;https://github.com/googollee/go_c2dm&#34;&gt;go_c2dm&lt;/a&gt;，一个简单的IMAP客户端&lt;a href=&#34;https://github.com/googollee/goimap&#34;&gt;goimap&lt;/a&gt;，想继续完善的编码库&lt;a href=&#34;https://github.com/googollee/go-encoding-ex&#34;&gt;go-encoding-ex&lt;/a&gt;。似乎赶着最近Google IO，国外很时兴写对Go的总结，于是我也赶热闹写一篇blog。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>关于gotour最后一题的一些想法</title>
       <link>https://air.googol.im/posts/gotour-exercise-web-crawl/</link>
       <pubDate>Sat, 04 Feb 2012 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/gotour-exercise-web-crawl/</guid>
       <description>&lt;p&gt;过年几天，把&lt;a href=&#34;http://tour.golang.org/&#34;&gt;A Tour of Go&lt;/a&gt;看了一遍，算是复习了一遍go语言。其中最后一题&lt;a href=&#34;http://tour.golang.org/#70&#34;&gt;Exercise: Web Crawler&lt;/a&gt;有些复杂，是串行程序转换到并行时常见的问题。这里记录一些当时思考的结果。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>到底应该怎么存密码</title>
       <link>https://air.googol.im/posts/how-to-save-password/</link>
       <pubDate>Thu, 22 Dec 2011 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/how-to-save-password/</guid>
       <description>&lt;p&gt;最近各大网站频频爆出密码泄露的事情，搞得用户“改密码改到手软”。先姑且不说一些政治上的因素导致网站必须保存明文的情况，到底应该如何保存密码，才能保证即便数据库内容被盗，用户的密码本身也是安全的呢？&lt;/p&gt;
 &lt;p&gt;说到这个问题，先要明确一些原则的问题，然后才能讨论具体的解决方法。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Christian Neukirchen 的 Ruby 编程风格指南</title>
       <link>https://air.googol.im/posts/ruby-style/</link>
       <pubDate>Sun, 20 Feb 2011 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/ruby-style/</guid>
       <description>&lt;p&gt;也许你不会同意本文提到的所有规则，但是这些规则确实帮助我产生了高质量的代码，对我来说很有用。任何人都可以随其所想，根据其自己的编码风格去写代码，但是，当你提代码到我的项目里时，请遵守这些规则：&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Golang里调用C</title>
       <link>https://air.googol.im/posts/call-c-in-golang/</link>
       <pubDate>Sun, 18 Apr 2010 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/call-c-in-golang/</guid>
       <description>&lt;p&gt;Golang调用C分两个步骤：1 写一个C的wrapper，这个很简单；2 对wrapper做编译，这个步骤有点复杂，而且涉及众多中间文件。应该是有办法用自动化的工具简化这个过程的。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>ssh退出失败，报错EPIPE</title>
       <link>https://air.googol.im/posts/ssh-quit-with-epipe/</link>
       <pubDate>Sat, 13 Mar 2010 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/ssh-quit-with-epipe/</guid>
       <description>&lt;p&gt;这两天帮同事看一个sshd退出时报错的问题。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Golang初探</title>
       <link>https://air.googol.im/posts/guide-to-golang/</link>
       <pubDate>Sun, 17 Jan 2010 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/guide-to-golang/</guid>
       <description>&lt;p&gt;Go语言是Google于2009年11月公布的一个新语言项目，其目标是创造一门既简单又有效率的开源编程语言。由于有C语言创始人Ken Thompson的参与，Go一面世，就被看成是C语言的继任者，受到很大关注。Go一方面吸收了C简单清晰、执行效率高的优点，另一方面融合了动态语言的闭包、动态绑定等特性，更加适应目前多核与多机高并发的开发环境和快速敏捷的开发效率。此外，Go并没有跟随主流的以“类和继承”为基础的面向对象实现方式，而是以接口和动态绑定的方式，将封装的粒度做得更细、更灵活，实现了另一种面向对象的代码组织形式。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>简单的UnitTest框架实现</title>
       <link>https://air.googol.im/posts/simple-unittest-framework/</link>
       <pubDate>Sat, 28 Nov 2009 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/simple-unittest-framework/</guid>
       <description>&lt;p&gt;这几天试了下TDD，需要一个UnitTest框架。以前用过Google Test和JUnit，不过想了一下，印象里Google Test经过几次升级后，似乎只能单独编译，而JUnit只能用在Java里，都不适合嵌入式运行的场合。所以花了半天左右自己写了个框架。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>关于C&#43;&#43;智能指针的思考</title>
       <link>https://air.googol.im/posts/thinking-of-cpp-ptr/</link>
       <pubDate>Sat, 07 Nov 2009 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/thinking-of-cpp-ptr/</guid>
       <description>&lt;p&gt;最近在公司的项目里开始实践用C++的析构来自动释放已申请的指针，同时保证程序的效率不变。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>为连续读取优化的一种缓存策略</title>
       <link>https://air.googol.im/posts/optimize-for-continous-reading/</link>
       <pubDate>Mon, 19 Oct 2009 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/optimize-for-continous-reading/</guid>
       <description>&lt;p&gt;事情的起因是boss要把对samba的支持从kernel转移到user模式的gio。这个迁移到还不是很复杂，改一些接口就可以。迁移过来后发现通过samba播放视频的性能下降的很厉害，在arm平台上，以前能流畅播放的视频现在完全不可看。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>栈和队的统一</title>
       <link>https://air.googol.im/posts/unified-stack-and-queue/</link>
       <pubDate>Thu, 28 May 2009 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/unified-stack-and-queue/</guid>
       <description>&lt;p&gt;这是上周软设考试时遇到的一道题，判断对错：可以用两个栈模拟一个队列，也可以用一个队列模拟两个栈。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>尝试用C&#43;&#43;实现Y Combinator（之三）</title>
       <link>https://air.googol.im/posts/implement-y-combinator-in-cpp-3/</link>
       <pubDate>Sat, 22 Sep 2007 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/implement-y-combinator-in-cpp-3/</guid>
       <description>&lt;p&gt;基本上，又进行了几次失败的尝试，具体过程不写了，反正写了也没人看。（其实是我没有存……）&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>尝试用C&#43;&#43;实现Y Combinator（之二）</title>
       <link>https://air.googol.im/posts/implement-y-combinator-in-cpp-2/</link>
       <pubDate>Thu, 06 Sep 2007 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/implement-y-combinator-in-cpp-2/</guid>
       <description>&lt;p&gt;恩……上篇没写完……&lt;/p&gt;
 &lt;p&gt;其实，上篇还写错了……&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>尝试用C&#43;&#43;实现Y Combinator（之一）</title>
       <link>https://air.googol.im/posts/implement-y-combinator-in-cpp-1/</link>
       <pubDate>Sat, 01 Sep 2007 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/implement-y-combinator-in-cpp-1/</guid>
       <description>&lt;p&gt;恩……程序员的一大特点：看到别人有个轮子，就想自己动手造个出来……（这样不好，不好……）&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Y Combinator in Python</title>
       <link>https://air.googol.im/posts/y-combinator-in-python/</link>
       <pubDate>Fri, 31 Aug 2007 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/y-combinator-in-python/</guid>
       <description>&lt;p&gt;译自（由于某种原因，请用代理访问）：&lt;a href=&#34;http://siddhi.blogspot.com/2007/08/y-combinator-in-python.html&#34;&gt;Y Combinator in Python&lt;/a&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>共享信息</title>
       <link>https://air.googol.im/posts/sharing-information/</link>
       <pubDate>Tue, 03 Jul 2007 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/sharing-information/</guid>
       <description>&lt;p&gt;题目是这样的：三个学生去教授家里帮忙收拾花园，比较辛苦，三个人的脸上都沾上了泥，但自己并不知道。休息的时候，教授对他们说：不要摸，你们三个中至少有一个人脸上有泥，有泥的人去洗掉。假设三个学生足够聪明，结果谁会去洗呢？&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>C&#43;&#43;中的重载问题</title>
       <link>https://air.googol.im/posts/overload-in-cpp/</link>
       <pubDate>Wed, 13 Jun 2007 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/overload-in-cpp/</guid>
       <description>&lt;p&gt;话说有这样的一族函数：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
@@ -403,60 +323,47 @@
 &lt;/div&gt;
 &lt;/div&gt;</description>
     </item>
-    
     <item>
       <title>关于C&#43;&#43;中的new的一些处理</title>
       <link>https://air.googol.im/posts/about-new-in-cpp/</link>
       <pubDate>Sat, 20 Jan 2007 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/about-new-in-cpp/</guid>
       <description>&lt;p&gt;首先的一点是，C++中new失败后，默认抛异常bad_alloc()，也就是说，判断返回值是否为NULL的方法在现代编译器面前毫无用处——判断执行之前，程序就随着异常的栈展开而销毁了！&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>终于知道当初微软的面试题，我错在哪里了……</title>
       <link>https://air.googol.im/posts/question-in-face-interview-of-microsoft/</link>
       <pubDate>Thu, 26 Oct 2006 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/question-in-face-interview-of-microsoft/</guid>
       <description>&lt;p&gt;有两杯液体，一杯蓝色一杯红色，两杯液体的体积一样。从红色液体中取出一试管液体，倒入蓝色液体中，搅匀。再从原来蓝色（现在是混合的）液体中取出同样一试管的液体，倒入红色中，搅匀。问最后两个杯子中，哪个杯子里的杂质更多。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>求3的余数</title>
       <link>https://air.googol.im/posts/mod-3/</link>
       <pubDate>Fri, 04 Feb 2005 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/mod-3/</guid>
       <description>&lt;p&gt;北京华为的一道面试题。要求是只使用+-*和移位运算，且不能递减3求得余数。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>内核printf源代码分析</title>
       <link>https://air.googol.im/posts/analysis-of-source-code-printf/</link>
       <pubDate>Mon, 18 Oct 2004 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/analysis-of-source-code-printf/</guid>
       <description>&lt;p&gt;对VC里printf的实现的分析。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>一段有趣的C程序（续）</title>
       <link>https://air.googol.im/posts/analysis-of-occ-circle/</link>
       <pubDate>Thu, 23 Sep 2004 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/analysis-of-occ-circle/</guid>
       <description>&lt;p&gt;同学看完我的一段有趣的程序后，给了我一段bt的程序：&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>一段有趣的C程序</title>
       <link>https://air.googol.im/posts/analysis-of-occ-knocker/</link>
       <pubDate>Wed, 22 Sep 2004 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/analysis-of-occ-knocker/</guid>
       <description>&lt;p&gt;最近在一个论坛发现了一段简单的C程序很有意思，其中蕴含着不少技巧，在此与大家分享一下。&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

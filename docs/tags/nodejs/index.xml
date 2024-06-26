@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>nodejs on Air On G</title>
+    <title>Nodejs on Air On G</title>
     <link>https://air.googol.im/tags/nodejs/</link>
-    <description>Recent content in nodejs on Air On G</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Nodejs on Air On G</description>
+    <generator>Hugo -- 0.127.0</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 24 Apr 2013 08:34:35 +0800</lastBuildDate><atom:link href="https://air.googol.im/tags/nodejs/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 24 Apr 2013 08:34:35 +0800</lastBuildDate>
+    <atom:link href="https://air.googol.im/tags/nodejs/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>迁移到HEXO</title>
       <link>https://air.googol.im/posts/migrate-to-hexo/</link>
       <pubDate>Wed, 24 Apr 2013 08:34:35 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/migrate-to-hexo/</guid>
       <description>&lt;p&gt;前几天把这个blog的框架从&lt;a href=&#34;https://github.com/mojombo/jekyll&#34;&gt;jekyll&lt;/a&gt;迁移到了&lt;a href=&#34;http://zespia.tw/hexo/&#34;&gt;HEXO&lt;/a&gt;。因为会重新生成feed，uuid和原来的不一样，所以有刷屏，抱歉。&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

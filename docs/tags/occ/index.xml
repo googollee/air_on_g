@@ -1,29 +1,26 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>occ on Air On G</title>
+    <title>Occ on Air On G</title>
     <link>https://air.googol.im/tags/occ/</link>
-    <description>Recent content in occ on Air On G</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Occ on Air On G</description>
+    <generator>Hugo -- 0.127.0</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 23 Sep 2004 20:00:00 +0800</lastBuildDate><atom:link href="https://air.googol.im/tags/occ/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 23 Sep 2004 20:00:00 +0800</lastBuildDate>
+    <atom:link href="https://air.googol.im/tags/occ/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>一段有趣的C程序（续）</title>
       <link>https://air.googol.im/posts/analysis-of-occ-circle/</link>
       <pubDate>Thu, 23 Sep 2004 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/analysis-of-occ-circle/</guid>
       <description>&lt;p&gt;同学看完我的一段有趣的程序后，给了我一段bt的程序：&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>一段有趣的C程序</title>
       <link>https://air.googol.im/posts/analysis-of-occ-knocker/</link>
       <pubDate>Wed, 22 Sep 2004 20:00:00 +0800</pubDate>
-      
       <guid>https://air.googol.im/posts/analysis-of-occ-knocker/</guid>
       <description>&lt;p&gt;最近在一个论坛发现了一段简单的C程序很有意思，其中蕴含着不少技巧，在此与大家分享一下。&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

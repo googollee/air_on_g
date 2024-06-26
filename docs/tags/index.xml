@@ -4,602 +4,471 @@
     <title>Tags on Air On G</title>
     <link>https://air.googol.im/tags/</link>
     <description>Recent content in Tags on Air On G</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.127.0</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 12 Jun 2024 17:40:00 +0200</lastBuildDate><atom:link href="https://air.googol.im/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 12 Jun 2024 17:40:00 +0200</lastBuildDate>
+    <atom:link href="https://air.googol.im/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>home-server</title>
+      <title>Home-Server</title>
       <link>https://air.googol.im/tags/home-server/</link>
-      <pubDate>Wed, 12 Jun 2024 17:40:00 +0200</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/home-server/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>ops</title>
+      <title>Ops</title>
       <link>https://air.googol.im/tags/ops/</link>
-      <pubDate>Wed, 12 Jun 2024 17:40:00 +0200</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/ops/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>security</title>
+      <title>Security</title>
       <link>https://air.googol.im/tags/security/</link>
-      <pubDate>Wed, 12 Jun 2024 17:40:00 +0200</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/security/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>ski</title>
+      <title>Ski</title>
       <link>https://air.googol.im/tags/ski/</link>
-      <pubDate>Sun, 08 Jan 2023 16:57:35 +0100</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/ski/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>sports</title>
+      <title>Sports</title>
       <link>https://air.googol.im/tags/sports/</link>
-      <pubDate>Sun, 08 Jan 2023 16:57:35 +0100</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/sports/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>go</title>
+      <title>Go</title>
       <link>https://air.googol.im/tags/go/</link>
-      <pubDate>Sun, 20 Feb 2022 17:37:40 +0100</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/go/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>unsafe</title>
+      <title>Unsafe</title>
       <link>https://air.googol.im/tags/unsafe/</link>
-      <pubDate>Sun, 20 Feb 2022 17:37:40 +0100</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/unsafe/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>coffee</title>
+      <title>Coffee</title>
       <link>https://air.googol.im/tags/coffee/</link>
-      <pubDate>Sun, 30 Jan 2022 16:25:52 +0100</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/coffee/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>coffee machine</title>
+      <title>Coffee Machine</title>
       <link>https://air.googol.im/tags/coffee-machine/</link>
-      <pubDate>Sun, 30 Jan 2022 16:25:52 +0100</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/coffee-machine/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>repair</title>
+      <title>Repair</title>
       <link>https://air.googol.im/tags/repair/</link>
-      <pubDate>Sun, 30 Jan 2022 16:25:52 +0100</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/repair/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>go-swagger</title>
+      <title>Go-Swagger</title>
       <link>https://air.googol.im/tags/go-swagger/</link>
-      <pubDate>Sat, 04 Dec 2021 11:11:08 +0100</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/go-swagger/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>openapi</title>
+      <title>Openapi</title>
       <link>https://air.googol.im/tags/openapi/</link>
-      <pubDate>Sat, 04 Dec 2021 11:11:08 +0100</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/openapi/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>swagger</title>
+      <title>Swagger</title>
       <link>https://air.googol.im/tags/swagger/</link>
-      <pubDate>Sat, 04 Dec 2021 11:11:08 +0100</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/swagger/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>editor</title>
+      <title>Editor</title>
       <link>https://air.googol.im/tags/editor/</link>
-      <pubDate>Tue, 09 Nov 2021 22:54:04 +0100</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/editor/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>lua</title>
+      <title>Lua</title>
       <link>https://air.googol.im/tags/lua/</link>
-      <pubDate>Tue, 09 Nov 2021 22:54:04 +0100</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/lua/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>neovim</title>
+      <title>Neovim</title>
       <link>https://air.googol.im/tags/neovim/</link>
-      <pubDate>Tue, 09 Nov 2021 22:54:04 +0100</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/neovim/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>rust</title>
+      <title>Rust</title>
       <link>https://air.googol.im/tags/rust/</link>
-      <pubDate>Sat, 21 Jul 2018 11:10:00 +0200</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/rust/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>programming</title>
+      <title>Programming</title>
       <link>https://air.googol.im/tags/programming/</link>
-      <pubDate>Mon, 01 May 2017 08:38:56 +0200</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/programming/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>vim</title>
+      <title>Vim</title>
       <link>https://air.googol.im/tags/vim/</link>
-      <pubDate>Mon, 01 May 2017 08:38:56 +0200</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/vim/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>wsl</title>
+      <title>Wsl</title>
       <link>https://air.googol.im/tags/wsl/</link>
-      <pubDate>Mon, 01 May 2017 08:38:56 +0200</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/wsl/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>book</title>
+      <title>Book</title>
       <link>https://air.googol.im/tags/book/</link>
-      <pubDate>Sun, 05 Mar 2017 21:06:19 -0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/book/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>golang</title>
+      <title>Golang</title>
       <link>https://air.googol.im/tags/golang/</link>
-      <pubDate>Sun, 05 Mar 2017 21:06:19 -0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/golang/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>blog</title>
+      <title>Blog</title>
       <link>https://air.googol.im/tags/blog/</link>
-      <pubDate>Sun, 19 Feb 2017 10:54:24 +0100</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/blog/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>hugo</title>
+      <title>Hugo</title>
       <link>https://air.googol.im/tags/hugo/</link>
-      <pubDate>Sun, 19 Feb 2017 10:54:24 +0100</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/hugo/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>performance</title>
+      <title>Performance</title>
       <link>https://air.googol.im/tags/performance/</link>
-      <pubDate>Fri, 28 Mar 2014 21:21:24 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/performance/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>docker</title>
+      <title>Docker</title>
       <link>https://air.googol.im/tags/docker/</link>
-      <pubDate>Fri, 28 Mar 2014 19:46:44 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/docker/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>operation</title>
+      <title>Operation</title>
       <link>https://air.googol.im/tags/operation/</link>
-      <pubDate>Fri, 28 Mar 2014 19:46:44 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/operation/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>concurrency</title>
+      <title>Concurrency</title>
       <link>https://air.googol.im/tags/concurrency/</link>
-      <pubDate>Sat, 15 Mar 2014 10:52:46 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/concurrency/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>pattern</title>
+      <title>Pattern</title>
       <link>https://air.googol.im/tags/pattern/</link>
-      <pubDate>Sat, 15 Mar 2014 10:52:46 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/pattern/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>bigdata</title>
+      <title>Bigdata</title>
       <link>https://air.googol.im/tags/bigdata/</link>
-      <pubDate>Tue, 11 Mar 2014 21:01:03 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/bigdata/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>business</title>
+      <title>Business</title>
       <link>https://air.googol.im/tags/business/</link>
-      <pubDate>Tue, 11 Mar 2014 21:01:03 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/business/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>instruction</title>
+      <title>Instruction</title>
       <link>https://air.googol.im/tags/instruction/</link>
-      <pubDate>Tue, 11 Mar 2014 21:01:03 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/instruction/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>atom</title>
+      <title>Atom</title>
       <link>https://air.googol.im/tags/atom/</link>
-      <pubDate>Fri, 07 Mar 2014 01:20:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/atom/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>go tip</title>
+      <title>Go Tip</title>
       <link>https://air.googol.im/tags/go-tip/</link>
-      <pubDate>Sun, 12 Jan 2014 10:13:39 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/go-tip/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>restful</title>
+      <title>Restful</title>
       <link>https://air.googol.im/tags/restful/</link>
-      <pubDate>Tue, 31 Dec 2013 10:48:24 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/restful/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>project management</title>
+      <title>Project Management</title>
       <link>https://air.googol.im/tags/project-management/</link>
-      <pubDate>Wed, 25 Sep 2013 22:48:15 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/project-management/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>startup</title>
+      <title>Startup</title>
       <link>https://air.googol.im/tags/startup/</link>
-      <pubDate>Wed, 25 Sep 2013 22:48:15 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/startup/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>design</title>
+      <title>Design</title>
       <link>https://air.googol.im/tags/design/</link>
-      <pubDate>Tue, 17 Sep 2013 22:51:28 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/design/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>project</title>
+      <title>Project</title>
       <link>https://air.googol.im/tags/project/</link>
-      <pubDate>Tue, 17 Sep 2013 22:51:28 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/project/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>hexo</title>
+      <title>Hexo</title>
       <link>https://air.googol.im/tags/hexo/</link>
-      <pubDate>Wed, 24 Apr 2013 08:34:35 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/hexo/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>nodejs</title>
+      <title>Nodejs</title>
       <link>https://air.googol.im/tags/nodejs/</link>
-      <pubDate>Wed, 24 Apr 2013 08:34:35 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/nodejs/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>ruby</title>
+      <title>Ruby</title>
       <link>https://air.googol.im/tags/ruby/</link>
-      <pubDate>Wed, 24 Apr 2013 08:34:35 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/ruby/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>code style</title>
+      <title>Code Style</title>
       <link>https://air.googol.im/tags/code-style/</link>
-      <pubDate>Sun, 20 Feb 2011 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/code-style/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>c</title>
+      <title>C</title>
       <link>https://air.googol.im/tags/c/</link>
-      <pubDate>Sun, 18 Apr 2010 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/c/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>os</title>
+      <title>Os</title>
       <link>https://air.googol.im/tags/os/</link>
-      <pubDate>Sat, 13 Mar 2010 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/os/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>pthread</title>
+      <title>Pthread</title>
       <link>https://air.googol.im/tags/pthread/</link>
-      <pubDate>Sat, 13 Mar 2010 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/pthread/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>ssh</title>
+      <title>Ssh</title>
       <link>https://air.googol.im/tags/ssh/</link>
-      <pubDate>Sat, 13 Mar 2010 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/ssh/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>cpp</title>
+      <title>Cpp</title>
       <link>https://air.googol.im/tags/cpp/</link>
-      <pubDate>Sat, 28 Nov 2009 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/cpp/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>embedding</title>
+      <title>Embedding</title>
       <link>https://air.googol.im/tags/embedding/</link>
-      <pubDate>Sat, 28 Nov 2009 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/embedding/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>unittest</title>
+      <title>Unittest</title>
       <link>https://air.googol.im/tags/unittest/</link>
-      <pubDate>Sat, 28 Nov 2009 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/unittest/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>auto_ptr</title>
+      <title>Auto_ptr</title>
       <link>https://air.googol.im/tags/auto_ptr/</link>
-      <pubDate>Sat, 07 Nov 2009 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/auto_ptr/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>cache</title>
+      <title>Cache</title>
       <link>https://air.googol.im/tags/cache/</link>
-      <pubDate>Mon, 19 Oct 2009 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/cache/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>gio</title>
+      <title>Gio</title>
       <link>https://air.googol.im/tags/gio/</link>
-      <pubDate>Mon, 19 Oct 2009 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/gio/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>queue</title>
+      <title>Queue</title>
       <link>https://air.googol.im/tags/queue/</link>
-      <pubDate>Thu, 28 May 2009 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/queue/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>stack</title>
+      <title>Stack</title>
       <link>https://air.googol.im/tags/stack/</link>
-      <pubDate>Thu, 28 May 2009 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/stack/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>python</title>
+      <title>Python</title>
       <link>https://air.googol.im/tags/python/</link>
-      <pubDate>Sat, 22 Sep 2007 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/python/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>y combinator</title>
+      <title>Y Combinator</title>
       <link>https://air.googol.im/tags/y-combinator/</link>
-      <pubDate>Sat, 22 Sep 2007 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/y-combinator/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>recurring</title>
+      <title>Recurring</title>
       <link>https://air.googol.im/tags/recurring/</link>
-      <pubDate>Tue, 03 Jul 2007 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/recurring/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>sharing</title>
+      <title>Sharing</title>
       <link>https://air.googol.im/tags/sharing/</link>
-      <pubDate>Tue, 03 Jul 2007 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/sharing/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>overload</title>
+      <title>Overload</title>
       <link>https://air.googol.im/tags/overload/</link>
-      <pubDate>Wed, 13 Jun 2007 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/overload/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>new</title>
+      <title>New</title>
       <link>https://air.googol.im/tags/new/</link>
-      <pubDate>Sat, 20 Jan 2007 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/new/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>interview</title>
+      <title>Interview</title>
       <link>https://air.googol.im/tags/interview/</link>
-      <pubDate>Thu, 26 Oct 2006 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/interview/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>microsoft</title>
+      <title>Microsoft</title>
       <link>https://air.googol.im/tags/microsoft/</link>
-      <pubDate>Thu, 26 Oct 2006 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/microsoft/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>mod</title>
+      <title>Mod</title>
       <link>https://air.googol.im/tags/mod/</link>
-      <pubDate>Fri, 04 Feb 2005 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/mod/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>printf</title>
+      <title>Printf</title>
       <link>https://air.googol.im/tags/printf/</link>
-      <pubDate>Mon, 18 Oct 2004 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/printf/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>occ</title>
+      <title>Occ</title>
       <link>https://air.googol.im/tags/occ/</link>
-      <pubDate>Thu, 23 Sep 2004 20:00:00 +0800</pubDate>
-      
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://air.googol.im/tags/occ/</guid>
       <description></description>
     </item>
-    
   </channel>
 </rss>

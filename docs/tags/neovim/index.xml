@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>neovim on Air On G</title>
+    <title>Neovim on Air On G</title>
     <link>https://air.googol.im/tags/neovim/</link>
-    <description>Recent content in neovim on Air On G</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Neovim on Air On G</description>
+    <generator>Hugo -- 0.127.0</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 09 Nov 2021 22:54:04 +0100</lastBuildDate><atom:link href="https://air.googol.im/tags/neovim/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 09 Nov 2021 22:54:04 +0100</lastBuildDate>
+    <atom:link href="https://air.googol.im/tags/neovim/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>组织Neovim配置的方法</title>
       <link>https://air.googol.im/posts/neovim-configuration/</link>
       <pubDate>Tue, 09 Nov 2021 22:54:04 +0100</pubDate>
-      
       <guid>https://air.googol.im/posts/neovim-configuration/</guid>
       <description>如何使用Lua组织Neovim的配置</description>
     </item>
-    
   </channel>
 </rss>
