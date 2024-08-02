@@ -16,6 +16,8 @@ minify:
 services:
   disqus:
     shortname: air-g
+  googleAnalytics:
+    id: G-BX4XDRKHQ9
 
 menu:
   main:
