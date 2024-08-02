@@ -8,7 +8,7 @@ server:
 	hugo server
 
 init:
-	git submodule update --init --recursive
+	git submodule update --init --recursive --remote
 
 docs/CNAME:
 	echo air.googol.im > docs/CNAME
