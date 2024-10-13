@@ -4,10 +4,17 @@
     <title>Air On G</title>
     <link>https://air.googol.im/</link>
     <description>Recent content on Air On G</description>
-    <generator>Hugo -- 0.131.0</generator>
+    <generator>Hugo -- 0.135.0</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 12 Jun 2024 17:40:00 +0200</lastBuildDate>
+    <lastBuildDate>Sun, 13 Oct 2024 14:07:40 +0200</lastBuildDate>
     <atom:link href="https://air.googol.im/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>游戏体验：黑神话：悟空</title>
+      <link>https://air.googol.im/posts/black-myth/</link>
+      <pubDate>Sun, 13 Oct 2024 14:07:40 +0200</pubDate>
+      <guid>https://air.googol.im/posts/black-myth/</guid>
+      <description>&lt;p&gt;《黑神话：悟空》这个游戏，最近总算通关两个结局，影神图全收集，最后打了82个小时。我也没什么动力打二周目，也没可能全成就了。总体上游戏可以给到75/100分，优点缺点都很明显，长板很长，短板很短。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>我是如何配置Home Server的</title>
       <link>https://air.googol.im/posts/home-server/</link>
