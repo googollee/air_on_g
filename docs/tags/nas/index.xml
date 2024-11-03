@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Nas on Air On G</title>
+    <link>https://air.googol.im/tags/nas/</link>
+    <description>Recent content in Nas on Air On G</description>
+    <generator>Hugo -- 0.136.2</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 27 Oct 2024 09:16:50 +0100</lastBuildDate>
+    <atom:link href="https://air.googol.im/tags/nas/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>如何配置nas上的磁盘阵列</title>
+      <link>https://air.googol.im/posts/nas-disk-array/</link>
+      <pubDate>Sun, 27 Oct 2024 09:16:50 +0100</pubDate>
+      <guid>https://air.googol.im/posts/nas-disk-array/</guid>
+      <description>&lt;p&gt;因为考虑要完全自己组装台NAS，需要练习一下如何创建并管理磁盘阵列。最近在虚拟机上学习了&lt;code&gt;mdadm&lt;/code&gt;和&lt;code&gt;lvm&lt;/code&gt;的使用方法。实践下来，&lt;code&gt;lvm&lt;/code&gt;功能更多，更灵活，但基础raid的功能不完善，磁盘损坏时更新磁盘很繁琐。&lt;code&gt;mdadm&lt;/code&gt;只能管理raid，但是更简单直观。考虑方便程度和使用场景，决定使用&lt;code&gt;mdadm&lt;/code&gt;创建raid10阵列管理磁盘。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

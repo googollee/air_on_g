@@ -3,16 +3,37 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://air.googol.im/</loc>
-    <lastmod>2024-10-13T14:07:40+02:00</lastmod>
+    <lastmod>2024-10-27T09:16:50+01:00</lastmod>
   </url><url>
     <loc>https://air.googol.im/categories/</loc>
-    <lastmod>2024-10-13T14:07:40+02:00</lastmod>
+    <lastmod>2024-10-27T09:16:50+01:00</lastmod>
+  </url><url>
+    <loc>https://air.googol.im/tags/nas/</loc>
+    <lastmod>2024-10-27T09:16:50+01:00</lastmod>
+  </url><url>
+    <loc>https://air.googol.im/tags/operation/</loc>
+    <lastmod>2024-10-27T09:16:50+01:00</lastmod>
+  </url><url>
+    <loc>https://air.googol.im/tags/ops/</loc>
+    <lastmod>2024-10-27T09:16:50+01:00</lastmod>
   </url><url>
     <loc>https://air.googol.im/posts/</loc>
-    <lastmod>2024-10-13T14:07:40+02:00</lastmod>
+    <lastmod>2024-10-27T09:16:50+01:00</lastmod>
+  </url><url>
+    <loc>https://air.googol.im/tags/raid/</loc>
+    <lastmod>2024-10-27T09:16:50+01:00</lastmod>
   </url><url>
     <loc>https://air.googol.im/tags/</loc>
-    <lastmod>2024-10-13T14:07:40+02:00</lastmod>
+    <lastmod>2024-10-27T09:16:50+01:00</lastmod>
+  </url><url>
+    <loc>https://air.googol.im/posts/nas-disk-array/</loc>
+    <lastmod>2024-10-27T09:16:50+01:00</lastmod>
+  </url><url>
+    <loc>https://air.googol.im/categories/%E5%BC%80%E5%8F%91/</loc>
+    <lastmod>2024-10-27T09:16:50+01:00</lastmod>
+  </url><url>
+    <loc>https://air.googol.im/categories/%E7%94%9F%E6%B4%BB/</loc>
+    <lastmod>2024-10-27T09:16:50+01:00</lastmod>
   </url><url>
     <loc>https://air.googol.im/tags/%E6%82%9F%E7%A9%BA/</loc>
     <lastmod>2024-10-13T14:07:40+02:00</lastmod>
@@ -21,9 +42,6 @@
     <lastmod>2024-10-13T14:07:40+02:00</lastmod>
   </url><url>
     <loc>https://air.googol.im/posts/black-myth/</loc>
-    <lastmod>2024-10-13T14:07:40+02:00</lastmod>
-  </url><url>
-    <loc>https://air.googol.im/categories/%E7%94%9F%E6%B4%BB/</loc>
     <lastmod>2024-10-13T14:07:40+02:00</lastmod>
   </url><url>
     <loc>https://air.googol.im/tags/%E8%A5%BF%E6%B8%B8%E8%AE%B0/</loc>
@@ -35,13 +53,7 @@
     <loc>https://air.googol.im/tags/home-server/</loc>
     <lastmod>2024-06-12T17:40:00+02:00</lastmod>
   </url><url>
-    <loc>https://air.googol.im/tags/ops/</loc>
-    <lastmod>2024-06-12T17:40:00+02:00</lastmod>
-  </url><url>
     <loc>https://air.googol.im/tags/security/</loc>
-    <lastmod>2024-06-12T17:40:00+02:00</lastmod>
-  </url><url>
-    <loc>https://air.googol.im/categories/%E5%BC%80%E5%8F%91/</loc>
     <lastmod>2024-06-12T17:40:00+02:00</lastmod>
   </url><url>
     <loc>https://air.googol.im/posts/home-server/</loc>
@@ -147,9 +159,6 @@
     <lastmod>2014-03-28T21:21:24+08:00</lastmod>
   </url><url>
     <loc>https://air.googol.im/tags/docker/</loc>
-    <lastmod>2014-03-28T19:46:44+08:00</lastmod>
-  </url><url>
-    <loc>https://air.googol.im/tags/operation/</loc>
     <lastmod>2014-03-28T19:46:44+08:00</lastmod>
   </url><url>
     <loc>https://air.googol.im/posts/supervisor-with-docker-to-manage-processes/</loc>

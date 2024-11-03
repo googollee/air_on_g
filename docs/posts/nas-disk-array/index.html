@@ -1,0 +1,560 @@
+<!doctype html><html lang=en dir=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>如何配置nas上的磁盘阵列 | Air On G</title>
+<meta name=keywords content="nas,raid,operation,ops"><meta name=description content="因为考虑要完全自己组装台NAS，需要练习一下如何创建并管理磁盘阵列。最近在虚拟机上学习了mdadm和lvm的使用方法。实践下来，lvm功能更多，更灵活，但基础raid的功能不完善，磁盘损坏时更新磁盘很繁琐。mdadm只能管理raid，但是更简单直观。考虑方便程度和使用场景，决定使用mdadm创建raid10阵列管理磁盘。"><meta name=author content="Googol Lee"><link rel=canonical href=https://air.googol.im/posts/nas-disk-array/><link crossorigin=anonymous href=/assets/css/stylesheet.fc220c15db4aef0318bbf30adc45d33d4d7c88deff3238b23eb255afdc472ca6.css integrity="sha256-/CIMFdtK7wMYu/MK3EXTPU18iN7/MjiyPrJVr9xHLKY=" rel="preload stylesheet" as=style><link rel=icon href=https://air.googol.im/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://air.googol.im/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://air.googol.im/favicon-32x32.png><link rel=apple-touch-icon href=https://air.googol.im/apple-touch-icon.png><link rel=mask-icon href=https://air.googol.im/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=https://air.googol.im/posts/nas-disk-array/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style></noscript><script async src="https://www.googletagmanager.com/gtag/js?id=G-BX4XDRKHQ9"></script><script>var dnt,doNotTrack=!1;if(!1&&(dnt=navigator.doNotTrack||window.doNotTrack||navigator.msDoNotTrack,doNotTrack=dnt=="1"||dnt=="yes"),!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-BX4XDRKHQ9")}</script><meta property="og:title" content="如何配置nas上的磁盘阵列"><meta property="og:description" content="因为考虑要完全自己组装台NAS，需要练习一下如何创建并管理磁盘阵列。最近在虚拟机上学习了mdadm和lvm的使用方法。实践下来，lvm功能更多，更灵活，但基础raid的功能不完善，磁盘损坏时更新磁盘很繁琐。mdadm只能管理raid，但是更简单直观。考虑方便程度和使用场景，决定使用mdadm创建raid10阵列管理磁盘。"><meta property="og:type" content="article"><meta property="og:url" content="https://air.googol.im/posts/nas-disk-array/"><meta property="og:image" content="https://air.googol.im/images/nas-disk-array.jpg"><meta property="article:section" content="posts"><meta property="article:published_time" content="2024-10-27T09:16:50+01:00"><meta property="article:modified_time" content="2024-10-27T09:16:50+01:00"><meta property="og:site_name" content="Air On G"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://air.googol.im/images/nas-disk-array.jpg"><meta name=twitter:title content="如何配置nas上的磁盘阵列"><meta name=twitter:description content="因为考虑要完全自己组装台NAS，需要练习一下如何创建并管理磁盘阵列。最近在虚拟机上学习了mdadm和lvm的使用方法。实践下来，lvm功能更多，更灵活，但基础raid的功能不完善，磁盘损坏时更新磁盘很繁琐。mdadm只能管理raid，但是更简单直观。考虑方便程度和使用场景，决定使用mdadm创建raid10阵列管理磁盘。"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://air.googol.im/posts/"},{"@type":"ListItem","position":2,"name":"如何配置nas上的磁盘阵列","item":"https://air.googol.im/posts/nas-disk-array/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"如何配置nas上的磁盘阵列","name":"如何配置nas上的磁盘阵列","description":"因为考虑要完全自己组装台NAS，需要练习一下如何创建并管理磁盘阵列。最近在虚拟机上学习了mdadm和lvm的使用方法。实践下来，lvm功能更多，更灵活，但基础raid的功能不完善，磁盘损坏时更新磁盘很繁琐。mdadm只能管理raid，但是更简单直观。考虑方便程度和使用场景，决定使用mdadm创建raid10阵列管理磁盘。\n","keywords":["nas","raid","operation","ops"],"articleBody":"因为考虑要完全自己组装台NAS，需要练习一下如何创建并管理磁盘阵列。最近在虚拟机上学习了mdadm和lvm的使用方法。实践下来，lvm功能更多，更灵活，但基础raid的功能不完善，磁盘损坏时更新磁盘很繁琐。mdadm只能管理raid，但是更简单直观。考虑方便程度和使用场景，决定使用mdadm创建raid10阵列管理磁盘。\n写在前面 阵列的管理思路是，使用mdadm创建磁盘阵列，并将阵列格式化为xfs文件格式。如果有磁盘损坏，可以直接使用mdadm替换阵列的磁盘并进行恢复，不需要操作xfs。如果要进行扩容，需要先用mdadm将新磁盘加入阵列并扩展阵列容量，再将xfs扩容以便使用新磁盘。\n在mdadm创建的阵列之上，还可以用lvm增加ssd加速功能，提高读写速度。由于lvm提供的raid10阵列功能，无法方便的在启用cache加速时更换失效磁盘，我能想到的方法是使用三层结构：\nmdadm：提供底层hdd的raid10阵列 lvm：将raid10和ssd一起创建一个简单卷，并将ssd作为卷cache加速 xfs：在lvm卷之上创建xfs 不过这种方式在扩容时非常麻烦，需要一层一层进行扩容，而且lvm需要先取消cache来扩容底层卷，再加回cache。这个过程稍有不慎就会破坏上层的xfs，导致数据丢失。所以我决定不使用这种方法。\n创建阵列 创建raid10 创建raid可以通过cockpit存储界面提供的选项完成，选择创建MDRAID设备，并选择相应磁盘和raid等级即可。以下记录如何用命令行创建阵列。\n假设存在磁盘/dev/vd{b..e}，4个容量为1GiB的hdd。\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 % lsblk NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS ... vdb 252:16 0 1G 0 disk vdc 252:32 0 1G 0 disk vdd 252:48 0 1G 0 disk vde 252:64 0 1G 0 disk # 创建raid10阵列 $ mdadm --create --verbose /dev/md/raid10 --level=10 --raid-devices=4 /dev/vd{b..e} mdadm: layout defaults to n2 mdadm: layout defaults to n2 mdadm: chunk size defaults to 512K mdadm: size set to 1046528K mdadm: Defaulting to version 1.2 metadata mdadm: array /dev/md/raid10 started. $ cat /proc/mdstat Personalities : [raid10] md127 : active raid10 vde[3] vdd[2] vdc[1] vdb[0] 2093056 blocks super 1.2 512K chunks 2 near-copies [4/4] [UUUU] unused devices: 创建xfs 将刚刚创建的raid10格式化为xfs。\n1 2 3 # 格式化 % mkfs.xfs /dev/md/raid10 # 挂载并使用/dev/md/raid10 一块磁盘损坏，重建阵列 重建raid可以通过cockpit存储界面提供的选项完成。选择添加磁盘，将新磁盘加入阵列即可。界面会提示阵列的重建进度。以下记录如何用命令行修复阵列。\n假设/dev/vdb损坏，并插入一块新的1.0GiB硬盘/dev/vdf。修复操作如下：\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 % lsblk lsblk NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS ... vdc 252:32 0 1G 0 disk └─md127 9:127 0 2G 0 raid10 /var/mnt/data vdd 252:48 0 1G 0 disk └─md127 9:127 0 2G 0 raid10 /var/mnt/data vde 252:64 0 1G 0 disk └─md127 9:127 0 2G 0 raid10 /var/mnt/data vdf 252:16 0 1G 0 disk # 检查阵列 % cat /proc/mdstat Personalities : [raid10] md127 : active raid10 vde[3] vdd[2] vdc[1] 2093056 blocks super 1.2 512K chunks 2 near-copies [4/3] [_UUU] unused devices: # 修复阵列 % mdadm /dev/md/raid10 -a /dev/vdf mdadm: added /dev/vdf # 检查同步进度 % cat /proc/mdstat Personalities : [raid10] md127 : active raid10 vdf[4] vde[3] vdd[2] vdc[1] 2093056 blocks super 1.2 512K chunks 2 near-copies [4/3] [_UUU] [===================\u003e.] recovery = 99.9% (1046528/1046528) finish=0.0min speed=209305K/sec unused devices: # 等待同步结束 % cat /proc/mdstat Personalities : [raid10] md127 : active raid10 vdf[4] vde[3] vdd[2] vdc[1] 2093056 blocks super 1.2 512K chunks 2 near-copies [4/4] [UUUU] unused devices: # 不再提示损坏信息，修复完成 以上过程不会损坏磁盘xfs的内容。\n扩容阵列：新增磁盘 扩容raid10 扩容raid部分操作可以通过cockpit存储界面提供的选项完成。选择添加磁盘，将新磁盘加入阵列即可。但此时raid10并无法启用新磁盘，还需要命令行更新设备才行。以下记录如何用命令行修复阵列。\n假设新磁盘为/dev/vd{f,g}，要将其增加到raid10阵列：\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 % lsblk NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS ... vdb 252:16 0 1G 0 disk └─md127 9:127 0 2G 0 raid10 /var/mnt/data vdc 252:32 0 1G 0 disk └─md127 9:127 0 2G 0 raid10 /var/mnt/data vdd 252:48 0 1G 0 disk └─md127 9:127 0 2G 0 raid10 /var/mnt/data vde 252:64 0 1G 0 disk └─md127 9:127 0 2G 0 raid10 /var/mnt/data vdf 252:80 0 1G 0 disk vdg 252:96 0 1G 0 disk # 检查阵列 % cat /proc/mdstat Personalities : [raid10] md127 : active raid10 vdb[4] vde[3] vdd[2] vdc[1] 2093056 blocks super 1.2 512K chunks 2 near-copies [4/4] [UUUU] unused devices: # 扩容阵列 % mdadm /dev/md/raid10 -a /dev/vdf -a /dev/vdg mdadm: added /dev/vdf mdadm: added /dev/vdg % cat /proc/mdstat Personalities : [raid10] md127 : active raid10 vdg[6](S) vdf[5](S) vdb[4] vde[3] vdd[2] vdc[1] 2093056 blocks super 1.2 512K chunks 2 near-copies [4/4] [UUUU] unused devices: # 更新阵列配置 % mdadm /dev/md/raid10 --grow --raid-devices=6 % cat /proc/mdstat Personalities : [raid10] md127 : active raid10 vdg[6] vdf[5] vdb[4] vde[3] vdd[2] vdc[1] 2093056 blocks super 1.2 512K chunks 2 near-copies [6/6] [UUUUUU] [==========\u003e..........] reshape = 52.0% (1089024/2093056) finish=0.1min speed=155574K/sec unused devices: # 等待同步结束 % cat /proc/mdstat Personalities : [raid10] md127 : active raid10 vdg[6] vdf[5] vdb[4] vde[3] vdd[2] vdc[1] 3139584 blocks super 1.2 512K chunks 2 near-copies [6/6] [UUUUUU] unused devices: 以上过程不会损坏磁盘xfs的内容。\n扩容xfs 将raid10扩容后，xfs还无法直接使用新空间。需要将xfs一并扩容。该步骤无法通过cockpit完成。\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 # 检查磁盘容量 % df -h /mnt/data Filesystem Size Used Avail Use% Mounted on /dev/md127 2.0G 171M 1.8G 9% /var/mnt/data # 扩容 % xfs_growfs -d /mnt/data/ meta-data=/dev/md127 isize=512 agcount=8, agsize=65408 blks = sectsz=512 attr=2, projid32bit=1 = crc=1 finobt=1, sparse=1, rmapbt=1 = reflink=1 bigtime=1 inobtcount=1 nrext64=1 data = bsize=4096 blocks=523264, imaxpct=25 = sunit=128 swidth=256 blks naming =version 2 bsize=4096 ascii-ci=0, ftype=1 log =internal log bsize=4096 blocks=16384, version=2 = sectsz=512 sunit=8 blks, lazy-count=1 realtime =none extsz=4096 blocks=0, rtextents=0 data blocks changed from 523264 to 784896 # 检查磁盘容量 % df -h /mnt/data Filesystem Size Used Avail Use% Mounted on /dev/md127 3.0G 191M 2.8G 7% /var/mnt/data 以上过程不会损坏磁盘xfs的内容。\n扩容阵列：更新更大容量磁盘 扩容raid10 首先参考一块磁盘损坏，重建阵列，逐一更换阵列中每块磁盘为更大容量的磁盘。注意：一定要等到一块磁盘完全同步完成后，再更新下一块磁盘！\n磁盘更新后，对raid10进行扩容：\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 # 检查状态 % cat /proc/mdstat Personalities : [raid10] md127 : active raid10 vde[5] vdd[4] vdc[1] vdb[0] 2091008 blocks super 1.2 512K chunks 2 near-copies [4/4] [UUUU] unused devices: # 扩展容量 % mdadm /dev/md/raid10 --grow --size=max mdadm: component size of /dev/md/raid10 has been set to 2094080K # 等待同步完成 % cat /proc/mdstat Personalities : [raid10] md127 : active raid10 vde[5] vdd[4] vdc[1] vdb[0] 4188160 blocks super 1.2 512K chunks 2 near-copies [4/4] [UUUU] unused devices: 以上过程不会损坏磁盘xfs的内容。\n扩容xfs 参考扩容xfs，将xfs容量扩展为新raid10的容量。\n完全使用lvm创建带缓存的raid10阵列（废弃） 仅作记录：以下是之前演练lvm时的记录。不是我实际的操作方法。\n本操作绝大部分参考Redhat关于如何Configuring and managing logical volumes的文档。这篇文档里没有提及如何修复带有cache的raid阵列，因此我也选择不使用带有cache的raid阵列。我自己试了各种办法，无法正常恢复一个带有cache的raid10阵列。如果有人知道该怎么做，希望不吝赐教。\n假设存在磁盘/dev/vd{b..g}，其中vdd是一块ssd，500MiB，其余是1GiB的hdd。\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 # 创建pv $ pvcreate /dev/vd{b..f} $ pvs PV VG Fmt Attr PSize PFree /dev/vdb lvm2 --- 1.00g 1.00g /dev/vdc lvm2 --- 1.00g 1.00g /dev/vdd lvm2 --- 512.00m 512.00m /dev/vde lvm2 --- 1.00g 1.00g /dev/vdf lvm2 --- 1.00g 1.00g # 创建vg vg_data $ vgcreate vg_data /dev/vd{b..f} $ vgs VG #PV #LV #SN Attr VSize VFree vg_data 5 0 0 wz--n- 4.48g 4.48g $ vgdisplay --- Volume group --- VG Name vg_data System ID Format lvm2 Metadata Areas 5 Metadata Sequence No 1 VG Access read/write VG Status resizable MAX LV 0 Cur LV 0 Open LV 0 Max PV 0 Cur PV 5 Act PV 5 VG Size 4.48 GiB PE Size 4.00 MiB Total PE 1147 Alloc PE / Size 0 / 0 Free PE / Size 1147 / 4.48 GiB VG UUID 25CafP-o9Ny-Qi4O-iRrl-Vk6t-GvId-s0BiEY # 创建raid10 $ lvcreate --type raid10 --mirrors 1 -l 100%FREE --name lv_data vg_data $ lvs LV VG Attr LSize Pool Origin Data% Meta% Move Log Cpy%Sync Convert lv_data vg_data rwi-a-r--- 1.98g 100.00 $ lvdisplay --- Logical volume --- LV Path /dev/vg_data/lv_data LV Name lv_data VG Name vg_data LV UUID sU6ZaR-9LVs-cplq-CseT-66cY-J3Hv-mm3WgP LV Write Access read/write LV Creation host, time coreos, 2024-10-27 09:32:13 +0100 LV Status available # open 0 LV Size 1.98 GiB Current LE 508 Mirrored volumes 4 Segments 1 Allocation inherit Read ahead sectors auto - currently set to 1024 Block device 253:8 # 创建cache $ lvcreate --type cache-pool -l 100%FREE --name lv_cache vg_data /dev/vdd $ lvs LV VG Attr LSize Pool Origin Data% Meta% Move Log Cpy%Sync Convert lv_cache vg_data Cwi---C--- 492.00m lv_data vg_data rwi-a-r--- 1.98g 100.00 $ lvdisplay --- Logical volume --- LV Path /dev/vg_data/lv_data LV Name lv_data VG Name vg_data LV UUID sU6ZaR-9LVs-cplq-CseT-66cY-J3Hv-mm3WgP LV Write Access read/write LV Creation host, time coreos, 2024-10-27 09:32:13 +0100 LV Status available # open 0 LV Size 1.98 GiB Current LE 508 Mirrored volumes 4 Segments 1 Allocation inherit Read ahead sectors auto - currently set to 1024 Block device 253:8 --- Logical volume --- LV Path /dev/vg_data/lv_cache LV Name lv_cache VG Name vg_data LV UUID cka8mv-Z3cv-VevD-S0Xa-SuVX-orSC-5Zh7cX LV Write Access read/write LV Creation host, time coreos, 2024-10-27 09:33:26 +0100 LV Pool metadata lv_cache_cmeta LV Pool data lv_cache_cdata LV Status NOT available LV Size 492.00 MiB Current LE 123 Segments 1 Allocation inherit Read ahead sectors auto # 启用cache % lvconvert --type cache --cachepool lv_cache vg_data/lv_data % lvs LV VG Attr LSize Pool Origin Data% Meta% Move Log Cpy%Sync Convert lv_data vg_data Cwi-a-C--- 1.98g [lv_cache_cpool] [lv_data_corig] 0.00 1.32 0.00 % lvdisplay --- Logical volume --- LV Path /dev/vg_data/lv_data LV Name lv_data VG Name vg_data LV UUID sU6ZaR-9LVs-cplq-CseT-66cY-J3Hv-mm3WgP LV Write Access read/write LV Creation host, time coreos, 2024-10-27 09:32:13 +0100 LV Cache pool name lv_cache_cpool LV Cache origin name lv_data_corig LV Status available # open 0 LV Size 1.98 GiB Cache used blocks 0.00% Cache metadata blocks 1.32% Cache dirty blocks 0.00% Cache read hits/misses 0 / 22 Cache wrt hits/misses 0 / 0 Cache demotions 0 Cache promotions 0 Current LE 508 Segments 1 Allocation inherit Read ahead sectors auto - currently set to 1024 Block device 253:8 # 格式化 % mkfs.xfs /dev/vg_data/lv_data # 挂载并使用/dev/vg_data/lv_data ","wordCount":"1503","inLanguage":"en","image":"https://air.googol.im/images/nas-disk-array.jpg","datePublished":"2024-10-27T09:16:50+01:00","dateModified":"2024-10-27T09:16:50+01:00","author":{"@type":"Person","name":"Googol Lee"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://air.googol.im/posts/nas-disk-array/"},"publisher":{"@type":"Organization","name":"Air On G","logo":{"@type":"ImageObject","url":"https://air.googol.im/favicon.ico"}}}</script></head><body id=top><script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add("dark"):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove("dark"):window.matchMedia("(prefers-color-scheme: dark)").matches&&document.body.classList.add("dark")</script><header class=header><nav class=nav><div class=logo><a href=https://air.googol.im/ accesskey=h title="Air On G (Alt + H)">Air On G</a><div class=logo-switches><button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu><li><a href=https://air.googol.im/posts/ title=Posts><span>Posts</span></a></li><li><a href=https://air.googol.im/categories/ title=Categories><span>Categories</span></a></li><li><a href=https://air.googol.im/tags/ title=Tags><span>Tags</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><div class=breadcrumbs><a href=https://air.googol.im/>Home</a>&nbsp;»&nbsp;<a href=https://air.googol.im/posts/>Posts</a></div><h1 class="post-title entry-hint-parent">如何配置nas上的磁盘阵列</h1><div class=post-meta><span title='2024-10-27 09:16:50 +0100 CET'>2024-10-27</span>&nbsp;·&nbsp;8 min&nbsp;·&nbsp;Googol Lee</div></header><figure class=entry-cover><img loading=eager src=https://air.googol.im/images/nas-disk-array.jpg alt></figure><div class=post-content><p>因为考虑要完全自己组装台NAS，需要练习一下如何创建并管理磁盘阵列。最近在虚拟机上学习了<code>mdadm</code>和<code>lvm</code>的使用方法。实践下来，<code>lvm</code>功能更多，更灵活，但基础raid的功能不完善，磁盘损坏时更新磁盘很繁琐。<code>mdadm</code>只能管理raid，但是更简单直观。考虑方便程度和使用场景，决定使用<code>mdadm</code>创建raid10阵列管理磁盘。</p><h2 id=写在前面>写在前面<a hidden class=anchor aria-hidden=true href=#写在前面>#</a></h2><p>阵列的管理思路是，使用<code>mdadm</code>创建磁盘阵列，并将阵列格式化为<code>xfs</code>文件格式。如果有磁盘损坏，可以直接使用<code>mdadm</code>替换阵列的磁盘并进行恢复，不需要操作<code>xfs</code>。如果要进行扩容，需要先用<code>mdadm</code>将新磁盘加入阵列并扩展阵列容量，再将<code>xfs</code>扩容以便使用新磁盘。</p><p>在<code>mdadm</code>创建的阵列之上，还可以用<code>lvm</code>增加ssd加速功能，提高读写速度。由于<code>lvm</code>提供的raid10阵列功能，无法方便的在启用cache加速时更换失效磁盘，我能想到的方法是使用三层结构：</p><ul><li><code>mdadm</code>：提供底层hdd的raid10阵列</li><li><code>lvm</code>：将raid10和ssd一起创建一个简单卷，并将ssd作为卷cache加速</li><li><code>xfs</code>：在lvm卷之上创建xfs</li></ul><p>不过这种方式在扩容时非常麻烦，需要一层一层进行扩容，而且<code>lvm</code>需要先取消cache来扩容底层卷，再加回cache。这个过程稍有不慎就会破坏上层的<code>xfs</code>，导致数据丢失。所以我决定不使用这种方法。</p><h2 id=创建阵列>创建阵列<a hidden class=anchor aria-hidden=true href=#创建阵列>#</a></h2><h3 id=创建raid10>创建raid10<a hidden class=anchor aria-hidden=true href=#创建raid10>#</a></h3><p>创建raid可以通过<code>cockpit</code>存储界面提供的选项完成，选择<code>创建MDRAID设备</code>，并选择相应磁盘和raid等级即可。以下记录如何用命令行创建阵列。</p><p>假设存在磁盘<code>/dev/vd{b..e}</code>，4个容量为1GiB的hdd。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt id=hl-0-1><a class=lnlinks href=#hl-0-1> 1</a>
+</span><span class=lnt id=hl-0-2><a class=lnlinks href=#hl-0-2> 2</a>
+</span><span class=lnt id=hl-0-3><a class=lnlinks href=#hl-0-3> 3</a>
+</span><span class=lnt id=hl-0-4><a class=lnlinks href=#hl-0-4> 4</a>
+</span><span class=lnt id=hl-0-5><a class=lnlinks href=#hl-0-5> 5</a>
+</span><span class=lnt id=hl-0-6><a class=lnlinks href=#hl-0-6> 6</a>
+</span><span class=lnt id=hl-0-7><a class=lnlinks href=#hl-0-7> 7</a>
+</span><span class=lnt id=hl-0-8><a class=lnlinks href=#hl-0-8> 8</a>
+</span><span class=lnt id=hl-0-9><a class=lnlinks href=#hl-0-9> 9</a>
+</span><span class=lnt id=hl-0-10><a class=lnlinks href=#hl-0-10>10</a>
+</span><span class=lnt id=hl-0-11><a class=lnlinks href=#hl-0-11>11</a>
+</span><span class=lnt id=hl-0-12><a class=lnlinks href=#hl-0-12>12</a>
+</span><span class=lnt id=hl-0-13><a class=lnlinks href=#hl-0-13>13</a>
+</span><span class=lnt id=hl-0-14><a class=lnlinks href=#hl-0-14>14</a>
+</span><span class=lnt id=hl-0-15><a class=lnlinks href=#hl-0-15>15</a>
+</span><span class=lnt id=hl-0-16><a class=lnlinks href=#hl-0-16>16</a>
+</span><span class=lnt id=hl-0-17><a class=lnlinks href=#hl-0-17>17</a>
+</span><span class=lnt id=hl-0-18><a class=lnlinks href=#hl-0-18>18</a>
+</span><span class=lnt id=hl-0-19><a class=lnlinks href=#hl-0-19>19</a>
+</span><span class=lnt id=hl-0-20><a class=lnlinks href=#hl-0-20>20</a>
+</span><span class=lnt id=hl-0-21><a class=lnlinks href=#hl-0-21>21</a>
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>% lsblk
+</span></span><span class=line><span class=cl>NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+</span></span><span class=line><span class=cl>...
+</span></span><span class=line><span class=cl>vdb    252:16   <span class=m>0</span>    1G  <span class=m>0</span> disk
+</span></span><span class=line><span class=cl>vdc    252:32   <span class=m>0</span>    1G  <span class=m>0</span> disk
+</span></span><span class=line><span class=cl>vdd    252:48   <span class=m>0</span>    1G  <span class=m>0</span> disk
+</span></span><span class=line><span class=cl>vde    252:64   <span class=m>0</span>    1G  <span class=m>0</span> disk
+</span></span><span class=line><span class=cl><span class=c1># 创建raid10阵列</span>
+</span></span><span class=line><span class=cl>$ mdadm --create --verbose /dev/md/raid10 --level<span class=o>=</span><span class=m>10</span> --raid-devices<span class=o>=</span><span class=m>4</span> /dev/vd<span class=o>{</span>b..e<span class=o>}</span>
+</span></span><span class=line><span class=cl>mdadm: layout defaults to n2
+</span></span><span class=line><span class=cl>mdadm: layout defaults to n2
+</span></span><span class=line><span class=cl>mdadm: chunk size defaults to 512K
+</span></span><span class=line><span class=cl>mdadm: size <span class=nb>set</span> to 1046528K
+</span></span><span class=line><span class=cl>mdadm: Defaulting to version 1.2 metadata
+</span></span><span class=line><span class=cl>mdadm: array /dev/md/raid10 started.
+</span></span><span class=line><span class=cl>$ cat /proc/mdstat 
+</span></span><span class=line><span class=cl>Personalities : <span class=o>[</span>raid10<span class=o>]</span> 
+</span></span><span class=line><span class=cl>md127 : active raid10 vde<span class=o>[</span>3<span class=o>]</span> vdd<span class=o>[</span>2<span class=o>]</span> vdc<span class=o>[</span>1<span class=o>]</span> vdb<span class=o>[</span>0<span class=o>]</span>
+</span></span><span class=line><span class=cl>      <span class=m>2093056</span> blocks super 1.2 512K chunks <span class=m>2</span> near-copies <span class=o>[</span>4/4<span class=o>]</span> <span class=o>[</span>UUUU<span class=o>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>unused devices: &lt;none&gt;
+</span></span></code></pre></td></tr></table></div></div><h3 id=创建xfs>创建xfs<a hidden class=anchor aria-hidden=true href=#创建xfs>#</a></h3><p>将刚刚创建的raid10格式化为xfs。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt id=hl-1-1><a class=lnlinks href=#hl-1-1>1</a>
+</span><span class=lnt id=hl-1-2><a class=lnlinks href=#hl-1-2>2</a>
+</span><span class=lnt id=hl-1-3><a class=lnlinks href=#hl-1-3>3</a>
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl><span class=c1># 格式化</span>
+</span></span><span class=line><span class=cl>% mkfs.xfs /dev/md/raid10
+</span></span><span class=line><span class=cl><span class=c1># 挂载并使用/dev/md/raid10</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=fix-disk>一块磁盘损坏，重建阵列<a hidden class=anchor aria-hidden=true href=#fix-disk>#</a></h2><p>重建raid可以通过<code>cockpit</code>存储界面提供的选项完成。选择<code>添加磁盘</code>，将新磁盘加入阵列即可。界面会提示阵列的重建进度。以下记录如何用命令行修复阵列。</p><p>假设<code>/dev/vdb</code>损坏，并插入一块新的1.0GiB硬盘<code>/dev/vdf</code>。修复操作如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt id=hl-2-1><a class=lnlinks href=#hl-2-1> 1</a>
+</span><span class=lnt id=hl-2-2><a class=lnlinks href=#hl-2-2> 2</a>
+</span><span class=lnt id=hl-2-3><a class=lnlinks href=#hl-2-3> 3</a>
+</span><span class=lnt id=hl-2-4><a class=lnlinks href=#hl-2-4> 4</a>
+</span><span class=lnt id=hl-2-5><a class=lnlinks href=#hl-2-5> 5</a>
+</span><span class=lnt id=hl-2-6><a class=lnlinks href=#hl-2-6> 6</a>
+</span><span class=lnt id=hl-2-7><a class=lnlinks href=#hl-2-7> 7</a>
+</span><span class=lnt id=hl-2-8><a class=lnlinks href=#hl-2-8> 8</a>
+</span><span class=lnt id=hl-2-9><a class=lnlinks href=#hl-2-9> 9</a>
+</span><span class=lnt id=hl-2-10><a class=lnlinks href=#hl-2-10>10</a>
+</span><span class=lnt id=hl-2-11><a class=lnlinks href=#hl-2-11>11</a>
+</span><span class=lnt id=hl-2-12><a class=lnlinks href=#hl-2-12>12</a>
+</span><span class=lnt id=hl-2-13><a class=lnlinks href=#hl-2-13>13</a>
+</span><span class=lnt id=hl-2-14><a class=lnlinks href=#hl-2-14>14</a>
+</span><span class=lnt id=hl-2-15><a class=lnlinks href=#hl-2-15>15</a>
+</span><span class=lnt id=hl-2-16><a class=lnlinks href=#hl-2-16>16</a>
+</span><span class=lnt id=hl-2-17><a class=lnlinks href=#hl-2-17>17</a>
+</span><span class=lnt id=hl-2-18><a class=lnlinks href=#hl-2-18>18</a>
+</span><span class=lnt id=hl-2-19><a class=lnlinks href=#hl-2-19>19</a>
+</span><span class=lnt id=hl-2-20><a class=lnlinks href=#hl-2-20>20</a>
+</span><span class=lnt id=hl-2-21><a class=lnlinks href=#hl-2-21>21</a>
+</span><span class=lnt id=hl-2-22><a class=lnlinks href=#hl-2-22>22</a>
+</span><span class=lnt id=hl-2-23><a class=lnlinks href=#hl-2-23>23</a>
+</span><span class=lnt id=hl-2-24><a class=lnlinks href=#hl-2-24>24</a>
+</span><span class=lnt id=hl-2-25><a class=lnlinks href=#hl-2-25>25</a>
+</span><span class=lnt id=hl-2-26><a class=lnlinks href=#hl-2-26>26</a>
+</span><span class=lnt id=hl-2-27><a class=lnlinks href=#hl-2-27>27</a>
+</span><span class=lnt id=hl-2-28><a class=lnlinks href=#hl-2-28>28</a>
+</span><span class=lnt id=hl-2-29><a class=lnlinks href=#hl-2-29>29</a>
+</span><span class=lnt id=hl-2-30><a class=lnlinks href=#hl-2-30>30</a>
+</span><span class=lnt id=hl-2-31><a class=lnlinks href=#hl-2-31>31</a>
+</span><span class=lnt id=hl-2-32><a class=lnlinks href=#hl-2-32>32</a>
+</span><span class=lnt id=hl-2-33><a class=lnlinks href=#hl-2-33>33</a>
+</span><span class=lnt id=hl-2-34><a class=lnlinks href=#hl-2-34>34</a>
+</span><span class=lnt id=hl-2-35><a class=lnlinks href=#hl-2-35>35</a>
+</span><span class=lnt id=hl-2-36><a class=lnlinks href=#hl-2-36>36</a>
+</span><span class=lnt id=hl-2-37><a class=lnlinks href=#hl-2-37>37</a>
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>% lsblk
+</span></span><span class=line><span class=cl>lsblk
+</span></span><span class=line><span class=cl>NAME    MAJ:MIN RM  SIZE RO TYPE   MOUNTPOINTS
+</span></span><span class=line><span class=cl>...
+</span></span><span class=line><span class=cl>vdc     252:32   <span class=m>0</span>    1G  <span class=m>0</span> disk
+</span></span><span class=line><span class=cl>└─md127   9:127  <span class=m>0</span>    2G  <span class=m>0</span> raid10 /var/mnt/data
+</span></span><span class=line><span class=cl>vdd     252:48   <span class=m>0</span>    1G  <span class=m>0</span> disk
+</span></span><span class=line><span class=cl>└─md127   9:127  <span class=m>0</span>    2G  <span class=m>0</span> raid10 /var/mnt/data
+</span></span><span class=line><span class=cl>vde     252:64   <span class=m>0</span>    1G  <span class=m>0</span> disk
+</span></span><span class=line><span class=cl>└─md127   9:127  <span class=m>0</span>    2G  <span class=m>0</span> raid10 /var/mnt/data
+</span></span><span class=line><span class=cl>vdf     252:16   <span class=m>0</span>    1G  <span class=m>0</span> disk
+</span></span><span class=line><span class=cl><span class=c1># 检查阵列</span>
+</span></span><span class=line><span class=cl>% cat /proc/mdstat 
+</span></span><span class=line><span class=cl>Personalities : <span class=o>[</span>raid10<span class=o>]</span> 
+</span></span><span class=line><span class=cl>md127 : active raid10 vde<span class=o>[</span>3<span class=o>]</span> vdd<span class=o>[</span>2<span class=o>]</span> vdc<span class=o>[</span>1<span class=o>]</span>
+</span></span><span class=line><span class=cl>      <span class=m>2093056</span> blocks super 1.2 512K chunks <span class=m>2</span> near-copies <span class=o>[</span>4/3<span class=o>]</span> <span class=o>[</span>_UUU<span class=o>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>unused devices: &lt;none&gt;
+</span></span><span class=line><span class=cl><span class=c1># 修复阵列</span>
+</span></span><span class=line><span class=cl>% mdadm /dev/md/raid10 -a /dev/vdf
+</span></span><span class=line><span class=cl>mdadm: added /dev/vdf
+</span></span><span class=line><span class=cl><span class=c1># 检查同步进度</span>
+</span></span><span class=line><span class=cl>% cat /proc/mdstat 
+</span></span><span class=line><span class=cl>Personalities : <span class=o>[</span>raid10<span class=o>]</span> 
+</span></span><span class=line><span class=cl>md127 : active raid10 vdf<span class=o>[</span>4<span class=o>]</span> vde<span class=o>[</span>3<span class=o>]</span> vdd<span class=o>[</span>2<span class=o>]</span> vdc<span class=o>[</span>1<span class=o>]</span>
+</span></span><span class=line><span class=cl>      <span class=m>2093056</span> blocks super 1.2 512K chunks <span class=m>2</span> near-copies <span class=o>[</span>4/3<span class=o>]</span> <span class=o>[</span>_UUU<span class=o>]</span>
+</span></span><span class=line><span class=cl>      <span class=o>[===================</span>&gt;.<span class=o>]</span>  <span class=nv>recovery</span> <span class=o>=</span> 99.9% <span class=o>(</span>1046528/1046528<span class=o>)</span> <span class=nv>finish</span><span class=o>=</span>0.0min <span class=nv>speed</span><span class=o>=</span>209305K/sec
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>unused devices: &lt;none&gt;
+</span></span><span class=line><span class=cl><span class=c1># 等待同步结束</span>
+</span></span><span class=line><span class=cl>% cat /proc/mdstat 
+</span></span><span class=line><span class=cl>Personalities : <span class=o>[</span>raid10<span class=o>]</span> 
+</span></span><span class=line><span class=cl>md127 : active raid10 vdf<span class=o>[</span>4<span class=o>]</span> vde<span class=o>[</span>3<span class=o>]</span> vdd<span class=o>[</span>2<span class=o>]</span> vdc<span class=o>[</span>1<span class=o>]</span>
+</span></span><span class=line><span class=cl>      <span class=m>2093056</span> blocks super 1.2 512K chunks <span class=m>2</span> near-copies <span class=o>[</span>4/4<span class=o>]</span> <span class=o>[</span>UUUU<span class=o>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>unused devices: &lt;none&gt;
+</span></span><span class=line><span class=cl><span class=c1># 不再提示损坏信息，修复完成</span>
+</span></span></code></pre></td></tr></table></div></div><p>以上过程不会损坏磁盘<code>xfs</code>的内容。</p><h2 id=扩容阵列新增磁盘>扩容阵列：新增磁盘<a hidden class=anchor aria-hidden=true href=#扩容阵列新增磁盘>#</a></h2><h3 id=expand-raid10>扩容raid10<a hidden class=anchor aria-hidden=true href=#expand-raid10>#</a></h3><p>扩容raid部分操作可以通过<code>cockpit</code>存储界面提供的选项完成。选择<code>添加磁盘</code>，将新磁盘加入阵列即可。但此时raid10并无法启用新磁盘，还需要命令行更新设备才行。以下记录如何用命令行修复阵列。</p><p>假设新磁盘为<code>/dev/vd{f,g}</code>，要将其增加到raid10阵列：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt id=hl-3-1><a class=lnlinks href=#hl-3-1> 1</a>
+</span><span class=lnt id=hl-3-2><a class=lnlinks href=#hl-3-2> 2</a>
+</span><span class=lnt id=hl-3-3><a class=lnlinks href=#hl-3-3> 3</a>
+</span><span class=lnt id=hl-3-4><a class=lnlinks href=#hl-3-4> 4</a>
+</span><span class=lnt id=hl-3-5><a class=lnlinks href=#hl-3-5> 5</a>
+</span><span class=lnt id=hl-3-6><a class=lnlinks href=#hl-3-6> 6</a>
+</span><span class=lnt id=hl-3-7><a class=lnlinks href=#hl-3-7> 7</a>
+</span><span class=lnt id=hl-3-8><a class=lnlinks href=#hl-3-8> 8</a>
+</span><span class=lnt id=hl-3-9><a class=lnlinks href=#hl-3-9> 9</a>
+</span><span class=lnt id=hl-3-10><a class=lnlinks href=#hl-3-10>10</a>
+</span><span class=lnt id=hl-3-11><a class=lnlinks href=#hl-3-11>11</a>
+</span><span class=lnt id=hl-3-12><a class=lnlinks href=#hl-3-12>12</a>
+</span><span class=lnt id=hl-3-13><a class=lnlinks href=#hl-3-13>13</a>
+</span><span class=lnt id=hl-3-14><a class=lnlinks href=#hl-3-14>14</a>
+</span><span class=lnt id=hl-3-15><a class=lnlinks href=#hl-3-15>15</a>
+</span><span class=lnt id=hl-3-16><a class=lnlinks href=#hl-3-16>16</a>
+</span><span class=lnt id=hl-3-17><a class=lnlinks href=#hl-3-17>17</a>
+</span><span class=lnt id=hl-3-18><a class=lnlinks href=#hl-3-18>18</a>
+</span><span class=lnt id=hl-3-19><a class=lnlinks href=#hl-3-19>19</a>
+</span><span class=lnt id=hl-3-20><a class=lnlinks href=#hl-3-20>20</a>
+</span><span class=lnt id=hl-3-21><a class=lnlinks href=#hl-3-21>21</a>
+</span><span class=lnt id=hl-3-22><a class=lnlinks href=#hl-3-22>22</a>
+</span><span class=lnt id=hl-3-23><a class=lnlinks href=#hl-3-23>23</a>
+</span><span class=lnt id=hl-3-24><a class=lnlinks href=#hl-3-24>24</a>
+</span><span class=lnt id=hl-3-25><a class=lnlinks href=#hl-3-25>25</a>
+</span><span class=lnt id=hl-3-26><a class=lnlinks href=#hl-3-26>26</a>
+</span><span class=lnt id=hl-3-27><a class=lnlinks href=#hl-3-27>27</a>
+</span><span class=lnt id=hl-3-28><a class=lnlinks href=#hl-3-28>28</a>
+</span><span class=lnt id=hl-3-29><a class=lnlinks href=#hl-3-29>29</a>
+</span><span class=lnt id=hl-3-30><a class=lnlinks href=#hl-3-30>30</a>
+</span><span class=lnt id=hl-3-31><a class=lnlinks href=#hl-3-31>31</a>
+</span><span class=lnt id=hl-3-32><a class=lnlinks href=#hl-3-32>32</a>
+</span><span class=lnt id=hl-3-33><a class=lnlinks href=#hl-3-33>33</a>
+</span><span class=lnt id=hl-3-34><a class=lnlinks href=#hl-3-34>34</a>
+</span><span class=lnt id=hl-3-35><a class=lnlinks href=#hl-3-35>35</a>
+</span><span class=lnt id=hl-3-36><a class=lnlinks href=#hl-3-36>36</a>
+</span><span class=lnt id=hl-3-37><a class=lnlinks href=#hl-3-37>37</a>
+</span><span class=lnt id=hl-3-38><a class=lnlinks href=#hl-3-38>38</a>
+</span><span class=lnt id=hl-3-39><a class=lnlinks href=#hl-3-39>39</a>
+</span><span class=lnt id=hl-3-40><a class=lnlinks href=#hl-3-40>40</a>
+</span><span class=lnt id=hl-3-41><a class=lnlinks href=#hl-3-41>41</a>
+</span><span class=lnt id=hl-3-42><a class=lnlinks href=#hl-3-42>42</a>
+</span><span class=lnt id=hl-3-43><a class=lnlinks href=#hl-3-43>43</a>
+</span><span class=lnt id=hl-3-44><a class=lnlinks href=#hl-3-44>44</a>
+</span><span class=lnt id=hl-3-45><a class=lnlinks href=#hl-3-45>45</a>
+</span><span class=lnt id=hl-3-46><a class=lnlinks href=#hl-3-46>46</a>
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>% lsblk
+</span></span><span class=line><span class=cl>NAME    MAJ:MIN RM  SIZE RO TYPE   MOUNTPOINTS
+</span></span><span class=line><span class=cl>...
+</span></span><span class=line><span class=cl>vdb     252:16   <span class=m>0</span>    1G  <span class=m>0</span> disk
+</span></span><span class=line><span class=cl>└─md127   9:127  <span class=m>0</span>    2G  <span class=m>0</span> raid10 /var/mnt/data
+</span></span><span class=line><span class=cl>vdc     252:32   <span class=m>0</span>    1G  <span class=m>0</span> disk
+</span></span><span class=line><span class=cl>└─md127   9:127  <span class=m>0</span>    2G  <span class=m>0</span> raid10 /var/mnt/data
+</span></span><span class=line><span class=cl>vdd     252:48   <span class=m>0</span>    1G  <span class=m>0</span> disk
+</span></span><span class=line><span class=cl>└─md127   9:127  <span class=m>0</span>    2G  <span class=m>0</span> raid10 /var/mnt/data
+</span></span><span class=line><span class=cl>vde     252:64   <span class=m>0</span>    1G  <span class=m>0</span> disk
+</span></span><span class=line><span class=cl>└─md127   9:127  <span class=m>0</span>    2G  <span class=m>0</span> raid10 /var/mnt/data
+</span></span><span class=line><span class=cl>vdf     252:80   <span class=m>0</span>    1G  <span class=m>0</span> disk
+</span></span><span class=line><span class=cl>vdg     252:96   <span class=m>0</span>    1G  <span class=m>0</span> disk
+</span></span><span class=line><span class=cl><span class=c1># 检查阵列</span>
+</span></span><span class=line><span class=cl>% cat /proc/mdstat 
+</span></span><span class=line><span class=cl>Personalities : <span class=o>[</span>raid10<span class=o>]</span> 
+</span></span><span class=line><span class=cl>md127 : active raid10 vdb<span class=o>[</span>4<span class=o>]</span> vde<span class=o>[</span>3<span class=o>]</span> vdd<span class=o>[</span>2<span class=o>]</span> vdc<span class=o>[</span>1<span class=o>]</span>
+</span></span><span class=line><span class=cl>      <span class=m>2093056</span> blocks super 1.2 512K chunks <span class=m>2</span> near-copies <span class=o>[</span>4/4<span class=o>]</span> <span class=o>[</span>UUUU<span class=o>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>unused devices: &lt;none&gt;
+</span></span><span class=line><span class=cl><span class=c1># 扩容阵列</span>
+</span></span><span class=line><span class=cl>% mdadm /dev/md/raid10 -a /dev/vdf -a /dev/vdg
+</span></span><span class=line><span class=cl>mdadm: added /dev/vdf
+</span></span><span class=line><span class=cl>mdadm: added /dev/vdg
+</span></span><span class=line><span class=cl>% cat /proc/mdstat 
+</span></span><span class=line><span class=cl>Personalities : <span class=o>[</span>raid10<span class=o>]</span> 
+</span></span><span class=line><span class=cl>md127 : active raid10 vdg<span class=o>[</span>6<span class=o>](</span>S<span class=o>)</span> vdf<span class=o>[</span>5<span class=o>](</span>S<span class=o>)</span> vdb<span class=o>[</span>4<span class=o>]</span> vde<span class=o>[</span>3<span class=o>]</span> vdd<span class=o>[</span>2<span class=o>]</span> vdc<span class=o>[</span>1<span class=o>]</span>
+</span></span><span class=line><span class=cl>      <span class=m>2093056</span> blocks super 1.2 512K chunks <span class=m>2</span> near-copies <span class=o>[</span>4/4<span class=o>]</span> <span class=o>[</span>UUUU<span class=o>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>unused devices: &lt;none&gt;
+</span></span><span class=line><span class=cl><span class=c1># 更新阵列配置</span>
+</span></span><span class=line><span class=cl>% mdadm /dev/md/raid10 --grow --raid-devices<span class=o>=</span><span class=m>6</span>
+</span></span><span class=line><span class=cl>% cat /proc/mdstat 
+</span></span><span class=line><span class=cl>Personalities : <span class=o>[</span>raid10<span class=o>]</span> 
+</span></span><span class=line><span class=cl>md127 : active raid10 vdg<span class=o>[</span>6<span class=o>]</span> vdf<span class=o>[</span>5<span class=o>]</span> vdb<span class=o>[</span>4<span class=o>]</span> vde<span class=o>[</span>3<span class=o>]</span> vdd<span class=o>[</span>2<span class=o>]</span> vdc<span class=o>[</span>1<span class=o>]</span>
+</span></span><span class=line><span class=cl>      <span class=m>2093056</span> blocks super 1.2 512K chunks <span class=m>2</span> near-copies <span class=o>[</span>6/6<span class=o>]</span> <span class=o>[</span>UUUUUU<span class=o>]</span>
+</span></span><span class=line><span class=cl>      <span class=o>[==========</span>&gt;..........<span class=o>]</span>  <span class=nv>reshape</span> <span class=o>=</span> 52.0% <span class=o>(</span>1089024/2093056<span class=o>)</span> <span class=nv>finish</span><span class=o>=</span>0.1min <span class=nv>speed</span><span class=o>=</span>155574K/sec
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>unused devices: &lt;none&gt;
+</span></span><span class=line><span class=cl><span class=c1># 等待同步结束</span>
+</span></span><span class=line><span class=cl>% cat /proc/mdstat 
+</span></span><span class=line><span class=cl>Personalities : <span class=o>[</span>raid10<span class=o>]</span> 
+</span></span><span class=line><span class=cl>md127 : active raid10 vdg<span class=o>[</span>6<span class=o>]</span> vdf<span class=o>[</span>5<span class=o>]</span> vdb<span class=o>[</span>4<span class=o>]</span> vde<span class=o>[</span>3<span class=o>]</span> vdd<span class=o>[</span>2<span class=o>]</span> vdc<span class=o>[</span>1<span class=o>]</span>
+</span></span><span class=line><span class=cl>      <span class=m>3139584</span> blocks super 1.2 512K chunks <span class=m>2</span> near-copies <span class=o>[</span>6/6<span class=o>]</span> <span class=o>[</span>UUUUUU<span class=o>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>unused devices: &lt;none&gt;
+</span></span></code></pre></td></tr></table></div></div><p>以上过程不会损坏磁盘<code>xfs</code>的内容。</p><h3 id=expand-xfs>扩容xfs<a hidden class=anchor aria-hidden=true href=#expand-xfs>#</a></h3><p>将raid10扩容后，<code>xfs</code>还无法直接使用新空间。需要将<code>xfs</code>一并扩容。该步骤无法通过<code>cockpit</code>完成。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt id=hl-4-1><a class=lnlinks href=#hl-4-1> 1</a>
+</span><span class=lnt id=hl-4-2><a class=lnlinks href=#hl-4-2> 2</a>
+</span><span class=lnt id=hl-4-3><a class=lnlinks href=#hl-4-3> 3</a>
+</span><span class=lnt id=hl-4-4><a class=lnlinks href=#hl-4-4> 4</a>
+</span><span class=lnt id=hl-4-5><a class=lnlinks href=#hl-4-5> 5</a>
+</span><span class=lnt id=hl-4-6><a class=lnlinks href=#hl-4-6> 6</a>
+</span><span class=lnt id=hl-4-7><a class=lnlinks href=#hl-4-7> 7</a>
+</span><span class=lnt id=hl-4-8><a class=lnlinks href=#hl-4-8> 8</a>
+</span><span class=lnt id=hl-4-9><a class=lnlinks href=#hl-4-9> 9</a>
+</span><span class=lnt id=hl-4-10><a class=lnlinks href=#hl-4-10>10</a>
+</span><span class=lnt id=hl-4-11><a class=lnlinks href=#hl-4-11>11</a>
+</span><span class=lnt id=hl-4-12><a class=lnlinks href=#hl-4-12>12</a>
+</span><span class=lnt id=hl-4-13><a class=lnlinks href=#hl-4-13>13</a>
+</span><span class=lnt id=hl-4-14><a class=lnlinks href=#hl-4-14>14</a>
+</span><span class=lnt id=hl-4-15><a class=lnlinks href=#hl-4-15>15</a>
+</span><span class=lnt id=hl-4-16><a class=lnlinks href=#hl-4-16>16</a>
+</span><span class=lnt id=hl-4-17><a class=lnlinks href=#hl-4-17>17</a>
+</span><span class=lnt id=hl-4-18><a class=lnlinks href=#hl-4-18>18</a>
+</span><span class=lnt id=hl-4-19><a class=lnlinks href=#hl-4-19>19</a>
+</span><span class=lnt id=hl-4-20><a class=lnlinks href=#hl-4-20>20</a>
+</span><span class=lnt id=hl-4-21><a class=lnlinks href=#hl-4-21>21</a>
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl><span class=c1># 检查磁盘容量</span>
+</span></span><span class=line><span class=cl>% df -h /mnt/data
+</span></span><span class=line><span class=cl>Filesystem      Size  Used Avail Use% Mounted on
+</span></span><span class=line><span class=cl>/dev/md127      2.0G  171M  1.8G   9% /var/mnt/data
+</span></span><span class=line><span class=cl><span class=c1># 扩容</span>
+</span></span><span class=line><span class=cl>% xfs_growfs -d /mnt/data/
+</span></span><span class=line><span class=cl>meta-data<span class=o>=</span>/dev/md127             <span class=nv>isize</span><span class=o>=</span><span class=m>512</span>    <span class=nv>agcount</span><span class=o>=</span>8, <span class=nv>agsize</span><span class=o>=</span><span class=m>65408</span> <span class=nv>blks</span>
+</span></span><span class=line><span class=cl>         <span class=o>=</span>                       <span class=nv>sectsz</span><span class=o>=</span><span class=m>512</span>   <span class=nv>attr</span><span class=o>=</span>2, <span class=nv>projid32bit</span><span class=o>=</span><span class=nv>1</span>
+</span></span><span class=line><span class=cl>         <span class=o>=</span>                       <span class=nv>crc</span><span class=o>=</span><span class=m>1</span>        <span class=nv>finobt</span><span class=o>=</span>1, <span class=nv>sparse</span><span class=o>=</span>1, <span class=nv>rmapbt</span><span class=o>=</span><span class=nv>1</span>
+</span></span><span class=line><span class=cl>         <span class=o>=</span>                       <span class=nv>reflink</span><span class=o>=</span><span class=m>1</span>    <span class=nv>bigtime</span><span class=o>=</span><span class=m>1</span> <span class=nv>inobtcount</span><span class=o>=</span><span class=m>1</span> <span class=nv>nrext64</span><span class=o>=</span><span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=nv>data</span>     <span class=o>=</span>                       <span class=nv>bsize</span><span class=o>=</span><span class=m>4096</span>   <span class=nv>blocks</span><span class=o>=</span>523264, <span class=nv>imaxpct</span><span class=o>=</span><span class=nv>25</span>
+</span></span><span class=line><span class=cl>         <span class=o>=</span>                       <span class=nv>sunit</span><span class=o>=</span><span class=m>128</span>    <span class=nv>swidth</span><span class=o>=</span><span class=m>256</span> blks
+</span></span><span class=line><span class=cl><span class=nv>naming</span>   <span class=o>=</span>version <span class=m>2</span>              <span class=nv>bsize</span><span class=o>=</span><span class=m>4096</span>   ascii-ci<span class=o>=</span>0, <span class=nv>ftype</span><span class=o>=</span><span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=nv>log</span>      <span class=o>=</span>internal log           <span class=nv>bsize</span><span class=o>=</span><span class=m>4096</span>   <span class=nv>blocks</span><span class=o>=</span>16384, <span class=nv>version</span><span class=o>=</span><span class=nv>2</span>
+</span></span><span class=line><span class=cl>         <span class=o>=</span>                       <span class=nv>sectsz</span><span class=o>=</span><span class=m>512</span>   <span class=nv>sunit</span><span class=o>=</span><span class=m>8</span> blks, lazy-count<span class=o>=</span><span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=nv>realtime</span> <span class=o>=</span>none                   <span class=nv>extsz</span><span class=o>=</span><span class=m>4096</span>   <span class=nv>blocks</span><span class=o>=</span>0, <span class=nv>rtextents</span><span class=o>=</span><span class=m>0</span>
+</span></span><span class=line><span class=cl>data blocks changed from <span class=m>523264</span> to <span class=m>784896</span>
+</span></span><span class=line><span class=cl><span class=c1># 检查磁盘容量</span>
+</span></span><span class=line><span class=cl>% df -h /mnt/data
+</span></span><span class=line><span class=cl>Filesystem      Size  Used Avail Use% Mounted on
+</span></span><span class=line><span class=cl>/dev/md127      3.0G  191M  2.8G   7% /var/mnt/data
+</span></span></code></pre></td></tr></table></div></div><p>以上过程不会损坏磁盘<code>xfs</code>的内容。</p><h2 id=扩容阵列更新更大容量磁盘>扩容阵列：更新更大容量磁盘<a hidden class=anchor aria-hidden=true href=#扩容阵列更新更大容量磁盘>#</a></h2><h3 id=扩容raid10>扩容raid10<a hidden class=anchor aria-hidden=true href=#扩容raid10>#</a></h3><p>首先参考<a href=#fix-disk>一块磁盘损坏，重建阵列</a>，逐一更换阵列中每块磁盘为更大容量的磁盘。<strong>注意：一定要等到一块磁盘完全同步完成后，再更新下一块磁盘！</strong></p><p>磁盘更新后，对raid10进行扩容：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt id=hl-5-1><a class=lnlinks href=#hl-5-1> 1</a>
+</span><span class=lnt id=hl-5-2><a class=lnlinks href=#hl-5-2> 2</a>
+</span><span class=lnt id=hl-5-3><a class=lnlinks href=#hl-5-3> 3</a>
+</span><span class=lnt id=hl-5-4><a class=lnlinks href=#hl-5-4> 4</a>
+</span><span class=lnt id=hl-5-5><a class=lnlinks href=#hl-5-5> 5</a>
+</span><span class=lnt id=hl-5-6><a class=lnlinks href=#hl-5-6> 6</a>
+</span><span class=lnt id=hl-5-7><a class=lnlinks href=#hl-5-7> 7</a>
+</span><span class=lnt id=hl-5-8><a class=lnlinks href=#hl-5-8> 8</a>
+</span><span class=lnt id=hl-5-9><a class=lnlinks href=#hl-5-9> 9</a>
+</span><span class=lnt id=hl-5-10><a class=lnlinks href=#hl-5-10>10</a>
+</span><span class=lnt id=hl-5-11><a class=lnlinks href=#hl-5-11>11</a>
+</span><span class=lnt id=hl-5-12><a class=lnlinks href=#hl-5-12>12</a>
+</span><span class=lnt id=hl-5-13><a class=lnlinks href=#hl-5-13>13</a>
+</span><span class=lnt id=hl-5-14><a class=lnlinks href=#hl-5-14>14</a>
+</span><span class=lnt id=hl-5-15><a class=lnlinks href=#hl-5-15>15</a>
+</span><span class=lnt id=hl-5-16><a class=lnlinks href=#hl-5-16>16</a>
+</span><span class=lnt id=hl-5-17><a class=lnlinks href=#hl-5-17>17</a>
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl><span class=c1># 检查状态</span>
+</span></span><span class=line><span class=cl>% cat /proc/mdstat 
+</span></span><span class=line><span class=cl>Personalities : <span class=o>[</span>raid10<span class=o>]</span> 
+</span></span><span class=line><span class=cl>md127 : active raid10 vde<span class=o>[</span>5<span class=o>]</span> vdd<span class=o>[</span>4<span class=o>]</span> vdc<span class=o>[</span>1<span class=o>]</span> vdb<span class=o>[</span>0<span class=o>]</span>
+</span></span><span class=line><span class=cl>      <span class=m>2091008</span> blocks super 1.2 512K chunks <span class=m>2</span> near-copies <span class=o>[</span>4/4<span class=o>]</span> <span class=o>[</span>UUUU<span class=o>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>unused devices: &lt;none&gt;
+</span></span><span class=line><span class=cl><span class=c1># 扩展容量</span>
+</span></span><span class=line><span class=cl>% mdadm /dev/md/raid10 --grow --size<span class=o>=</span>max
+</span></span><span class=line><span class=cl>mdadm: component size of /dev/md/raid10 has been <span class=nb>set</span> to 2094080K
+</span></span><span class=line><span class=cl><span class=c1># 等待同步完成</span>
+</span></span><span class=line><span class=cl>% cat /proc/mdstat 
+</span></span><span class=line><span class=cl>Personalities : <span class=o>[</span>raid10<span class=o>]</span> 
+</span></span><span class=line><span class=cl>md127 : active raid10 vde<span class=o>[</span>5<span class=o>]</span> vdd<span class=o>[</span>4<span class=o>]</span> vdc<span class=o>[</span>1<span class=o>]</span> vdb<span class=o>[</span>0<span class=o>]</span>
+</span></span><span class=line><span class=cl>      <span class=m>4188160</span> blocks super 1.2 512K chunks <span class=m>2</span> near-copies <span class=o>[</span>4/4<span class=o>]</span> <span class=o>[</span>UUUU<span class=o>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>unused devices: &lt;none&gt;
+</span></span></code></pre></td></tr></table></div></div><p>以上过程不会损坏磁盘<code>xfs</code>的内容。</p><h3 id=扩容xfs>扩容xfs<a hidden class=anchor aria-hidden=true href=#扩容xfs>#</a></h3><p>参考<a href=#expand-xfs>扩容xfs</a>，将<code>xfs</code>容量扩展为新<code>raid10</code>的容量。</p><h2 id=完全使用lvm创建带缓存的raid10阵列废弃>完全使用<code>lvm</code>创建带缓存的raid10阵列（废弃）<a hidden class=anchor aria-hidden=true href=#完全使用lvm创建带缓存的raid10阵列废弃>#</a></h2><blockquote><p>仅作记录：以下是之前演练<code>lvm</code>时的记录。不是我实际的操作方法。</p></blockquote><blockquote><p>本操作绝大部分参考Redhat关于如何<a href=https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_and_managing_logical_volumes/index>Configuring and managing logical volumes</a>的文档。这篇文档里没有提及如何修复带有cache的raid阵列，因此我也选择不使用带有cache的raid阵列。我自己试了各种办法，无法正常恢复一个带有cache的raid10阵列。如果有人知道该怎么做，希望不吝赐教。</p></blockquote><p>假设存在磁盘<code>/dev/vd{b..g}</code>，其中<code>vdd</code>是一块ssd，500MiB，其余是1GiB的hdd。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt id=hl-6-1><a class=lnlinks href=#hl-6-1>  1</a>
+</span><span class=lnt id=hl-6-2><a class=lnlinks href=#hl-6-2>  2</a>
+</span><span class=lnt id=hl-6-3><a class=lnlinks href=#hl-6-3>  3</a>
+</span><span class=lnt id=hl-6-4><a class=lnlinks href=#hl-6-4>  4</a>
+</span><span class=lnt id=hl-6-5><a class=lnlinks href=#hl-6-5>  5</a>
+</span><span class=lnt id=hl-6-6><a class=lnlinks href=#hl-6-6>  6</a>
+</span><span class=lnt id=hl-6-7><a class=lnlinks href=#hl-6-7>  7</a>
+</span><span class=lnt id=hl-6-8><a class=lnlinks href=#hl-6-8>  8</a>
+</span><span class=lnt id=hl-6-9><a class=lnlinks href=#hl-6-9>  9</a>
+</span><span class=lnt id=hl-6-10><a class=lnlinks href=#hl-6-10> 10</a>
+</span><span class=lnt id=hl-6-11><a class=lnlinks href=#hl-6-11> 11</a>
+</span><span class=lnt id=hl-6-12><a class=lnlinks href=#hl-6-12> 12</a>
+</span><span class=lnt id=hl-6-13><a class=lnlinks href=#hl-6-13> 13</a>
+</span><span class=lnt id=hl-6-14><a class=lnlinks href=#hl-6-14> 14</a>
+</span><span class=lnt id=hl-6-15><a class=lnlinks href=#hl-6-15> 15</a>
+</span><span class=lnt id=hl-6-16><a class=lnlinks href=#hl-6-16> 16</a>
+</span><span class=lnt id=hl-6-17><a class=lnlinks href=#hl-6-17> 17</a>
+</span><span class=lnt id=hl-6-18><a class=lnlinks href=#hl-6-18> 18</a>
+</span><span class=lnt id=hl-6-19><a class=lnlinks href=#hl-6-19> 19</a>
+</span><span class=lnt id=hl-6-20><a class=lnlinks href=#hl-6-20> 20</a>
+</span><span class=lnt id=hl-6-21><a class=lnlinks href=#hl-6-21> 21</a>
+</span><span class=lnt id=hl-6-22><a class=lnlinks href=#hl-6-22> 22</a>
+</span><span class=lnt id=hl-6-23><a class=lnlinks href=#hl-6-23> 23</a>
+</span><span class=lnt id=hl-6-24><a class=lnlinks href=#hl-6-24> 24</a>
+</span><span class=lnt id=hl-6-25><a class=lnlinks href=#hl-6-25> 25</a>
+</span><span class=lnt id=hl-6-26><a class=lnlinks href=#hl-6-26> 26</a>
+</span><span class=lnt id=hl-6-27><a class=lnlinks href=#hl-6-27> 27</a>
+</span><span class=lnt id=hl-6-28><a class=lnlinks href=#hl-6-28> 28</a>
+</span><span class=lnt id=hl-6-29><a class=lnlinks href=#hl-6-29> 29</a>
+</span><span class=lnt id=hl-6-30><a class=lnlinks href=#hl-6-30> 30</a>
+</span><span class=lnt id=hl-6-31><a class=lnlinks href=#hl-6-31> 31</a>
+</span><span class=lnt id=hl-6-32><a class=lnlinks href=#hl-6-32> 32</a>
+</span><span class=lnt id=hl-6-33><a class=lnlinks href=#hl-6-33> 33</a>
+</span><span class=lnt id=hl-6-34><a class=lnlinks href=#hl-6-34> 34</a>
+</span><span class=lnt id=hl-6-35><a class=lnlinks href=#hl-6-35> 35</a>
+</span><span class=lnt id=hl-6-36><a class=lnlinks href=#hl-6-36> 36</a>
+</span><span class=lnt id=hl-6-37><a class=lnlinks href=#hl-6-37> 37</a>
+</span><span class=lnt id=hl-6-38><a class=lnlinks href=#hl-6-38> 38</a>
+</span><span class=lnt id=hl-6-39><a class=lnlinks href=#hl-6-39> 39</a>
+</span><span class=lnt id=hl-6-40><a class=lnlinks href=#hl-6-40> 40</a>
+</span><span class=lnt id=hl-6-41><a class=lnlinks href=#hl-6-41> 41</a>
+</span><span class=lnt id=hl-6-42><a class=lnlinks href=#hl-6-42> 42</a>
+</span><span class=lnt id=hl-6-43><a class=lnlinks href=#hl-6-43> 43</a>
+</span><span class=lnt id=hl-6-44><a class=lnlinks href=#hl-6-44> 44</a>
+</span><span class=lnt id=hl-6-45><a class=lnlinks href=#hl-6-45> 45</a>
+</span><span class=lnt id=hl-6-46><a class=lnlinks href=#hl-6-46> 46</a>
+</span><span class=lnt id=hl-6-47><a class=lnlinks href=#hl-6-47> 47</a>
+</span><span class=lnt id=hl-6-48><a class=lnlinks href=#hl-6-48> 48</a>
+</span><span class=lnt id=hl-6-49><a class=lnlinks href=#hl-6-49> 49</a>
+</span><span class=lnt id=hl-6-50><a class=lnlinks href=#hl-6-50> 50</a>
+</span><span class=lnt id=hl-6-51><a class=lnlinks href=#hl-6-51> 51</a>
+</span><span class=lnt id=hl-6-52><a class=lnlinks href=#hl-6-52> 52</a>
+</span><span class=lnt id=hl-6-53><a class=lnlinks href=#hl-6-53> 53</a>
+</span><span class=lnt id=hl-6-54><a class=lnlinks href=#hl-6-54> 54</a>
+</span><span class=lnt id=hl-6-55><a class=lnlinks href=#hl-6-55> 55</a>
+</span><span class=lnt id=hl-6-56><a class=lnlinks href=#hl-6-56> 56</a>
+</span><span class=lnt id=hl-6-57><a class=lnlinks href=#hl-6-57> 57</a>
+</span><span class=lnt id=hl-6-58><a class=lnlinks href=#hl-6-58> 58</a>
+</span><span class=lnt id=hl-6-59><a class=lnlinks href=#hl-6-59> 59</a>
+</span><span class=lnt id=hl-6-60><a class=lnlinks href=#hl-6-60> 60</a>
+</span><span class=lnt id=hl-6-61><a class=lnlinks href=#hl-6-61> 61</a>
+</span><span class=lnt id=hl-6-62><a class=lnlinks href=#hl-6-62> 62</a>
+</span><span class=lnt id=hl-6-63><a class=lnlinks href=#hl-6-63> 63</a>
+</span><span class=lnt id=hl-6-64><a class=lnlinks href=#hl-6-64> 64</a>
+</span><span class=lnt id=hl-6-65><a class=lnlinks href=#hl-6-65> 65</a>
+</span><span class=lnt id=hl-6-66><a class=lnlinks href=#hl-6-66> 66</a>
+</span><span class=lnt id=hl-6-67><a class=lnlinks href=#hl-6-67> 67</a>
+</span><span class=lnt id=hl-6-68><a class=lnlinks href=#hl-6-68> 68</a>
+</span><span class=lnt id=hl-6-69><a class=lnlinks href=#hl-6-69> 69</a>
+</span><span class=lnt id=hl-6-70><a class=lnlinks href=#hl-6-70> 70</a>
+</span><span class=lnt id=hl-6-71><a class=lnlinks href=#hl-6-71> 71</a>
+</span><span class=lnt id=hl-6-72><a class=lnlinks href=#hl-6-72> 72</a>
+</span><span class=lnt id=hl-6-73><a class=lnlinks href=#hl-6-73> 73</a>
+</span><span class=lnt id=hl-6-74><a class=lnlinks href=#hl-6-74> 74</a>
+</span><span class=lnt id=hl-6-75><a class=lnlinks href=#hl-6-75> 75</a>
+</span><span class=lnt id=hl-6-76><a class=lnlinks href=#hl-6-76> 76</a>
+</span><span class=lnt id=hl-6-77><a class=lnlinks href=#hl-6-77> 77</a>
+</span><span class=lnt id=hl-6-78><a class=lnlinks href=#hl-6-78> 78</a>
+</span><span class=lnt id=hl-6-79><a class=lnlinks href=#hl-6-79> 79</a>
+</span><span class=lnt id=hl-6-80><a class=lnlinks href=#hl-6-80> 80</a>
+</span><span class=lnt id=hl-6-81><a class=lnlinks href=#hl-6-81> 81</a>
+</span><span class=lnt id=hl-6-82><a class=lnlinks href=#hl-6-82> 82</a>
+</span><span class=lnt id=hl-6-83><a class=lnlinks href=#hl-6-83> 83</a>
+</span><span class=lnt id=hl-6-84><a class=lnlinks href=#hl-6-84> 84</a>
+</span><span class=lnt id=hl-6-85><a class=lnlinks href=#hl-6-85> 85</a>
+</span><span class=lnt id=hl-6-86><a class=lnlinks href=#hl-6-86> 86</a>
+</span><span class=lnt id=hl-6-87><a class=lnlinks href=#hl-6-87> 87</a>
+</span><span class=lnt id=hl-6-88><a class=lnlinks href=#hl-6-88> 88</a>
+</span><span class=lnt id=hl-6-89><a class=lnlinks href=#hl-6-89> 89</a>
+</span><span class=lnt id=hl-6-90><a class=lnlinks href=#hl-6-90> 90</a>
+</span><span class=lnt id=hl-6-91><a class=lnlinks href=#hl-6-91> 91</a>
+</span><span class=lnt id=hl-6-92><a class=lnlinks href=#hl-6-92> 92</a>
+</span><span class=lnt id=hl-6-93><a class=lnlinks href=#hl-6-93> 93</a>
+</span><span class=lnt id=hl-6-94><a class=lnlinks href=#hl-6-94> 94</a>
+</span><span class=lnt id=hl-6-95><a class=lnlinks href=#hl-6-95> 95</a>
+</span><span class=lnt id=hl-6-96><a class=lnlinks href=#hl-6-96> 96</a>
+</span><span class=lnt id=hl-6-97><a class=lnlinks href=#hl-6-97> 97</a>
+</span><span class=lnt id=hl-6-98><a class=lnlinks href=#hl-6-98> 98</a>
+</span><span class=lnt id=hl-6-99><a class=lnlinks href=#hl-6-99> 99</a>
+</span><span class=lnt id=hl-6-100><a class=lnlinks href=#hl-6-100>100</a>
+</span><span class=lnt id=hl-6-101><a class=lnlinks href=#hl-6-101>101</a>
+</span><span class=lnt id=hl-6-102><a class=lnlinks href=#hl-6-102>102</a>
+</span><span class=lnt id=hl-6-103><a class=lnlinks href=#hl-6-103>103</a>
+</span><span class=lnt id=hl-6-104><a class=lnlinks href=#hl-6-104>104</a>
+</span><span class=lnt id=hl-6-105><a class=lnlinks href=#hl-6-105>105</a>
+</span><span class=lnt id=hl-6-106><a class=lnlinks href=#hl-6-106>106</a>
+</span><span class=lnt id=hl-6-107><a class=lnlinks href=#hl-6-107>107</a>
+</span><span class=lnt id=hl-6-108><a class=lnlinks href=#hl-6-108>108</a>
+</span><span class=lnt id=hl-6-109><a class=lnlinks href=#hl-6-109>109</a>
+</span><span class=lnt id=hl-6-110><a class=lnlinks href=#hl-6-110>110</a>
+</span><span class=lnt id=hl-6-111><a class=lnlinks href=#hl-6-111>111</a>
+</span><span class=lnt id=hl-6-112><a class=lnlinks href=#hl-6-112>112</a>
+</span><span class=lnt id=hl-6-113><a class=lnlinks href=#hl-6-113>113</a>
+</span><span class=lnt id=hl-6-114><a class=lnlinks href=#hl-6-114>114</a>
+</span><span class=lnt id=hl-6-115><a class=lnlinks href=#hl-6-115>115</a>
+</span><span class=lnt id=hl-6-116><a class=lnlinks href=#hl-6-116>116</a>
+</span><span class=lnt id=hl-6-117><a class=lnlinks href=#hl-6-117>117</a>
+</span><span class=lnt id=hl-6-118><a class=lnlinks href=#hl-6-118>118</a>
+</span><span class=lnt id=hl-6-119><a class=lnlinks href=#hl-6-119>119</a>
+</span><span class=lnt id=hl-6-120><a class=lnlinks href=#hl-6-120>120</a>
+</span><span class=lnt id=hl-6-121><a class=lnlinks href=#hl-6-121>121</a>
+</span><span class=lnt id=hl-6-122><a class=lnlinks href=#hl-6-122>122</a>
+</span><span class=lnt id=hl-6-123><a class=lnlinks href=#hl-6-123>123</a>
+</span><span class=lnt id=hl-6-124><a class=lnlinks href=#hl-6-124>124</a>
+</span><span class=lnt id=hl-6-125><a class=lnlinks href=#hl-6-125>125</a>
+</span><span class=lnt id=hl-6-126><a class=lnlinks href=#hl-6-126>126</a>
+</span><span class=lnt id=hl-6-127><a class=lnlinks href=#hl-6-127>127</a>
+</span><span class=lnt id=hl-6-128><a class=lnlinks href=#hl-6-128>128</a>
+</span><span class=lnt id=hl-6-129><a class=lnlinks href=#hl-6-129>129</a>
+</span><span class=lnt id=hl-6-130><a class=lnlinks href=#hl-6-130>130</a>
+</span><span class=lnt id=hl-6-131><a class=lnlinks href=#hl-6-131>131</a>
+</span><span class=lnt id=hl-6-132><a class=lnlinks href=#hl-6-132>132</a>
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl><span class=c1># 创建pv</span>
+</span></span><span class=line><span class=cl>$ pvcreate /dev/vd<span class=o>{</span>b..f<span class=o>}</span>
+</span></span><span class=line><span class=cl>$ pvs
+</span></span><span class=line><span class=cl>  PV         VG Fmt  Attr PSize   PFree  
+</span></span><span class=line><span class=cl>  /dev/vdb      lvm2 ---    1.00g   1.00g
+</span></span><span class=line><span class=cl>  /dev/vdc      lvm2 ---    1.00g   1.00g
+</span></span><span class=line><span class=cl>  /dev/vdd      lvm2 ---  512.00m 512.00m
+</span></span><span class=line><span class=cl>  /dev/vde      lvm2 ---    1.00g   1.00g
+</span></span><span class=line><span class=cl>  /dev/vdf      lvm2 ---    1.00g   1.00g
+</span></span><span class=line><span class=cl><span class=c1># 创建vg vg_data</span>
+</span></span><span class=line><span class=cl>$ vgcreate vg_data /dev/vd<span class=o>{</span>b..f<span class=o>}</span>
+</span></span><span class=line><span class=cl>$ vgs
+</span></span><span class=line><span class=cl>  VG      <span class=c1>#PV #LV #SN Attr   VSize VFree</span>
+</span></span><span class=line><span class=cl>  vg_data   <span class=m>5</span>   <span class=m>0</span>   <span class=m>0</span> wz--n- 4.48g 4.48g
+</span></span><span class=line><span class=cl>$ vgdisplay
+</span></span><span class=line><span class=cl>  --- Volume group ---
+</span></span><span class=line><span class=cl>  VG Name               vg_data
+</span></span><span class=line><span class=cl>  System ID
+</span></span><span class=line><span class=cl>  Format                lvm2
+</span></span><span class=line><span class=cl>  Metadata Areas        <span class=m>5</span>
+</span></span><span class=line><span class=cl>  Metadata Sequence No  <span class=m>1</span>
+</span></span><span class=line><span class=cl>  VG Access             read/write
+</span></span><span class=line><span class=cl>  VG Status             resizable
+</span></span><span class=line><span class=cl>  MAX LV                <span class=m>0</span>
+</span></span><span class=line><span class=cl>  Cur LV                <span class=m>0</span>
+</span></span><span class=line><span class=cl>  Open LV               <span class=m>0</span>
+</span></span><span class=line><span class=cl>  Max PV                <span class=m>0</span>
+</span></span><span class=line><span class=cl>  Cur PV                <span class=m>5</span>
+</span></span><span class=line><span class=cl>  Act PV                <span class=m>5</span>
+</span></span><span class=line><span class=cl>  VG Size               4.48 GiB
+</span></span><span class=line><span class=cl>  PE Size               4.00 MiB
+</span></span><span class=line><span class=cl>  Total PE              <span class=m>1147</span>
+</span></span><span class=line><span class=cl>  Alloc PE / Size       <span class=m>0</span> / <span class=m>0</span>
+</span></span><span class=line><span class=cl>  Free  PE / Size       <span class=m>1147</span> / 4.48 GiB
+</span></span><span class=line><span class=cl>  VG UUID               25CafP-o9Ny-Qi4O-iRrl-Vk6t-GvId-s0BiEY
+</span></span><span class=line><span class=cl><span class=c1># 创建raid10</span>
+</span></span><span class=line><span class=cl>$ lvcreate --type raid10 --mirrors <span class=m>1</span> -l 100%FREE --name lv_data vg_data
+</span></span><span class=line><span class=cl>$ lvs
+</span></span><span class=line><span class=cl>  LV      VG      Attr       LSize Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+</span></span><span class=line><span class=cl>  lv_data vg_data rwi-a-r--- 1.98g                                    100.00
+</span></span><span class=line><span class=cl>$ lvdisplay
+</span></span><span class=line><span class=cl>  --- Logical volume ---
+</span></span><span class=line><span class=cl>  LV Path                /dev/vg_data/lv_data
+</span></span><span class=line><span class=cl>  LV Name                lv_data
+</span></span><span class=line><span class=cl>  VG Name                vg_data
+</span></span><span class=line><span class=cl>  LV UUID                sU6ZaR-9LVs-cplq-CseT-66cY-J3Hv-mm3WgP
+</span></span><span class=line><span class=cl>  LV Write Access        read/write
+</span></span><span class=line><span class=cl>  LV Creation host, <span class=nb>time</span> coreos, 2024-10-27 09:32:13 +0100
+</span></span><span class=line><span class=cl>  LV Status              available
+</span></span><span class=line><span class=cl>  <span class=c1># open                 0</span>
+</span></span><span class=line><span class=cl>  LV Size                1.98 GiB
+</span></span><span class=line><span class=cl>  Current LE             <span class=m>508</span>
+</span></span><span class=line><span class=cl>  Mirrored volumes       <span class=m>4</span>
+</span></span><span class=line><span class=cl>  Segments               <span class=m>1</span>
+</span></span><span class=line><span class=cl>  Allocation             inherit
+</span></span><span class=line><span class=cl>  Read ahead sectors     auto
+</span></span><span class=line><span class=cl>  - currently <span class=nb>set</span> to     <span class=m>1024</span>
+</span></span><span class=line><span class=cl>  Block device           253:8
+</span></span><span class=line><span class=cl><span class=c1># 创建cache</span>
+</span></span><span class=line><span class=cl>$ lvcreate --type cache-pool -l 100%FREE --name lv_cache vg_data /dev/vdd
+</span></span><span class=line><span class=cl>$ lvs
+</span></span><span class=line><span class=cl>  LV       VG      Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+</span></span><span class=line><span class=cl>  lv_cache vg_data Cwi---C--- 492.00m
+</span></span><span class=line><span class=cl>  lv_data  vg_data rwi-a-r---   1.98g                                    100.00
+</span></span><span class=line><span class=cl>$ lvdisplay
+</span></span><span class=line><span class=cl>  --- Logical volume ---
+</span></span><span class=line><span class=cl>  LV Path                /dev/vg_data/lv_data
+</span></span><span class=line><span class=cl>  LV Name                lv_data
+</span></span><span class=line><span class=cl>  VG Name                vg_data
+</span></span><span class=line><span class=cl>  LV UUID                sU6ZaR-9LVs-cplq-CseT-66cY-J3Hv-mm3WgP
+</span></span><span class=line><span class=cl>  LV Write Access        read/write
+</span></span><span class=line><span class=cl>  LV Creation host, <span class=nb>time</span> coreos, 2024-10-27 09:32:13 +0100
+</span></span><span class=line><span class=cl>  LV Status              available
+</span></span><span class=line><span class=cl>  <span class=c1># open                 0</span>
+</span></span><span class=line><span class=cl>  LV Size                1.98 GiB
+</span></span><span class=line><span class=cl>  Current LE             <span class=m>508</span>
+</span></span><span class=line><span class=cl>  Mirrored volumes       <span class=m>4</span>
+</span></span><span class=line><span class=cl>  Segments               <span class=m>1</span>
+</span></span><span class=line><span class=cl>  Allocation             inherit
+</span></span><span class=line><span class=cl>  Read ahead sectors     auto
+</span></span><span class=line><span class=cl>  - currently <span class=nb>set</span> to     <span class=m>1024</span>
+</span></span><span class=line><span class=cl>  Block device           253:8
+</span></span><span class=line><span class=cl>   
+</span></span><span class=line><span class=cl>  --- Logical volume ---
+</span></span><span class=line><span class=cl>  LV Path                /dev/vg_data/lv_cache
+</span></span><span class=line><span class=cl>  LV Name                lv_cache
+</span></span><span class=line><span class=cl>  VG Name                vg_data
+</span></span><span class=line><span class=cl>  LV UUID                cka8mv-Z3cv-VevD-S0Xa-SuVX-orSC-5Zh7cX
+</span></span><span class=line><span class=cl>  LV Write Access        read/write
+</span></span><span class=line><span class=cl>  LV Creation host, <span class=nb>time</span> coreos, 2024-10-27 09:33:26 +0100
+</span></span><span class=line><span class=cl>  LV Pool metadata       lv_cache_cmeta
+</span></span><span class=line><span class=cl>  LV Pool data           lv_cache_cdata
+</span></span><span class=line><span class=cl>  LV Status              NOT available
+</span></span><span class=line><span class=cl>  LV Size                492.00 MiB
+</span></span><span class=line><span class=cl>  Current LE             <span class=m>123</span>
+</span></span><span class=line><span class=cl>  Segments               <span class=m>1</span>
+</span></span><span class=line><span class=cl>  Allocation             inherit
+</span></span><span class=line><span class=cl>  Read ahead sectors     auto
+</span></span><span class=line><span class=cl><span class=c1># 启用cache</span>
+</span></span><span class=line><span class=cl>% lvconvert --type cache --cachepool lv_cache vg_data/lv_data
+</span></span><span class=line><span class=cl>% lvs
+</span></span><span class=line><span class=cl>  LV      VG      Attr       LSize Pool             Origin          Data%  Meta%  Move Log Cpy%Sync Convert
+</span></span><span class=line><span class=cl>  lv_data vg_data Cwi-a-C--- 1.98g <span class=o>[</span>lv_cache_cpool<span class=o>]</span> <span class=o>[</span>lv_data_corig<span class=o>]</span> 0.00   1.32            0.00
+</span></span><span class=line><span class=cl>% lvdisplay
+</span></span><span class=line><span class=cl>  --- Logical volume ---
+</span></span><span class=line><span class=cl>  LV Path                /dev/vg_data/lv_data
+</span></span><span class=line><span class=cl>  LV Name                lv_data
+</span></span><span class=line><span class=cl>  VG Name                vg_data
+</span></span><span class=line><span class=cl>  LV UUID                sU6ZaR-9LVs-cplq-CseT-66cY-J3Hv-mm3WgP
+</span></span><span class=line><span class=cl>  LV Write Access        read/write
+</span></span><span class=line><span class=cl>  LV Creation host, <span class=nb>time</span> coreos, 2024-10-27 09:32:13 +0100
+</span></span><span class=line><span class=cl>  LV Cache pool name     lv_cache_cpool
+</span></span><span class=line><span class=cl>  LV Cache origin name   lv_data_corig
+</span></span><span class=line><span class=cl>  LV Status              available
+</span></span><span class=line><span class=cl>  <span class=c1># open                 0</span>
+</span></span><span class=line><span class=cl>  LV Size                1.98 GiB
+</span></span><span class=line><span class=cl>  Cache used blocks      0.00%
+</span></span><span class=line><span class=cl>  Cache metadata blocks  1.32%
+</span></span><span class=line><span class=cl>  Cache dirty blocks     0.00%
+</span></span><span class=line><span class=cl>  Cache <span class=nb>read</span> hits/misses <span class=m>0</span> / <span class=m>22</span>
+</span></span><span class=line><span class=cl>  Cache wrt hits/misses  <span class=m>0</span> / <span class=m>0</span>
+</span></span><span class=line><span class=cl>  Cache demotions        <span class=m>0</span>
+</span></span><span class=line><span class=cl>  Cache promotions       <span class=m>0</span>
+</span></span><span class=line><span class=cl>  Current LE             <span class=m>508</span>
+</span></span><span class=line><span class=cl>  Segments               <span class=m>1</span>
+</span></span><span class=line><span class=cl>  Allocation             inherit
+</span></span><span class=line><span class=cl>  Read ahead sectors     auto
+</span></span><span class=line><span class=cl>  - currently <span class=nb>set</span> to     <span class=m>1024</span>
+</span></span><span class=line><span class=cl>  Block device           253:8
+</span></span><span class=line><span class=cl><span class=c1># 格式化</span>
+</span></span><span class=line><span class=cl>% mkfs.xfs /dev/vg_data/lv_data
+</span></span><span class=line><span class=cl><span class=c1># 挂载并使用/dev/vg_data/lv_data</span>
+</span></span></code></pre></td></tr></table></div></div></div><footer class=post-footer><ul class=post-tags><li><a href=https://air.googol.im/tags/nas/>Nas</a></li><li><a href=https://air.googol.im/tags/raid/>Raid</a></li><li><a href=https://air.googol.im/tags/operation/>Operation</a></li><li><a href=https://air.googol.im/tags/ops/>Ops</a></li></ul><nav class=paginav><a class=next href=https://air.googol.im/posts/black-myth/><span class=title>Next »</span><br><span>游戏体验：黑神话：悟空</span></a></nav><ul class=share-buttons><li><a target=_blank rel="noopener noreferrer" aria-label="share 如何配置nas上的磁盘阵列 on x" href="https://x.com/intent/tweet/?text=%e5%a6%82%e4%bd%95%e9%85%8d%e7%bd%aenas%e4%b8%8a%e7%9a%84%e7%a3%81%e7%9b%98%e9%98%b5%e5%88%97&amp;url=https%3a%2f%2fair.googol.im%2fposts%2fnas-disk-array%2f&amp;hashtags=nas%2craid%2coperation%2cops"><svg viewBox="0 0 512 512" height="30" width="30" fill="currentcolor"><path d="M512 62.554V449.446C512 483.97 483.97 512 449.446 512H62.554C28.03 512 0 483.97.0 449.446V62.554C0 28.03 28.029.0 62.554.0H449.446C483.971.0 512 28.03 512 62.554zM269.951 190.75 182.567 75.216H56L207.216 272.95 63.9 436.783h61.366L235.9 310.383l96.667 126.4H456L298.367 228.367l134-153.151H371.033zM127.633 110h36.468l219.38 290.065H349.5z"/></svg></a></li><li><a target=_blank rel="noopener noreferrer" aria-label="share 如何配置nas上的磁盘阵列 on linkedin" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fair.googol.im%2fposts%2fnas-disk-array%2f&amp;title=%e5%a6%82%e4%bd%95%e9%85%8d%e7%bd%aenas%e4%b8%8a%e7%9a%84%e7%a3%81%e7%9b%98%e9%98%b5%e5%88%97&amp;summary=%e5%a6%82%e4%bd%95%e9%85%8d%e7%bd%aenas%e4%b8%8a%e7%9a%84%e7%a3%81%e7%9b%98%e9%98%b5%e5%88%97&amp;source=https%3a%2f%2fair.googol.im%2fposts%2fnas-disk-array%2f"><svg viewBox="0 0 512 512" height="30" width="30" fill="currentcolor"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM160.461 423.278V197.561h-75.04v225.717h75.04zm270.539.0V293.839c0-69.333-37.018-101.586-86.381-101.586-39.804.0-57.634 21.891-67.617 37.266v-31.958h-75.021c.995 21.181.0 225.717.0 225.717h75.02V297.222c0-6.748.486-13.492 2.474-18.315 5.414-13.475 17.767-27.434 38.494-27.434 27.135.0 38.007 20.707 38.007 51.037v120.768H431zM123.448 88.722C97.774 88.722 81 105.601 81 127.724c0 21.658 16.264 39.002 41.455 39.002h.484c26.165.0 42.452-17.344 42.452-39.002-.485-22.092-16.241-38.954-41.943-39.002z"/></svg></a></li><li><a target=_blank rel="noopener noreferrer" aria-label="share 如何配置nas上的磁盘阵列 on reddit" href="https://reddit.com/submit?url=https%3a%2f%2fair.googol.im%2fposts%2fnas-disk-array%2f&title=%e5%a6%82%e4%bd%95%e9%85%8d%e7%bd%aenas%e4%b8%8a%e7%9a%84%e7%a3%81%e7%9b%98%e9%98%b5%e5%88%97"><svg viewBox="0 0 512 512" height="30" width="30" fill="currentcolor"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM446 265.638c0-22.964-18.616-41.58-41.58-41.58-11.211.0-21.361 4.457-28.841 11.666-28.424-20.508-67.586-33.757-111.204-35.278l18.941-89.121 61.884 13.157c.756 15.734 13.642 28.29 29.56 28.29 16.407.0 29.706-13.299 29.706-29.701.0-16.403-13.299-29.702-29.706-29.702-11.666.0-21.657 6.792-26.515 16.578l-69.105-14.69c-1.922-.418-3.939-.042-5.585 1.036-1.658 1.073-2.811 2.761-3.224 4.686l-21.152 99.438c-44.258 1.228-84.046 14.494-112.837 35.232-7.468-7.164-17.589-11.591-28.757-11.591-22.965.0-41.585 18.616-41.585 41.58.0 16.896 10.095 31.41 24.568 37.918-.639 4.135-.99 8.328-.99 12.576.0 63.977 74.469 115.836 166.33 115.836s166.334-51.859 166.334-115.836c0-4.218-.347-8.387-.977-12.493 14.564-6.47 24.735-21.034 24.735-38.001zM326.526 373.831c-20.27 20.241-59.115 21.816-70.534 21.816-11.428.0-50.277-1.575-70.522-21.82-3.007-3.008-3.007-7.882.0-10.889 3.003-2.999 7.882-3.003 10.885.0 12.777 12.781 40.11 17.317 59.637 17.317 19.522.0 46.86-4.536 59.657-17.321 3.016-2.999 7.886-2.995 10.885.008 3.008 3.011 3.003 7.882-.008 10.889zm-5.23-48.781c-16.373.0-29.701-13.324-29.701-29.698.0-16.381 13.328-29.714 29.701-29.714 16.378.0 29.706 13.333 29.706 29.714.0 16.374-13.328 29.698-29.706 29.698zM160.91 295.348c0-16.381 13.328-29.71 29.714-29.71 16.369.0 29.689 13.329 29.689 29.71.0 16.373-13.32 29.693-29.689 29.693-16.386.0-29.714-13.32-29.714-29.693z"/></svg></a></li><li><a target=_blank rel="noopener noreferrer" aria-label="share 如何配置nas上的磁盘阵列 on facebook" href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fair.googol.im%2fposts%2fnas-disk-array%2f"><svg viewBox="0 0 512 512" height="30" width="30" fill="currentcolor"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H342.978V319.085h66.6l12.672-82.621h-79.272v-53.617c0-22.603 11.073-44.636 46.58-44.636H425.6v-70.34s-32.71-5.582-63.982-5.582c-65.288.0-107.96 39.569-107.96 111.204v62.971h-72.573v82.621h72.573V512h-191.104c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892z"/></svg></a></li><li><a target=_blank rel="noopener noreferrer" aria-label="share 如何配置nas上的磁盘阵列 on whatsapp" href="https://api.whatsapp.com/send?text=%e5%a6%82%e4%bd%95%e9%85%8d%e7%bd%aenas%e4%b8%8a%e7%9a%84%e7%a3%81%e7%9b%98%e9%98%b5%e5%88%97%20-%20https%3a%2f%2fair.googol.im%2fposts%2fnas-disk-array%2f"><svg viewBox="0 0 512 512" height="30" width="30" fill="currentcolor"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zm-58.673 127.703c-33.842-33.881-78.847-52.548-126.798-52.568-98.799.0-179.21 80.405-179.249 179.234-.013 31.593 8.241 62.428 23.927 89.612l-25.429 92.884 95.021-24.925c26.181 14.28 55.659 21.807 85.658 21.816h.074c98.789.0 179.206-80.413 179.247-179.243.018-47.895-18.61-92.93-52.451-126.81zM263.976 403.485h-.06c-26.734-.01-52.954-7.193-75.828-20.767l-5.441-3.229-56.386 14.792 15.05-54.977-3.542-5.637c-14.913-23.72-22.791-51.136-22.779-79.287.033-82.142 66.867-148.971 149.046-148.971 39.793.014 77.199 15.531 105.329 43.692 28.128 28.16 43.609 65.592 43.594 105.4-.034 82.149-66.866 148.983-148.983 148.984zm81.721-111.581c-4.479-2.242-26.499-13.075-30.604-14.571-4.105-1.495-7.091-2.241-10.077 2.241-2.986 4.483-11.569 14.572-14.182 17.562-2.612 2.988-5.225 3.364-9.703 1.12-4.479-2.241-18.91-6.97-36.017-22.23C231.8 264.15 222.81 249.484 220.198 245s-.279-6.908 1.963-9.14c2.016-2.007 4.48-5.232 6.719-7.847 2.24-2.615 2.986-4.484 4.479-7.472 1.493-2.99.747-5.604-.374-7.846-1.119-2.241-10.077-24.288-13.809-33.256-3.635-8.733-7.327-7.55-10.077-7.688-2.609-.13-5.598-.158-8.583-.158-2.986.0-7.839 1.121-11.944 5.604-4.105 4.484-15.675 15.32-15.675 37.364.0 22.046 16.048 43.342 18.287 46.332 2.24 2.99 31.582 48.227 76.511 67.627 10.685 4.615 19.028 7.371 25.533 9.434 10.728 3.41 20.492 2.929 28.209 1.775 8.605-1.285 26.499-10.833 30.231-21.295 3.732-10.464 3.732-19.431 2.612-21.298-1.119-1.869-4.105-2.99-8.583-5.232z"/></svg></a></li><li><a target=_blank rel="noopener noreferrer" aria-label="share 如何配置nas上的磁盘阵列 on telegram" href="https://telegram.me/share/url?text=%e5%a6%82%e4%bd%95%e9%85%8d%e7%bd%aenas%e4%b8%8a%e7%9a%84%e7%a3%81%e7%9b%98%e9%98%b5%e5%88%97&amp;url=https%3a%2f%2fair.googol.im%2fposts%2fnas-disk-array%2f"><svg viewBox="2 2 28 28" height="30" width="30" fill="currentcolor"><path d="M26.49 29.86H5.5a3.37 3.37.0 01-2.47-1 3.35 3.35.0 01-1-2.47V5.48A3.36 3.36.0 013 3 3.37 3.37.0 015.5 2h21A3.38 3.38.0 0129 3a3.36 3.36.0 011 2.46V26.37a3.35 3.35.0 01-1 2.47 3.38 3.38.0 01-2.51 1.02zm-5.38-6.71a.79.79.0 00.85-.66L24.73 9.24a.55.55.0 00-.18-.46.62.62.0 00-.41-.17q-.08.0-16.53 6.11a.59.59.0 00-.41.59.57.57.0 00.43.52l4 1.24 1.61 4.83a.62.62.0 00.63.43.56.56.0 00.4-.17L16.54 20l4.09 3A.9.9.0 0021.11 23.15zM13.8 20.71l-1.21-4q8.72-5.55 8.78-5.55c.15.0.23.0.23.16a.18.18.0 010 .06s-2.51 2.3-7.52 6.8z"/></svg></a></li><li><a target=_blank rel="noopener noreferrer" aria-label="share 如何配置nas上的磁盘阵列 on ycombinator" href="https://news.ycombinator.com/submitlink?t=%e5%a6%82%e4%bd%95%e9%85%8d%e7%bd%aenas%e4%b8%8a%e7%9a%84%e7%a3%81%e7%9b%98%e9%98%b5%e5%88%97&u=https%3a%2f%2fair.googol.im%2fposts%2fnas-disk-array%2f"><svg width="30" height="30" viewBox="0 0 512 512" fill="currentcolor" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"><path d="M449.446.0C483.971.0 512 28.03 512 62.554V449.446C512 483.97 483.97 512 449.446 512H62.554C28.03 512 0 483.97.0 449.446V62.554C0 28.03 28.029.0 62.554.0H449.446zM183.8767 87.9921h-62.034L230.6673 292.4508V424.0079h50.6655V292.4508L390.1575 87.9921H328.1233L256 238.2489z"/></svg></a></li></ul></footer><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//air-g.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></article></main><footer class=footer><span>&copy; 2024 <a href=https://air.googol.im/>Air On G</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+        <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
+</a><script>let menu=document.getElementById("menu");menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove("dark"),localStorage.setItem("pref-theme","light")):(document.body.classList.add("dark"),localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="copy";function s(){t.innerHTML="copied!",setTimeout(()=>{t.innerHTML="copy"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>
