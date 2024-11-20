@@ -155,7 +155,7 @@ pub fn fill(&mut self, r: &mut impl io::Read, n: usize) -> io::Result<()> {
 
 Rust默认保证变量使用时必须做过初始化，而这里`Vec::with_capacity()`分配内存后，并不需要确定数据的内容，随后会填入具体数据，所以使用`unsafe { v.set_len(n) }`来强制使用该段未初始化的内存。值得注意的是，当使用`v.into_boxed_slice()`将这段内存的所有权交给`self.heap`后，需要有一种方法再取回这段内存的引用，并赋给`buf`变量。`self.heap`的类型是`Option<Box<[u8]>>`，按照习惯，需要按照`Option<Box<[u8]>> -> Box<[u8]> -> [u8] -> &mut [u8]`的顺序取得引用。但是这里有个问题，如果变成了`Box<[u8]>`，证明这是一个自己拥有生命周期的变量类型，而不是一个引用。所以这里的取引用的顺序是`Option<Box<[u8]>> -> Option<&mut Box<[u8]>> -> &mut Box<[u8]> -> &mut [u8]`。而第一步就是通过`self.heap.as_mut()`来取得引用。
 
-<s>由于Rust没有官方的`io.ReadFull()`，所以这里做了自己的实现：</s>经[@upsuper](https://twitter.com/upsuper)提醒，Rust官方有类似的实现`std::io::Read::read_exact`。不过这里依旧使用自己的实现：
+~~由于Rust没有官方的`io.ReadFull()`，所以这里做了自己的实现：~~ 经[@upsuper](https://twitter.com/upsuper)提醒，Rust官方有类似的实现`std::io::Read::read_exact`。不过这里依旧使用自己的实现：
 
 ```rust
 fn read_full(r: &mut impl io::Read, b: &mut [u8]) -> io::Result<()> {
@@ -323,7 +323,7 @@ mod tests {
 
 这样`mod tests`内部的代码就只会在`test`时才做编译。而Go使用文件后缀来做这种区分。比如`xxx_test.go`默认只在测试是编译。这里我认为Go的方式更自然。一个包里有哪些编译控制，哪个文件会在哪个状态用到，直接看文件名就能知道。类似`xxx_unix.go/yyy_windows.go`也为维护提供了方便。Rust如果没有合适的工具的话，就只能一个一个文件查看，才能知道编译规则。
 
-说道工具，Rust工具链的质量和Go相比，可以用惨不忍睹来形容。上文提到的性能测试就是一例。Rust大量工具目前处于preview或者只提供nightly的地步（好像最近clippy刚刚进入到stable的preview状态）。Rust社区希望2018能够提供一个稳定生产力的版本[Rust 2018](https://rust-lang-nursery.github.io/edition-guide/2018/index.html)，不过现在2018都已经过半，还有一部分语法工作没有合并到stable。<s>这不得不想起当年C++ 98拖到C++ 00再拖到C++ 0x。希望Rust能在发布语言版本的时候，考虑一部分核心工具链的同时发布。</s>Rust社区将2018版本的发布时间定在10月，目前各个项目与预期进度相符。希望在今年底能看到更具生产力的稳定版本，不仅仅是语言的特性，还包括关键工具链。
+说道工具，Rust工具链的质量和Go相比，可以用惨不忍睹来形容。上文提到的性能测试就是一例。Rust大量工具目前处于preview或者只提供nightly的地步（好像最近clippy刚刚进入到stable的preview状态）。Rust社区希望2018能够提供一个稳定生产力的版本[Rust 2018](https://rust-lang-nursery.github.io/edition-guide/2018/index.html)，不过现在2018都已经过半，还有一部分语法工作没有合并到stable。 ~~这不得不想起当年C++ 98拖到C++ 00再拖到C++ 0x。希望Rust能在发布语言版本的时候，考虑一部分核心工具链的同时发布。~~ Rust社区将2018版本的发布时间定在10月，目前各个项目与预期进度相符。希望在今年底能看到更具生产力的稳定版本，不仅仅是语言的特性，还包括关键工具链。
 
 至于工程项目，cargo做的很好。Go目前的`GOPATH`模式，大概只有Google自己觉得好。好在Go modules已经[箭在弦上](https://groups.google.com/forum/#!topic/golang-dev/a5PqQuBljF4)，马上就不用忍受这么难用的功能了。
 
